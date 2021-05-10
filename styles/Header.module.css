@@ -1,0 +1,36 @@
+.header{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  height:60px;
+  background-color: #eaeded;
+  color:#333;
+  padding:0 30px;
+
+}
+
+.logo a{
+  color:red;
+  font-size:30px;  
+}
+.logo a:hover{
+  color:#000;
+}
+.select select{
+  appearance:none;
+  font-size: 1.1rem;
+  border:none;  
+}
+.select select:hover{
+  cursor: pointer;
+  border-bottom:1px solid;
+}
+.select p{
+  display:inline-block;
+}
+.header ul{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  list-style:none;
+}
