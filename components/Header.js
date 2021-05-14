@@ -4,10 +4,11 @@ import styles from '@/styles/Header.module.css'
 import Search from '@/components/Search'
 import AuthContext from '@/context/AuthContext'
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'
+import { getCurrencySymbol } from 'utils'
 
 
 export default function Header() {
-  const { currencyName,setCurrencyName, login, logout }=useContext(AuthContext)
+  const { currencyValue,setCurrencyValue, login, logout }=useContext(AuthContext)
   
   
   return (
@@ -18,10 +19,10 @@ export default function Header() {
         </Link>
       </div>
       <div className={styles.select}>
-        <p>Валюта</p>
+        <p>{getCurrencySymbol(currencyValue)}  Валюта</p>
         <select
-          value={currencyName}
-          onChange={(e) => setCurrencyName(e.target.value)}
+          value={currencyValue}
+          onChange={(e) => setCurrencyValue(e.target.value)}
         >
           <option value="UAH">UAH</option>
           <option value="USD">USD</option>
