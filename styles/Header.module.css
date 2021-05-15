@@ -34,3 +34,13 @@
   align-items:center;
   list-style:none;
 }
+
+.currencies{
+  display:flex;
+  }
+
+  .currencies p{
+    display:block;
+    padding:0 5px;
+  }
+  

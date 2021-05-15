@@ -8,7 +8,7 @@ import { getCurrencySymbol } from 'utils'
 
 
 export default function Header() {
-  const { currencyValue,setCurrencyValue, login, logout }=useContext(AuthContext)
+  const { currencyShop,setCurrencyShop, login, logout,currencyRate }=useContext(AuthContext)
   
   
   return (
@@ -18,11 +18,15 @@ export default function Header() {
           <a>Кармен</a>
         </Link>
       </div>
+      <div className={styles.currencies}>
+        <p>USD: {currencyRate.USD.toFixed(2)}</p>
+        <p>EUR: {currencyRate.EUR.toFixed(2)}</p>
+      </div>
       <div className={styles.select}>
-        <p>{getCurrencySymbol(currencyValue)}  Валюта</p>
+        <p>{getCurrencySymbol(currencyShop)}  Валюта </p>
         <select
-          value={currencyValue}
-          onChange={(e) => setCurrencyValue(e.target.value)}
+          value={currencyShop}
+          onChange={(e) => setCurrencyShop(e.target.value)}
         >
           <option value="UAH">UAH</option>
           <option value="USD">USD</option>

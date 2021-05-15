@@ -6,3 +6,9 @@ export function getCurrencySymbol(currencyValue) {
     default: return 'UAH';
   }
 }
+
+export function getPriceForShow({ currencyShop, currencyRate, currencyValue, price }) {
+  const showPrice =
+    ((currencyRate[currencyValue] * price) / currencyRate[currencyShop]).toFixed(2)
+  return showPrice
+}
