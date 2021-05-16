@@ -3,12 +3,14 @@ import { useState,useContext } from 'react'
 import styles from '@/styles/Header.module.css'
 import Search from '@/components/Search'
 import AuthContext from '@/context/AuthContext'
+import ProductsContext from '@/context/ProductsContext'
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'
 import { getCurrencySymbol } from 'utils'
 
 
 export default function Header() {
-  const { currencyShop,setCurrencyShop, login, logout,currencyRate }=useContext(AuthContext)
+  const { login, logout }=useContext(AuthContext)
+  const { currencyShop,setCurrencyShop,currencyRate }=useContext(ProductsContext)
   
   
   return (

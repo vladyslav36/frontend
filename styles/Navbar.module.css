@@ -1,0 +1,25 @@
+.container{
+  background-color:  #1a5276 ;
+  color:#eaeded;
+  width:100%;
+  padding:5px 10px;
+  border-radius:5px;
+}
+
+.container .list{
+list-style:none;
+display:flex;
+justify-content:flex-start;
+align-items:center;
+}
+
+.category{
+  padding:5px 15px;
+  border-radius:5px;
+}
+
+.category:hover{
+  color:#1a5276;
+  background-color: #eaeded;
+  cursor:pointer;
+}

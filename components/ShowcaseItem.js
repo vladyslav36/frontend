@@ -4,12 +4,12 @@ import { API_URL } from "@/config/index"
 import styles from '@/styles/showcaseItem.module.css'
 import { FaShoppingCart } from "react-icons/fa"
 import { getCurrencySymbol,getPriceForShow } from 'utils'
-import AuthContext from '@/context/AuthContext'
+import ProductsContext from '@/context/ProductsContext'
 import { useContext } from 'react'
 
 
 export default function ShowcaseItem({ product:{currencyValue,name,image,price} }) {
-  const { currencyRate,currencyShop } = useContext(AuthContext)
+  const { currencyRate,currencyShop } = useContext(ProductsContext)
   
   const priceForShow=getPriceForShow({currencyRate,currencyShop,price,currencyValue})
   return (

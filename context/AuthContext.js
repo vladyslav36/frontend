@@ -1,16 +1,11 @@
 import { createContext, useState, useEffect } from 'react'
 
+
 const AuthContext = createContext()
 
-export const AuthProvider=({ children }) =>{
-  const [currencyShop,setCurrencyShop]=useState('UAH')
+export const AuthProvider=({ children }) =>{  
   const [user, setUser] = useState(null)
-  const [error, setError] = useState(null)
-  const [currencyRate, setCurrencyRate] = useState({
-    UAH: 1,
-    USD: 1,
-    EUR:1
-  })
+  const [error, setError] = useState(null)  
   
   // login
   const login = () => {
@@ -30,11 +25,7 @@ export const AuthProvider=({ children }) =>{
       logout,
       user,
       error,
-      register,
-      currencyShop,
-      setCurrencyShop,
-      currencyRate,
-      setCurrencyRate
+      register     
     }}>
       {children}
     </AuthContext.Provider>
