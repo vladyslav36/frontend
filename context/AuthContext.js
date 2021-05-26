@@ -4,9 +4,9 @@ import { createContext, useState, useEffect } from 'react'
 const AuthContext = createContext()
 
 export const AuthProvider=({ children }) =>{  
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState({})
   const [error, setError] = useState(null)  
-  
+  user.isAdmin=true
   // login
   const login = () => {
     console.log('login')

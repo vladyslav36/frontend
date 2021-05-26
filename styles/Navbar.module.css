@@ -1,9 +1,13 @@
 .container{
-  background-color:  #1a5276 ;
+  background-color:   #5499c7  ;
   color:#eaeded;
   width:100%;
   padding:5px 10px;
   border-radius:5px;
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  
 }
 
 .container .list{
@@ -11,15 +15,60 @@ list-style:none;
 display:flex;
 justify-content:flex-start;
 align-items:center;
+flex-wrap:wrap;
+
 }
 
 .category{
-  padding:5px 15px;
-  border-radius:5px;
+  padding:5px 15px;  
+  margin:5px 0;
+  position:relative;
 }
 
 .category:hover{
-  color:#1a5276;
-  background-color: #eaeded;
+ 
+  background-color:  #2980b9 ;
   cursor:pointer;
 }
+.drop_down_list{
+  position:absolute;
+  list-style: none; 
+  display:none;
+  z-index:900;
+  padding:10px 0;
+  top:100%;
+  left:0;  
+  min-width:160px;
+  background-color: #f2f3f4;
+  color:#333;
+  border:1px solid  #ccd1d1;
+;
+}
+.category:hover .drop_down_list{
+  display:block;
+  
+}
+.drop_down_list li{
+  padding:5px 15px; 
+  
+}
+.drop_down_list li:hover{
+  background-color: #5499c7;
+  color:#eaeded;
+}
+.adminPanel .icon{
+  font-size:1.2rem;
+  display:block;
+}
+.adminPanel{
+  display:flex;
+  align-items: center;
+}
+.adminPanel div{
+padding:0 5px;
+}
+.adminPanel a{
+  color:#eaeded;
+  cursor:pointer;
+  display:block;
+   }

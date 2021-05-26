@@ -18,8 +18,9 @@
 }
 .select select{
   appearance:none;
-  font-size: 1.1rem;
-  border:none;  
+  font-size: 1rem;
+  border:none; 
+  background-color: #eaeded; 
 }
 .select select:hover{
   cursor: pointer;
