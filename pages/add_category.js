@@ -66,6 +66,7 @@ export default function addCategoryPage({ categories }) {
       body: JSON.stringify(values),
     })
     const data = await res.json()
+    
     if (!res.ok) {
       toast.error("Что-то пошло не так")
     } else {

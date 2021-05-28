@@ -16,8 +16,8 @@ export default function Navbar({ categories }) {
           {categories.map(
             (category) =>
               category.level === 0 && (
-                <li key={category._id} className={styles.category}>
-                  
+                <Link href={`/category/${category.slug}`} key={category._id} >
+                  <li  className={styles.category}>
                     {category.name}
                     <ul className={styles.drop_down_list}>
                       {categories
@@ -25,11 +25,13 @@ export default function Navbar({ categories }) {
                           (item) => item.parentCategoryId === category._id
                         )
                         .map((item) => (
-                          <li key={item._id}>{item.name}</li>
+                          <Link href={`/category/${item.slug}`} key={item._id}>
+                            <li >{item.name}</li>
+                          </Link>
                         ))}
                     </ul>
-                 
-                </li>
+                  </li>
+                </Link>
               )
           )}
         </ul>
@@ -37,7 +39,7 @@ export default function Navbar({ categories }) {
       {isAdmin && (
         <div className={styles.adminPanel}>
           <div>
-            <Link href="/addcategory">
+            <Link href="/add_category">
               <a>
                 <FaPlus className={styles.icon} />
               </a>
@@ -45,7 +47,7 @@ export default function Navbar({ categories }) {
           </div>
 
           <div>
-            <Link href="/editcategory">
+            <Link href="/edit_category_list">
               <a>
                 <FaEdit className={styles.icon} />
               </a>

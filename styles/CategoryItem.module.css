@@ -1,0 +1,30 @@
+.item{
+  flex-basis:300px;
+  margin:25px ;
+  padding:5px;
+  border:1px solid  #bdc3c7;
+  
+align-items:center;
+
+}
+.item .link{
+  display:flex;
+
+ justify-content: flex-start;
+  align-items: center;
+}
+
+.item .name{
+  font-size:1.2rem;
+  display:block;
+  text-align: center;
+
+  color:#333;
+  margin:0 10px;
+  
+}
+
+.item .image{
+  display:flex;
+ 
+}

@@ -20,7 +20,7 @@ export default function ImageUpload({imageUploaded}) {
       body:formData
     })
     const { path } = await res.json()
-    console.log(path)
+    
     if (res.ok) {
       
       imageUploaded(path)
@@ -28,7 +28,7 @@ export default function ImageUpload({imageUploaded}) {
   }
 
   const handleChange = (e) => {
-    console.log(e.target.files[0])
+    
     setImage(e.target.files[0])
     
   }
