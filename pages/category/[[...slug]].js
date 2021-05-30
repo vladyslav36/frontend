@@ -3,6 +3,7 @@ import { API_URL } from "@/config/index"
 import CategoryItem from "@/components/CategoryItem"
 import ProductList from '@/components/ProductList'
 import styles from '@/styles/Category.module.css'
+import Link from 'next/link'
 
 export default function categoryPage({ categories, params }) {
   const { slug } = params  
@@ -23,7 +24,9 @@ const categoriesList =
   // ProductList куда передаем lastSlug как ссылку на категорию, продукты которой надо показать
   return (
     <Layout title="Категории">
-      <div className={styles.container}>        
+       <Link href='/'>На главную</Link> 
+      <div className={styles.container}>
+      
         {slug ? categoriesList.length? (          
           categoriesList
           .map(item=>(

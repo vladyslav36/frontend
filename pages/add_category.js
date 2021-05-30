@@ -55,6 +55,8 @@ export default function addCategoryPage({ categories }) {
         toast.error("Родительская категория должна быть выбрана из списка")
         return
       }
+    } else {
+      values.parentCategoryId=null
     }
     
     // Send data
@@ -109,7 +111,7 @@ export default function addCategoryPage({ categories }) {
         ) : (
           <>
             <h1>Добавление категории</h1>
-            <Link href="/">Вернуться назад</Link>
+            <Link href="/">На главную</Link>
             <ToastContainer />
             <div className={styles.form}>
               <form onSubmit={handleSubmit}>
