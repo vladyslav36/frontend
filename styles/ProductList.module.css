@@ -1,0 +1,40 @@
+.container{
+ width:100%;
+}
+
+.product{  
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color:   #E5E4E2  ;
+;
+}
+
+.image{
+  flex: 1;
+display:flex;
+justify-content: center;
+padding:5px;
+
+}
+
+.name{
+  flex: 1;
+  
+}
+
+.description{
+  flex:6;
+}
+
+.price{
+  flex:0.3;
+}
+
+.button{
+  font-size: 1rem;
+  border:none;
+  padding:5px 15px;
+  background-color: inherit;
+  cursor:pointer;
+}

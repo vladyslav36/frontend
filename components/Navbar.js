@@ -25,7 +25,7 @@ export default function Navbar({ categories }) {
                           (item) => item.parentCategoryId === category._id
                         )
                         .map((item) => (
-                          <Link href={`/category/${item.slug}`} key={item._id}>
+                          <Link href={`/category/${category.slug}/${item.slug}`} key={item._id}>
                             <li >{item.name}</li>
                           </Link>
                         ))}

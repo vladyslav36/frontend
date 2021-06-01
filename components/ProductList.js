@@ -1,8 +1,43 @@
+import styles from "@/styles/ProductList.module.css"
+import { API_URL } from "@/config/index"
+import Image from "next/image"
+import useSWR from "swr"
+import Link from "next/link"
+
 export default function ProductList({ categorySlug }) {
-  
+  const getProducts = (...arg) => fetch(...arg).then((res) => res.json())
+  const { data, error } = useSWR(
+    `${API_URL}/api/products/?category=${categorySlug}`,
+    getProducts
+  )
+  if (error) return <div>Error</div>
+  if (!data) return <div>Loading...</div>
+  const { products } = data
+
   return (
-    <div>
-      ProductList of category {categorySlug}
+    <div className={styles.container}>
+      {products.map((product) => (
+       
+          <div key={product._id} className={styles.product}>
+          <Link href={`/product/${product.slug}`}>
+              <a className={styles.image}>
+                <Image
+                  src={`${API_URL}${product.image}`}
+                  width={70}
+                  height={70}
+                />
+              </a>
+            </Link>
+
+            <div className={styles.name}>{product.name}</div>
+            <div className={styles.description}> {product.description}</div>
+            <div className={styles.price}> {product.price}</div>
+            <button className={styles.button}>
+              <span>Купить</span>
+            </button>
+          </div>
+       
+      ))}
     </div>
   )
 }

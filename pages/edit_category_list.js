@@ -50,12 +50,15 @@ export default function editCategoryListPage({ categories }) {
                       <FaPencilAlt className={styles.icon} />
                     </a>
                   </Link>
-                  {/* <Link href={`/delete_category/${item.slug}`}><a className={styles.delete}><FaTimes className={styles.icon}/></a></Link> */}
-                  <button
+                 
+                  <button 
                     className={styles.delete}
                     onClick={() => handleDeleteCategory(`${item._id}`)}
                   >
-                    <FaTimes className={styles.icon} />
+                    <span>
+                      <FaTimes className={styles.icon} />
+                    </span>
+                    
                   </button>
                 </div>
               </div>

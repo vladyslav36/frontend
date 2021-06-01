@@ -5,10 +5,12 @@ import ProductList from '@/components/ProductList'
 import styles from '@/styles/Category.module.css'
 import Link from 'next/link'
 
+
 export default function categoryPage({ categories, params }) {
   const { slug } = params  
   const itemHref = slug ? `/category/${slug.join("/")}` : "/category"  
   const lastSlug = slug && slug[slug.length - 1]
+  
   
   // Список категорий, которые являются детьми от категории lastSlug
 const categoriesList =
@@ -32,7 +34,10 @@ const categoriesList =
           .map(item=>(
         <CategoryItem item={item} key={item._id} itemHref={itemHref}/>
           ))
-        ) : <ProductList categorySlug={lastSlug}/> : (
+        ) :
+          <ProductList categorySlug={lastSlug} />
+          
+          : (
           categories
             .filter((item) => item.level === 0)
             .map((item) => (
