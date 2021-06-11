@@ -1,5 +1,5 @@
-import { FaMinusCircle } from "react-icons/fa"
 import styles from '@/styles/AccessDenied.module.css'
+import { FaMinusCircle } from "react-icons/fa"
 import Link from "next/link"
 
 export default function AccessDenied() {

@@ -1,8 +1,9 @@
+import styles from "@/styles/Form.module.css"
 import { useState } from "react"
 import { API_URL } from "@/config/index"
-import styles from "@/styles/Form.module.css"
 
-export default function ImageUpload({imageUploaded}) {
+export default function ImageUpload({imageUploaded,index}) {
+
   const [image, setImage] = useState(null)
 
   const handleSubmit =  async (e) => {
@@ -23,7 +24,7 @@ export default function ImageUpload({imageUploaded}) {
     
     if (res.ok) {
       
-      imageUploaded(path)
+      imageUploaded(path,index)
     }
   }
 

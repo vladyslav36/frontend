@@ -1,6 +1,6 @@
-import Link from 'next/link'
-import { useState,useContext } from 'react'
 import styles from '@/styles/Header.module.css'
+import Link from 'next/link'
+import { useContext } from 'react'
 import Search from '@/components/Search'
 import AuthContext from '@/context/AuthContext'
 import ProductsContext from '@/context/ProductsContext'

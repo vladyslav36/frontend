@@ -56,19 +56,3 @@ flex-wrap:wrap;
   background-color: #5499c7;
   color:#eaeded;
 }
-.adminPanel .icon{
-  font-size:1.2rem;
-  display:block;
-}
-.adminPanel{
-  display:flex;
-  align-items: center;
-}
-.adminPanel div{
-padding:0 5px;
-}
-.adminPanel a{
-  color:#eaeded;
-  cursor:pointer;
-  display:block;
-   }

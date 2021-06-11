@@ -1,8 +1,8 @@
+import styles from '@/styles/Category.module.css'
 import Layout from "@/components/Layout"
 import { API_URL } from "@/config/index"
 import CategoryItem from "@/components/CategoryItem"
 import ProductList from '@/components/ProductList'
-import styles from '@/styles/Category.module.css'
 import Link from 'next/link'
 
 

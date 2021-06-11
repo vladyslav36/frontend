@@ -1,6 +1,6 @@
 .item {
   border: 1px solid #707b7c;
-  flex-basis: 250px;
+  flex-basis: 250px;  
   padding: 5px;
   margin:10px 10px;
   display:flex;

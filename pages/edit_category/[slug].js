@@ -1,3 +1,4 @@
+import styles from "@/styles/Form.module.css"
 import AccessDenied from "@/components/AccessDenied"
 import Layout from "@/components/Layout"
 import Modal from "@/components/Modal"
@@ -5,12 +6,11 @@ import ImageUpload from "@/components/ImageUpload"
 import AuthContext from "@/context/AuthContext"
 import { useContext, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
-import { FaImage } from "react-icons/fa"
+import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Image from "next/image"
-import { API_URL } from "@/config/index"
-import styles from "@/styles/Form.module.css"
+import { API_URL,NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../../utils"
 
@@ -20,8 +20,8 @@ export default function editCategoryPage({ categories, slug }) {
   } = useContext(AuthContext)
   const category = categories.find((item) => item.slug === slug)
   const [values, setValues] = useState({
-    _id: category._id,    
-    image:category.image,
+    _id: category._id,
+    image: category.image,
     name: category.name,
     parentCategory: category.parentCategory,
     parentCategoryId: category.parentCategoryId,
@@ -41,7 +41,7 @@ export default function editCategoryPage({ categories, slug }) {
     const list = categories.filter(
       ({ name }) => name.toLowerCase().indexOf(value.toLowerCase()) >= 0
     )
-   
+
     return list
   }
   const handleSubmit = async (e) => {
@@ -64,7 +64,7 @@ export default function editCategoryPage({ categories, slug }) {
         return
       }
     } else {
-      values.parentCategoryId=null
+      values.parentCategoryId = null
     }
 
     // Send data
@@ -99,7 +99,6 @@ export default function editCategoryPage({ categories, slug }) {
   }
 
   const handleListClick = ({ id, name }) => {
-   
     setValues({ ...values, parentCategory: name, parentCategoryId: id })
   }
 
@@ -120,7 +119,7 @@ export default function editCategoryPage({ categories, slug }) {
         ) : (
           <>
             <h1>Редактирование категории</h1>
-            <Link href='/edit_category_list'>Вернуться назад</Link>
+            <Link href="/edit_category_list">Вернуться назад</Link>
             <ToastContainer />
             <div className={styles.form}>
               <form onSubmit={handleSubmit}>
@@ -155,23 +154,20 @@ export default function editCategoryPage({ categories, slug }) {
                           (isShowList && styles.active)
                         }
                       >
-                        {listForMenu && (
-                          
-                            listForMenu.map((category) => (
-                              <li
-                                key={category._id}
-                                onClick={() =>
-                                  handleListClick({
-                                    id: category._id,
-                                    name: category.name,
-                                  })
-                                }
-                              >
-                                {getCategoriesTree(category, categories)}
-                              </li>
-                            ))
-                          
-                        )}
+                        {listForMenu &&
+                          listForMenu.map((category) => (
+                            <li
+                              key={category._id}
+                              onClick={() =>
+                                handleListClick({
+                                  id: category._id,
+                                  name: category.name,
+                                })
+                              }
+                            >
+                              {getCategoriesTree(category, categories)}
+                            </li>
+                          ))}
                       </ul>
                     </div>
                   </div>
@@ -195,23 +191,40 @@ export default function editCategoryPage({ categories, slug }) {
               <div>
                 <p>Изображение категории</p>
 
-                <div className={styles.upploadImage}>
+                <div className={styles.image_container}>
                   {imagePreview ? (
-                    <Image src={imagePreview} width={200} height={270} />
+                    <div className={styles.image}>
+                      <Image src={imagePreview} width={200} height={250} />
+                    </div>
                   ) : (
-                    <div className={styles.noImage}>
-                      <p>No image</p>
+                    <div className={styles.image}>
+                      <Image
+                        src={`${API_URL}${NOIMAGE_PATH}`}
+                        width={200}
+                        height={250}
+                        alt="No Image"
+                      />
                     </div>
                   )}
-                  <button
-                    className="btn"
-                    onClick={() => {
-                      setShowModal(true)
-                      setIsShowList(false)
-                    }}
-                  >
-                    <FaImage /> Загрузить картинку
-                  </button>
+                  <div className={styles.image_footer}>
+                    <button
+                      className="btn"
+                      onClick={() => {
+                        setShowModal(true)
+                        setIsShowList(false)
+                      }}
+                    >
+                      <FaImage /> 
+                    </button>
+                    <button
+                      className="btn"
+                      onClick={() => {
+                        setImagePreview("")
+                      }}
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

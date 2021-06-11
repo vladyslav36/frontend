@@ -1,3 +1,4 @@
+import styles from "@/styles/Form.module.css"
 import AccessDenied from "@/components/AccessDenied"
 import Layout from "@/components/Layout"
 import Modal from "@/components/Modal"
@@ -5,21 +6,20 @@ import ImageUpload from "@/components/ImageUpload"
 import AuthContext from "@/context/AuthContext"
 import { useContext, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
-import { FaImage } from "react-icons/fa"
+import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Image from "next/image"
-import { API_URL } from "@/config/index"
-import styles from "@/styles/Form.module.css"
+import { API_URL,NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
-import { getCategoriesTree } from '../utils'
+import { getCategoriesTree } from "../utils"
 
 export default function addCategoryPage({ categories }) {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
   const [values, setValues] = useState({
-    name: "",    
+    name: "",
     parentCategory: "",
     parentCategoryId: null,
     uploadedImage: "",
@@ -31,7 +31,7 @@ export default function addCategoryPage({ categories }) {
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
 
   const router = useRouter()
-// Функция возвращает список категорий в соответствии со строкой поиска
+  // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(categories, value) {
     const list = categories.filter(
       ({ name }) => name.toLowerCase().indexOf(value.toLowerCase()) >= 0
@@ -47,18 +47,20 @@ export default function addCategoryPage({ categories }) {
       return
     }
     // Проверка на наличие и соответствие родительской категории в категориях
-    if (values.parentCategory) {    
+    if (values.parentCategory) {
       const isValid = categories.some(
-        (item) => item.name === values.parentCategory && item._id === values.parentCategoryId
+        (item) =>
+          item.name === values.parentCategory &&
+          item._id === values.parentCategoryId
       )
       if (!isValid) {
         toast.error("Родительская категория должна быть выбрана из списка")
         return
       }
     } else {
-      values.parentCategoryId=null
+      values.parentCategoryId = null
     }
-    
+
     // Send data
     const res = await fetch(`${API_URL}/api/categories`, {
       method: "POST",
@@ -68,7 +70,7 @@ export default function addCategoryPage({ categories }) {
       body: JSON.stringify(values),
     })
     const data = await res.json()
-    
+
     if (!res.ok) {
       toast.error("Что-то пошло не так")
     } else {
@@ -100,7 +102,7 @@ export default function addCategoryPage({ categories }) {
   const imageUploaded = (path) => {
     setShowModal(false)
     setValues({ ...values, uploadedImage: path })
-    setImagePreview(`${API_URL}${path}`)
+    setImagePreview(path)
   }
 
   return (
@@ -148,7 +150,6 @@ export default function addCategoryPage({ categories }) {
                       >
                         {listForMenu && (
                           <>
-                            
                             {listForMenu.map((category) => (
                               <li
                                 key={category._id}
@@ -159,7 +160,7 @@ export default function addCategoryPage({ categories }) {
                                   })
                                 }
                               >
-                                {getCategoriesTree(category,categories)}
+                                {getCategoriesTree(category, categories)}
                               </li>
                             ))}
                           </>
@@ -187,23 +188,39 @@ export default function addCategoryPage({ categories }) {
               <div>
                 <p>Изображение категории</p>
 
-                <div className={styles.upploadImage}>
+                <div className={styles.image_container}>
                   {imagePreview ? (
-                    <Image src={imagePreview} width={200} height={270} />
+                    <div className={styles.image}>
+                      <Image
+                        src={`${API_URL}${imagePreview}`}
+                        width={200}
+                        height={250}
+                      />
+                    </div>
                   ) : (
-                    <div className={styles.noImage}>
-                      <p>No image</p>
+                    <div className={styles.image}>
+                          <Image src={`${API_URL}${NOIMAGE_PATH}`} width={200} height={250} alt='No Image'/>
                     </div>
                   )}
-                  <button
-                    className="btn"
-                    onClick={() => {
-                      setShowModal(true)
-                      setIsShowList(false)
-                    }}
-                  >
-                    <FaImage /> Загрузить картинку
-                  </button>
+                  <div className={styles.image_footer}>
+                    <button
+                      className="btn"
+                      onClick={() => {
+                        setShowModal(true)
+                        setIsShowList(false)
+                      }}
+                    >
+                      <FaImage />
+                    </button>
+                    <button
+                      className="btn"
+                      onClick={() => {
+                        setImagePreview("")
+                      }}
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

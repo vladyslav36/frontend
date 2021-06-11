@@ -1,6 +1,7 @@
-import ShowcaseItem from '@/components/ShowcaseItem'
 import styles from '@/styles/ShowCase.module.css'
-export default function Showcase({showcaseProducts}) {
+import ShowcaseItem from '@/components/ShowcaseItem'
+export default function Showcase({ showcaseProducts }) {
+  
   return (
     <div className={styles.container}>
       {showcaseProducts && (
