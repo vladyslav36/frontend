@@ -139,9 +139,9 @@ export default function addCategoryPage({ categories }) {
                         name="parentCategory"
                         value={values.parentCategory}
                         onChange={handleChangeParent}
-                        onClick={handleShowList}
+                        onClick={handleShowList}                        
                       />
-                      <ul
+                      <ul                        
                         className={
                           styles.dropdown_menu +
                           " " +
@@ -151,7 +151,7 @@ export default function addCategoryPage({ categories }) {
                         {listForMenu && (
                           <>
                             {listForMenu.map((category) => (
-                              <li
+                              <li                                
                                 key={category._id}
                                 onClick={() =>
                                   handleListClick({
@@ -199,7 +199,12 @@ export default function addCategoryPage({ categories }) {
                     </div>
                   ) : (
                     <div className={styles.image}>
-                          <Image src={`${API_URL}${NOIMAGE_PATH}`} width={200} height={250} alt='No Image'/>
+                      <Image
+                        src={`${API_URL}${NOIMAGE_PATH}`}
+                        width={200}
+                        height={250}
+                        alt="No Image"
+                      />
                     </div>
                   )}
                   <div className={styles.image_footer}>
@@ -213,7 +218,7 @@ export default function addCategoryPage({ categories }) {
                       <FaImage />
                     </button>
                     <button
-                      className="btn"
+                      className="btn btn-danger"
                       onClick={() => {
                         setImagePreview("")
                       }}

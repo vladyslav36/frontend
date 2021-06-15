@@ -4,11 +4,7 @@ import Layout from "@/components/Layout"
 import Modal from "@/components/Modal"
 import ImageUpload from "@/components/ImageUpload"
 import AuthContext from "@/context/AuthContext"
-import {  
-  useContext,  
-  useEffect,  
-  useState,
-} from "react"
+import { useContext, useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { FaImage, FaPlus, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
@@ -25,6 +21,7 @@ export default function addProductPage({ categories }) {
   const [values, setValues] = useState({
     name: "",
     model: "",
+    brand: "",
     image: "",
     uploadedImage: "",
     uploadedImages: [],
@@ -33,8 +30,8 @@ export default function addProductPage({ categories }) {
     categorySlug: "",
     price: "",
     retailPrice: "",
+    isShowcase: 'НЕТ',
     countInStock: 100,
-    isShowCase: false,
     addedImages: [],
     currencyValue: "UAH",
   })
@@ -96,9 +93,10 @@ export default function addProductPage({ categories }) {
   const handleChange = (e) => {
     e.preventDefault()
     const { name, value } = e.target
-
+    console.log(name, value)
     setValues({ ...values, [name]: value })
   }
+
   // input for parentCategory
   const handleChangeCategory = (e) => {
     e.preventDefault()
@@ -126,18 +124,18 @@ export default function addProductPage({ categories }) {
     setShowModal(false)
     setImagesPreview(
       imagesPreview.map((item, i) => (i === index ? path : item))
-    )    
+    )
   }
 
   const imagesNewUpploaded = (path) => {
     setShowModal(false)
-    setImagesPreview([...imagesPreview, path])    
+    setImagesPreview([...imagesPreview, path])
   }
-  
+
   useEffect(() => {
-  setValues({ ...values, uploadedImages: [...imagesPreview] })
+    setValues({ ...values, uploadedImages: [...imagesPreview] })
   }, [imagesPreview])
-  
+  console.log(values)
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
@@ -167,6 +165,16 @@ export default function addProductPage({ categories }) {
                     id="model"
                     name="model"
                     value={values.model}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="brand">Бренд</label>
+                  <input
+                    type="text"
+                    id="brand"
+                    name="brand"
+                    value={values.brand}
                     onChange={handleChange}
                   />
                 </div>
@@ -263,17 +271,18 @@ export default function addProductPage({ categories }) {
 
                 <div>
                   <div>
-                    <label htmlFor="isShowCase">Показывать на витрине</label>
+                    <label htmlFor="isShowсase">Показывать на витрине</label>
                   </div>
                   <div>
-                    <select
-                      id="isShowCase"
-                      name="isShowCase"
-                      value={values.isShowCase}
+                      <select
+                    
+                       value={values.isShowcase}
+                      name="isShowcase"
+                      id="isShowcase"
                       onChange={handleChange}
                     >
-                      <option value="false">Нет</option>
-                      <option value="true">Да</option>
+                      <option value='НЕТ'>НЕТ</option>
+                        <option value='ДА'>ДА</option>
                     </select>
                   </div>
                 </div>
@@ -323,7 +332,7 @@ export default function addProductPage({ categories }) {
                 <FaImage />
               </button>
               <button
-                className="btn"
+                  className="btn btn-danger"
                 onClick={() => {
                   setImagePreview("")
                 }}
@@ -357,7 +366,7 @@ export default function addProductPage({ categories }) {
                         <FaImage />
                       </button>
                       <button
-                        className="btn"
+                        className="btn btn-danger"
                         onClick={() => {
                           setImagesPreview(
                             imagesPreview.filter((item, index) => index !== i)

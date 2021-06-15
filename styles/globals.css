@@ -17,16 +17,22 @@ a{
   color:steelblue;
 }
 
+
 .btn{
   border:none;
   border-radius:5px;
-  background-color: red;
+  background-color:#1f618d;
   color:#fff;
   padding:5px 10px;
   font-size:1rem;
   cursor:pointer;
 }
 
+.btn-danger{
+  background-color: red;
+  color:#fff;
+  
+}
 .btn:hover{
   opacity:0.9;
 }

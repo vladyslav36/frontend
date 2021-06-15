@@ -217,7 +217,7 @@ export default function editCategoryPage({ categories, slug }) {
                       <FaImage /> 
                     </button>
                     <button
-                      className="btn"
+                      className="btn btn-danger"
                       onClick={() => {
                         setImagePreview("")
                       }}
