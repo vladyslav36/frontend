@@ -10,6 +10,7 @@ import { FaImage, FaTimes } from "react-icons/fa"
 import ImageUpload from "@/components/ImageUpload"
 import Modal from "@/components/Modal"
 import { useRouter } from "next/router"
+import Link from "next/link"
 
 export default function add_brandPage() {
   const {
@@ -76,6 +77,7 @@ export default function add_brandPage() {
 
     if (!inputValues.name) {
       toast.error("Поле Название должно быть заполнено")
+      return
     }
     // Send data
     const res = await fetch(`${API_URL}/api/brands`, {
@@ -96,17 +98,18 @@ export default function add_brandPage() {
 
   return (
     <Layout title="Добавление бренда">
-      {isAdmin ? (
+       {isAdmin ? (
         <div>
           <ToastContainer />
 
           <form onSubmit={handleSubmit}>
             <div className={styles.header}>
               <h2>Добавление бренда</h2>
-              <button className="btn" type="submit">
+               <button className="btn" type="submit">
                 Сохранить
               </button>
             </div>
+            <Link href='/'>Вернуться на главную</Link>
             <div className={styles.content}>
               <div className={styles.input_field}>
                 <div className={styles.input_block}>
