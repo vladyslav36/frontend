@@ -12,33 +12,34 @@ import Link from "next/link"
 import Image from "next/image"
 import { API_URL, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
-import { getCategoriesTree } from "../utils"
+import { getCategoriesTree } from "../../utils"
 import SelectOptions from "@/components/SelectOptions"
 
-export default function addProductPage({ categories, brands }) {
+export default function editProductPage({ categories, brands,product }) {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
+console.log(product)
   const [values, setValues] = useState({
-    name: "",
-    model: "",
-    brand: "",
-    brandId: null,
-    image: "",    
-    description: "",
-    category: "",
-    categoryId: null,
-    colors: [],
-    sizes: [],
-    heights: [],
-    isInStock: "ДА",
-    price: "",
-    retailPrice: "",
-    isShowcase: "НЕТ",
-    addedImages: [],
-    currencyValue: "UAH",
+    _id:product._id,
+    name: product.name,
+    model: product.model,
+    brand: product.brand,
+    brandId: product.brandId,
+    image: product.image,    
+    description: product.description,
+    category: product.category,
+    categoryId: product.categoryId,
+    colors: [...product.colors],
+    sizes: [...product.sizes],
+    heights: [...product.heights],
+    isInStock: product.isInStock ? "ДА" : "НЕТ",
+    price: product.price,
+    retailPrice: product.retailPrice,
+    isShowcase: product.isShowcase ? "ДА" : "НЕТ",
+    addedImages: [...product.addedImages],
+    currencyValue: product.currencyValue,
   })
-  
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
   const [isShowBrandsList, setIsShowBrandsList] = useState(false)
@@ -46,8 +47,7 @@ export default function addProductPage({ categories, brands }) {
   const [listForBrandsMenu, setListForBrandsMenu] = useState(
     getListForMenu(brands, "")
   )
-  const [upploadCb, setUpploadCb] = useState({})
- 
+  const [upploadCb, setUpploadCb] = useState({})  
   const [imageIdx, setImageIdx] = useState(0)
 
   const router = useRouter()
@@ -93,7 +93,7 @@ export default function addProductPage({ categories, brands }) {
     }
     // Send data
     const res = await fetch(`${API_URL}/api/products`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -146,15 +146,14 @@ export default function addProductPage({ categories, brands }) {
 
   const imagesUpploaded = (path, index) => {
     setShowModal(false)
-    setValues({...values,addedImages:values.addedImages.map((item,i)=>(i===index?path:item))})
+    setValues({ ...values, addedImages: values.addedImages.map((item, i) => (i === index ? path : item)) })
     
   }
 
   const imagesNewUpploaded = (path) => {
     setShowModal(false)
     setValues({...values,addedImages:[...values.addedImages,path]})
-    
-  }  
+     } 
 
   return (
     <Layout title="Добавление товара">
@@ -165,7 +164,7 @@ export default function addProductPage({ categories, brands }) {
           <div className={styles.form}>
             <form onSubmit={handleSubmit}>
               <div className={styles.header}>
-                <h1>Добавление товара</h1>
+                  <h1>Редактирование {product.name}</h1>
                 <input type="submit" value="Сохранить" className="btn" />
               </div>
 
@@ -402,7 +401,7 @@ export default function addProductPage({ categories, brands }) {
               <button
                 className="btn btn-danger"
                 onClick={() => {
-                  setValues({...values,image:''})
+                  setValues({ ...values, image: '' })
                 }}
               >
                 <FaTimes />
@@ -436,7 +435,7 @@ export default function addProductPage({ categories, brands }) {
                       <button
                         className="btn btn-danger"
                       onClick={() => {
-                          setValues({...values,addedImages:values.addedImages.filter((item,index)=>index!==i)})
+                          setValues({...values,addedImages:values.addedImages.filter((item,idx)=>idx!==i)})
                           
                         }}
                       >
@@ -466,15 +465,23 @@ export default function addProductPage({ categories, brands }) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({params:{slug}}) {
   const categoriesData = await fetch(`${API_URL}/api/categories`)
-  const { categories } = await categoriesData.json()
+  const { categories } = await categoriesData.json()  
   const brandsData = await fetch(`${API_URL}/api/brands`)
   const { brands } = await brandsData.json()
+  const res = await fetch(`${API_URL}/api/products/${slug}`)
+  const { product } = await res.json()
   return {
     props: {
       categories,
       brands,
-    },
+      product,
+      
+    }
   }
 }
+
+
+
+

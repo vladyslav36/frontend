@@ -10,7 +10,7 @@ import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Image from "next/image"
-import { API_URL,NOIMAGE_PATH } from "@/config/index"
+import { API_URL, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../utils"
 
@@ -21,11 +21,10 @@ export default function addCategoryPage({ categories }) {
   const [values, setValues] = useState({
     name: "",
     parentCategory: "",
-    parentCategoryId: null,
-    uploadedImage: "",
+    parentCategoryId: null,    
     description: "",
   })
-  const [imagePreview, setImagePreview] = useState("")
+  
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
@@ -96,13 +95,10 @@ export default function addCategoryPage({ categories }) {
     setValues({ ...values, parentCategory: name, parentCategoryId: id })
   }
 
-  const handleShowList = () => {
-    setIsShowList(!isShowList)
-  }
   const imageUploaded = (path) => {
     setShowModal(false)
-    setValues({ ...values, uploadedImage: path })
-    setImagePreview(path)
+    setValues({ ...values, image: path })
+    
   }
 
   return (
@@ -112,11 +108,15 @@ export default function addCategoryPage({ categories }) {
           <AccessDenied />
         ) : (
           <>
-            <h1>Добавление категории</h1>
-            <Link href="/">На главную</Link>
-            <ToastContainer />
             <div className={styles.form}>
               <form onSubmit={handleSubmit}>
+                <div className={styles.header}>
+                  <h1>Добавление категории</h1>
+                  <input type="submit" value="Сохранить" className="btn" />
+                </div>
+
+                <Link href="/">На главную</Link>
+                <ToastContainer />
                 <div className={styles.grid}>
                   <div>
                     <label htmlFor="name">Категория</label>
@@ -132,16 +132,20 @@ export default function addCategoryPage({ categories }) {
                     <label htmlFor="parentCategory">
                       Родительская категория
                     </label>
-                    <div className={styles.input_group_menu}>
+                    <div
+                      className={styles.input_group_menu}
+                      tabIndex={0}
+                      onFocus={() => setIsShowList(true)}
+                      onBlur={() => setIsShowList(false)}
+                    >
                       <input
                         type="text"
                         id="parentCategory"
                         name="parentCategory"
                         value={values.parentCategory}
                         onChange={handleChangeParent}
-                        onClick={handleShowList}                        
                       />
-                      <ul                        
+                      <ul
                         className={
                           styles.dropdown_menu +
                           " " +
@@ -151,7 +155,7 @@ export default function addCategoryPage({ categories }) {
                         {listForMenu && (
                           <>
                             {listForMenu.map((category) => (
-                              <li                                
+                              <li
                                 key={category._id}
                                 onClick={() =>
                                   handleListClick({
@@ -179,20 +183,15 @@ export default function addCategoryPage({ categories }) {
                     onChange={handleChange}
                   ></textarea>
                 </div>
-                <input
-                  type="submit"
-                  value="Добавить категорию"
-                  className="btn"
-                />
               </form>
               <div>
                 <p>Изображение категории</p>
 
                 <div className={styles.image_container}>
-                  {imagePreview ? (
+                  {values.image ? (
                     <div className={styles.image}>
                       <Image
-                        src={`${API_URL}${imagePreview}`}
+                        src={`${API_URL}${values.image}`}
                         width={200}
                         height={250}
                       />
@@ -220,7 +219,7 @@ export default function addCategoryPage({ categories }) {
                     <button
                       className="btn btn-danger"
                       onClick={() => {
-                        setImagePreview("")
+                        setValues({...values,image:''})
                       }}
                     >
                       <FaTimes />

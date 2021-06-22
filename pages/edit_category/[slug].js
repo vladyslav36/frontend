@@ -10,7 +10,7 @@ import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Image from "next/image"
-import { API_URL,NOIMAGE_PATH } from "@/config/index"
+import { API_URL, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../../utils"
 
@@ -24,13 +24,11 @@ export default function editCategoryPage({ categories, slug }) {
     image: category.image,
     name: category.name,
     parentCategory: category.parentCategory,
-    parentCategoryId: category.parentCategoryId,
-    uploadedImage: "",
+    parentCategoryId: category.parentCategoryId,    
     description: category.description,
   })
-  const [imagePreview, setImagePreview] = useState(
-    `${API_URL}${category.image}`
-  )
+  
+  
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
@@ -102,13 +100,10 @@ export default function editCategoryPage({ categories, slug }) {
     setValues({ ...values, parentCategory: name, parentCategoryId: id })
   }
 
-  const handleShowList = () => {
-    setIsShowList(!isShowList)
-  }
   const imageUploaded = (path) => {
     setShowModal(false)
-    setValues({ ...values, uploadedImage: path })
-    setImagePreview(`${API_URL}${path}`)
+    setValues({ ...values, image: path })
+    
   }
 
   return (
@@ -118,11 +113,19 @@ export default function editCategoryPage({ categories, slug }) {
           <AccessDenied />
         ) : (
           <>
-            <h1>Редактирование категории</h1>
-            <Link href="/edit_category_list">Вернуться назад</Link>
-            <ToastContainer />
             <div className={styles.form}>
               <form onSubmit={handleSubmit}>
+                <div className={styles.header}>
+                  <h1>Редактирование категории</h1>
+                  <input
+                    type="submit"
+                    value="Сохранить"
+                    className="btn"
+                  />
+                </div>
+
+                <Link href="/edit_category_list">Вернуться назад</Link>
+                <ToastContainer />
                 <div className={styles.grid}>
                   <div>
                     <label htmlFor="name">Категория</label>
@@ -138,14 +141,18 @@ export default function editCategoryPage({ categories, slug }) {
                     <label htmlFor="parentCategory">
                       Родительская категория
                     </label>
-                    <div className={styles.input_group_menu}>
+                    <div
+                      className={styles.input_group_menu}
+                      tabIndex={0}
+                      onFocus={() => setIsShowList(true)}
+                      onBlur={() => setIsShowList(false)}
+                    >
                       <input
                         type="text"
                         id="parentCategory"
                         name="parentCategory"
                         value={values.parentCategory}
                         onChange={handleChangeParent}
-                        onClick={handleShowList}
                       />
                       <ul
                         className={
@@ -182,19 +189,14 @@ export default function editCategoryPage({ categories, slug }) {
                     onChange={handleChange}
                   ></textarea>
                 </div>
-                <input
-                  type="submit"
-                  value="Сохранить изменения"
-                  className="btn"
-                />
               </form>
               <div>
                 <p>Изображение категории</p>
 
                 <div className={styles.image_container}>
-                  {imagePreview ? (
+                  {values.image ? (
                     <div className={styles.image}>
-                      <Image src={imagePreview} width={200} height={250} />
+                      <Image src={`${API_URL}${values.image}`} width={200} height={250} />
                     </div>
                   ) : (
                     <div className={styles.image}>
@@ -214,12 +216,12 @@ export default function editCategoryPage({ categories, slug }) {
                         setIsShowList(false)
                       }}
                     >
-                      <FaImage /> 
+                      <FaImage />
                     </button>
                     <button
                       className="btn btn-danger"
                       onClick={() => {
-                        setImagePreview("")
+                        setValues({...values,image:''})
                       }}
                     >
                       <FaTimes />

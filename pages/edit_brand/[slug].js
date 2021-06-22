@@ -1,8 +1,8 @@
 import Layout from "@/components/Layout"
 import AuthContext from "@/context/AuthContext"
 import { useContext, useState } from "react"
-import { API_URL, NOIMAGE_PATH } from "../config"
-import styles from "@/styles/BrandForm.module.css"
+import { API_URL, NOIMAGE_PATH } from "../../config/index"
+import styles from "@/styles/brandForm.module.css"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Image from "next/image"
@@ -11,38 +11,40 @@ import ImageUpload from "@/components/ImageUpload"
 import Modal from "@/components/Modal"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import AccessDenied from "@/components/AccessDenied"
 
-export default function add_brandPage() {
+export default function edit_brandPage({brands,slug}) {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
 
+  const {name,colors,sizes,heights,image,_id}=brands.find((item)=>item.slug===slug)
   const router = useRouter()
 
   const [inputValues, setInputValues] = useState({
-    name: "",
+    name: name,
     color: "",
     size: "",
     height: "",
   })
 
   const [values, setValues] = useState({
-    name: "",
-    colors: [],
-    sizes: [],
-    heights: [],    
-    image: "",
+    name ,
+    colors,
+    sizes,
+    heights,    
+    image,
+    _id
   })
 
-  const [listName, setListName] = useState("")  
+  const [listName, setListName] = useState("")
+  
   const [showModal, setShowModal] = useState(false)
 
   const listNameRu = { colors: "Цвета", sizes: "Размеры", heights: "Роста" }
 
   const imageUploaded = (path) => {
-    setShowModal(false)
-    setValues({ ...values, image: path })    
+    setShowModal(false)    
+    setValues({ ...values, image: path })
   }
 
   const handleChange = (e) => {
@@ -54,16 +56,12 @@ export default function add_brandPage() {
     }
   }
   const handlePress = (e, { name }) => {
-    
     if (e.key === "Enter") {
       e.preventDefault()
-      if (name) {
-        handleClick({ name, itemName: e.target.name })
-      }
+      handleClick({ name, itemName: e.target.name })
     }
   }
   const handleClick = ({ name, itemName }) => {
-    
     if (inputValues[itemName]) {
       setValues({ ...values, [name]: [...values[name], inputValues[itemName]] })
       setInputValues({ ...inputValues, [itemName]: "" })
@@ -73,7 +71,6 @@ export default function add_brandPage() {
     elem.focus()
   }
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -83,7 +80,7 @@ export default function add_brandPage() {
     }
     // Send data
     const res = await fetch(`${API_URL}/api/brands`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -100,18 +97,18 @@ export default function add_brandPage() {
 
   return (
     <Layout title="Добавление бренда">
-       {!isAdmin ? (<AccessDenied/>):(
+      {isAdmin ? (
         <div>
           <ToastContainer />
 
           <form onSubmit={handleSubmit}>
             <div className={styles.header}>
-              <h2>Добавление бренда</h2>
-               <button className="btn" type="submit">
+              <h2>Редактирование бренда</h2>
+              <button className="btn" type="submit">
                 Сохранить
               </button>
             </div>
-            <Link href='/'>Вернуться на главную</Link>
+            <Link href="/">Вернуться на главную</Link>
             <div className={styles.content}>
               <div className={styles.input_field}>
                 <div className={styles.input_block}>
@@ -125,8 +122,8 @@ export default function add_brandPage() {
                     name="name"
                     value={inputValues.name}
                     onChange={handleChange}
-                    onKeyPress={(e)=>handlePress(e,{name:null})}
-                    onFocus={()=>setListName('')}
+                    onKeyPress={handlePress}
+                    onFocus={() => setListName("")}
                   />
                 </div>
 
@@ -141,9 +138,8 @@ export default function add_brandPage() {
                     id="color"
                     value={inputValues.color}
                     onChange={handleChange}
-                    onKeyPress={(e)=>handlePress(e,{name:'colors'})}
+                    onKeyPress={(e) => handlePress(e, { name: "colors" })}
                     onFocus={() => setListName("colors")}
-                    
                   />
                   <input
                     className={styles.button}
@@ -165,9 +161,8 @@ export default function add_brandPage() {
                     id="size"
                     value={inputValues.size}
                     onChange={handleChange}
-                    onKeyPress={(e)=>handlePress(e,{name:'sizes'})}
+                    onKeyPress={(e) => handlePress(e, { name: "sizes" })}
                     onFocus={() => setListName("sizes")}
-                    
                   />
                   <input
                     className={styles.button}
@@ -189,9 +184,8 @@ export default function add_brandPage() {
                     id="height"
                     value={inputValues.height}
                     onChange={handleChange}
-                    onKeyPress={(e)=>handlePress(e,{name:'heights'})}
+                    onKeyPress={(e) => handlePress(e, { name: "heights" })}
                     onFocus={() => setListName("heights")}
-                    
                   />
                   <input
                     className={styles.button}
@@ -206,7 +200,6 @@ export default function add_brandPage() {
                   <div className={styles.image_container}>
                     {values.image ? (
                       <div className={styles.image}>
-                        
                         <Image
                           src={`${API_URL}${values.image}`}
                           width={200}
@@ -237,7 +230,7 @@ export default function add_brandPage() {
                         type="button"
                         className="btn btn-danger"
                         onClick={() => {
-                          setValues({ ...values, image: "" })
+                          setValues({...values,image:''})
                         }}
                       >
                         <FaTimes />
@@ -284,7 +277,27 @@ export default function add_brandPage() {
             <ImageUpload imageUploaded={imageUploaded} />
           </Modal>
         </div>
-      ) }
+      ) : (
+        <h2>У вас нет прав для редактирования этой страницы</h2>
+      )}
     </Layout>
   )
+}
+
+export async function getServerSideProps({ params: { slug } }) {
+  const res = await fetch(`${API_URL}/api/brands`)
+  const { brands } = await res.json()
+
+  if (!res.ok) {
+    return {
+      redirect: "/serverError",
+    }
+  }
+
+  return {
+    props: {
+      brands,
+      slug,
+    },
+  }
 }
