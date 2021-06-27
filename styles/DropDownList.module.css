@@ -1,0 +1,24 @@
+
+.drop_down_list{
+  position: absolute;
+  z-index: 900;
+  top: 105%;
+  left: 0;  
+  font-size: 14px;
+  background:  #f8f9f9;
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #999;
+  border-radius: 5px;  
+  display:none;
+ }
+
+  .drop_down_list.active{
+   display:block;
+ }
+
+ .drop_down_list li{
+   cursor:pointer;
+   margin:2px 0;
+   list-style: none;
+ }

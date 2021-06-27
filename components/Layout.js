@@ -9,7 +9,7 @@ export default function Layout({ children,title,keywords,description }) {
       <Head>
         <title>{title}</title>
         <meta name='description' content={description} />
-        <meta namt='keywords' content={keywords}/>
+        <meta name='keywords' content={keywords}/>
       </Head>
       <Header />
       <div className={styles.container}>

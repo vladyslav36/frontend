@@ -43,3 +43,11 @@ export const getCategoriesTree = (category, categories) => {
 
   return result.reverse().join(" ➔ ")
 }
+
+export const getSearchItemsList = (items, searchString,limit) => {  
+    const list = items.filter(
+      ({ name }) => name.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
+  ).map(item=>item.name).slice(0,limit)  
+    return list
+  }
+

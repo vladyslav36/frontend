@@ -14,8 +14,9 @@ export default function HomePage({ showcaseProducts,categories }) {
       title="Кармен"
       description="Оптовый магазин Кармен"
       keywords="Колготки, носки, лосины, леггинсы опт, розница"
+
     >
-      <Navbar categories={categories}/>
+      <Navbar categories={categories} />
       <Breadcrumb />
       <AdminPanel/>
       <Showcase showcaseProducts={showcaseProducts} />
@@ -25,7 +26,7 @@ export default function HomePage({ showcaseProducts,categories }) {
 
 export async function getServerSideProps() {
   const resProducts = await fetch(`${API_URL}/api/products/showcase`)
-  const { showcaseProducts } = await resProducts.json()
+  const { showcaseProducts } = await resProducts.json()  
   const resCategories = await fetch(`${API_URL}/api/categories`)
   const { categories } = await resCategories.json()
   return {

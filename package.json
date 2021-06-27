@@ -12,7 +12,20 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-icons": "^4.2.0",
+    "react-loader-spinner": "^4.0.0",
     "react-toastify": "^7.0.4",
     "swr": "^0.5.6"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vladyslav36/frontend.git"
+  },
+  "author": "vladyslav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vladyslav36/frontend/issues"
+  },
+  "homepage": "https://github.com/vladyslav36/frontend#readme"
 }

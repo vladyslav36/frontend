@@ -82,13 +82,7 @@ export default function AdminPanel() {
               </Link>
             </ul>
           </div>
-          <div className={styles.container_item}>
-            Опции
-            <ul className={styles.dropdown_list}>
-              <li>Добавить</li>
-              <li>Редактировать</li>
-            </ul>
-          </div>
+          
           <div className={styles.container_item}>
             Курс валют
             <form onSubmit={handleSubmit}>
