@@ -14,23 +14,27 @@ import { API_URL, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../utils"
 
-export default function addCategoryPage({ categories }) {
+
+export default function addCategoryPage({categories}) {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
   const [values, setValues] = useState({
     name: "",
     parentCategory: "",
-    parentCategoryId: null,    
+    parentCategoryId: null,
     description: "",
   })
   
+  
+
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
+ 
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
 
   const router = useRouter()
-  // Функция возвращает список категорий в соответствии со строкой поиска
+// Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(categories, value) {
     const list = categories.filter(
       ({ name }) => name.toLowerCase().indexOf(value.toLowerCase()) >= 0
@@ -98,9 +102,9 @@ export default function addCategoryPage({ categories }) {
   const imageUploaded = (path) => {
     setShowModal(false)
     setValues({ ...values, image: path })
-    
   }
-
+   
+  
   return (
     <div>
       <Layout title="Добавление категории">
@@ -219,7 +223,7 @@ export default function addCategoryPage({ categories }) {
                     <button
                       className="btn btn-danger"
                       onClick={() => {
-                        setValues({...values,image:''})
+                        setValues({ ...values, image: "" })
                       }}
                     >
                       <FaTimes />

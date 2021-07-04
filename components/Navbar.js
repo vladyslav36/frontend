@@ -3,11 +3,18 @@ import { useContext } from "react"
 import AuthContext from "@/context/AuthContext"
 import { FaPlus, FaEdit } from "react-icons/fa"
 import Link from "next/link"
+import { fetchCategories } from "dataFetchers"
+import Spinner from '@/components/Spinner'
 
-export default function Navbar({ categories }) {
+export default function Navbar() {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
+
+  const { data, error, isLoading } = fetchCategories()
+  if (isLoading) return <Spinner />
+  const { categories } = data
+
   const getChildren = (category, categories) => {
   return categories.filter(item=>item.parentCategoryId===category._id)
 }

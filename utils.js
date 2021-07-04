@@ -9,8 +9,9 @@ export function getCurrencySymbol(currencyValue) {
     case "USD":
       return "$"
       break
+    
     default:
-      return "UAH"
+      return "₴"
   }
 }
 
@@ -51,3 +52,6 @@ export const getSearchItemsList = (items, searchString,limit) => {
     return list
   }
 
+export const getShortDescription = (description,length) => {
+  return description.length>length?`${description.slice(0,length)}...`:description
+}

@@ -1,13 +1,14 @@
 .container{
-  background-color:   #5499c7  ;
-  color:#eaeded;
+  background-color:#1f618d    ;
+  color:#fff;
   width:100%;
   padding:5px 10px;
   border-radius:5px;
   display:flex;
   justify-content: space-between;
   align-items:center;
-  
+  font-size:14px;
+  letter-spacing: 0.2ex;
 }
 
 .container .list{
@@ -20,14 +21,14 @@ flex-wrap:wrap;
 }
 
 .category{
-  padding:5px 15px;  
+  padding:5px 10px;  
   margin:5px 0;
   position:relative;
 }
 
 .category:hover{
  
-  background-color:  #2980b9 ;
+  background-color:   #2874a6  ;
   cursor:pointer;
 }
 .drop_down_list{
@@ -35,12 +36,12 @@ flex-wrap:wrap;
   list-style: none; 
   display:none;
   z-index:900;
-  padding:10px 0;
+  padding:5px 0;
   top:100%;
   left:0;  
   min-width:160px;
-  background-color: #f2f3f4;
-  color:#333;
+  background-color:  #fbfcfc ;
+color:#000;
   border:1px solid  #ccd1d1;
 ;
 }
@@ -49,10 +50,10 @@ flex-wrap:wrap;
   
 }
 .drop_down_list li{
-  padding:5px 15px; 
+  padding:0px 10px; 
   
 }
 .drop_down_list li:hover{
-  background-color: #5499c7;
-  color:#eaeded;
+  background-color: #2874a6;
+  color:#fbfcfc;
 }

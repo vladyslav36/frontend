@@ -4,7 +4,7 @@ import { useContext, useState } from "react"
 import Spinner from "@/components/Spinner"
 import AuthContext from "@/context/AuthContext"
 import ProductsContext from "@/context/ProductsContext"
-import DropDownList from '@/components/DropDownList'
+import DropDownList from "@/components/DropDownList"
 import {
   FaPhone,
   FaShoppingCart,
@@ -12,8 +12,9 @@ import {
   FaSignOutAlt,
   FaTasks,
 } from "react-icons/fa"
-import { getCurrencySymbol, getSearchItemsList } from "utils"
+import { getCurrencySymbol } from "utils"
 import { fetchNames } from "dataFetchers"
+import { API_URL } from "../config"
 
 export default function Header() {
   const { login, logout } = useContext(AuthContext)
@@ -23,14 +24,65 @@ export default function Header() {
   const [isShowList, setIsShowList] = useState(false)
 
   const [searchString, setSearchString] = useState("")
-  const handleSubmit = (e) => {
+  const [checkValues, setCheckValues] = useState({
+    isProduct: true,
+    isModel:false
+  })
+
+  const getSearchItemsList = (items, searchString, limit, isProduct = true, isModel = false) => {
+    
+    const listName = items
+      .filter(
+        ({ name }) =>
+          isProduct&&name.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
+      )
+      .map((item) => item.name)
+      .slice(0, limit)
+    const listModel = items
+      .filter(
+        ({ model }) =>
+          isModel &&
+          model.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
+      )
+      .map((item) => item.model)
+      .slice(0, limit)
+    const list=[...listName,...listModel]
+    return list
+  }
+
+  const handleSubmit =  async (e) => {
     e.preventDefault()
+    let result=[]
+    if (checkValues.isProduct) {
+      const res = await fetch(
+      `${API_URL}/api/products/search?product=${searchString}`
+    )
+      const { products } = await res.json()
+      result=[...products]
+    }
+    if (checkValues.isModel) {
+      const res = await fetch(
+      `${API_URL}/api/products/search?model=${searchString}`
+    )
+      const { products } = await res.json()
+      result=[...result,...products]
+    }
+   
+   
+    
   }
   const handleChange = (e) => {
     e.preventDefault()
     setSearchString(e.target.value)
   }
-
+  const checkChange = (e) => {
+   
+    const { name, checked } = e.target
+    
+    setCheckValues({...checkValues,[name]:checked})
+   
+    
+}
   const handleClick = (name) => {
     setSearchString(name)
   }
@@ -38,7 +90,7 @@ export default function Header() {
   const { data, isLoading } = fetchNames()
   if (isLoading) return <Spinner />
   const { products } = data
-console.log(products)
+
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
@@ -70,21 +122,23 @@ console.log(products)
         &nbsp;<p>098-208-60-83</p>
       </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className={styles.search}
-        
-      >
-        <div className={styles.input_group} tabIndex={0}
-        onFocus={()=>setIsShowList(true)}
-        onBlur={()=>setIsShowList(false)}>
-<input type="text" value={searchString} onChange={handleChange} />
-        <input type="button" value="Найти" onChange={handleSubmit} />
-        {products.length ? (
-          <DropDownList isShow={isShowList} itemsList={getSearchItemsList(products,searchString,20)} handleClick={handleClick}/>
-        ):null}
+      <form onSubmit={handleSubmit} className={styles.search}>
+        <div
+          className={styles.input_group}
+          tabIndex={0}
+          onFocus={() => setIsShowList(true)}
+          onBlur={() => setIsShowList(false)}
+        >
+          <input type="text" value={searchString} onChange={handleChange} />
+          <input type="submit" value="Найти" onChange={handleSubmit} />
+          {products.length ? (
+            <DropDownList
+              isShow={isShowList}
+              itemsList={getSearchItemsList(products, searchString, 20,checkValues.isProduct,checkValues.isModel)}
+              handleClick={handleClick}
+            />
+          ) : null}
         </div>
-        
       </form>
 
       <nav>
@@ -114,6 +168,31 @@ console.log(products)
             <p>Товаров 0(0грн)</p>
           </a>
         </Link>
+      </div>
+      <div className={styles.check_block}>
+        <div>
+          <p>Искать в</p> 
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="isProduct"
+            name="isProduct"
+            onChange={checkChange}
+            checked={checkValues.isProduct}
+          />
+          <label htmlFor="isProduct">товарах</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="isModel"
+            name="isModel"
+            onChange={checkChange}
+            checked={checkValues.isModel}
+          />
+          <label htmlFor="isModel">моделях</label>
+        </div>        
       </div>
     </header>
   )

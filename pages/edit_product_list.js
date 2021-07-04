@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import Spinner from '@/components/Spinner'
-import { getNames } from "dataFetchers"
+import { fetchNames } from "dataFetchers"
 
 
 
@@ -39,17 +39,8 @@ export default  function editProductListPage() {
     brand: false,
     category: false,
   })
-  const [prodList, setProdList] = useState([])
+  const [prodList, setProdList] = useState([])    
   
-  
-  const getProdListFromQuery = async () => {
-    const res = await fetch(
-      `${API_URL}/api/products/search?product=${values.product}&category=${values.category}&brand=${values.brand}`
-    )
-    const { products } = await res.json()
-
-    setProdList([...products])
-  }
   const handleDeleteProduct = async (id) => {
     if (confirm("Уверены?")) {
       const res = await fetch(`${API_URL}/api/products/${id}`, {
@@ -75,11 +66,15 @@ export default  function editProductListPage() {
   const submitHandler = async (e) => {
     e.preventDefault()
 
-    // send query
-    getProdListFromQuery()
+   const res = await fetch(
+     `${API_URL}/api/products/search?product=${values.product}&category=${values.category}&brand=${values.brand}`
+   )
+   const { products } = await res.json()
+
+   setProdList([...products])
   }
 
-const { data, isLoading } = getNames()
+const { data, isLoading } = fetchNames()
   if (isLoading) return <Spinner/>
   const { brands, categories, products } = data
   
@@ -183,7 +178,7 @@ const { data, isLoading } = getNames()
               </div>
             </form>
 
-            <div className={styles.grid}>
+            <div className={styles.grid_header}>
               <div>Название</div>
               <div>Модель</div>
               <div>Описание</div>
@@ -191,8 +186,8 @@ const { data, isLoading } = getNames()
               <div>Управление</div>
               <div className={styles.grid_line}></div>
               {prodList.length
-                ? prodList.map((item) => (
-                    <>
+                ? prodList.map((item,i) => (
+                  <div key= { i } className={styles.grid_body}>
                       <div>{item.name}</div>
                       <div>{item.model}</div>
                       <div>{item.description}</div>
@@ -218,7 +213,7 @@ const { data, isLoading } = getNames()
                         </button>
                       </div>
                       <div className={styles.grid_line}></div>
-                    </>
+                    </div>
                   ))
                 : null}
             </div>

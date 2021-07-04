@@ -1,18 +1,10 @@
-/* .header{
-  display:flex;
-  justify-content: space-between;
-  align-items:center;
-  height:60px;
-  background-color: #eaeded;
-  color:#333;
-  padding:0 30px;
-} */
+
 .header {
   display: grid;
   grid-template-columns: 200px 150px 3fr 2fr 1fr;
-  grid-template-rows: 21px 21px 70px;
+  grid-template-rows: 21px 21px 60px 30px;
 
-  background-color: #eaeded;
+  background-color:  #f4f6f6 ;
   color: #333;
   padding: 10px 15px;
 }
@@ -20,8 +12,9 @@
   grid-row: 3/4;
   grid-column: 1/2;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
+  line-height: 1;
 }
 
 .logo a {
@@ -31,35 +24,7 @@
 .logo a:hover {
   color: #000;
 }
-/* .select select{
-  appearance:none;
-  font-size: 16px;
-  border:none; 
-  background-color: #eaeded; 
-}
-.select select:hover{
-  cursor: pointer;
-  border-bottom:1px solid;
-}
-.select p{
-  display:inline-block;
-}
-.header ul{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  list-style:none;
-} */
 
-/* .currencies{
-  display:flex;
-  }
-
-  .currencies p{
-    display:block;
-    padding:0 5px;
-    font-size:15px;
-  } */
 .currencies {
   grid-row: 1/2;
   grid-column: 1/2;
@@ -113,7 +78,7 @@
   grid-row: 3/4;
   grid-column: 2/4;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
  
 }
@@ -125,11 +90,14 @@
   justify-content: center;
 }
 .input_group input:nth-of-type(1) {
+  font-size: 14px;
+  padding:0 2px;
   height: 30px;
   width: 70%;
   min-width: 200px;
 }
 .input_group input:nth-of-type(2) {
+  font-size:14px;
   width: 70px;
   height: 30px;
 }
@@ -198,8 +166,8 @@ margin:0 5px;
   grid-row: 3/4;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 5px;
+  align-items: flex-end;
+  /* padding: 5px; */
 }
 
 .header .cart a {
@@ -229,3 +197,30 @@ margin:0 5px;
 .header .cart a:hover {
   cursor: pointer;
 }
+
+.check_block{
+  grid-column: 2/4;
+  grid-row: 4/5;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+}
+
+.check_block>div{
+  padding: 0 5px;
+  
+}
+.check_block>div>label{
+  padding:0 3px;
+}
+.check_block>div>label{  
+ cursor:pointer;
+}
+.check_block>div>input[type='checkbox']{
+  appearance: none;  
+}
+.check_block>div>input[type='checkbox']:checked + label{
+  border-bottom:1px solid #333;
+}
+
