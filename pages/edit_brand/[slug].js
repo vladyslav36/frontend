@@ -63,7 +63,10 @@ export default function edit_brandPage({brands,slug}) {
   }
   const handleClick = ({ name, itemName }) => {
     if (inputValues[itemName]) {
-      setValues({ ...values, [name]: [...values[name], inputValues[itemName]] })
+      setValues({
+        ...values,
+        [name]: [...values[name], { name: inputValues[itemName], price: 0 }],
+      })
       setInputValues({ ...inputValues, [itemName]: "" })
     }
 
@@ -246,7 +249,7 @@ export default function edit_brandPage({brands,slug}) {
                   <ul>
                     {values[listName].map((item, i) => (
                       <li key={i}>
-                        {item}
+                        {item.name}
 
                         <FaTimes
                           className={styles.icon}

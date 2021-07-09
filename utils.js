@@ -22,7 +22,7 @@ export function getPriceForShow({
   price,
 }) {
   const showPrice = (
-    (currencyRate[currencyValue] * price) /
+    (currencyRate[currencyValue] * (+price)) /
     currencyRate[currencyShop]
   ).toFixed(2)
   return showPrice
@@ -54,4 +54,12 @@ export const getSearchItemsList = (items, searchString,limit) => {
 
 export const getShortDescription = (description,length) => {
   return description.length>length?`${description.slice(0,length)}...`:description
+}
+
+export const stringToPrice = (string)=>{
+  if (!isNaN(+string)) {
+    return { price: '' + (Math.abs((+string).toFixed(2))), error: false }
+  } else {
+    return {price:string,error:true}
+  }
 }

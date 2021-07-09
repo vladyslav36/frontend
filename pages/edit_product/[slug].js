@@ -12,14 +12,14 @@ import Link from "next/link"
 import Image from "next/image"
 import { API_URL, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
-import { getCategoriesTree } from "../../utils"
+import { getCategoriesTree, stringToPrice } from "../../utils"
 import SelectOptions from "@/components/SelectOptions"
 
 export default function editProductPage({ categories, brands,product }) {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
-console.log(product)
+
   const [values, setValues] = useState({
     _id:product._id,
     name: product.name,
@@ -107,6 +107,14 @@ console.log(product)
       router.push("/")
     }
   }
+  const formatPrice = ({ name, value }) => {
+    let { price, error } = stringToPrice(value)    
+    if (error) {
+      price = ""
+      toast.error("Прайс должен быть числом")
+    }
+    setValues({ ...values, [name]: price })
+  }
   // input для name & model ...
   const handleChange = (e) => {
     e.preventDefault()
@@ -164,7 +172,7 @@ console.log(product)
           <div className={styles.form}>
             <form onSubmit={handleSubmit}>
               <div className={styles.header}>
-                  <h1>Редактирование {product.name}</h1>
+                <h1>Редактирование {product.name}</h1>
                 <input type="submit" value="Сохранить" className="btn" />
               </div>
 
@@ -285,22 +293,28 @@ console.log(product)
                     <label htmlFor="currencyValue">Валюта товара</label>
                   </div>
                   <div className={styles.input_price}>
-                    <div>
+                    <div tabIndex={0}>
                       <input
                         type="text"
                         id="price"
                         name="price"
                         value={values.price}
                         onChange={handleChange}
+                        onBlur={(e) =>
+                          formatPrice({ name: "price", value: e.target.value })
+                        }
                       />
                     </div>
-                    <div>
+                    <div tabIndex={0}>
                       <input
                         type="text"
                         id="retailPrice"
                         name="retailPrice"
                         value={values.retailPrice}
                         onChange={handleChange}
+                        onBlur={(e) =>
+                          formatPrice({ name: "retailPrice", value: e.target.value })
+                        }
                       />
                     </div>
                     <div>
@@ -352,7 +366,7 @@ console.log(product)
                   brandId={values.brandId}
                   brands={brands}
                   values={values}
-                  setValues={setValues}
+                  setValues={setValues} 
                 />
               )}
               <div>
@@ -401,7 +415,7 @@ console.log(product)
               <button
                 className="btn btn-danger"
                 onClick={() => {
-                  setValues({ ...values, image: '' })
+                  setValues({ ...values, image: "" })
                 }}
               >
                 <FaTimes />
@@ -434,9 +448,13 @@ console.log(product)
                       </button>
                       <button
                         className="btn btn-danger"
-                      onClick={() => {
-                          setValues({...values,addedImages:values.addedImages.filter((item,idx)=>idx!==i)})
-                          
+                        onClick={() => {
+                          setValues({
+                            ...values,
+                            addedImages: values.addedImages.filter(
+                              (item, idx) => idx !== i
+                            ),
+                          })
                         }}
                       >
                         <FaTimes />

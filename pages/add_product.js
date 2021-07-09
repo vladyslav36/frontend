@@ -12,7 +12,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { API_URL, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
-import { getCategoriesTree } from "../utils"
+import { getCategoriesTree, stringToPrice } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 
 export default function addProductPage({ categories, brands }) {
@@ -106,6 +106,15 @@ export default function addProductPage({ categories, brands }) {
     } else {
       router.push("/")
     }
+  }
+
+  const formatPrice = ({ name, value }) => {    
+    let { price, error } = stringToPrice(value)    
+    if (error) {
+      price = ''
+      toast.error('Прайс должен быть числом')
+    }
+    setValues({...values,[name]:price})
   }
   // input для name & model ...
   const handleChange = (e) => {
@@ -286,22 +295,28 @@ export default function addProductPage({ categories, brands }) {
                     <label htmlFor="currencyValue">Валюта товара</label>
                   </div>
                   <div className={styles.input_price}>
-                    <div>
+                    <div tabIndex={0}>
                       <input
                         type="text"
                         id="price"
                         name="price"
                         value={values.price}
                         onChange={handleChange}
+                        onBlur={(e) =>
+                          formatPrice({ name: "price", value: e.target.value })
+                        }
                       />
                     </div>
-                    <div>
+                    <div tabIndex={0}>
                       <input
                         type="text"
                         id="retailPrice"
                         name="retailPrice"
                         value={values.retailPrice}
                         onChange={handleChange}
+                        onBlur={(e) =>
+                          formatPrice({ name: "retailPrice", value: e.target.value })
+                        }
                       />
                     </div>
                     <div>
@@ -354,6 +369,7 @@ export default function addProductPage({ categories, brands }) {
                   brands={brands}
                   values={values}
                   setValues={setValues}
+                  toast={toast}
                 />
               )}
               <div>
@@ -402,7 +418,7 @@ export default function addProductPage({ categories, brands }) {
               <button
                 className="btn btn-danger"
                 onClick={() => {
-                  setValues({...values,image:''})
+                  setValues({ ...values, image: "" })
                 }}
               >
                 <FaTimes />
@@ -435,9 +451,13 @@ export default function addProductPage({ categories, brands }) {
                       </button>
                       <button
                         className="btn btn-danger"
-                      onClick={() => {
-                          setValues({...values,addedImages:values.addedImages.filter((item,index)=>index!==i)})
-                          
+                        onClick={() => {
+                          setValues({
+                            ...values,
+                            addedImages: values.addedImages.filter(
+                              (item, index) => index !== i
+                            ),
+                          })
                         }}
                       >
                         <FaTimes />
