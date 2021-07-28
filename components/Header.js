@@ -84,6 +84,7 @@ export default function Header() {
     
 }
   const handleClick = (name) => {
+    setIsShowList(false)
     setSearchString(name)
   }
 

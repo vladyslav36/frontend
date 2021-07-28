@@ -1,7 +1,7 @@
 import styles from "@/styles/DropDownList.module.css"
 
 
-export default function DropDownList({ isShow, itemsList, handleClick }) {
+export default function DropDownList({ isShow=false, itemsList=[], handleClick }) {
   return (
     <>
       {itemsList.length ? (
