@@ -9,16 +9,18 @@ import {
   FaPhone,
   FaShoppingCart,
   FaSignInAlt,
-  FaSignOutAlt,
   FaTasks,
 } from "react-icons/fa"
 import { getCurrencySymbol } from "utils"
 import { fetchNames } from "dataFetchers"
 import { API_URL } from "../config"
+import  { useRouter } from "next/router"
+
 
 export default function Header() {
+  const router=useRouter()
   const { login, logout } = useContext(AuthContext)
-  const { currencyShop, setCurrencyShop, currencyRate } =
+  const { currencyShop, setCurrencyShop, currencyRate,setProductList } =
     useContext(ProductsContext)
 
   const [isShowList, setIsShowList] = useState(false)
@@ -65,10 +67,10 @@ export default function Header() {
       `${API_URL}/api/products/search?model=${searchString}`
     )
       const { products } = await res.json()
-      result=[...result,...products]
+      result = [...result, ...products]
     }
-   
-   
+    setProductList([...result])
+    router.push('/product_list')
     
   }
   const handleChange = (e) => {
@@ -131,15 +133,15 @@ export default function Header() {
           onBlur={() => setIsShowList(false)}
         >
           <input type="text" value={searchString} onChange={handleChange} />
-          <input type="submit" value="Найти" onChange={handleSubmit} />
           {products.length ? (
             <DropDownList
-              isShow={isShowList}
-              itemsList={getSearchItemsList(products, searchString, 20,checkValues.isProduct,checkValues.isModel)}
-              handleClick={handleClick}
+            isShow={isShowList}
+            itemsList={getSearchItemsList(products, searchString, 20,checkValues.isProduct,checkValues.isModel)}
+            handleClick={handleClick}
             />
-          ) : null}
+            ) : null}
         </div>
+            <input type="submit" value="Найти" onChange={handleSubmit}/>
       </form>
 
       <nav>

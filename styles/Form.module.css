@@ -73,8 +73,15 @@
 .image{
    width:200px;
   height:250px;
+  display:flex;
+  justify-content: center;
+  align-items:center;
   border:1px solid #b2babb;
+}
 
+.image img{
+  max-width:198px;
+  max-height:248px;
 }
 
 
@@ -84,6 +91,7 @@
   align-items: flex-start;
   margin: 10px 5px;
   width:200px;
+  
   
 }
 .image_footer button {

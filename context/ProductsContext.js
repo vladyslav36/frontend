@@ -11,7 +11,7 @@ const [currencyRate, setCurrencyRate] = useState({
   USD: 1,
   EUR: 1,
 })
-
+const [productList,setProductList]=useState([])
 useEffect(() => {
   const fetchCurrency = async () => {
     const res = await fetch(`${API_URL}/api/currencyrate`)
@@ -25,7 +25,9 @@ useEffect(() => {
       currencyRate,
       currencyShop,
       setCurrencyRate,
-      setCurrencyShop
+      setCurrencyShop,
+      productList,
+      setProductList
     }}>
     {children}
     </ProductsContext.Provider>

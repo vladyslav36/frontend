@@ -47,5 +47,14 @@ export const fetchBrands = () => {
   }
 }
 
+export const fetchProductsCategoryId = (id) => {
+    const { data, error } = useSWR(`${API_URL}/api/products/category/${id}`,fetcher)
+  return {
+    data,
+    isLoading: !error && !data,
+    isError: error,
+  }
+}
+
 
 

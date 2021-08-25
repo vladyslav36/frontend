@@ -3,7 +3,6 @@ import Layout from "@/components/Layout"
 import { API_URL } from "@/config/index.js"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import Image from "next/image"
 import Link from "next/link"
 import { FaShoppingCart, FaTimes } from "react-icons/fa"
 import { getCurrencySymbol } from "utils"
@@ -84,12 +83,35 @@ export default function productPage({ slug, product }) {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    if (!Number.isInteger(+values.qnt)){
-      toast.error('Количество должно быть целым числом')
-      setValues({ ...values, qnt: '' })
-      inputQnt.current.focus()
+   
+    if (product.sizes.length && !values.size) {
+      toast.error('Поле Размер должно быть заполнено')
       return
     }
+    if (product.colors.length && !values.color) {
+      toast.error('Поле Цвет должно быть заполнено')
+      return
+    }
+    if (product.heights.length && !values.height) {
+      toast.error('Поле Рост должно быть заполнено')
+      return
+    }
+     if (!values.qnt) {
+       toast.error("Поле Количество должно быть заполнено")
+       return
+     }
+     if (+values.qnt <= 0) {
+       toast.error("Количество должно быть больше нуля")
+       setValues({ ...values, qnt: "" })
+       inputQnt.current.focus()
+       return
+     }
+     if (!Number.isInteger(+values.qnt)) {
+       toast.error("Количество должно быть целым числом")
+       setValues({ ...values, qnt: "" })
+       inputQnt.current.focus()
+       return
+     }
     setChosen([
       ...chosen,
       {

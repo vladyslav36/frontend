@@ -21,14 +21,13 @@ export default function editCategoryPage({ categories, slug }) {
   const category = categories.find((item) => item.slug === slug)
   const [values, setValues] = useState({
     _id: category._id,
-    image: category.image,
     name: category.name,
     parentCategory: category.parentCategory,
     parentCategoryId: category.parentCategoryId,    
     description: category.description,
   })
   
-  
+  const [image,setImage]=useState({path:category.image?`${API_URL}${category.image}`:'',file:null})
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
@@ -66,12 +65,16 @@ export default function editCategoryPage({ categories, slug }) {
     }
 
     // Send data
+    const formData = new FormData()
+    formData.append('values',JSON.stringify(values))
+    formData.append('imageClientPath',image.path)
+    formData.append('image',image.file)
     const res = await fetch(`${API_URL}/api/categories`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        "enctype": "multipart/form-data",
       },
-      body: JSON.stringify(values),
+      body: formData,
     })
     const data = await res.json()
 
@@ -98,12 +101,12 @@ export default function editCategoryPage({ categories, slug }) {
 
   const handleListClick = ({ id, name }) => {
     setValues({ ...values, parentCategory: name, parentCategoryId: id })
+    setIsShowList(false)
   }
 
-  const imageUploaded = (path) => {
-    setShowModal(false)
-    setValues({ ...values, image: path })
-    
+  const deleteImage = () => {
+    URL.revokeObjectURL(image.path)
+    setImage({ path: "", file: null })
   }
 
   return (
@@ -117,11 +120,7 @@ export default function editCategoryPage({ categories, slug }) {
               <form onSubmit={handleSubmit}>
                 <div className={styles.header}>
                   <h1>Редактирование категории</h1>
-                  <input
-                    type="submit"
-                    value="Сохранить"
-                    className="btn"
-                  />
+                  <input type="submit" value="Сохранить" className="btn" />
                 </div>
 
                 <Link href="/edit_category_list">Вернуться назад</Link>
@@ -194,18 +193,13 @@ export default function editCategoryPage({ categories, slug }) {
                 <p>Изображение категории</p>
 
                 <div className={styles.image_container}>
-                  {values.image ? (
+                  {image.path ? (
                     <div className={styles.image}>
-                      <Image src={`${API_URL}${values.image}`} width={200} height={250} />
+                      <img src={image.path} />
                     </div>
                   ) : (
                     <div className={styles.image}>
-                      <Image
-                        src={`${API_URL}${NOIMAGE_PATH}`}
-                        width={200}
-                        height={250}
-                        alt="No Image"
-                      />
+                          <img src='/noimage.png' alt="No Image" />
                     </div>
                   )}
                   <div className={styles.image_footer}>
@@ -220,9 +214,7 @@ export default function editCategoryPage({ categories, slug }) {
                     </button>
                     <button
                       className="btn btn-danger"
-                      onClick={() => {
-                        setValues({...values,image:''})
-                      }}
+                      onClick={deleteImage}
                     >
                       <FaTimes />
                     </button>
@@ -233,7 +225,11 @@ export default function editCategoryPage({ categories, slug }) {
           </>
         )}
         <Modal show={showModal} onClose={() => setShowModal(false)}>
-          <ImageUpload imageUploaded={imageUploaded} />
+          <ImageUpload
+            setShowModal={setShowModal}
+            setImage={setImage}
+            image={image}
+          />
         </Modal>
       </Layout>
     </div>

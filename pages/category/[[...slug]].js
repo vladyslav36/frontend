@@ -4,6 +4,8 @@ import { API_URL } from "@/config/index"
 import CategoryItem from "@/components/CategoryItem"
 import ProductList from '@/components/ProductList'
 import Link from 'next/link'
+import { fetchProductsCategoryId } from 'dataFetchers'
+import Spinner from '@/components/Spinner'
 
 
 export default function categoryPage({ categories, params }) {
@@ -25,6 +27,15 @@ const categoriesList =
   // и которые являются детьми категории lastSlug
   // Если categoryList пустой массив, т.е. подкатегорий нет то переходим на компонент
   // ProductList куда передаем lastSlug как ссылку на категорию, продукты которой надо показать
+
+  const getProductList = (categoryId) => {
+    const { data,isLoading } = fetchProductsCategoryId(categoryId)
+    if (isLoading) return <Spinner />
+    
+    const { products } = data
+    
+    return <ProductList products={products} />
+  }
   return (
     <Layout title="Категории">
        <Link href='/'>На главную</Link> 
@@ -35,8 +46,10 @@ const categoriesList =
           .map(item=>(
         <CategoryItem item={item} key={item._id} itemHref={itemHref}/>
           ))
-        ) :
-          <ProductList categoryId={lastCategoryId} />
+        ) : (
+            getProductList(lastCategoryId)
+        )
+          
           
           : (
           categories

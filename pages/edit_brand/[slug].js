@@ -5,7 +5,7 @@ import { API_URL, NOIMAGE_PATH } from "../../config/index"
 import styles from "@/styles/brandForm.module.css"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import Image from "next/image"
+
 import { FaImage, FaTimes } from "react-icons/fa"
 import ImageUpload from "@/components/ImageUpload"
 import Modal from "@/components/Modal"
@@ -16,8 +16,9 @@ export default function edit_brandPage({brands,slug}) {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
-
-  const {name,colors,sizes,heights,image,_id}=brands.find((item)=>item.slug===slug)
+const brand=brands.find((item)=>item.slug===slug)
+  const { name, colors, sizes, heights, _id } = brand
+  const imagePath=brand.image
   const router = useRouter()
 
   const [inputValues, setInputValues] = useState({
@@ -31,21 +32,16 @@ export default function edit_brandPage({brands,slug}) {
     name ,
     colors,
     sizes,
-    heights,    
-    image,
+    heights,
     _id
   })
-
+const [image,setImage]=useState({file:null,path:imagePath?`${API_URL}${imagePath}`:''})
   const [listName, setListName] = useState("")
   
   const [showModal, setShowModal] = useState(false)
 
   const listNameRu = { colors: "Цвета", sizes: "Размеры", heights: "Роста" }
-
-  const imageUploaded = (path) => {
-    setShowModal(false)    
-    setValues({ ...values, image: path })
-  }
+  
 
   const handleChange = (e) => {
     e.preventDefault()
@@ -74,6 +70,11 @@ export default function edit_brandPage({brands,slug}) {
     elem.focus()
   }
 
+  const deleteImage = () => {
+    URL.revokeObjectURL(image.path)
+    setImage({ path: "", image: null })
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -82,12 +83,17 @@ export default function edit_brandPage({brands,slug}) {
       return
     }
     // Send data
+    const formData = new FormData()    
+    formData.append('values',JSON.stringify(values))
+    formData.append('imageClientPath',image.path)
+    formData.append(`image`, image.file)
+
     const res = await fetch(`${API_URL}/api/brands`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        enctype: "multipart/form-data",
       },
-      body: JSON.stringify(values),
+      body: formData,
     })
     const data = await res.json()
 
@@ -97,7 +103,6 @@ export default function edit_brandPage({brands,slug}) {
       router.push("/")
     }
   }
-
   return (
     <Layout title="Добавление бренда">
       {isAdmin ? (
@@ -201,20 +206,18 @@ export default function edit_brandPage({brands,slug}) {
                 </div>
                 <div>
                   <div className={styles.image_container}>
-                    {values.image ? (
+                    {image.path ? (
                       <div className={styles.image}>
-                        <Image
-                          src={`${API_URL}${values.image}`}
-                          width={200}
-                          height={250}
+                        <img
+                          src={image.path}
+                          
                         />
                       </div>
                     ) : (
                       <div className={styles.image}>
-                        <Image
-                          src={`${API_URL}${NOIMAGE_PATH}`}
-                          width={200}
-                          height={250}
+                        <img
+                          src='/noimage.png'
+                          
                           alt="No Image"
                         />
                       </div>
@@ -232,9 +235,7 @@ export default function edit_brandPage({brands,slug}) {
                       <button
                         type="button"
                         className="btn btn-danger"
-                        onClick={() => {
-                          setValues({...values,image:''})
-                        }}
+                        onClick={deleteImage}
                       >
                         <FaTimes />
                       </button>
@@ -274,10 +275,9 @@ export default function edit_brandPage({brands,slug}) {
 
           <Modal
             show={showModal}
-            onClose={() => setShowModal(false)}
-            title="Загрузить картинку"
+            onClose={() => setShowModal(false)}  
           >
-            <ImageUpload imageUploaded={imageUploaded} />
+            <ImageUpload setShowModal={setShowModal} image={image} setImage={setImage} />
           </Modal>
         </div>
       ) : (

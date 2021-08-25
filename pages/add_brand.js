@@ -5,7 +5,6 @@ import { API_URL, NOIMAGE_PATH } from "../config"
 import styles from "@/styles/BrandForm.module.css"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import Image from "next/image"
 import { FaImage, FaTimes } from "react-icons/fa"
 import ImageUpload from "@/components/ImageUpload"
 import Modal from "@/components/Modal"
@@ -31,19 +30,12 @@ export default function add_brandPage() {
     name: "",
     colors: [],
     sizes: [],
-    heights: [],    
-    image: "",
+    heights: [],
   })
-
-  const [listName, setListName] = useState("")  
+  const [image, setImage] = useState({ path: "", file: null })
+  const [listName, setListName] = useState("")
   const [showModal, setShowModal] = useState(false)
-
   const listNameRu = { colors: "Цвета", sizes: "Размеры", heights: "Роста" }
-
-  const imageUploaded = (path) => {
-    setShowModal(false)
-    setValues({ ...values, image: path })    
-  }
 
   const handleChange = (e) => {
     e.preventDefault()
@@ -54,7 +46,6 @@ export default function add_brandPage() {
     }
   }
   const handlePress = (e, { name }) => {
-    
     if (e.key === "Enter") {
       e.preventDefault()
       if (name) {
@@ -63,17 +54,22 @@ export default function add_brandPage() {
     }
   }
   const handleClick = ({ name, itemName }) => {
-    
     if (inputValues[itemName]) {
-      setValues({ ...values, [name]: [...values[name], {name:inputValues[itemName],price:''}] })
+      setValues({
+        ...values,
+        [name]: [...values[name], { name: inputValues[itemName], price: "" }],
+      })
       setInputValues({ ...inputValues, [itemName]: "" })
     }
 
+    
     const elem = document.getElementById(itemName)
     elem.focus()
   }
-
-  
+const deleteImage = () => {
+      URL.revokeObjectURL(image.path)
+      setImage({ path: "", image: null })
+    }
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -82,12 +78,16 @@ export default function add_brandPage() {
       return
     }
     // Send data
+    const formData = new FormData()    
+    formData.append('values',JSON.stringify(values))
+    formData.append(`image`, image.file)
+    
     const res = await fetch(`${API_URL}/api/brands`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "enctype": "multipart/form-data",
       },
-      body: JSON.stringify(values),
+      body: formData,
     })
     const data = await res.json()
 
@@ -97,21 +97,23 @@ export default function add_brandPage() {
       router.push("/")
     }
   }
-
+  console.log(image)
   return (
     <Layout title="Добавление бренда">
-       {!isAdmin ? (<AccessDenied/>):(
+      {!isAdmin ? (
+        <AccessDenied />
+      ) : (
         <div>
           <ToastContainer />
 
           <form onSubmit={handleSubmit}>
             <div className={styles.header}>
               <h2>Добавление бренда</h2>
-               <button className="btn" type="submit">
+              <button className="btn" type="submit">
                 Сохранить
               </button>
             </div>
-            <Link href='/'>Вернуться на главную</Link>
+            <Link href="/">Вернуться на главную</Link>
             <div className={styles.content}>
               <div className={styles.input_field}>
                 <div className={styles.input_block}>
@@ -125,8 +127,8 @@ export default function add_brandPage() {
                     name="name"
                     value={inputValues.name}
                     onChange={handleChange}
-                    onKeyPress={(e)=>handlePress(e,{name:''})}
-                    onFocus={()=>setListName('')}
+                    onKeyPress={(e) => handlePress(e, { name: "" })}
+                    onFocus={() => setListName("")}
                   />
                 </div>
 
@@ -141,9 +143,8 @@ export default function add_brandPage() {
                     id="color"
                     value={inputValues.color}
                     onChange={handleChange}
-                    onKeyPress={(e)=>handlePress(e,{name:'colors'})}
+                    onKeyPress={(e) => handlePress(e, { name: "colors" })}
                     onFocus={() => setListName("colors")}
-                    
                   />
                   <input
                     className={styles.button}
@@ -165,9 +166,8 @@ export default function add_brandPage() {
                     id="size"
                     value={inputValues.size}
                     onChange={handleChange}
-                    onKeyPress={(e)=>handlePress(e,{name:'sizes'})}
+                    onKeyPress={(e) => handlePress(e, { name: "sizes" })}
                     onFocus={() => setListName("sizes")}
-                    
                   />
                   <input
                     className={styles.button}
@@ -189,9 +189,8 @@ export default function add_brandPage() {
                     id="height"
                     value={inputValues.height}
                     onChange={handleChange}
-                    onKeyPress={(e)=>handlePress(e,{name:'heights'})}
+                    onKeyPress={(e) => handlePress(e, { name: "heights" })}
                     onFocus={() => setListName("heights")}
-                    
                   />
                   <input
                     className={styles.button}
@@ -204,25 +203,16 @@ export default function add_brandPage() {
                 </div>
                 <div>
                   <div className={styles.image_container}>
-                    {values.image ? (
+                    {image.path ? (
                       <div className={styles.image}>
-                        
-                        <Image
-                          src={`${API_URL}${values.image}`}
-                          width={200}
-                          height={250}
-                        />
+                        <img src={image.path} />
                       </div>
                     ) : (
                       <div className={styles.image}>
-                        <Image
-                          src={`${API_URL}${NOIMAGE_PATH}`}
-                          width={200}
-                          height={250}
-                          alt="No Image"
-                        />
+                        <img src="/noimage.png" alt="No Image" />
                       </div>
                     )}
+
                     <div className={styles.image_footer}>
                       <button
                         type="button"
@@ -236,9 +226,7 @@ export default function add_brandPage() {
                       <button
                         type="button"
                         className="btn btn-danger"
-                        onClick={() => {
-                          setValues({ ...values, image: "" })
-                        }}
+                        onClick={deleteImage}
                       >
                         <FaTimes />
                       </button>
@@ -276,15 +264,12 @@ export default function add_brandPage() {
             </div>
           </form>
 
-          <Modal
-            show={showModal}
-            onClose={() => setShowModal(false)}
-            title="Загрузить картинку"
-          >
-            <ImageUpload imageUploaded={imageUploaded} />
+          <Modal show={showModal} onClose={() => setShowModal(false)}>
+              <ImageUpload setShowModal={setShowModal} setImage={setImage} image={image}/>
           </Modal>
         </div>
-      ) }
+      )}
     </Layout>
   )
 }
+
