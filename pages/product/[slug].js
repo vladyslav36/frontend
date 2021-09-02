@@ -29,6 +29,7 @@ export default function productPage({ slug, product }) {
     isShow: false,
     idx:0
   })
+  const [mainImageIdx,setMainImageIdx]=useState(0)
   // Функция добавляет опционную цену к строке опции
   const getList = (name) => {
     return product[name].map((item) =>
@@ -149,24 +150,29 @@ export default function productPage({ slug, product }) {
 
       <div className={styles.top_content}>
         <div className={styles.left}>
-          <div className={styles.main_image}>            
+          <div className={styles.main_image}>
             <img
-              src={`${API_URL}${product.image}`}
-              onClick={() => setSliderValues({ isShow: true, idx: 0 })}
+              src={
+                product.images.length
+                  ? `${API_URL}${product.images[mainImageIdx]}`
+                  : "noimage.png"
+              }
+              onClick={() =>
+                setSliderValues({ isShow: true, idx: mainImageIdx })
+              }
             />
           </div>
 
           <div className={styles.added_images}>
-            {product.addedImages.length
-              ? product.addedImages.map((item, i) => (
-                  <div key={i}>
-                    
+            {product.imagesSm.length
+              ? product.imagesSm.map((item, i) => (
+                  <div
+                    key={i}
+                    className={i === mainImageIdx ? styles.image_active : ""}
+                  >
                     <img
                       src={`${API_URL}${item}`}
-                     
-                      onClick={() =>
-                        setSliderValues({ isShow: true, idx: i + 1 })
-                      }
+                      onClick={() => setMainImageIdx(i)}
                     />
                   </div>
                 ))
@@ -286,41 +292,52 @@ export default function productPage({ slug, product }) {
               </button>
             </div>
           </form>
-          <h3>Выбрано</h3>
-          <div className={styles.chosen}>
-            <div className={styles.chosen_header}>
-              <p>Размер</p>
-              <p>Цвет</p>
-              <p>Рост</p>
-              <p>Кол-во</p>
-              <p>Цена</p>
-
-              <div className={styles.line}></div>
+          <table>
+            <caption>Выбрано товаров</caption>
+            <thead>
+              <tr>
+                <th>Рост</th>
+                <th>Размер</th>
+                <th>Цвет</th>
+                <th>Кол-во</th>
+                <th>Цена</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
               {chosen.length ? (
                 chosen.map((item, i) => (
-                  <div key={i} className={styles.chosen_item}>
-                    <p>{item.size}</p>
-                    <p>{item.color}</p>
-                    <p>{item.height}</p>
-                    <p>{item.qnt}</p>
-                    <p>{item.price}</p>
-                    <FaTimes
-                      className={styles.icon}
-                      onClick={() => handleDelete(i)}
-                    />
-                  </div>
+                  <tr key={i}>
+                    <td>{item.height}</td>
+                    <td>{item.size}</td>
+                    <td>{item.color}</td>
+                    <td>{item.qnt}</td>
+                    <td>{item.price}</td>
+                    <td className={styles.flex}>
+                      <div className={styles.icon_wrapper}>
+                        <FaTimes
+                          className={styles.icon}
+                          onClick={() => handleDelete(i)}
+                        />
+                      </div>
+                    </td>
+                  </tr>
                 ))
               ) : (
                 <>&nbsp;</>
               )}
-              <div className={styles.line}></div>
-              <div className={styles.chosen_footer}>
-                <div>Всего товаров {getTotalQnt()}</div>
-
-                <div>на сумму {getTotalAmount()}</div>
-              </div>
-            </div>
-          </div>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6">
+                  <div className={styles.footer_wrapper}>
+                    <p>Всего товаров {getTotalQnt()}</p>
+                    <p>На сумму {getTotalAmount()}</p>
+                  </div>
+                </td>                
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
 
@@ -330,7 +347,8 @@ export default function productPage({ slug, product }) {
         <Slider
           setSliderValues={setSliderValues}
           sliderValues={sliderValues}
-          images={[product.image, ...product.addedImages]}
+          images={product.images}
+          setMainImageIdx={setMainImageIdx}
         />
       )}
     </Layout>

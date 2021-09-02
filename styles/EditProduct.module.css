@@ -4,51 +4,84 @@
   flex-direction: column;
   padding: 10px;
 }
-.grid_header {
-  font-size: 14px;
-  display: grid;
-  grid-template-columns: 2fr 1fr 8fr 60px 90px;
-  column-gap: 5px;
-}
-.grid_body {
-  grid-column: 1/-1;
-  display: grid;
-  /* grid-template-columns: 120px 90px 3fr 60px 90px; */
-  grid-template-columns: subgrid;
-  column-gap: 5px;
-}
-.grid_line {
-  grid-column: 1/-1;
-  height: 1px;
-  background-color: #d6dbdf;
+.container table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.grid_body > div:not(.grid_line) {
-  display: flex;
+.container thead :nth-child(1) {
+  width: 70px;
+  border-bottom: 1px solid #999;
+}
+.container thead :nth-child(2) {
+  width: 15%;
+  text-align: left;
+}
+.container thead :nth-child(3) {
+  width: 10%;
+  text-align: left;
+}
+.container thead :nth-child(4) {
+  width: 50%;
+}
+.container thead :nth-child(5) {
+  width: 50px;
+}
+.container thead :nth-child(6) {
+  width: 100px;
+}
+
+.container tbody tr:nth-child(odd) {
+  background-color: #f2f3f4;
+}
+.container tbody tr :nth-child(1) {
+  vertical-align: middle;
+  text-align: left;
+  padding: 3px;
+}
+.container tbody tr :nth-child(1) img {
+  width: 50px;
+  height: 70px;
+}
+.container tbody tr :nth-child(2) {
+  text-align: left;
+  padding: 0 5px;
+}
+.container tbody tr :nth-child(3) {
+  text-align: left;
+  padding: 0 5px;
+}
+.container tbody tr :nth-child(4) {
+  text-align: left;
+  padding: 0 5px;
+}
+.container tbody tr :nth-child(5) {
+  text-align: center;
+  padding: 0 5px;
+}
+
+.buttons_wrapper{
+  margin-left:20px;
+  display:flex;
   align-items: center;
+  justify-content: center;
+ 
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-}
-
-.edit {
-  margin: 0 5px;
-  padding: 0 10px;
+.edit {   
   color: #2874a6;
+  cursor: pointer;  
 }
 
-.delete {
-  margin: 0 5px;
+.delete { 
   border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 5px;
-  color: red;
-  background-color: inherit;
+  cursor: pointer;  
+  color: red;  
 }
-
+.icon {
+  font-size: 1.5rem;
+}
 .linkButton {
   border: none;
   font-size: 1rem;

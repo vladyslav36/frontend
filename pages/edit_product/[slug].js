@@ -2,15 +2,14 @@ import styles from "@/styles/Form.module.css"
 import AccessDenied from "@/components/AccessDenied"
 import Layout from "@/components/Layout"
 import Modal from "@/components/Modal"
-import ImageUpload from "@/components/ImageUpload"
+import ImagesUpload from "@/components/ImagesUpload"
 import AuthContext from "@/context/AuthContext"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { FaImage, FaPlus, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import Image from "next/image"
-import { API_URL, NOIMAGE_PATH } from "@/config/index"
+import { API_URL } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree, stringToPrice } from "../../utils"
 import SelectOptions from "@/components/SelectOptions"
@@ -25,8 +24,7 @@ export default function editProductPage({ categories, brands,product }) {
     name: product.name,
     model: product.model,
     brand: product.brand,
-    brandId: product.brandId,
-    image: product.image,    
+    brandId: product.brandId,        
     description: product.description,
     category: product.category,
     categoryId: product.categoryId,
@@ -36,10 +34,13 @@ export default function editProductPage({ categories, brands,product }) {
     isInStock: product.isInStock ? "ДА" : "НЕТ",
     price: product.price,
     retailPrice: product.retailPrice,
-    isShowcase: product.isShowcase ? "ДА" : "НЕТ",
-    addedImages: [...product.addedImages],
+    isShowcase: product.isShowcase ? "ДА" : "НЕТ",    
     currencyValue: product.currencyValue,
   })
+  
+  const [images,setImages]=useState(product.images.map(item => {
+    return { file: null, path: `${API_URL}${item}` }
+   }))
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
   const [isShowBrandsList, setIsShowBrandsList] = useState(false)
@@ -47,7 +48,7 @@ export default function editProductPage({ categories, brands,product }) {
   const [listForBrandsMenu, setListForBrandsMenu] = useState(
     getListForMenu(brands, "")
   )
-  const [upploadCb, setUpploadCb] = useState({})  
+   
   const [imageIdx, setImageIdx] = useState(0)
 
   const router = useRouter()
@@ -92,14 +93,18 @@ export default function editProductPage({ categories, brands,product }) {
       values.brandId = null
     }
     // Send data
+    const formData = new FormData()
+    formData.append("values", JSON.stringify(values))
+    const imageClientPaths = images.map(item => item.path)
+    formData.append('imageClientPaths',JSON.stringify(imageClientPaths))
+    images.forEach((item) => formData.append("images", item.file))
     const res = await fetch(`${API_URL}/api/products`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        enctype: "multipart/form-data",
       },
-      body: JSON.stringify(values),
+      body: formData,
     })
-    const data = await res.json()
 
     if (!res.ok) {
       toast.error("Что-то пошло не так")
@@ -149,22 +154,11 @@ export default function editProductPage({ categories, brands,product }) {
     setIsShowBrandsList(false)
   }
 
-  const imageUpploaded = (path) => {
-    setShowModal(false)    
-    setValues({ ...values, image: path })
+  const deleteImage = (i) => {
+    URL.revokeObjectURL(images[i].path)
+    setImages(images.filter((item, idx) => idx !== i))
   }
-
-  const imagesUpploaded = (path, index) => {
-    setShowModal(false)
-    setValues({ ...values, addedImages: values.addedImages.map((item, i) => (i === index ? path : item)) })
-    
-  }
-
-  const imagesNewUpploaded = (path) => {
-    setShowModal(false)
-    setValues({...values,addedImages:[...values.addedImages,path]})
-     } 
-
+console.log(images)
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
@@ -315,7 +309,10 @@ export default function editProductPage({ categories, brands,product }) {
                         value={values.retailPrice}
                         onChange={handleChange}
                         onBlur={(e) =>
-                          formatPrice({ name: "retailPrice", value: e.target.value })
+                          formatPrice({
+                            name: "retailPrice",
+                            value: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -368,7 +365,7 @@ export default function editProductPage({ categories, brands,product }) {
                   brandId={values.brandId}
                   brands={brands}
                   values={values}
-                  setValues={setValues} 
+                  setValues={setValues}
                 />
               )}
               <div>
@@ -383,52 +380,13 @@ export default function editProductPage({ categories, brands,product }) {
               </div>
             </form>
           </div>
-          <h2>Основное изображение</h2>
-          <div className={styles.image_container}>
-            <div className={styles.image}>
-              {values.image ? (
-                <img
-                  src={`${API_URL}${values.image}`}                  
-                />
-              ) : (
-                <div className={styles.image}>
-                  <img
-                    src={`${API_URL}${NOIMAGE_PATH}`}                    
-                    alt="No Image"
-                  />
-                </div>
-              )}
-            </div>
-            <div className={styles.image_footer}>
-              <button
-                className="btn"
-                onClick={() => {
-                  setShowModal(true)
-                  setIsShowList(false)
-                  setUpploadCb({ cb: imageUpploaded })
-                }}
-              >
-                <FaImage />
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => {
-                  setValues({ ...values, image: "" })
-                }}
-              >
-                <FaTimes />
-              </button>
-            </div>
-          </div>
-          <h2>Дополнительные изображения</h2>
+          <h2>Изображения</h2>
           <div className={styles.images_container}>
-            {values.addedImages.length
-              ? values.addedImages.map((item, i) => (
-                  <div key={i} className={styles.image_container}>
+            {images.length
+              ? images.map((item, i) => (
+                  <div className={styles.image_container} key={i}>
                     <div className={styles.image}>
-                      <img
-                        src={`${API_URL}${item}`}                       
-                      />
+                      <img src={item.path} />
                     </div>
                     <div className={styles.image_footer}>
                       <button
@@ -437,21 +395,13 @@ export default function editProductPage({ categories, brands,product }) {
                           setImageIdx(i)
                           setShowModal(true)
                           setIsShowList(false)
-                          setUpploadCb({ cb: imagesUpploaded })
                         }}
                       >
                         <FaImage />
                       </button>
                       <button
                         className="btn btn-danger"
-                        onClick={() => {
-                          setValues({
-                            ...values,
-                            addedImages: values.addedImages.filter(
-                              (item, idx) => idx !== i
-                            ),
-                          })
-                        }}
+                        onClick={() => deleteImage(i)}
                       >
                         <FaTimes />
                       </button>
@@ -462,9 +412,9 @@ export default function editProductPage({ categories, brands,product }) {
             <button
               className="btn"
               onClick={() => {
+                setImageIdx(images.length)
                 setShowModal(true)
                 setIsShowList(false)
-                setUpploadCb({ cb: imagesNewUpploaded })
               }}
             >
               <FaPlus />
@@ -473,7 +423,12 @@ export default function editProductPage({ categories, brands,product }) {
         </>
       )}
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <ImageUpload imageUploaded={upploadCb.cb} index={imageIdx} />
+        <ImagesUpload
+          setShowModal={setShowModal}
+          images={images}
+          setImages={setImages}
+          idx={imageIdx}
+        />      
       </Modal>
     </Layout>
   )

@@ -41,17 +41,17 @@ export default  function editProductListPage() {
   })
   const [prodList, setProdList] = useState([])    
   
-  const handleDeleteProduct = async (id) => {
+  const handleDeleteProduct = async ({_id,idx}) => {
     if (confirm("Уверены?")) {
-      const res = await fetch(`${API_URL}/api/products/${id}`, {
+      const res = await fetch(`${API_URL}/api/products/${_id}`, {
         method: "DELETE",
       })
       const data = await res.json()
       if (!res.ok) {
         toast.error(data.message)
       } else {
-        getProdListFromQuery()
-        router.push(router.pathname)
+        setProdList(prodList.filter((item,i)=>i!=idx))
+        
       }
     }
   }
@@ -89,7 +89,7 @@ const { data, isLoading } = fetchNames()
             <h3>Список товаров</h3>
             <Link href="/">На главную</Link>
             <form onSubmit={submitHandler} className={styles.form}>
-              <div >
+              <div>
                 <label htmlFor="product">Название</label>
 
                 <div
@@ -113,9 +113,10 @@ const { data, isLoading } = fetchNames()
                     <DropDownList
                       isShow={isShowList.product}
                       itemsList={getSearchItemsList(products, values.product)}
-                      handleClick={(item) =>
+                      handleClick={(item) => {
                         handleListClick({ item, name: "product" })
-                      }
+                        setIsShowList({ ...isShowList, product: false })
+                      }}
                     />
                   ) : null}
                 </div>
@@ -142,9 +143,10 @@ const { data, isLoading } = fetchNames()
                   <DropDownList
                     isShow={isShowList.category}
                     itemsList={getSearchItemsList(categories, values.category)}
-                    handleClick={(item) =>
+                    handleClick={(item) => {
                       handleListClick({ item, name: "category" })
-                    }
+                      setIsShowList({ ...isShowList, category: false })
+                    }}
                   />
                 </div>
               </div>
@@ -166,57 +168,98 @@ const { data, isLoading } = fetchNames()
                   <DropDownList
                     isShow={isShowList.brand}
                     itemsList={getSearchItemsList(brands, values.brand, 10)}
-                    handleClick={(item) =>
+                    handleClick={(item) => {
                       handleListClick({ item, name: "brand" })
-                    }
+                      setIsShowList({ ...isShowList, brand: false })
+                    }}
                   />
                 </div>
               </div>
-              <div >
+              <div>
                 <div>&nbsp;</div>
                 <input type="submit" className={styles.button} value="Найти" />
               </div>
             </form>
-
-            <div className={styles.grid_header}>
-              <div>Название</div>
-              <div>Модель</div>
-              <div>Описание</div>
-              <div>Цена</div>
-              <div>Управление</div>
-              <div className={styles.grid_line}></div>
-              {prodList.length
-                ? prodList.map((item,i) => (
-                  <div key= { i } className={styles.grid_body}>
-                      <div>{item.name}</div>
-                      <div>{item.model}</div>
-                      <div>{item.description}</div>
-                      <div>
-                        {item.price}
-                        {getCurrencySymbol(item.currencyValue)}
-                      </div>
-
-                      <div className={styles.buttons}>
-                        <Link href={`/edit_product/${item.slug}`}>
-                          <a className={styles.edit}>
-                            <FaPencilAlt className={styles.icon} />
-                          </a>
-                        </Link>
-
-                        <button
-                          className={styles.delete}
-                          onClick={() => handleDeleteProduct(`${item._id}`)}
-                        >
-                          <span>
-                            <FaTimes className={styles.icon} />
-                          </span>
+            <table>
+              <thead>
+                <tr>
+                  <th>&nbsp;</th>
+                  <th>Название</th>
+                  <th>Модель</th>
+                  <th>Описание</th>
+                  <th>Цена</th>
+                  <th>&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+                {prodList.length
+                  ? prodList.map((item, i) => (
+                      <tr key={i}>
+                        <td>
+                          <img
+                            src={
+                              item.imagesSm.length
+                                ? `${API_URL}${item.imagesSm[0]}`
+                                : `/noimage.png`
+                            }
+                            alt="no image"
+                          />
+                        </td>
+                        <td>{item.name}</td>
+                        <td>{item.model}</td>
+                        <td>{item.description}</td>
+                        <td>
+                          {item.price}&nbsp;
+                          {getCurrencySymbol(item.currencyValue)}
+                        </td>
+                        <td>
+                          <div className={styles.buttons_wrapper}>
+                            <div className={styles.edit}>
+                              <Link href={`/edit_product/${item.slug}`}>
+                                <a>
+                                  <FaPencilAlt className={styles.icon} />
+                                </a>
+                              </Link>
+                            </div>
+                            <div >
+                              <button
+                                className={styles.delete}
+                                onClick={() =>
+                                  handleDeleteProduct({
+                                    _id: `${item._id}`,
+                                    idx: i,
+                                  })
+                                }
+                              >
+                                <span>
+                                  <FaTimes className={styles.icon} />
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                          {/* <button className={styles.edit}>
+                          <Link href={`/edit_product/${item.slug}`}>
+                            <a>
+                              <FaPencilAlt className={styles.icon} />
+                            </a>
+                          </Link>
                         </button>
-                      </div>
-                      <div className={styles.grid_line}></div>
-                    </div>
-                  ))
-                : null}
-            </div>
+                          
+
+                          <button
+                            className={styles.delete}
+                            onClick={() => handleDeleteProduct({_id:`${item._id}`,idx:i})}
+                          >
+                            <span>
+                              <FaTimes className={styles.icon} />
+                            </span>
+                          </button> */}
+                        </td>
+                      </tr>
+                    ))
+                  : null}
+              </tbody>
+            </table>
           </div>
         )}
       </Layout>

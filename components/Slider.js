@@ -4,10 +4,9 @@ import styles from "@/styles/Slider.module.css"
 import { API_URL } from "../config"
 import { useState } from "react"
 
-export default function Slider({ images, setSliderValues,sliderValues }) {
+export default function Slider({ images, setSliderValues,sliderValues,setMainImageIdx }) {
   const [num, setNum] = useState(sliderValues.idx)
-  const lastNumber = images.length - 1
-  console.log()
+  const lastNumber = images.length - 1  
   const prevImage = () => {
     if (num===0) {
       setNum(lastNumber)
@@ -23,6 +22,11 @@ export default function Slider({ images, setSliderValues,sliderValues }) {
       setNum(num+1)
     }
   }
+
+  const closeSlider = (idx) => {
+    setMainImageIdx(idx)
+    setSliderValues({ ...sliderValues, isShow: false })
+  }
   const imageHeight = window.innerHeight * 0.95
   
   return (
@@ -37,7 +41,7 @@ export default function Slider({ images, setSliderValues,sliderValues }) {
         
       </div>
 
-      <FaTimes onClick={() => setSliderValues({ ...sliderValues, isShow: false })} className={styles.times_icon}/>
+      <FaTimes onClick={() => closeSlider(num)} className={styles.times_icon}/>
     </div>
   )
 }

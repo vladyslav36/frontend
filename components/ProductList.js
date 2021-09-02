@@ -34,7 +34,7 @@ export default function ProductList({ products }) {
           <Link href={`/product/${product.slug}`}>
             <a className={styles.image}>
               <img
-                src={`${API_URL}${product.image}` } alt={'no image'}               
+                src={product.imagesSm.length?`${API_URL}${product.imagesSm[0]}`:'noimage.png' } alt={'no image'}               
               />
             </a>
           </Link>

@@ -12,16 +12,12 @@
   cursor:pointer;
 }
 
-.icon{
-  color:red;
-  font-size: 18px;
-  margin:0 5px;
-}
+
 .top_content{
   display:grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 440px 1fr;
   width:100%;
- column-gap: 20px;
+ column-gap: 15px;
 margin:10px 0;
 }
 .top_content .left{
@@ -30,9 +26,7 @@ margin:10px 0;
   justify-content: flex-start;
   align-items: flex-start;
 }
-.top_content .main_image{
-  
-  padding:5px;
+.top_content .main_image{  
   display:flex;
   align-items: center;
   justify-content: flex-start;
@@ -40,7 +34,7 @@ margin:10px 0;
 }
 
 .main_image img{
-  max-width:390px;
+  max-width:420px;
   border:1px solid #888;
 }
 
@@ -55,19 +49,19 @@ margin:10px 0;
   align-items: center;
   flex-wrap: wrap;
   margin:10px 0;
-  max-width:400px;
+  max-width:420px;
 
 }
 
 .added_images img{
-  max-width:85px;
-  max-height:115px;
+  max-width:50px;
+  max-height:70px;
  
 }
 
 .added_images > div{
-  width:90px;
-  height:120px;
+  width:60px;
+  height:80px;
   display:flex;
   justify-content: center;
   align-items: center;
@@ -76,7 +70,9 @@ margin:10px 0;
   border:1px solid #888;
   cursor:pointer;  
 }
-
+.added_images .image_active{
+  border:1px solid red;
+}
 .added_images > div:hover{
   transform: scale(0.98);  
 }
@@ -125,42 +121,93 @@ margin:10px 0;
   height:30px;
   margin:5px 0;
 }
-.chosen_header{
-  width:100%;
-  display:grid;
-  grid-template-columns: repeat(6,1fr);
-  column-gap: 1px; 
+
+.center table{
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  margin:10px 0;
   
 }
-.chosen_header p{
-  font-size: 12px;
-  margin:auto;
-}
-.line{
-  grid-column: 1/-2;
-  height:1px;
-  background-color: #888;
-  margin-top:2px;
+
+.center table caption{
+  font-size:15px;
+  font-weight: 700;
 }
 
-.chosen_item{
-  display:grid;
-  grid-column: 1/-1;
-  grid-template-columns: subgrid;
-  justify-items: center;
+.center table thead{
+  font-size: 13px;
+  border-bottom: 1px solid #999;
+  
+}
+
+.center table tbody{
+  font-size:13px;
+}
+.center table tbody tr :nth-child(1){
+text-align: center;
+}
+.center table tbody tr :nth-child(2){
+text-align: center;
+}
+.center table tbody tr :nth-child(3){
+text-align: center;
+}
+.center table tbody tr :nth-child(4){
+text-align: center;
+}
+.center table tbody tr :nth-child(5){
+text-align: center;
+}
+
+
+.center  thead tr :nth-child(1){
+  width:50px;
+  text-align: center;
+}
+.center  thead tr :nth-child(2){
+  width:50px;
+  text-align: center;
+}
+.center  thead tr :nth-child(3){
+  width:150px;
+  text-align: center;
+}
+.center  thead tr :nth-child(4){
+  width:50px;
+  text-align: center;
+}
+.center  thead tr :nth-child(5){
+  width:60px;
+  text-align: center;
+}
+.center  thead tr :nth-child(6){
+  width:50px;
+  text-align: center;
+}
+
+
+.center table tfoot{
+  font-size:13px;
+  border-top: 1px solid #999;
+}
+.icon_wrapper{  
+  display:flex;  
+  justify-content: center;
+  align-items: center;
+}
+.footer_wrapper{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .icon{
-  color:red;
-  
-  cursor:pointer;
+  color:red;  
+  cursor:pointer;  
+  font-size: 16px;  
 }
 
-.chosen_footer{
-  grid-column: 1/-2;
-  display:flex;
-  justify-content:space-between;
-  font-size: 12px;
-}
+
 
 
 @media(max-width:720px){
@@ -182,8 +229,8 @@ margin:10px 0;
   max-width:500px;
 }
 .added_images > div{
-  width:115px;
-  height:155px;
+  width:60px;
+  height:80px;
   
 }
 
