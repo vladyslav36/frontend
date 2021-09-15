@@ -1,54 +1,129 @@
-.grid{
- width:100%;
- display:grid;
- grid-template-columns: 100px 2fr 2fr 6fr 1fr 1fr;
- grid-template-rows: 1fr;
-}
 
-.grid_product{  
- grid-column:1/-1;
- display:grid;
- grid-template-columns: subgrid;
- align-items: center;
- padding:2px;
+.table{
+  width:100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size:14px;
 }
-.image{
-  /* border:1px solid #333; */
-  margin:5px;
+.table thead{
+  border-bottom: 1px solid #888;
+}
+.table thead :nth-child(1){
+  width:60px;
+  }
+.table thead :nth-child(2){
+  width:100px;
+  }
+.table thead :nth-child(3){
+  width:70px;
+  }
+.table thead :nth-child(4){
+  width:auto;
+  }
+.table thead :nth-child(5){
+  width:70px;
+  }
+.table thead :nth-child(6){
+  width:100px;
+  }
+  .table tbody td{
+    text-align: center;
+  }
+.table tbody{
+  border-bottom: 1px solid #888;
+}
+.image{  
   display:flex;
   justify-content: flex-start;
   align-items: center;
   padding:2px;
+
 }
 
 .image img{
-  max-width:55px;
+  max-width:50px;
   max-height:70px;
+  cursor:pointer;
 }
-.line{
-  grid-column: 1/-1;
-  height:1px;
-  background-color: #333;
-  margin-top: 2px;
-}
+
 .button{
   display:flex;
   justify-content: center;
   align-items:center;
-  width:30px;
-  height:30px;
-  font-size: 25px;
-  color:red;
-  background-color: inherit;
-  border:none;
 }
 
-.name_link:hover{
+.button button{
+  font-size:1.5rem;
+  background-color: inherit;
+  border:none;
+  color:red;
   cursor:pointer;
-  text-decoration: underline;
- 
+}
+.name{
+  color:inherit;
+}
+.name:hover{  
+  text-decoration: underline; 
+}
+.container{
+  width:100%;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+.card{
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between; 
+line-height: 1;
+  border:1px solid #888;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+  margin:0 10px 10px 10px;
+  width:200px;
+  height:300px;
+  overflow:auto;
+}
+
+.card:hover{
+  transform:scale(0.99);
+  cursor:pointer;
+}
+.image_card{
+  width:100%;
+/* height:210px; */
+display:flex;
+flex-direction: column;
+align-items: center;
+justify-content: space-between;
+}
+
+.image_card img{
+  max-width:150px;
+  max-height:200px;
+  padding-top:5px;
+}
+
+
+.name_card{
+  padding:5px 10px;
+  width:100%;
+}
+
+.footer_card{
+  border-top:1px solid #888;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.price_card{
+  padding:3px;
+  
 }
 
 @media(max-width:768px){
-  
+  .table thead :nth-child(4){
+  width:150px;
+  }
 }

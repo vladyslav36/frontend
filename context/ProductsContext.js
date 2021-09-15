@@ -26,7 +26,7 @@ useEffect(() => {
       currencyShop,
       setCurrencyRate,
       setCurrencyShop,
-      productList,
+      productList, 
       setProductList
     }}>
     {children}

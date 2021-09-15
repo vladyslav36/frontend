@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export function getCurrencySymbol(currencyValue) {
   switch (currencyValue) {
     case "UAH":
@@ -45,6 +47,28 @@ export const getCategoriesTree = (category, categories) => {
   return result.reverse().join(" ➔ ")
 }
 
+export const getArrayCategoryTree = (category, categories) => {
+  
+  var result = [
+    { name: category.name, slug: category.slug }
+  ]
+   const findParent = (category) => {
+     const parent = categories.find(
+       (elem) => elem._id === category.parentCategoryId
+     )
+     if (parent) {
+       result.push(
+         { name: parent.name, slug: parent.slug }
+       )
+       findParent(parent)
+     }
+     return
+   }
+   findParent(category)
+
+  return result.reverse()
+    
+}
 export const getSearchItemsList = (items, searchString,limit) => {  
     const list = items.filter(
       ({ name }) => name.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
