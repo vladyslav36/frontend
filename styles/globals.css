@@ -1,5 +1,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Robotto:wght@400&display=swap');
+:root{
+  --links-color:#2874a6;
+  --links-hover-color: #1a5276;
+}
 * {
   box-sizing: border-box;
   margin:0px;
@@ -14,10 +18,11 @@ body{
 
 a{
   text-decoration:none;
-  color:   #0d2cb4  ;
-;
+  color:var(--links-color) ;
 }
-
+a:hover{
+  color:var(--links-hover-color);
+}
 
 .btn{
   border:none;

@@ -21,29 +21,29 @@
     cursor:pointer;
     
   }
-.crumbs{
- 
+.crumbs{ 
+  font-size:15px;
   margin:0 10px;
   display:flex;
-  color:#0d2cb4;
+  color:var(--links-color);
 }
 .crumbs a{
   color:inherit;
 }
 .crumbs a:hover{
   text-decoration: underline;
+  color:var(--links-hover-color);
 }
 .crumbs div{
   display:flex;
 }
 .container{
-  display:flex;
-  width:100%;
-margin:10px;
+  display:flex;  
+    width:100%;
+margin:5px 0;
 }
 
-.left_content{
-  
+.left_content{  
   display:flex;
   margin-bottom:10px;
   flex-direction: column;
@@ -74,9 +74,10 @@ max-height: 200px;
   font-size: 14px;  
   
 }
-.right_content{
-  width:100%;  
-  padding:0 10px;
+.right_content{  
+  width:100%;
+ /* padding:0 30px; */
+
 }
 .right_content>h3{
   text-align: center;

@@ -10,7 +10,7 @@ import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Image from "next/image"
-import { API_URL, NOIMAGE_PATH } from "@/config/index"
+import { API_URL, NOIMAGE, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../../utils"
 
@@ -199,7 +199,7 @@ export default function editCategoryPage({ categories, slug }) {
                     </div>
                   ) : (
                     <div className={styles.image}>
-                          <img src='/noimage.png' alt="No Image" />
+                          <img src={`${NOIMAGE}`} alt="No Image" />
                     </div>
                   )}
                   <div className={styles.image_footer}>

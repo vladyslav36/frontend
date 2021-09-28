@@ -1,28 +1,30 @@
 import styles from "@/styles/AdminPanel.module.css"
 import AuthContext from "@/context/AuthContext"
-import ProductsContext from "@/context/ProductsContext"
+
 import { useContext, useEffect, useState } from "react"
 import Link from "next/link"
 
 import { API_URL } from "../config"
+import useSWR, { mutate } from "swr"
 
 export default function AdminPanel() {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
-  const { currencyRate, setCurrencyRate } = useContext(ProductsContext)
+  
 
+  const { data } = useSWR(`${API_URL}/api/currencyrate`)
   const [values, setValues] = useState({
-    USD: currencyRate.USD.toString(),
-    EUR: currencyRate.EUR.toString(),
+    USD: "",
+    EUR: "",
   })
-
   useEffect(() => {
     setValues({
-      USD: currencyRate.USD.toString(),
-      EUR: currencyRate.EUR.toString(),
+      USD: data ? data.currencyRate.USD.toString() : "",
+      EUR: data ? data.currencyRate.EUR.toString() : "",
     })
-  }, [currencyRate])
+  }, [data])
+  
 
   const handleChange = (e) => {
     e.preventDefault()
@@ -31,20 +33,20 @@ export default function AdminPanel() {
   }
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const valuesToSend={USD:+values.USD,EUR:+values.EUR}
+    const valuesToSend = { USD: +values.USD, EUR: +values.EUR }
+
     // send data
-    const res = await fetch(`${API_URL}/api/currencyrate`, {
+    await fetch(`${API_URL}/api/currencyrate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(valuesToSend),
     })
-    const data = await res.json()
     
-    setCurrencyRate({ ...currencyRate, USD: data.USD, EUR: data.EUR })
+    mutate(`${API_URL}/api/currencyrate`)
   }
-
+console.log(data)
   return (
     <div>
       {isAdmin ? (
@@ -82,7 +84,7 @@ export default function AdminPanel() {
               </Link>
             </ul>
           </div>
-          
+
           <div className={styles.container_item}>
             Курс валют
             <form onSubmit={handleSubmit}>

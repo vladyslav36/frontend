@@ -1,7 +1,8 @@
-import Link from "next/link"
 
-export function getCurrencySymbol(currencyValue) {
-  switch (currencyValue) {
+
+export function getCurrencySymbol(currencyShop) {
+  
+  switch (currencyShop) {
     case "UAH":
       return "₴"
       break
@@ -23,6 +24,7 @@ export function getPriceForShow({
   currencyValue,
   price,
 }) {
+   
   const showPrice = (
     (currencyRate[currencyValue] * (+price)) /
     currencyRate[currencyShop]

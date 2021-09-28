@@ -5,19 +5,20 @@ import { useRouter } from "next/router"
 import Link from "next/link"
 import Spinner from "@/components/Spinner"
 import ProductsList from "@/components/ProductsList"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { getArrayCategoryTree } from "utils"
 import Navbar from "@/components/Navbar"
 import CategoriesList from "@/components/CategoriesList"
 import { FaList, FaTh } from "react-icons/fa"
+import ProductsContext from "@/context/ProductsContext"
 
-export default function categoryPage({ categories, params: { slug } }) {
+export default function categoryPage({ categories, qnt, params: { slug } }) {
   const router = useRouter()
 
   const [isShowCategories, setIsShowCategories] = useState(false)
   const [isShowProducts, setIsShowProducts] = useState(false)
   const [productList, setProductList] = useState([])
-  const [isShowAsList,setIsShowAsList]=useState(true)
+  const [isShowAsList, setIsShowAsList] = useState(true)
   const category = categories.find((item) => item.slug === slug)
 
   const childrenList = categories.filter(
@@ -63,12 +64,14 @@ export default function categoryPage({ categories, params: { slug } }) {
         </div>
         {isShowProducts ? (
           <div className={styles.toggles}>
-          <div title='Список' onClick={()=>setIsShowAsList(true)}><FaList /></div>
-          <div title='Плитка' onClick={()=>setIsShowAsList(false)}><FaTh/></div>
-
-        </div>
-        ):null}
-        
+            <div title="Список" onClick={() => setIsShowAsList(true)}>
+              <FaList />
+            </div>
+            <div title="Плитка" onClick={() => setIsShowAsList(false)}>
+              <FaTh />
+            </div>
+          </div>
+        ) : null}
       </div>
 
       <div className={styles.container}>
@@ -87,11 +90,14 @@ export default function categoryPage({ categories, params: { slug } }) {
         </div>
         <div className={styles.right_content}>
           {isShowCategories ? (
-            <CategoriesList categories={childrenList} />
+            <CategoriesList categories={childrenList} qnt={qnt} />
           ) : null}
           {isShowProducts ? (
             productList.length ? (
-              <ProductsList products={productList} isShowAsList={isShowAsList}/>
+              <ProductsList
+                products={productList}
+                isShowAsList={isShowAsList}
+              />
             ) : (
               <h3>В этой категории нет товаров</h3>
             )
@@ -104,9 +110,10 @@ export default function categoryPage({ categories, params: { slug } }) {
 
 export async function getServerSideProps({ params }) {
   const data = await fetch(`${API_URL}/api/categories`)
-  const { categories } = await data.json()
+  const { categories, qnt } = await data.json()
   return {
     props: {
+      qnt,
       categories,
       params,
     },

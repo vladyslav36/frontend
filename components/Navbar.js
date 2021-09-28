@@ -1,35 +1,29 @@
 import styles from "@/styles/Navbar.module.css"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import AuthContext from "@/context/AuthContext"
-import ProductsContext from "@/context/ProductsContext"
-import { FaPlus, FaEdit } from "react-icons/fa"
-import Link from "next/link"
-import { fetchCategories, fetchProductsCategoryId } from "dataFetchers"
+import { fetchCategories } from "dataFetchers"
 import Spinner from "@/components/Spinner"
-import { API_URL } from "../config"
 import { useRouter } from "next/router"
+import useSWR from "swr"
+import { API_URL } from "../config"
 
 export default function Navbar() {
   const {
     user: { isAdmin },
-  } = useContext(AuthContext)
-
-  const { setProductList } = useContext(ProductsContext)
-
-  const router = useRouter()
-
-  const { data, error, isLoading } = fetchCategories()
-  if (isLoading) return <Spinner />
-  const { categories } = data
+  } = useContext(AuthContext)  
+  const router = useRouter()  
 
   const getChildren = (category, categories) => {
     return categories.filter((item) => item.parentCategoryId === category._id)
   }
-
   
+  const { data } = useSWR(`${API_URL}/api/categories`)
+
+  const categories = data ? data.categories : []
+  const qnt = data ? data.qnt : {}
   return (
     <div className={styles.container}>
-      {categories.length && (
+      {data?categories.length && (
         <ul className={styles.list}>
           {categories.map(
             (category) =>
@@ -53,7 +47,7 @@ export default function Navbar() {
                           }}
                           key={item._id}
                         >
-                          {item.name}
+                          {item.name}&nbsp;({qnt[item._id]})
                         </li>
                       ))}
                     </ul>
@@ -62,7 +56,7 @@ export default function Navbar() {
               )
           )}
         </ul>
-      )}
+      ):null}
     </div>
   )
 }

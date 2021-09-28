@@ -1,3 +1,22 @@
+.links{
+  display:flex;
+  
+}
+.links a{
+  margin-left:20px;
+}
+
+.links p{
+  color:var(--links-color);
+  margin-left: 10px;
+}
+.links p:hover{
+  cursor:pointer;
+  color:var(--links-hover-color);
+}
+.container{
+  padding:0 5px;
+}
 .header{
   display:flex;
   justify-content: space-between;
@@ -13,20 +32,20 @@
 }
 
 
-.top_content{
+.content{
   display:grid;
-  grid-template-columns: 440px 1fr;
+  grid-template-columns: 2fr 3fr;
   width:100%;
  column-gap: 15px;
-margin:10px 0;
+
 }
-.top_content .left{
+.content .left{
   display:flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 }
-.top_content .main_image{  
+.content .main_image{  
   display:flex;
   align-items: center;
   justify-content: flex-start;
@@ -34,43 +53,45 @@ margin:10px 0;
 }
 
 .main_image img{
-  max-width:420px;
+  width: 100%;  
   border:1px solid #888;
 }
 
-.top_content .main_image:hover{
+.content .main_image:hover{
   transform: scale(0.993);
   cursor:pointer;
 }
 
 .added_images{  
   display:flex;
-  justify-content: flex-start;
+  justify-content: space-around;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: wrap;  
   margin:10px 0;
-  max-width:420px;
-
+  gap:10px;
 }
-
 .added_images img{
   max-width:50px;
-  max-height:70px;
- 
+  max-height:70px; 
 }
 
-.added_images > div{
+.added_image{
   width:60px;
   height:80px;
   display:flex;
   justify-content: center;
   align-items: center;
-  margin:5px;
-  
+  /* margin:5px; */  
   border:1px solid #888;
   cursor:pointer;  
 }
-.added_images .image_active{
+
+.fake_image{
+  width:60px;
+  height:0px;
+  
+}
+.image_active{
   border:1px solid red;
 }
 .added_images > div:hover{
@@ -83,7 +104,7 @@ margin:10px 0;
 }
 .center .form{
   display:grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   column-gap: 20px;
 }
 .form > div > div{
@@ -115,13 +136,15 @@ margin:10px 0;
   cursor:pointer;
  
 }
-.top_content input{
+.content input{
   display:block;
   width:100%;
   height:30px;
   margin:5px 0;
 }
-
+.table{
+  padding-right:5px;
+}
 .center table{
   table-layout: fixed;
   width: 100%;
@@ -137,12 +160,15 @@ margin:10px 0;
 
 .center table thead{
   font-size: 13px;
-  border-bottom: 1px solid #999;
+  border: 1px solid #999;
   
 }
-
+/* .table table th{
+  border: 1px solid #999;
+} */
 .center table tbody{
   font-size:13px;
+  border: 1px solid #999;
 }
 .center table tbody tr :nth-child(1){
 text-align: center;
@@ -162,15 +188,15 @@ text-align: center;
 
 
 .center  thead tr :nth-child(1){
-  width:50px;
+  width:70px;
   text-align: center;
 }
 .center  thead tr :nth-child(2){
-  width:50px;
+  width:70px;
   text-align: center;
 }
 .center  thead tr :nth-child(3){
-  width:150px;
+  width:auto;
   text-align: center;
 }
 .center  thead tr :nth-child(4){
@@ -178,11 +204,11 @@ text-align: center;
   text-align: center;
 }
 .center  thead tr :nth-child(5){
-  width:60px;
+  width:70px;
   text-align: center;
 }
 .center  thead tr :nth-child(6){
-  width:50px;
+  width:30px;
   text-align: center;
 }
 
@@ -211,17 +237,17 @@ text-align: center;
 
 
 @media(max-width:720px){
-  .top_content{
+  .content{
     grid-template-columns: 1fr;
   }
-  .top_content .main_image{
+  .content .main_image{
     justify-content: center;
     
   }
-.top_content .main_image img{
+.content .main_image img{
   max-width: 500px;
 }
-.top_content .left{
+.content .left{
   align-items: center;
 }
 

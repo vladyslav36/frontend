@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout"
 import AuthContext from "@/context/AuthContext"
 import { useContext, useState } from "react"
-import { API_URL, NOIMAGE_PATH } from "../../config/index"
+import { API_URL, NOIMAGE } from "../../config/index"
 import styles from "@/styles/brandForm.module.css"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -216,7 +216,7 @@ const [image,setImage]=useState({file:null,path:imagePath?`${API_URL}${imagePath
                     ) : (
                       <div className={styles.image}>
                         <img
-                          src='/noimage.png'
+                          src={`${NOIMAGE}`}
                           
                           alt="No Image"
                         />

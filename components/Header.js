@@ -1,201 +1,247 @@
 import styles from "@/styles/Header.module.css"
 import Link from "next/link"
 import { useContext, useState } from "react"
-import Spinner from "@/components/Spinner"
 import AuthContext from "@/context/AuthContext"
 import ProductsContext from "@/context/ProductsContext"
-import DropDownList from "@/components/DropDownList"
+
 import {
+  FaHome,
   FaPhone,
+  FaSearch,
   FaShoppingCart,
   FaSignInAlt,
-  FaTasks,
 } from "react-icons/fa"
-import { getCurrencySymbol } from "utils"
-import { fetchNames } from "dataFetchers"
-import { API_URL } from "../config"
-import  { useRouter } from "next/router"
-
+import { getCurrencySymbol, getPriceForShow } from "utils"
+import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
+import { useRouter } from "next/router"
+import useSWR from "swr"
+import Loupe from "./Loupe"
 
 export default function Header() {
-  const router=useRouter()
+  const router = useRouter()
   const { login, logout } = useContext(AuthContext)
-  const { currencyShop, setCurrencyShop, currencyRate,setProductList } =
+  const { currencyShop, setCurrencyShop, setProductList } =
     useContext(ProductsContext)
 
   const [isShowList, setIsShowList] = useState(false)
-
+  const [isShowLoupe, setIsShowLoupe] = useState(false)
+  const [image, setImage] = useState("")
   const [searchString, setSearchString] = useState("")
   const [checkValues, setCheckValues] = useState({
     isProduct: true,
-    isModel:false
+    isModel: false,
   })
 
-  const getSearchItemsList = (items, searchString, limit, isProduct = true, isModel = false) => {
-    
-    const listName = items
-      .filter(
-        ({ name }) =>
-          isProduct&&name.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
-      )
-      .map((item) => item.name)
-      .slice(0, limit)
-    const listModel = items
-      .filter(
-        ({ model }) =>
-          isModel &&
-          model.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
-      )
-      .map((item) => item.model)
-      .slice(0, limit)
-    const list=[...listName,...listModel]
+  const getSearchItemsList = (items, searchString) => {
+    const limit = 7
+    const listName = items.filter(
+      ({ name }) =>
+        checkValues.isProduct &&
+        name.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
+    )
+
+    const listModel = items.filter(
+      ({ model }) =>
+        checkValues.isModel &&
+        model.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
+    )
+
+    const list = [...listName, ...listModel].slice(0, limit)
     return list
   }
 
-  const handleSubmit =  async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    let result=[]
-    if (checkValues.isProduct) {
-      const res = await fetch(
-      `${API_URL}/api/products/search?product=${searchString}`
-    )
-      const { products } = await res.json()
-      result=[...products]
-    }
-    if (checkValues.isModel) {
-      const res = await fetch(
-      `${API_URL}/api/products/search?model=${searchString}`
-    )
-      const { products } = await res.json()
-      result = [...result, ...products]
-    }
-    setProductList([...result])
-    router.push('/product_list')
-    
+    console.log("item")
+    // let result = []
+    // if (checkValues.isProduct) {
+    //   const res = await fetch(
+    //     `${API_URL}/api/products/search?product=${searchString}`
+    //   )
+    //   const { products } = await res.json()
+    //   result = [...products]
+    // }
+    // if (checkValues.isModel) {
+    //   const res = await fetch(
+    //     `${API_URL}/api/products/search?model=${searchString}`
+    //   )
+    //   const { products } = await res.json()
+    //   result = [...result, ...products]
+    // }
+    // setProductList([...result])
+    // router.push("/product_list")
   }
   const handleChange = (e) => {
     e.preventDefault()
     setSearchString(e.target.value)
   }
   const checkChange = (e) => {
-   
     const { name, checked } = e.target
-    
-    setCheckValues({...checkValues,[name]:checked})
-   
-    
-}
+
+    setCheckValues({ ...checkValues, [name]: checked })
+  }
   const handleClick = (name) => {
     setIsShowList(false)
     setSearchString(name)
   }
-
-  const { data, isLoading } = fetchNames()
-  if (isLoading) return <Spinner />
-  const { products } = data
-
+  const handleImageClick = () => {
+    setIsShowLoupe(true)
+  }
+  const { data } = useSWR(`${API_URL}/api/products`)
+  const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
+  
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>
+      <div className={styles.header_top}>
+        <div className={styles.header_top_left}>
+          <div className={styles.currency_wrapper}>
+            <div className={styles.currencies}>
+              <p>USD: {dataRate ? dataRate.currencyRate.USD.toFixed(2) : ""}</p>
+              <p>EUR: {dataRate ? dataRate.currencyRate.EUR.toFixed(2) : ""}</p>
+            </div>
+            <div className={styles.select}>
+              <p>{getCurrencySymbol(currencyShop)} Валюта магазина</p>
+              <select
+                value={currencyShop}
+                onChange={(e) => setCurrencyShop(e.target.value)}
+              >
+                <option value="UAH">UAH</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+              </select>
+            </div>
+          </div>
+          <div className={styles.phones}>
+            <div className={styles.phone_1}>
+              <FaPhone />
+              &nbsp;<p>{PHONE1}</p>
+            </div>
+            <div className={styles.phone_2}>
+              <FaPhone />
+              &nbsp;<p>{PHONE2}</p>
+            </div>
+          </div>
+        </div>
+        <nav>
+          <Link href="/account/login">
+            <a className={styles.login}>
+              <FaSignInAlt className={styles.icon} />
+              <p>Войти</p>
+            </a>
+          </Link>
+        </nav>
+      </div>
+      <div className={styles.header_bottom}>
         <Link href="/">
-          <a>Кармен</a>
-        </Link>
-      </div>
-      <div className={styles.currencies}>
-        <p>USD: {currencyRate.USD.toFixed(2)}</p>
-        <p>EUR: {currencyRate.EUR.toFixed(2)}</p>
-      </div>
-      <div className={styles.select}>
-        <p>{getCurrencySymbol(currencyShop)} Валюта магазина</p>
-        <select
-          value={currencyShop}
-          onChange={(e) => setCurrencyShop(e.target.value)}
-        >
-          <option value="UAH">UAH</option>
-          <option value="USD">USD</option>
-          <option value="EUR">EUR</option>
-        </select>
-      </div>
-      <div className={styles.phone_1}>
-        <FaPhone />
-        &nbsp;<p>050-950-16-71</p>
-      </div>
-      <div className={styles.phone_2}>
-        <FaPhone />
-        &nbsp;<p>098-208-60-83</p>
-      </div>
-
-      <form onSubmit={handleSubmit} className={styles.search}>
-        <div
-          className={styles.input_group}
-          tabIndex={0}
-          onFocus={() => setIsShowList(true)}
-          onBlur={() => setIsShowList(false)}
-        >
-          <input type="text" value={searchString} onChange={handleChange} />
-          {products.length ? (
-            <DropDownList
-            isShow={isShowList}
-            itemsList={getSearchItemsList(products, searchString, 20,checkValues.isProduct,checkValues.isModel)}
-            handleClick={handleClick}
-            />
-            ) : null}
-        </div>
-            <input type="submit" value="Найти" onChange={handleSubmit}/>
-      </form>
-
-      <nav>
-        <ul>
-          <li>
-            <Link href="/account/login">
-              <a className={styles.login}>
-                <FaSignInAlt className={styles.icon} />
-                <p>Войти</p>
+          <div className={styles.logos}>
+            <div className={styles.logo_home}>
+              <a>
+                <FaHome />
               </a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/account/register">
-              <a className={styles.register} onClick={() => logout()}>
-                <FaTasks className={styles.icon} />
-                <p>Регистрация</p>
-              </a>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      <div className={styles.cart}>
-        <Link href="/">
-          <a>
-            <FaShoppingCart className={styles.icon} />
-            <p>Товаров 0(0грн)</p>
-          </a>
+            </div>
+            <div className={styles.logo}>
+              <a>Кармен</a>
+            </div>
+          </div>
         </Link>
-      </div>
-      <div className={styles.check_block}>
-        <div>
-          <p>Искать в</p> 
+        <div className={styles.search_check_wrapper}>
+          <form onSubmit={handleSubmit} className={styles.search}>
+            <div
+              className={styles.input_group}
+              tabIndex={0}
+              onFocus={() => setIsShowList(true)}
+              onBlur={() => setIsShowList(false)}
+            >
+              <input type="text" value={searchString} onChange={handleChange} />
+              {data && data.products.length ? (
+                <ul
+                  className={
+                    styles.drop_down_list + " " + (isShowList && styles.active)
+                  }
+                >
+                  {getSearchItemsList(data.products, searchString).map(
+                    (item, i) => (
+                      <Link href={`/product/${item.slug}`} key={i}>
+                        <li onClick={() => handleClick(item.name)}>
+                          <div className={styles.left_wrapper}>
+                            <img
+                              src={
+                                item.imagesSm[0]
+                                  ? `${API_URL}${item.imagesSm[0]}`
+                                  : `${NOIMAGE}`
+                              }
+                              alt="No image"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setIsShowLoupe(true)
+                                setImage(item.images[0])
+                              }}
+                            />
+                            <p>{item.name}</p>
+                          </div>
+                          <div className={styles.right_wrapper}>
+                            {dataRate ? (
+                              <p>
+                                {getPriceForShow({
+                                  currencyShop,
+                                  currencyRate: dataRate.currencyRate,
+                                  currencyValue: item.currencyValue,
+                                  price: item.price,
+                                })}
+                                &nbsp;{getCurrencySymbol(currencyShop)}
+                              </p>
+                            ) : null}
+                          </div>
+                        </li>
+                      </Link>
+                    )
+                  )}
+                </ul>
+              ) : null}
+              {isShowLoupe ? (
+                <Loupe setIsShow={setIsShowLoupe} image={image} />
+              ) : null}
+              <button>
+                <FaSearch />
+              </button>
+            </div>
+          </form>
+
+          <div className={styles.check_block}>
+            <div>
+              <p>Искать по</p>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="isProduct"
+                name="isProduct"
+                onChange={checkChange}
+                checked={checkValues.isProduct}
+              />
+              <label htmlFor="isProduct">названию</label>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="isModel"
+                name="isModel"
+                onChange={checkChange}
+                checked={checkValues.isModel}
+              />
+              <label htmlFor="isModel">модели</label>
+            </div>
+          </div>
         </div>
-        <div>
-          <input
-            type="checkbox"
-            id="isProduct"
-            name="isProduct"
-            onChange={checkChange}
-            checked={checkValues.isProduct}
-          />
-          <label htmlFor="isProduct">товарах</label>
+
+        <div className={styles.cart}>
+          <Link href="/">
+            <a>
+              <FaShoppingCart className={styles.icon} />
+              <p>Товаров 0(0грн)</p>
+            </a>
+          </Link>
         </div>
-        <div>
-          <input
-            type="checkbox"
-            id="isModel"
-            name="isModel"
-            onChange={checkChange}
-            checked={checkValues.isModel}
-          />
-          <label htmlFor="isModel">моделях</label>
-        </div>        
       </div>
     </header>
   )

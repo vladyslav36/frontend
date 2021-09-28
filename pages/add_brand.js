@@ -97,7 +97,7 @@ const deleteImage = () => {
       router.push("/")
     }
   }
-  console.log(image)
+  
   return (
     <Layout title="Добавление бренда">
       {!isAdmin ? (

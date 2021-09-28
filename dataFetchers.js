@@ -55,6 +55,14 @@ export const fetchProductsCategoryId = (id) => {
     isError: error,
   }
 }
+export const useCurrencyRate = () => {   
+    const { data, error } = useSWR(`${API_URL}/api/currencyrate`,fetcher)
+  return {
+    data,
+    isLoading: !error && !data,
+    isError: error,
+  }
+}
 
 
 

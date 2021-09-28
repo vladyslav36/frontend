@@ -1,26 +1,37 @@
 import styles from "@/styles/CategoriesList.module.css"
 import Link from "next/link"
-import { API_URL } from "@/config/index"
+import { API_URL, NOIMAGE } from "@/config/index"
 
-export default function CategoriesList({ categories=[] }) {
+export default function CategoriesList({ categories = [], qnt }) {
+  const fakeArray = ["", "", "", "", "", "", ""]
   return (
     <div className={styles.content}>
-      {categories.length ? (
-        categories.map((item, i) => (
-          <Link href={`/category/${item.slug}`} key={i}>
-            <a>
-          <div className={styles.item} >
-            <div className={styles.image}>
-              <img src={item.image?`${API_URL}${item.image}`:'/noimage.png'} alt="No image" />
-            </div>
-            <div className={item.name}>
-              <p>{item.name}</p>
-            </div>
-          </div>
-            </a>
-          </Link>
-        ))
-      ):(<h2>Нет подкатегорий</h2>)}
+      <>
+        {categories.length ? (
+          categories.map((item, i) => (
+            <Link href={`/category/${item.slug}`} key={i}>
+              <div className={styles.item}>
+                <div className={styles.image}>
+                  <img
+                    src={item.image ? `${API_URL}${item.image}` : `${NOIMAGE}`}
+                    alt="No image"
+                  />
+                </div>
+                <div className={item.name}>
+                  <p>
+                    {item.name}&nbsp;({qnt[item._id]})
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <h2>Нет подкатегорий</h2>
+        )}
+        {fakeArray.map((item, i) => (
+          <div className={styles.fake_image}></div>
+        ))}
+      </>
     </div>
   )
 }

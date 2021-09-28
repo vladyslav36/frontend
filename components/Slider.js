@@ -5,7 +5,7 @@ import { API_URL } from "../config"
 import { useState } from "react"
 
 export default function Slider({ images, setSliderValues,sliderValues,setMainImageIdx }) {
-  const [num, setNum] = useState(sliderValues.idx)
+  const [num, setNum] = useState(sliderValues.idx)  
   const lastNumber = images.length - 1  
   const prevImage = () => {
     if (num===0) {
@@ -32,12 +32,12 @@ export default function Slider({ images, setSliderValues,sliderValues,setMainIma
   return (
     <div className={styles.slider}>
       <div className={styles.container}>        
-        <button onClick={prevImage} className={styles.prev_button}><FaArrowLeft/></button>
+        {lastNumber?(<button onClick={prevImage} className={styles.prev_button}><FaArrowLeft/></button>):null}  
         <div className={styles.image}>          
           <img src={`${API_URL}${images[num]}`} style={{maxHeight:imageHeight} }/>
         </div>
         
-          <button onClick={nextImage} className={styles.next_button}><FaArrowRight/></button>
+        {lastNumber?(<button onClick={nextImage} className={styles.next_button}><FaArrowRight/></button>):null}  
         
       </div>
 

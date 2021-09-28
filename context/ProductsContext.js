@@ -6,28 +6,31 @@ const ProductsContext = createContext()
 
 export const ProductsProvider = ({ children })=>{
 const [currencyShop, setCurrencyShop] = useState("UAH")
-const [currencyRate, setCurrencyRate] = useState({
-  UAH: 1,
-  USD: 1,
-  EUR: 1,
-})
+// const [currencyRate, setCurrencyRate] = useState({
+//   UAH: 1,
+//   USD: 1,
+//   EUR: 1,
+// })
+  const [categories,setCategories]=useState([])
 const [productList,setProductList]=useState([])
-useEffect(() => {
-  const fetchCurrency = async () => {
-    const res = await fetch(`${API_URL}/api/currencyrate`)
-    const { currencyRate } = await res.json()
-    setCurrencyRate(currencyRate)
-  }
-  fetchCurrency()
-}, [])
+  // useEffect(() => {
+  //   const fetcher = async () => {     
+  //      const res = await fetch(`${API_URL}/api/currencyrate`)
+  //     const { currencyRate } = await res.json()
+  //     setCurrencyRate(currencyRate)
+  //   }
+  //   fetcher()
+  // },[])
   return (
     <ProductsContext.Provider value={{
-      currencyRate,
+      // currencyRate,
       currencyShop,
-      setCurrencyRate,
+      // setCurrencyRate,
       setCurrencyShop,
       productList, 
-      setProductList
+      setProductList,
+      categories,
+      setCategories
     }}>
     {children}
     </ProductsContext.Provider>

@@ -1,12 +1,16 @@
-
+.table_wrapper{
+  margin:0 10px;;
+}
 .table{
   width:100%;
   border-collapse: collapse;
   table-layout: fixed;
   font-size:14px;
+  border:1px solid #888;
+  line-height: 1.2;
 }
 .table thead{
-  border-bottom: 1px solid #888;
+  border: 1px solid #888;
 }
 .table thead :nth-child(1){
   width:60px;
@@ -23,41 +27,54 @@
 .table thead :nth-child(5){
   width:70px;
   }
-.table thead :nth-child(6){
-  width:100px;
+
+  .table tbody tr{
+    border: 1px solid #888;
+  }
+  .table tbody tr:hover{
+    border-left: 2px solid var(--links-color);
+    border-right: 2px solid var(--links-color);
+    cursor:pointer;
   }
   .table tbody td{
     text-align: center;
+    border:1px solid #888;
   }
 .table tbody{
-  border-bottom: 1px solid #888;
+  border: 1px solid #888;
 }
 .image{  
   display:flex;
   justify-content: flex-start;
   align-items: center;
   padding:2px;
-
 }
 
 .image img{
   max-width:50px;
-  max-height:70px;
-  cursor:pointer;
+  max-height:70px;  
 }
-
+.image img:hover{
+  cursor:zoom-in;
+  transform:scale(0.98)
+}
 .button{
   display:flex;
   justify-content: center;
   align-items:center;
 }
 
-.button button{
-  font-size:1.5rem;
+.button a{
+  font-size:1.3rem;
   background-color: inherit;
   border:none;
-  color:red;
+  color: var(--links-color);
   cursor:pointer;
+  display:flex;
+}
+
+.button a:hover{
+  color:var(--links-hover-color);
 }
 .name{
   color:inherit;
@@ -65,30 +82,31 @@
 .name:hover{  
   text-decoration: underline; 
 }
-.container{
-  width:100%;
+.container{  
   display:flex;
   flex-wrap:wrap;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content:space-around; 
+  gap:20px;
+  padding:0 10px;
 }
+
 .card{
   display:flex;
   flex-direction: column;
-  justify-content: space-between; 
+  justify-content: space-between;   
 line-height: 1;
   border:1px solid #888;
   box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
-  margin:0 10px 10px 10px;
-  width:200px;
+    
+  width:180px;
   height:300px;
   overflow:auto;
 }
-
 .card:hover{
-  transform:scale(0.99);
   cursor:pointer;
+  border:1px solid var(--links-color);
 }
+
 .image_card{
   width:100%;
 /* height:210px; */
@@ -100,12 +118,21 @@ justify-content: space-between;
 
 .image_card img{
   max-width:150px;
-  max-height:200px;
-  padding-top:5px;
+  max-height:210px;
+  margin-top:10px;
+  border:1px solid #888;
+}
+.fake_image{
+  width:180px;
+  height:0;
+}
+.image_card img:hover{
+  cursor:zoom-in;
+  transform:scale(0.99)
 }
 
-
 .name_card{
+  font-size:14px;
   padding:5px 10px;
   width:100%;
 }
@@ -115,15 +142,23 @@ justify-content: space-between;
   display:flex;
   justify-content: center;
   align-items: center;
+  background-color: #e5e8e8;
+  font-size:15px;
+  padding:5px 0;
 }
 
-.price_card{
-  padding:3px;
-  
-}
+
 
 @media(max-width:768px){
   .table thead :nth-child(4){
   width:150px;
+  }
+}
+
+
+
+@media(max-width:400px){
+  .container{
+    justify-content: center;
   }
 }
