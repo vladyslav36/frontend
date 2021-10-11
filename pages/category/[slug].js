@@ -3,16 +3,17 @@ import Layout from "@/components/Layout"
 import { API_URL } from "@/config/index"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import Spinner from "@/components/Spinner"
 import ProductsList from "@/components/ProductsList"
-import { useContext, useEffect, useState } from "react"
-import { getArrayCategoryTree } from "utils"
+import { useEffect, useState } from "react"
+import { getArrayCategoryTree, getQntProdInCat } from "utils"
 import Navbar from "@/components/Navbar"
 import CategoriesList from "@/components/CategoriesList"
 import { FaList, FaTh } from "react-icons/fa"
-import ProductsContext from "@/context/ProductsContext"
 
-export default function categoryPage({ categories, qnt, params: { slug } }) {
+import Links from "@/components/Links"
+import useSWR from "swr"
+
+export default function categoryPage({ categories, params: { slug } }) {
   const router = useRouter()
 
   const [isShowCategories, setIsShowCategories] = useState(false)
@@ -24,7 +25,14 @@ export default function categoryPage({ categories, qnt, params: { slug } }) {
   const childrenList = categories.filter(
     (item) => item.parentCategoryId === category._id
   )
+  const { data: dataProd } = useSWR(`${API_URL}/api/products`)
 
+  const qnt =
+    dataProd &&
+    getQntProdInCat({
+      products: dataProd.products,
+      categories,
+    })
   useEffect(async () => {
     if (childrenList.length) {
       setIsShowCategories(true)
@@ -46,21 +54,23 @@ export default function categoryPage({ categories, qnt, params: { slug } }) {
 
   return (
     <Layout title="Категории">
-      <Link href="/">На главную</Link>
       <Navbar />
       <div className={styles.header}>
-        <div className={styles.crumbs}>
-          {getArrayCategoryTree(category, categories).map((item, i, arr) => {
-            const arrow = i < arr.length - 1 ? <div>&nbsp;➔&nbsp;</div> : null
-            return (
-              <div key={i}>
-                <Link href={`/category/${item.slug}`}>
-                  <a>{item.name}</a>
-                </Link>
-                {arrow}
-              </div>
-            )
-          })}
+        <div className={styles.header_left}>
+          <Links home={true} back={true} />
+          <div className={styles.crumbs}>
+            {getArrayCategoryTree(category, categories).map((item, i, arr) => {
+              const arrow = i < arr.length - 1 ? <div>&nbsp;➔&nbsp;</div> : null
+              return (
+                <div key={i}>
+                  <Link href={`/category/${item.slug}`}>
+                    <a>{item.name}</a>
+                  </Link>
+                  {arrow}
+                </div>
+              )
+            })}
+          </div>
         </div>
         {isShowProducts ? (
           <div className={styles.toggles}>
@@ -90,7 +100,7 @@ export default function categoryPage({ categories, qnt, params: { slug } }) {
         </div>
         <div className={styles.right_content}>
           {isShowCategories ? (
-            <CategoriesList categories={childrenList} qnt={qnt} />
+            <CategoriesList categories={childrenList} qnt={qnt ? qnt : ""} />
           ) : null}
           {isShowProducts ? (
             productList.length ? (
@@ -109,11 +119,17 @@ export default function categoryPage({ categories, qnt, params: { slug } }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const data = await fetch(`${API_URL}/api/categories`)
-  const { categories, qnt } = await data.json()
+  const res = await fetch(`${API_URL}/api/categories`)
+  const data = await res.json()
+
+  if (!data) {
+    return {
+      notFound: true,
+    }
+  }
+  const { categories } = data
   return {
     props: {
-      qnt,
       categories,
       params,
     },

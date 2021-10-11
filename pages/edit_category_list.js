@@ -10,8 +10,10 @@ import Link from "next/link"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
+import Links from "@/components/Links"
+import useSWR from "swr"
 
-export default function editCategoryListPage({ categories }) {
+export default function editCategoryListPage({categories}) {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
@@ -29,6 +31,9 @@ export default function editCategoryListPage({ categories }) {
       }
     }
   }
+
+  const { data } = useSWR(`${API_URL}/api/categories`)
+
   return (
     <div>
       <Layout title="Редактирование категории">
@@ -37,9 +42,9 @@ export default function editCategoryListPage({ categories }) {
           <AccessDenied />
         ) : (
           <div className={styles.container}>
-            <h2>Список категорий</h2>
-            <Link href='/'>На главную</Link>
-            {categories.map((item) => (
+              <Links back={false} home={true} />
+              {categories.length ? (
+                 categories.map((item) => (
               <div key={item._id} className={styles.item}>
                 <div className={styles.categoryTree}>
                   {getCategoriesTree(item, categories)}
@@ -62,7 +67,9 @@ export default function editCategoryListPage({ categories }) {
                   </button>
                 </div>
               </div>
-            ))}
+            ))
+              ):null}
+           
           </div>
         )}
       </Layout>

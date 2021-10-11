@@ -5,19 +5,22 @@ import Navbar from "@/components/Navbar"
 import AdminPanel from "@/components/AdminPanel"
 
 
+
 export default function HomePage() {  
   return (
     <Layout
       title="Кармен"
       description="Оптовый магазин Кармен"
-      keywords="Колготки, носки, лосины, леггинсы опт, розница"
+      keywords="Колготки, носки, лосины, леггинсы опт, розница"     
     >
-      <Navbar />      
+      <Navbar />
       <AdminPanel/>
-      <Showcase  />
+      <Showcase />
     </Layout>
   )
 }
+
+
 
 
 

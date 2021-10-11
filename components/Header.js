@@ -11,7 +11,12 @@ import {
   FaShoppingCart,
   FaSignInAlt,
 } from "react-icons/fa"
-import { getCurrencySymbol, getPriceForShow } from "utils"
+import {
+  getCurrencySymbol,
+  getPriceForShow,
+  getQntInCart,
+  getTotalInCart,
+} from "utils"
 import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import { useRouter } from "next/router"
 import useSWR from "swr"
@@ -20,76 +25,46 @@ import Loupe from "./Loupe"
 export default function Header() {
   const router = useRouter()
   const { login, logout } = useContext(AuthContext)
-  const { currencyShop, setCurrencyShop, setProductList } =
-    useContext(ProductsContext)
+  const { currencyShop, setCurrencyShop, cart } = useContext(ProductsContext)
 
   const [isShowList, setIsShowList] = useState(false)
   const [isShowLoupe, setIsShowLoupe] = useState(false)
   const [image, setImage] = useState("")
   const [searchString, setSearchString] = useState("")
-  const [checkValues, setCheckValues] = useState({
-    isProduct: true,
-    isModel: false,
-  })
+  
 
   const getSearchItemsList = (items, searchString) => {
-    const limit = 7
-    const listName = items.filter(
-      ({ name }) =>
-        checkValues.isProduct &&
-        name.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
-    )
+    const limit = 10
+    const list = items
+      .filter(
+        ({ name, model }) =>
+          name.toLowerCase().indexOf(searchString.toLowerCase()) >= 0 ||
+          model.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
+      )
+      .slice(0, limit)
 
-    const listModel = items.filter(
-      ({ model }) =>
-        checkValues.isModel &&
-        model.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
-    )
-
-    const list = [...listName, ...listModel].slice(0, limit)
     return list
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log("item")
-    // let result = []
-    // if (checkValues.isProduct) {
-    //   const res = await fetch(
-    //     `${API_URL}/api/products/search?product=${searchString}`
-    //   )
-    //   const { products } = await res.json()
-    //   result = [...products]
-    // }
-    // if (checkValues.isModel) {
-    //   const res = await fetch(
-    //     `${API_URL}/api/products/search?model=${searchString}`
-    //   )
-    //   const { products } = await res.json()
-    //   result = [...result, ...products]
-    // }
-    // setProductList([...result])
-    // router.push("/product_list")
+    console.log("item")    
   }
   const handleChange = (e) => {
     e.preventDefault()
     setSearchString(e.target.value)
   }
-  const checkChange = (e) => {
-    const { name, checked } = e.target
-
-    setCheckValues({ ...checkValues, [name]: checked })
-  }
+  
   const handleClick = (name) => {
     setIsShowList(false)
     setSearchString(name)
   }
-  const handleImageClick = () => {
-    setIsShowLoupe(true)
-  }
-  const { data } = useSWR(`${API_URL}/api/products`)
-  const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
   
+  const { data } = useSWR(`${API_URL}/api/products`)
+  
+  const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
+ 
+
   return (
     <header className={styles.header}>
       <div className={styles.header_top}>
@@ -177,7 +152,10 @@ export default function Header() {
                                 setImage(item.images[0])
                               }}
                             />
-                            <p>{item.name}</p>
+                            <div>
+                              {item.model ? <p>Артикул:{item.model}</p> : null}
+                              <p>Модель:{item.name}</p>
+                            </div>
                           </div>
                           <div className={styles.right_wrapper}>
                             {dataRate ? (
@@ -206,39 +184,14 @@ export default function Header() {
               </button>
             </div>
           </form>
-
-          <div className={styles.check_block}>
-            <div>
-              <p>Искать по</p>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="isProduct"
-                name="isProduct"
-                onChange={checkChange}
-                checked={checkValues.isProduct}
-              />
-              <label htmlFor="isProduct">названию</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="isModel"
-                name="isModel"
-                onChange={checkChange}
-                checked={checkValues.isModel}
-              />
-              <label htmlFor="isModel">модели</label>
-            </div>
-          </div>
+         
         </div>
 
         <div className={styles.cart}>
-          <Link href="/">
+          <Link href="/cart">
             <a>
               <FaShoppingCart className={styles.icon} />
-              <p>Товаров 0(0грн)</p>
+              <p>Товаров {cart ? getQntInCart(cart) : "0"}</p>
             </a>
           </Link>
         </div>

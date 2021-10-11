@@ -3,8 +3,8 @@ import styles from "@/styles/EditProduct.module.css"
 import AccessDenied from "@/components/AccessDenied"
 import Layout from "@/components/Layout"
 import AuthContext from "@/context/AuthContext"
-import { useContext, useEffect, useState } from "react"
-import { getCategoriesTree, getCurrencySymbol, getSearchItemsList } from "utils"
+import { useContext, useState } from "react"
+import {  getCurrencySymbol, getSearchItemsList } from "utils"
 import DropDownList from "@/components/DropDownList"
 import { API_URL } from "../config"
 import { FaPencilAlt, FaTimes } from "react-icons/fa"
@@ -12,22 +12,15 @@ import Link from "next/link"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
-import Image from "next/image"
-import Spinner from '@/components/Spinner'
-import { fetchNames } from "dataFetchers"
 
+import Links from "@/components/Links"
+import useSWR from "swr"
 
-
-
-
-
-export default  function editProductListPage() {
+export default  function editProductListPage({products,categories,brands}) {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
-  const router = useRouter()
-  
-   
+  const router = useRouter()  
   
   const [values, setValues] = useState({
     product: "",
@@ -73,10 +66,6 @@ export default  function editProductListPage() {
 
    setProdList([...products])
   }
-
-const { data, isLoading } = fetchNames()
-  if (isLoading) return <Spinner/>
-  const { brands, categories, products } = data
   
   return (
     <div>
@@ -86,11 +75,10 @@ const { data, isLoading } = fetchNames()
           <AccessDenied />
         ) : (
           <div className={styles.container}>
-            <h3>Список товаров</h3>
-            <Link href="/">На главную</Link>
+            <Links home={true} back={false} />
             <form onSubmit={submitHandler} className={styles.form}>
               <div>
-                <label htmlFor="product">Название</label>
+                <label htmlFor="product">Модель</label>
 
                 <div
                   className={styles.input_group}
@@ -112,7 +100,10 @@ const { data, isLoading } = fetchNames()
                   {products.length ? (
                     <DropDownList
                       isShow={isShowList.product}
-                      itemsList={getSearchItemsList(products, values.product)}
+                      itemsList={getSearchItemsList(
+                        products,
+                        values.product
+                      )}
                       handleClick={(item) => {
                         handleListClick({ item, name: "product" })
                         setIsShowList({ ...isShowList, product: false })
@@ -140,14 +131,19 @@ const { data, isLoading } = fetchNames()
                     value={values.category}
                     onChange={handleChange}
                   />
-                  <DropDownList
-                    isShow={isShowList.category}
-                    itemsList={getSearchItemsList(categories, values.category)}
-                    handleClick={(item) => {
-                      handleListClick({ item, name: "category" })
-                      setIsShowList({ ...isShowList, category: false })
-                    }}
-                  />
+                  {categories.length ? (
+                    <DropDownList
+                      isShow={isShowList.category}
+                      itemsList={getSearchItemsList(
+                        categories,
+                        values.category
+                      )}
+                      handleClick={(item) => {
+                        handleListClick({ item, name: "category" })
+                        setIsShowList({ ...isShowList, category: false })
+                      }}
+                    />
+                  ) : null}
                 </div>
               </div>
               <div>
@@ -165,14 +161,20 @@ const { data, isLoading } = fetchNames()
                     value={values.brand}
                     onChange={handleChange}
                   />
-                  <DropDownList
-                    isShow={isShowList.brand}
-                    itemsList={getSearchItemsList(brands, values.brand, 10)}
-                    handleClick={(item) => {
-                      handleListClick({ item, name: "brand" })
-                      setIsShowList({ ...isShowList, brand: false })
-                    }}
-                  />
+                  {brands.length ? (
+                    <DropDownList
+                      isShow={isShowList.brand}
+                      itemsList={getSearchItemsList(
+                        brands,
+                        values.brand,
+                        10
+                      )}
+                      handleClick={(item) => {
+                        handleListClick({ item, name: "brand" })
+                        setIsShowList({ ...isShowList, brand: false })
+                      }}
+                    />
+                  ) : null}
                 </div>
               </div>
               <div>
@@ -184,8 +186,8 @@ const { data, isLoading } = fetchNames()
               <thead>
                 <tr>
                   <th>&nbsp;</th>
-                  <th>Название</th>
                   <th>Модель</th>
+                  <th>Артикул</th>
                   <th>Описание</th>
                   <th>Цена</th>
                   <th>&nbsp;</th>
@@ -221,7 +223,7 @@ const { data, isLoading } = fetchNames()
                                 </a>
                               </Link>
                             </div>
-                            <div >
+                            <div>
                               <button
                                 className={styles.delete}
                                 onClick={() =>
@@ -237,23 +239,7 @@ const { data, isLoading } = fetchNames()
                               </button>
                             </div>
                           </div>
-                          {/* <button className={styles.edit}>
-                          <Link href={`/edit_product/${item.slug}`}>
-                            <a>
-                              <FaPencilAlt className={styles.icon} />
-                            </a>
-                          </Link>
-                        </button>
                           
-
-                          <button
-                            className={styles.delete}
-                            onClick={() => handleDeleteProduct({_id:`${item._id}`,idx:i})}
-                          >
-                            <span>
-                              <FaTimes className={styles.icon} />
-                            </span>
-                          </button> */}
                         </td>
                       </tr>
                     ))
@@ -267,15 +253,15 @@ const { data, isLoading } = fetchNames()
   )
 }
 
-// export async function getServerSideProps() {
-//   const res = await fetch(`${API_URL}/api/products/names`)
-//   const { products, brands, categories } = await res.json()
+export async function getServerSideProps() {
+  const res = await fetch(`${API_URL}/api/products/names`)
+  const { products, brands, categories } = await res.json()
 
-//   return {
-//     props: {
-//       products,
-//       categories,
-//       brands,
-//     },
-//   }
-// }
+  return {
+    props: {
+      products,
+      categories,
+      brands,
+    },
+  }
+}

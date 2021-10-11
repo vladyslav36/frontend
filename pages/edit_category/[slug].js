@@ -13,6 +13,7 @@ import Image from "next/image"
 import { API_URL, NOIMAGE, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../../utils"
+import Links from "@/components/Links"
 
 export default function editCategoryPage({ categories, slug }) {
   const {
@@ -23,11 +24,14 @@ export default function editCategoryPage({ categories, slug }) {
     _id: category._id,
     name: category.name,
     parentCategory: category.parentCategory,
-    parentCategoryId: category.parentCategoryId,    
+    parentCategoryId: category.parentCategoryId,
     description: category.description,
   })
-  
-  const [image,setImage]=useState({path:category.image?`${API_URL}${category.image}`:'',file:null})
+
+  const [image, setImage] = useState({
+    path: category.image ? `${API_URL}${category.image}` : "",
+    file: null,
+  })
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
@@ -66,13 +70,13 @@ export default function editCategoryPage({ categories, slug }) {
 
     // Send data
     const formData = new FormData()
-    formData.append('values',JSON.stringify(values))
-    formData.append('imageClientPath',image.path)
-    formData.append('image',image.file)
+    formData.append("values", JSON.stringify(values))
+    formData.append("imageClientPath", image.path)
+    formData.append("image", image.file)
     const res = await fetch(`${API_URL}/api/categories`, {
       method: "PUT",
       headers: {
-        "enctype": "multipart/form-data",
+        enctype: "multipart/form-data",
       },
       body: formData,
     })
@@ -119,11 +123,10 @@ export default function editCategoryPage({ categories, slug }) {
             <div className={styles.form}>
               <form onSubmit={handleSubmit}>
                 <div className={styles.header}>
-                  <h1>Редактирование категории</h1>
+                  <Links home={true} back={true} />
                   <input type="submit" value="Сохранить" className="btn" />
                 </div>
 
-                <Link href="/edit_category_list">Вернуться назад</Link>
                 <ToastContainer />
                 <div className={styles.grid}>
                   <div>
@@ -199,7 +202,7 @@ export default function editCategoryPage({ categories, slug }) {
                     </div>
                   ) : (
                     <div className={styles.image}>
-                          <img src={`${NOIMAGE}`} alt="No Image" />
+                      <img src={`${NOIMAGE}`} alt="No Image" />
                     </div>
                   )}
                   <div className={styles.image_footer}>
@@ -212,10 +215,7 @@ export default function editCategoryPage({ categories, slug }) {
                     >
                       <FaImage />
                     </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={deleteImage}
-                    >
+                    <button className="btn btn-danger" onClick={deleteImage}>
                       <FaTimes />
                     </button>
                   </div>

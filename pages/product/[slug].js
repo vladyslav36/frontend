@@ -13,10 +13,12 @@ import { useRouter } from "next/router"
 import Navbar from "@/components/Navbar"
 import ProductsContext from "@/context/ProductsContext"
 import useSWR from "swr"
+import Links from "@/components/Links"
 
 export default function productPage({ slug, product }) {
   const router = useRouter()
   const { currencyShop } = useContext(ProductsContext)
+  const { cart, setCart } = useContext(ProductsContext)
   const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
   const [values, setValues] = useState({
     color: "",
@@ -37,8 +39,8 @@ export default function productPage({ slug, product }) {
     idx: 0,
   })
   const [mainImageIdx, setMainImageIdx] = useState(0)
-  const fakeArray = ['','','','','','','']
-  
+  const fakeArray = ["", "", "", "", "", "", ""]
+
   // Функция добавляет опционную цену к строке опции
   const getList = (name) => {
     return product[name].map((item) =>
@@ -83,7 +85,10 @@ export default function productPage({ slug, product }) {
 
   const handleCartClick = () => {
     console.log("cart click")
+    setCart([...cart, ...chosen])
+    setChosen([])
   }
+  console.log(cart)
   const changeHandler = (e) => {
     e.preventDefault()
     const { name, value } = e.target
@@ -91,7 +96,7 @@ export default function productPage({ slug, product }) {
     setValues({ ...values, [name]: value })
   }
 
-  const submitHandler = (e) => {
+  const addedValues = (e) => {
     e.preventDefault()
 
     if (product.sizes.length && !values.size) {
@@ -125,15 +130,16 @@ export default function productPage({ slug, product }) {
     setChosen([
       ...chosen,
       {
-        name:product.name,
+        name: product.name,
         color: values.color,
         size: values.size,
         height: values.height,
         qnt: values.qnt,
         price: getOptionPrice() || product.price,
-        currencyValue:product.currencyValue
+        currencyValue: product.currencyValue,
       },
     ])
+    clearValues()
   }
   const clearValues = () => {
     setValues({
@@ -150,24 +156,16 @@ export default function productPage({ slug, product }) {
 
   return (
     <Layout title={`Страница товара ${slug}`}>
-      <dir className={styles.links}>
-        <p onClick={() => router.back()}>Назад</p>
-        <Link href="/">
-          <a>На главную</a>
-        </Link>
-      </dir>
-
       <Navbar />
+      <div className={styles.header}>
+        <Links home={true} back={true} />
+        <button className={styles.cart_button} onClick={handleCartClick}>
+          <FaShoppingCart className={styles.icon} />
+          <span>В корзину</span>
+        </button>
+      </div>
       <ToastContainer />
       <div className={styles.container}>
-        <div className={styles.header}>
-          <h1>{product.name}</h1>
-          <button className={styles.cart_button} onClick={handleCartClick}>
-            <FaShoppingCart className={styles.icon} />
-            <span>В корзину</span>
-          </button>
-        </div>
-
         <div className={styles.content}>
           <div className={styles.left}>
             <div className={styles.main_image}>
@@ -190,9 +188,9 @@ export default function productPage({ slug, product }) {
                       key={i}
                       // className={i === mainImageIdx ? styles.image_active : ""}
                       className={
-                        styles.added_image + " " + (i === mainImageIdx
-                          ? styles.image_active
-                          : "")
+                        styles.added_image +
+                        " " +
+                        (i === mainImageIdx ? styles.image_active : "")
                       }
                     >
                       <img
@@ -211,14 +209,22 @@ export default function productPage({ slug, product }) {
           <div className={styles.center}>
             <div className={styles.center_header}>
               <div>
-                <h4>Бренд</h4>
-                <p>{product.brand}</p>
-                <h4>Модель</h4>
-                <p>{product.model}</p>
+                <div>
+                  <h5>Бренд:</h5>
+                  <p>{product.brand}</p>
+                </div>
+                <div>
+                  <h5>Модель:</h5>
+                  <p>{product.name}</p>
+                </div>
+                <div>
+                  <h5>Артикул:</h5>
+                  <p>{product.model}</p>
+                </div>
               </div>
               <div>
                 {dataRate ? (
-                  <h1>
+                  <p className={styles.price}>
                     {getPriceForShow({
                       currencyRate: dataRate.currencyRate,
                       currencyValue: product.currencyValue,
@@ -226,124 +232,138 @@ export default function productPage({ slug, product }) {
                       price: product.price,
                     })}{" "}
                     {getCurrencySymbol(currencyShop)}
-                  </h1>
+                  </p>
                 ) : null}
               </div>
             </div>
 
-            <form onSubmit={submitHandler} className={styles.form}>
-              <div>
-                {product.sizes.length ? (
-                  <div
-                    tabIndex={0}
-                    onFocus={() => setIsShowList({ ...isShowList, size: true })}
-                    onBlur={() => setIsShowList({ ...isShowList, size: false })}
-                  >
-                    <label htmlFor="size">Размер</label>
-                    <input
-                      type="text"
-                      id="size"
-                      name="size"
-                      value={values.size}
-                      onChange={changeHandler}
-                      autoComplete="off"
-                      readOnly
-                    />
-                    <DropDownList
-                      isShow={isShowList.size}
-                      itemsList={getList("sizes")}
-                      handleClick={(item) =>
-                        listItemClick({ item, option: "size" })
-                      }
-                    />
-                  </div>
-                ) : null}
-                {product.colors.length ? (
-                  <div
-                    tabIndex={0}
-                    onFocus={() =>
-                      setIsShowList({ ...isShowList, color: true })
-                    }
-                    onBlur={() =>
-                      setIsShowList({ ...isShowList, color: false })
-                    }
-                  >
-                    <label htmlFor="color">Цвет</label>
-                    <input
-                      type="text"
-                      id="color"
-                      name="color"
-                      value={values.color}
-                      onChange={changeHandler}
-                      autoComplete="off"
-                      readOnly
-                    />
-                    <DropDownList
-                      isShow={isShowList.color}
-                      itemsList={getList("colors")}
-                      handleClick={(item) =>
-                        listItemClick({ item, option: "color" })
-                      }
-                    />
-                  </div>
-                ) : null}
-                {product.heights.length ? (
-                  <div
-                    tabIndex={0}
-                    onFocus={() =>
-                      setIsShowList({ ...isShowList, color: true })
-                    }
-                    onBlur={() =>
-                      setIsShowList({ ...isShowList, color: false })
-                    }
-                  >
-                    <label htmlFor="height">Рост</label>
-                    <input
-                      type="text"
-                      id="heigh"
-                      name="height"
-                      value={values.height}
-                      onChange={changeHandler}
-                      autoComplete="off"
-                      readOnly
-                    />
-                    <DropDownList
-                      isShow={isShowList.height}
-                      itemsList={getList("heights")}
-                      handleClick={(item) =>
-                        listItemClick({ item, option: "height" })
-                      }
-                    />
-                  </div>
-                ) : null}
-                <div>
-                  <label htmlFor="qnt">Количество</label>
+            <div className={styles.inputs}>
+              {/* <div> */}
+              {product.sizes.length ? (
+                <div
+                  tabIndex={0}
+                  onFocus={() => setIsShowList({ ...isShowList, size: true })}
+                  onBlur={() => setIsShowList({ ...isShowList, size: false })}
+                >
+                  <label htmlFor="size">Размер</label>
                   <input
-                    ref={inputQnt}
                     type="text"
-                    id="qnt"
-                    name="qnt"
+                    id="size"
+                    name="size"
+                    value={values.size}
                     onChange={changeHandler}
-                    value={values.qnt}
+                    autoComplete="off"
+                    readOnly
+                  />
+                  <DropDownList
+                    isShow={isShowList.size}
+                    itemsList={getList("sizes")}
+                    handleClick={(item) =>
+                      listItemClick({ item, option: "size" })
+                    }
                   />
                 </div>
+              ) : null}
+              {product.colors.length ? (
+                <div
+                  tabIndex={0}
+                  onFocus={() => setIsShowList({ ...isShowList, color: true })}
+                  onBlur={() => setIsShowList({ ...isShowList, color: false })}
+                >
+                  <label htmlFor="color">Цвет</label>
+                  <input
+                    type="text"
+                    id="color"
+                    name="color"
+                    value={values.color}
+                    onChange={changeHandler}
+                    autoComplete="off"
+                    readOnly
+                  />
+                  <DropDownList
+                    isShow={isShowList.color}
+                    itemsList={getList("colors")}
+                    handleClick={(item) =>
+                      listItemClick({ item, option: "color" })
+                    }
+                  />
+                </div>
+              ) : null}
+              {product.heights.length ? (
+                <div
+                  tabIndex={0}
+                  onFocus={() => setIsShowList({ ...isShowList, height: true })}
+                  onBlur={() => setIsShowList({ ...isShowList, height: false })}
+                >
+                  <label htmlFor="height">Рост</label>
+                  <input
+                    type="text"
+                    id="height"
+                    name="height"
+                    value={values.height}
+                    onChange={changeHandler}
+                    autoComplete="off"
+                    readOnly
+                  />
+                  <DropDownList
+                    isShow={isShowList.height}
+                    itemsList={getList("heights")}
+                    handleClick={(item) =>
+                      listItemClick({ item, option: "height" })
+                    }
+                  />
+                </div>
+              ) : null}
+              <div>
+                <label htmlFor="qnt">Количество</label>
+                <input
+                  ref={inputQnt}
+                  type="text"
+                  id="qnt"
+                  name="qnt"
+                  onChange={changeHandler}
+                  value={values.qnt}
+                />
               </div>
-
-              <div className={styles.buttons}>
-                <button>Добавить</button>
-                <button type="button" onClick={clearValues}>
-                  Очистить
-                </button>
-              </div>
-            </form>
+              {/* </div> */}
+            </div>
+            <div className={styles.button}>
+              <button type="button" onClick={addedValues}>
+                Выбрать
+              </button>              
+            </div>
             <div className={styles.table}>
               <table>
                 <caption>Выбрано товаров</caption>
                 <thead>
                   <tr>
-                    <th>Рост</th>
-                    <th>Размер</th>
-                    <th>Цвет</th>
+                    <th
+                      style={
+                        product.heights.length
+                          ? {}
+                          : { visibility: "hidden", width: 0 }
+                      }
+                    >
+                      Рост
+                    </th>
+                    <th
+                      style={
+                        product.sizes.length
+                          ? {}
+                          : { visibility: "hidden", width: 0 }
+                      }
+                    >
+                      Размер
+                    </th>
+                    <th
+                      style={
+                        product.colors.length
+                          ? {}
+                          : { visibility: "hidden", width: 0 }
+                      }
+                    >
+                      Цвет
+                    </th>
                     <th>Кол-во</th>
                     <th>
                       Цена&nbsp;{getCurrencySymbol(product.currencyValue)}

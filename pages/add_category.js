@@ -13,9 +13,9 @@ import Image from "next/image"
 import { API_URL, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../utils"
+import Links from "@/components/Links"
 
-
-export default function addCategoryPage({categories}) {
+export default function addCategoryPage({ categories }) {
   const {
     user: { isAdmin },
   } = useContext(AuthContext)
@@ -25,17 +25,15 @@ export default function addCategoryPage({categories}) {
     parentCategoryId: null,
     description: "",
   })
-  
-  
 
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
-  const [image,setImage]=useState({path:'',file:null})
- 
+  const [image, setImage] = useState({ path: "", file: null })
+
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
 
   const router = useRouter()
-// Функция возвращает список категорий в соответствии со строкой поиска
+  // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(categories, value) {
     const list = categories.filter(
       ({ name }) => name.toLowerCase().indexOf(value.toLowerCase()) >= 0
@@ -67,12 +65,12 @@ export default function addCategoryPage({categories}) {
 
     // Send data
     const formData = new FormData()
-    formData.append('values',JSON.stringify(values))
-    formData.append('image',image.file)
+    formData.append("values", JSON.stringify(values))
+    formData.append("image", image.file)
     const res = await fetch(`${API_URL}/api/categories`, {
       method: "POST",
       headers: {
-        "enctype": "multipart/form-data",
+        enctype: "multipart/form-data",
       },
       body: formData,
     })
@@ -106,10 +104,9 @@ export default function addCategoryPage({categories}) {
 
   const deleteImage = () => {
     URL.revokeObjectURL(image.path)
-    setImage({path:'',file:null})
+    setImage({ path: "", file: null })
   }
-   
-  
+
   return (
     <div>
       <Layout title="Добавление категории">
@@ -120,11 +117,13 @@ export default function addCategoryPage({categories}) {
             <div className={styles.form}>
               <form onSubmit={handleSubmit}>
                 <div className={styles.header}>
-                  <h1>Добавление категории</h1>
+                  <Link href="/">
+                    <Links home={true} />
+                  </Link>
+
                   <input type="submit" value="Сохранить" className="btn" />
                 </div>
 
-                <Link href="/">На главную</Link>
                 <ToastContainer />
                 <div className={styles.grid}>
                   <div>
@@ -204,10 +203,7 @@ export default function addCategoryPage({categories}) {
                     </div>
                   ) : (
                     <div className={styles.image}>
-                      <img
-                        src='/noimage.png'                        
-                        alt="No Image"
-                      />
+                      <img src="/noimage.png" alt="No Image" />
                     </div>
                   )}
                   <div className={styles.image_footer}>
@@ -220,10 +216,7 @@ export default function addCategoryPage({categories}) {
                     >
                       <FaImage />
                     </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={deleteImage}
-                    >
+                    <button className="btn btn-danger" onClick={deleteImage}>
                       <FaTimes />
                     </button>
                   </div>

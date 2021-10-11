@@ -21,7 +21,11 @@ export default function Loupe({
         </div>        
       </div>
 
-      <FaTimes onClick={() => setIsShow(false)} className={styles.times_icon} />
+      <FaTimes onClick={(e) => {
+        e.stopPropagation()
+        setIsShow(false)
+      }}
+        className={styles.times_icon} />
     </div>
   )
 }

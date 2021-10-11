@@ -28,7 +28,7 @@ export const fetchShowcaseProducts = () => {
     isError: !!error
   }
 }
-
+ 
 export const fetchCategories = () => {
   const { data, error } = useSWR(`${API_URL}/api/categories`, fetcher)
   return {

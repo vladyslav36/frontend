@@ -13,6 +13,7 @@ import { API_URL } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree, stringToPrice } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
+import Links from "@/components/Links"
 
 export default function addProductPage({ categories, brands }) {
   const {
@@ -29,12 +30,13 @@ export default function addProductPage({ categories, brands }) {
     colors: [],
     sizes: [],
     heights: [],
-    isInStock: "ДА",
+    isInStock: true,
     price: "",
     retailPrice: "",
-    isShowcase: "НЕТ",
+    isShowcase: false,
     currencyValue: "UAH",
   })
+
   const [images, setImages] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
@@ -90,12 +92,12 @@ export default function addProductPage({ categories, brands }) {
     }
     // Send data
     const formData = new FormData()
-    formData.append('values', JSON.stringify(values))    
-    images.forEach(item=>formData.append('images',item.file))
+    formData.append("values", JSON.stringify(values))
+    images.forEach((item) => formData.append("images", item.file))
     const res = await fetch(`${API_URL}/api/products`, {
       method: "POST",
       headers: {
-        "enctype": "multipart/form-data",
+        enctype: "multipart/form-data",
       },
       body: formData,
     })
@@ -118,9 +120,13 @@ export default function addProductPage({ categories, brands }) {
   }
   // input для name & model ...
   const handleChange = (e) => {
-    e.preventDefault()
-    const { name, value } = e.target
-    setValues({ ...values, [name]: value })
+    const { name, value, checked } = e.target
+    if (name === "isShowcase" || name === "isInStock") {
+      setValues({ ...values, [name]: checked })
+    } else {
+      e.preventDefault()
+      setValues({ ...values, [name]: value })
+    }
   }
 
   // input for parentCategory
@@ -153,22 +159,20 @@ export default function addProductPage({ categories, brands }) {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-
-  
+  console.log(values)
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
         <AccessDenied />
       ) : (
-        <>
+        <div className={styles.container}>
           <div className={styles.form}>
             <form onSubmit={handleSubmit}>
               <div className={styles.header}>
-                <h1>Добавление товара</h1>
+                <Links home={true} />
                 <input type="submit" value="Сохранить" className="btn" />
               </div>
 
-              <Link href="/">На главную</Link>
               <ToastContainer />
               <div className={styles.grid}>
                 <div>
@@ -328,31 +332,27 @@ export default function addProductPage({ categories, brands }) {
                   </div>
                 </div>
 
-                <div>
-                  <div>
-                    <div className={styles.select_block}>
-                      <p>Показывать на витрине</p>
-                      <select
-                        value={values.isShowcase}
-                        name="isShowcase"
-                        id="isShowcase"
-                        onChange={handleChange}
-                      >
-                        <option value="НЕТ">НЕТ</option>
-                        <option value="ДА">ДА</option>
-                      </select>
-                    </div>
-                    <div className={styles.select_block}>
-                      <p>В наличии</p>
-                      <select
-                        name="isInStock"
-                        id="isInStock"
-                        onChange={handleChange}
-                      >
-                        <option value="ДА">ДА</option>
-                        <option value="НЕТ">НЕТ</option>
-                      </select>
-                    </div>
+                <div className={styles.checkbox_wrapper}>
+                  <div className={styles.checkbox}>
+                    <label htmlFor="isShowcase">Показывать на витрине</label>
+                    <input
+                      type="checkbox"
+                      name="isShowcase"
+                      id="isShowcase"
+                      onChange={handleChange}
+                      checked={values.isShowcase}
+                    />
+                  </div>
+
+                  <div className={styles.checkbox}>
+                    <label htmlFor="isInStock">В наличии</label>
+                    <input
+                      type="checkbox"
+                      name="isInStock"
+                      id="isInStock"
+                      onChange={handleChange}
+                      checked={values.isInStock}
+                    />
                   </div>
                 </div>
               </div>
@@ -408,7 +408,7 @@ export default function addProductPage({ categories, brands }) {
               : null}
             <button
               className="btn"
-                onClick={() => {
+              onClick={() => {
                 setImageIdx(images.length)
                 setShowModal(true)
                 setIsShowList(false)
@@ -417,7 +417,7 @@ export default function addProductPage({ categories, brands }) {
               <FaPlus />
             </button>
           </div>
-        </>
+        </div>
       )}
       <Modal show={showModal} onClose={() => setShowModal(false)}>
         <ImagesUpload
@@ -443,4 +443,3 @@ export async function getServerSideProps() {
     },
   }
 }
-

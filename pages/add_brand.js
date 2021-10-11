@@ -11,6 +11,7 @@ import Modal from "@/components/Modal"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import AccessDenied from "@/components/AccessDenied"
+import Links from "@/components/Links"
 
 export default function add_brandPage() {
   const {
@@ -62,14 +63,13 @@ export default function add_brandPage() {
       setInputValues({ ...inputValues, [itemName]: "" })
     }
 
-    
     const elem = document.getElementById(itemName)
     elem.focus()
   }
-const deleteImage = () => {
-      URL.revokeObjectURL(image.path)
-      setImage({ path: "", image: null })
-    }
+  const deleteImage = () => {
+    URL.revokeObjectURL(image.path)
+    setImage({ path: "", image: null })
+  }
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -78,14 +78,14 @@ const deleteImage = () => {
       return
     }
     // Send data
-    const formData = new FormData()    
-    formData.append('values',JSON.stringify(values))
+    const formData = new FormData()
+    formData.append("values", JSON.stringify(values))
     formData.append(`image`, image.file)
-    
+
     const res = await fetch(`${API_URL}/api/brands`, {
       method: "POST",
       headers: {
-        "enctype": "multipart/form-data",
+        enctype: "multipart/form-data",
       },
       body: formData,
     })
@@ -97,7 +97,7 @@ const deleteImage = () => {
       router.push("/")
     }
   }
-  
+
   return (
     <Layout title="Добавление бренда">
       {!isAdmin ? (
@@ -108,12 +108,13 @@ const deleteImage = () => {
 
           <form onSubmit={handleSubmit}>
             <div className={styles.header}>
-              <h2>Добавление бренда</h2>
+              <Link href="/">
+                <Links home={true} />
+              </Link>
               <button className="btn" type="submit">
                 Сохранить
               </button>
             </div>
-            <Link href="/">Вернуться на главную</Link>
             <div className={styles.content}>
               <div className={styles.input_field}>
                 <div className={styles.input_block}>
@@ -265,11 +266,14 @@ const deleteImage = () => {
           </form>
 
           <Modal show={showModal} onClose={() => setShowModal(false)}>
-              <ImageUpload setShowModal={setShowModal} setImage={setImage} image={image}/>
+            <ImageUpload
+              setShowModal={setShowModal}
+              setImage={setImage}
+              image={image}
+            />
           </Modal>
         </div>
       )}
     </Layout>
   )
 }
-

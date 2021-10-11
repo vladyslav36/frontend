@@ -1,38 +1,29 @@
-import { createContext,useState,useEffect } from 'react'
-import { API_URL } from '@/config/index'
-
+import { createContext, useEffect, useState } from "react"
 
 const ProductsContext = createContext()
 
-export const ProductsProvider = ({ children })=>{
-const [currencyShop, setCurrencyShop] = useState("UAH")
-// const [currencyRate, setCurrencyRate] = useState({
-//   UAH: 1,
-//   USD: 1,
-//   EUR: 1,
-// })
-  const [categories,setCategories]=useState([])
-const [productList,setProductList]=useState([])
-  // useEffect(() => {
-  //   const fetcher = async () => {     
-  //      const res = await fetch(`${API_URL}/api/currencyrate`)
-  //     const { currencyRate } = await res.json()
-  //     setCurrencyRate(currencyRate)
-  //   }
-  //   fetcher()
-  // },[])
+export const ProductsProvider = ({ children }) => {
+  const [currencyShop, setCurrencyShop] = useState("UAH")
+  const [cart, setCart] = useState([])
+
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem("cart"))
+    setCart(cart ? cart : [])
+  }, [])
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart))
+  }, [cart])
+
   return (
-    <ProductsContext.Provider value={{
-      // currencyRate,
-      currencyShop,
-      // setCurrencyRate,
-      setCurrencyShop,
-      productList, 
-      setProductList,
-      categories,
-      setCategories
-    }}>
-    {children}
+    <ProductsContext.Provider
+      value={{
+        currencyShop,
+        setCurrencyShop,
+        cart,
+        setCart,
+      }}
+    >
+      {children}
     </ProductsContext.Provider>
   )
 }

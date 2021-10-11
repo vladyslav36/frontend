@@ -11,6 +11,7 @@ import ImageUpload from "@/components/ImageUpload"
 import Modal from "@/components/Modal"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import Links from "@/components/Links"
 
 export default function edit_brandPage({brands,slug}) {
   const {
@@ -111,12 +112,12 @@ const [image,setImage]=useState({file:null,path:imagePath?`${API_URL}${imagePath
 
           <form onSubmit={handleSubmit}>
             <div className={styles.header}>
-              <h2>Редактирование бренда</h2>
+              <Links home={true} back={true}/>
               <button className="btn" type="submit">
                 Сохранить
               </button>
             </div>
-            <Link href="/">Вернуться на главную</Link>
+            
             <div className={styles.content}>
               <div className={styles.input_field}>
                 <div className={styles.input_block}>

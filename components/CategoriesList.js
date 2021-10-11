@@ -29,7 +29,7 @@ export default function CategoriesList({ categories = [], qnt }) {
           <h2>Нет подкатегорий</h2>
         )}
         {fakeArray.map((item, i) => (
-          <div className={styles.fake_image}></div>
+          <div className={styles.fake_image} key={i}></div>
         ))}
       </>
     </div>

@@ -31,10 +31,10 @@ export default function editProductPage({ categories, brands,product }) {
     colors: [...product.colors],
     sizes: [...product.sizes],
     heights: [...product.heights],
-    isInStock: product.isInStock ? "ДА" : "НЕТ",
+    isInStock: product.isInStock,
     price: product.price,
     retailPrice: product.retailPrice,
-    isShowcase: product.isShowcase ? "ДА" : "НЕТ",    
+    isShowcase: product.isShowcase,    
     currencyValue: product.currencyValue,
   })
   
@@ -122,9 +122,13 @@ export default function editProductPage({ categories, brands,product }) {
   }
   // input для name & model ...
   const handleChange = (e) => {
-    e.preventDefault()
-    const { name, value } = e.target
-    setValues({ ...values, [name]: value })
+    const { name, value, checked } = e.target
+    if (name === "isShowcase" || name === "isInStock") {
+      setValues({ ...values, [name]: checked })
+    } else {
+      e.preventDefault()
+      setValues({ ...values, [name]: value })
+    }
   }
 
   // input for parentCategory
@@ -332,31 +336,27 @@ console.log(images)
                   </div>
                 </div>
 
-                <div>
-                  <div>
-                    <div className={styles.select_block}>
-                      <p>Показывать на витрине</p>
-                      <select
-                        value={values.isShowcase}
-                        name="isShowcase"
-                        id="isShowcase"
-                        onChange={handleChange}
-                      >
-                        <option value="НЕТ">НЕТ</option>
-                        <option value="ДА">ДА</option>
-                      </select>
-                    </div>
-                    <div className={styles.select_block}>
-                      <p>В наличии</p>
-                      <select
-                        name="isInStock"
-                        id="isInStock"
-                        onChange={handleChange}
-                      >
-                        <option value="ДА">ДА</option>
-                        <option value="НЕТ">НЕТ</option>
-                      </select>
-                    </div>
+                <div className={styles.checkbox_wrapper}>
+                  <div className={styles.checkbox}>
+                    <label htmlFor="isShowcase">Показывать на витрине</label>
+                    <input
+                      type="checkbox"
+                      name="isShowcase"
+                      id="isShowcase"
+                      onChange={handleChange}
+                      checked={values.isShowcase}
+                    />
+                  </div>
+
+                  <div className={styles.checkbox}>
+                    <label htmlFor="isInStock">В наличии</label>
+                    <input
+                      type="checkbox"
+                      name="isInStock"
+                      id="isInStock"
+                      onChange={handleChange}
+                      checked={values.isInStock}
+                    />
                   </div>
                 </div>
               </div>
@@ -428,7 +428,7 @@ console.log(images)
           images={images}
           setImages={setImages}
           idx={imageIdx}
-        />      
+        />
       </Modal>
     </Layout>
   )

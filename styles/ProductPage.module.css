@@ -15,22 +15,26 @@
   color:var(--links-hover-color);
 }
 .container{
-  padding:0 5px;
+  padding:0 10px;
 }
 .header{
   display:flex;
   justify-content: space-between;
   align-items: center;
+  padding:5px 10px;
 }
 .cart_button{
   display:flex;
   align-items: center;
   justify-content: space-between;
-  padding:5px 10px;
-  font-size: 16px;
+  padding:5px 10px; 
+   
   cursor:pointer;
 }
-
+.cart_button .icon{
+  font-size: 18px;
+ margin-right: 5px;
+}
 
 .content{
   display:grid;
@@ -102,12 +106,33 @@
   justify-content: space-between;
   align-items: center;
 }
-.center .form{
-  display:grid;
-  grid-template-columns: 2fr 1fr;
-  column-gap: 20px;
+
+.center_header h5{
+  background-color:   #f8c471;
+  border-radius:7px;
+  padding:2px 5px;
 }
-.form > div > div{
+.center_header>div p{
+  padding:0 5px;
+}
+.center_header>div div{
+  display:flex;
+  align-items: center;
+  padding:2px 0;
+}
+.price{
+  font-size: 30px;
+  font-weight: 600;
+  color:    #424949;
+
+}
+.center .inputs{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+  padding:10px 0;
+}
+.inputs > div{
   position:relative;
 }
 
@@ -119,28 +144,37 @@
 
  
 
-.center .buttons{
-  display:flex;
-  flex-direction: column;
+.center .button{
+  display:flex;  
   justify-content: center;
-  align-items:flex-end;
-  padding:5px 0;
+  align-items:center;
+  padding:10px 0;
+  
 }
 
-.center .buttons button{
-  padding:5px 10px;
-  margin:0 10px 20px 0;
+.center .button button{
+  color: #fbfcfc ;  
+  background-color:   #0e6655  ;
+  border-radius:5px;
+  border:none;
+  padding:7px 15px;  
 }
+
+
+
+
 
 .center .buttons button:hover{
   cursor:pointer;
- 
+ background-color:  #229954 ;
 }
 .content input{
+  font-size: 15px;
   display:block;
   width:100%;
   height:30px;
-  margin:5px 0;
+  margin:3px 0;
+  padding:0 5px;
 }
 .table{
   padding-right:5px;
@@ -196,7 +230,7 @@ text-align: center;
   text-align: center;
 }
 .center  thead tr :nth-child(3){
-  width:auto;
+  width:150px;
   text-align: center;
 }
 .center  thead tr :nth-child(4){
@@ -212,7 +246,10 @@ text-align: center;
   text-align: center;
 }
 
-
+.hide_col{
+  visibility:hidden;
+  width:0;
+}
 .center table tfoot{
   font-size:13px;
   border-top: 1px solid #999;
@@ -222,16 +259,17 @@ text-align: center;
   justify-content: center;
   align-items: center;
 }
-.footer_wrapper{
-  display:flex;
-  align-items: center;
-  justify-content: space-between;
-}
 .icon{
   color:red;  
   cursor:pointer;  
   font-size: 16px;  
 }
+.footer_wrapper{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 
 
 

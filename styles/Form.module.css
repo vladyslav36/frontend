@@ -1,3 +1,6 @@
+.container {
+  padding: 0 10px;
+}
 .form {
   display: block;
 }
@@ -7,207 +10,217 @@
   grid-template-columns: 1fr 1fr;
   column-gap: 20px;
   row-gap: 10px;
-  margin:5px 0;
-  
+  margin: 5px 0;
 }
-.form .header{
-  display:flex;
+.grid label {
+  font-size: 14px;
+}
+.form .header {
+  display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-.form .header input{
-  width:100px;
+.form .header input {
+  width: 100px;
+}
+.form .header a {
+  display: flex;
+  align-items: center;
 }
 .form input {
   display: block;
   width: 100%;
   height: 30px;
   padding: 5px;
-  margin: 5px 0 10px;
-  font-size: 1rem;
+
+  font-size: 14px;
 }
-.form .input,.form select{
-    display: block;
+.form .input,
+.form select {
+  display: block;
   width: 100%;
   height: 30px;
   padding: 5px;
-  margin: 5px 0 10px;
-  font-size: 1rem;
+  font-size: 14px;
   background-color: inherit;
-  border:1px solid #333;
+  border: 1px solid #333;
 }
-.form .select_block{
-  display: inline-block;
- width:50%;
- 
+.checkbox_wrapper {
+  padding-top: 20px;
+  display: flex;
+  align-items:center;
+  justify-content: space-around;
+}
+.form .checkbox {  
+  flex: auto;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-
-.form .input_price{
-  display:flex;
-  width:100%;
-}
-.form .input_price div{
-  flex:1;
+.form .checkbox input[type="checkbox"] {
+  height: 20px;
+  width:30px;
+  
 }
 
-.form .labels{
-  display:flex;
+.form .input_price {
+  display: flex;
+  width: 100%;
+}
+.form .input_price div {
+  flex: 1;
+}
+
+.form .labels {
+  display: flex;
   justify-content: space-around;
 }
 .form input[submit] {
   display: block;
   width: 100%;
-  height: 40px;
+  height: 30px;
   padding: 5px;
 }
 
 .form textarea {
-  font-size: 1rem;
+  font-size: 14px;
   width: 100%;
   height: 100x;
   padding: 5px;
 }
 
-
-.image{
-   width:200px;
-  height:250px;
-  display:flex;
+.image {
+  width: 200px;
+  height: 250px;
+  display: flex;
   justify-content: center;
-  align-items:center;
-  border:1px solid #b2babb;
+  align-items: center;
+  border: 1px solid #b2babb;
 }
 
-.image img{
-  max-width:198px;
-  max-height:248px;
+.image img {
+  max-width: 198px;
+  max-height: 248px;
 }
-
 
 .image_container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin: 10px 5px;
-  width:200px;
-  
-  
+  width: 200px;
 }
 .image_footer button {
   margin-top: 5px;
 }
 
-.images_container{
-  display:flex;
+.images_container {
+  display: flex;
   flex-direction: row;
-  justify-content: flex-start;  
+  justify-content: flex-start;
   flex-wrap: wrap;
   align-items: center;
-
 }
-.images_container>button{
-  margin:0 10px;
+.images_container > button {
+  margin: 0 10px;
 }
-.image_footer{
-  display:flex;
+.image_footer {
+  display: flex;
   justify-content: space-around;
-  width:100%;
-  margin:5px 0;
+  width: 100%;
+  margin: 5px 0;
 }
 
-.image_footer button{
-  display:flex;
-  
+.image_footer button {
+  display: flex;
 }
 
 .dropdown_menu {
   list-style: none;
-  font-size: 1rem;
+  font-size: 14px;
   display: none;
   width: 100%;
   position: absolute;
   z-index: 900;
+  top: 35px;
+  left: 0;
   background: rgba(244, 246, 246);
   padding: 0 10px;
-  margin-top: -15px;
+
   border: 1px solid #333;
   border-radius: 5px;
 }
-.active{
-  display:block;
+.active {
+  display: block;
 }
 
-.dropdown_menu li{
-  padding:0 5px;
+.dropdown_menu li {
+  padding: 0 5px;
 }
-.dropdown_menu li:hover{
-  cursor:pointer;
-background-color: #e5e8e8;
-
+.dropdown_menu li:hover {
+  cursor: pointer;
+  background-color: #e5e8e8;
 }
 .input_group_menu {
   position: relative;
-  
 }
-.linkButton{
-  border:none;
-  font-size:1rem;
+.linkButton {
+  border: none;
+  font-size: 1rem;
   cursor: pointer;
-  color: #3498db ;
-  padding:5px 0;
-  
+  color: #3498db;
+  padding: 5px 0;
 }
 
+.flex_block {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 16;
 
-.flex_block{
-  display:flex;
-  flex-wrap:wrap;
-  font-size:16;  
- 
-  margin:10px 0;
-  
+  margin: 10px 0;
 }
 
-.flex_block_item{
-  display:flex;
-  border:1px solid #333;
+.flex_block_item {
+  display: flex;
+  border: 1px solid #333;
   align-items: center;
 }
 
-
-.flex_block_item .option{
-  padding:0 20px;
+.flex_block_item .option {
+  padding: 0 20px;
   border-right: 1px solid #333;
   height: 100%;
-  cursor:pointer;
-  display:flex;
+  cursor: pointer;
+  display: flex;
   align-items: center;
 }
 
-.flex_block_item .option.active_item{
-  background-color:  #a3e4d7;
+.flex_block_item .option.active_item {
+  background-color: #a3e4d7;
 }
- 
-.option_price input{
- height: 20px;
- width:70px;
-  margin:0;
-  padding:0 5px;
-  border:none; 
+
+.option_price input {
+  height: 20px;
+  width: 70px;
+  margin: 0;
+  padding: 0 5px;
+  border: none;
 }
-.header_options{
-  display:flex;
+.header_options {
+  display: flex;
   justify-content: flex-start;
   align-items: center;
   padding-right: 10px;
 }
-.header_options input{
- margin:0;
- padding:0;
+.header_options input {
+  margin: 0;
+  padding: 0;
   height: 18px;
-  width:40px;
-  cursor:pointer;
+  width: 40px;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

@@ -87,7 +87,7 @@
   flex-wrap:wrap;
   justify-content:space-around; 
   gap:20px;
-  padding:0 10px;
+  padding-left:10px;
 }
 
 .card{

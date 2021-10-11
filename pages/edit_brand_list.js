@@ -6,30 +6,31 @@ import { FaPencilAlt, FaTimes } from "react-icons/fa"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
+import Links from "@/components/Links"
 
 export default function edit_brand_listPage({ brands }) {
   const router = useRouter()
   const handleDeleteBrand = async (id) => {
     if (confirm("Уверены?")) {
       const res = await fetch(`${API_URL}/api/brands/${id}`, {
-      method: "DELETE",
-    })
-    const data = await res.json()
+        method: "DELETE",
+      })
+      const data = await res.json()
 
-    if (!res.ok) {
-      toast.error(data.message)
-    } else {
-      router.push(router.pathname)
+      if (!res.ok) {
+        toast.error(data.message)
+      } else {
+        router.push(router.pathname)
+      }
     }
-    }
-    
   }
   return (
     <Layout title="Список брендов">
       <ToastContainer />
       <div className={styles.container}>
-        <h3>Бренды</h3>
-        <Link href="/">Вернуться на главную</Link>
+        <Link href="/">
+          <Links home={true} />
+        </Link>
         {brands.map((item) => (
           <div key={item._id} className={styles.item}>
             {item.name}

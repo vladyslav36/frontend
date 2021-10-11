@@ -46,7 +46,7 @@ export default function AdminPanel() {
     
     mutate(`${API_URL}/api/currencyrate`)
   }
-console.log(data)
+
   return (
     <div>
       {isAdmin ? (
