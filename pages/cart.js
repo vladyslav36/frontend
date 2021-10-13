@@ -5,23 +5,14 @@ import AuthContext from "@/context/AuthContext"
 import ProductsContext from "@/context/ProductsContext"
 import Layout from "@/components/Layout"
 import { FaTimes } from "react-icons/fa"
-import { getCurrencySymbol, getQntInCart, getTotalInCart } from "utils"
+import { getCurrencySymbol, getQntInCart,getTotalAmount } from "utils"
 import Links from "@/components/Links"
 import router from "next/router"
 
 export default function Cart() {
   const { cart, setCart } = useContext(ProductsContext)  
 
-  const getTotalAmount = (cart) => {
-    const totalObj = getTotalInCart(cart)
-    let strArr = []
-    for (let key in totalObj) {
-      if (totalObj[key]) {
-        strArr.push(`${totalObj[key].toFixed(2)}${getCurrencySymbol(key)}`)
-      }
-    }
-    return strArr.join(" + ") || "0"
-  }
+  
   const isAttrInCart = (attr) => {
     return cart.some((item) => item[attr] !== "")
   }

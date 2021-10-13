@@ -1,16 +1,22 @@
 import Layout from "@/components/Layout"
 import Links from "@/components/Links"
+import ProductsContext from "@/context/ProductsContext"
 import styles from "@/styles/Checkout.module.css"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { toast, ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { getMailString, getTotalAmount } from "utils"
+import { API_URL } from "../config"
 
 export default function Checkout() {
+  const { cart }=useContext(ProductsContext)
   const [values, setValues] = useState({
     name: "",
     surname: "",
     phone: "",
-    city:'',
-    carrier:'',
-    branch:'',
+    city: "",
+    carrier: "",
+    branch: "",
     pickup: true,
     courier: false,
     prepaid: true,
@@ -42,13 +48,27 @@ export default function Checkout() {
     }
   }
 
-  const handleSendOrder = () => {
+  const handleSendOrder = async () => {
+    const totalAmount = getTotalAmount(cart)
+    const mailString=getMailString({cart,totalAmount,values})
     localStorage.setItem("checkout", JSON.stringify(values))
-    console.log("ok")
+    const res = await fetch(`${API_URL}/api/cart/mail`, {
+      method:'POST',
+      headers: {
+        'Content-Type':'application/json',
+      },
+      body:JSON.stringify({mailString})
+    })
+    if (res.ok) {
+      toast.success('Заказ успешно отправлен')
+    } else {
+      toast.error('Ошибка при отправке заказа')
+    }
   }
-  console.log(values)
+  
   return (
     <Layout title="Оформление заказа">
+      <ToastContainer/>
       <div className={styles.container}>
         <div className={styles.header}>
           <Links home={true} back={true} />
@@ -118,13 +138,18 @@ export default function Checkout() {
             <>
               <div className={styles.input}>
                 <label htmlFor="city">Населенный пункт</label>
-                <input type="text" name='city' value={values.city} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="city"
+                  value={values.city}
+                  onChange={handleChange}
+                />
               </div>
               <div className={styles.input}>
                 <label htmlFor="carrier">Перевозчик</label>
                 <input
                   type="text"
-                  name='carrier'
+                  name="carrier"
                   value={values.carrier}
                   onChange={handleChange}
                 />
@@ -133,7 +158,7 @@ export default function Checkout() {
                 <label htmlFor="branch">Отделение</label>
                 <input
                   type="text"
-                  name='branch'
+                  name="branch"
                   value={values.branch}
                   onChange={handleChange}
                 />
@@ -169,6 +194,8 @@ export default function Checkout() {
           ) : null}
         </div>
       </div>
+      {/* test */}
+      
     </Layout>
   )
 }

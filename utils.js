@@ -137,3 +137,89 @@ export const getQntProdInCat = ({ categories, products }) => {
   //
   return Object.assign({}, ...qnt)
 }
+
+export const getTotalAmount = (cart) => {
+  const totalObj = getTotalInCart(cart)
+  let strArr = []
+  for (let key in totalObj) {
+    if (totalObj[key]) {
+      strArr.push(`${totalObj[key].toFixed(2)}${getCurrencySymbol(key)}`)
+    }
+  }
+  return strArr.join(" + ") || "0"
+}
+
+export const getMailString = ({ cart, totalAmount, values }) => {
+  const {
+    name,
+    surname,
+    phone,
+    city,
+    carrier,
+    branch,
+    pickup,
+    courier,
+    prepaid,
+    postpaid,
+  } = values
+  const isAttrInCart = (attr) => {
+    return cart.some((item) => item[attr] !== "")
+  }
+  return `
+  <div style='font-size:16px;'>
+  
+  <div style='margin:auto;width:200px;color:blue'>Заказ от 23.12.2021</div>
+    <div >
+      <div><em>Получатель:</em>${name} ${surname}</div>
+    <div><em>Телефон:</em>${phone}</div>
+    <div><em>Доставка:</em> ${
+      pickup ? "Самовывоз" : `${city} ${carrier} ${branch}`
+    }</div>
+    <div><em>Оплата:</em> ${prepaid ? "предоплата" : "наложенный платеж"}</div>
+    </div>
+    
+    <table class="table" style='
+        width:100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        border:1px solid #999;
+        margin:5px 0;
+        text-align:center;      
+        '>
+      <thead >
+        <tr>
+          <td>Модель</td>
+          <td style='${
+            isAttrInCart("height") ? "" : "visibility:hiden;width:0"
+          }'>Рост</td>
+          <td '${
+            isAttrInCart("size") ? "" : "visibility:hiden;width:0"
+          }'>Размер</td>
+          <td '${
+            isAttrInCart("color") ? "" : "visibility:hiden;width:0"
+          }'>Цвет</td>
+          <td>Цена</td>
+          <td>Кол-во</td>
+        </tr>
+      </thead>
+      <tbody >
+      ${cart
+        .map(
+          (item) => `
+        <tr style='border:1px solid #999;'>
+          <td >${item.name}</td>
+        <td>${item.height}</td>
+        <td>${item.size}</td>
+        <td>${item.color}</td>
+        <td>${item.price}${getCurrencySymbol(item.currencyValue)}</td>
+        <td>${item.qnt}</td>
+        </tr> 
+        `
+        )
+        .join("")}              
+      </tbody>
+    </table>
+    <div >Сумма заказа: <span style='color:red;'>${totalAmount}</span></div>
+  </div>
+  `
+}
