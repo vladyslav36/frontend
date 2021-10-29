@@ -17,7 +17,7 @@ import Links from "@/components/Links"
 
 export default function addCategoryPage({ categories }) {
   const {
-    user: { isAdmin },
+    user: { isAdmin,token },
   } = useContext(AuthContext)
   const [values, setValues] = useState({
     name: "",
@@ -71,13 +71,14 @@ export default function addCategoryPage({ categories }) {
       method: "POST",
       headers: {
         enctype: "multipart/form-data",
+        authorization: `Bearer ${token}`,
       },
       body: formData,
     })
     const data = await res.json()
 
     if (!res.ok) {
-      toast.error("Что-то пошло не так")
+      toast.error(data.message)
     } else {
       router.push("/")
     }

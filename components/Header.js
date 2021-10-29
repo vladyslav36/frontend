@@ -10,6 +10,7 @@ import {
   FaSearch,
   FaShoppingCart,
   FaSignInAlt,
+  FaSignOutAlt,
 } from "react-icons/fa"
 import {
   getCurrencySymbol,
@@ -24,7 +25,7 @@ import Loupe from "./Loupe"
 
 export default function Header() {
   const router = useRouter()
-  const { login, logout } = useContext(AuthContext)
+  const { setUser,user } = useContext(AuthContext)
   const { currencyShop, setCurrencyShop, cart } = useContext(ProductsContext)
 
   const [isShowList, setIsShowList] = useState(false)
@@ -46,10 +47,7 @@ export default function Header() {
     return list
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log("item")    
-  }
+  
   const handleChange = (e) => {
     e.preventDefault()
     setSearchString(e.target.value)
@@ -98,12 +96,20 @@ export default function Header() {
           </div>
         </div>
         <nav>
-          <Link href="/account/login">
+          {Object.keys(user).length === 0 ? (
+            <Link href="/account/login">
             <a className={styles.login}>
               <FaSignInAlt className={styles.icon} />
               <p>Войти</p>
             </a>
           </Link>
+          ):(<button className={styles.logout} onClick={()=>setUser({})}>
+            <FaSignOutAlt className={styles.icon} />
+              <p>{user.name}</p>
+          </button>
+          )}
+          
+          
         </nav>
       </div>
       <div className={styles.header_bottom}>
@@ -120,7 +126,7 @@ export default function Header() {
           </div>
         </Link>
         <div className={styles.search_check_wrapper}>
-          <form onSubmit={handleSubmit} className={styles.search}>
+          <form  className={styles.search}>
             <div
               className={styles.input_group}
               tabIndex={0}
@@ -179,12 +185,11 @@ export default function Header() {
               {isShowLoupe ? (
                 <Loupe setIsShow={setIsShowLoupe} image={image} />
               ) : null}
-              <button>
+              <button type='button'>
                 <FaSearch />
               </button>
             </div>
           </form>
-         
         </div>
 
         <div className={styles.cart}>

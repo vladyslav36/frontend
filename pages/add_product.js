@@ -6,18 +6,18 @@ import ImagesUpload from "@/components/ImagesUpload"
 import AuthContext from "@/context/AuthContext"
 import { useContext, useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import { FaImage, FaPlus, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import { API_URL } from "@/config/index"
-import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree, stringToPrice } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 
 export default function addProductPage({ categories, brands }) {
   const {
-    user: { isAdmin },
+    user: { isAdmin,token },
   } = useContext(AuthContext)
   const [values, setValues] = useState({
     name: "",
@@ -98,13 +98,14 @@ export default function addProductPage({ categories, brands }) {
       method: "POST",
       headers: {
         enctype: "multipart/form-data",
+        authorization: `Bearer ${token}`,
       },
       body: formData,
     })
     const data = await res.json()
 
     if (!res.ok) {
-      toast.error("Что-то пошло не так")
+      toast.error(data.message)
     } else {
       router.push("/")
     }

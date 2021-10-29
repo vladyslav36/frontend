@@ -15,13 +15,16 @@ import useSWR from "swr"
 
 export default function editCategoryListPage({categories}) {
   const {
-    user: { isAdmin },
+    user: { isAdmin,token },
   } = useContext(AuthContext)
   const router = useRouter()
   const handleDeleteCategory = async (id) => {
     if (confirm("Уверены?")) {
       const res = await fetch(`${API_URL}/api/categories/${id}`, {
         method: "DELETE",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       })
       const data = await res.json()
       if (!res.ok) {

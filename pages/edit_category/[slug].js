@@ -17,7 +17,7 @@ import Links from "@/components/Links"
 
 export default function editCategoryPage({ categories, slug }) {
   const {
-    user: { isAdmin },
+    user: { isAdmin,token },
   } = useContext(AuthContext)
   const category = categories.find((item) => item.slug === slug)
   const [values, setValues] = useState({
@@ -77,13 +77,14 @@ export default function editCategoryPage({ categories, slug }) {
       method: "PUT",
       headers: {
         enctype: "multipart/form-data",
+        authorization: `Bearer ${token}`,
       },
       body: formData,
     })
     const data = await res.json()
 
     if (!res.ok) {
-      toast.error("Что-то пошло не так")
+      toast.error(data.message)
     } else {
       router.push("/edit_category_list")
     }

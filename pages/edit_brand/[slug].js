@@ -2,7 +2,7 @@ import Layout from "@/components/Layout"
 import AuthContext from "@/context/AuthContext"
 import { useContext, useState } from "react"
 import { API_URL, NOIMAGE } from "../../config/index"
-import styles from "@/styles/brandForm.module.css"
+import styles from "@/styles/BrandForm.module.css"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
@@ -13,13 +13,13 @@ import { useRouter } from "next/router"
 import Link from "next/link"
 import Links from "@/components/Links"
 
-export default function edit_brandPage({brands,slug}) {
+export default function edit_brandPage({ brands, slug }) {
   const {
-    user: { isAdmin },
+    user: { isAdmin, token },
   } = useContext(AuthContext)
-const brand=brands.find((item)=>item.slug===slug)
+  const brand = brands.find((item) => item.slug === slug)
   const { name, colors, sizes, heights, _id } = brand
-  const imagePath=brand.image
+  const imagePath = brand.image
   const router = useRouter()
 
   const [inputValues, setInputValues] = useState({
@@ -30,19 +30,21 @@ const brand=brands.find((item)=>item.slug===slug)
   })
 
   const [values, setValues] = useState({
-    name ,
+    name,
     colors,
     sizes,
     heights,
-    _id
+    _id,
   })
-const [image,setImage]=useState({file:null,path:imagePath?`${API_URL}${imagePath}`:''})
+  const [image, setImage] = useState({
+    file: null,
+    path: imagePath ? `${API_URL}${imagePath}` : "",
+  })
   const [listName, setListName] = useState("")
-  
+
   const [showModal, setShowModal] = useState(false)
 
   const listNameRu = { colors: "Цвета", sizes: "Размеры", heights: "Роста" }
-  
 
   const handleChange = (e) => {
     e.preventDefault()
@@ -84,22 +86,23 @@ const [image,setImage]=useState({file:null,path:imagePath?`${API_URL}${imagePath
       return
     }
     // Send data
-    const formData = new FormData()    
-    formData.append('values',JSON.stringify(values))
-    formData.append('imageClientPath',image.path)
+    const formData = new FormData()
+    formData.append("values", JSON.stringify(values))
+    formData.append("imageClientPath", image.path)
     formData.append(`image`, image.file)
 
     const res = await fetch(`${API_URL}/api/brands`, {
       method: "PUT",
       headers: {
         enctype: "multipart/form-data",
+        authorization: `Bearer ${token}`
       },
       body: formData,
     })
     const data = await res.json()
 
     if (!res.ok) {
-      toast.error("Что-то пошло не так")
+      toast.error(data.message)
     } else {
       router.push("/")
     }
@@ -112,12 +115,12 @@ const [image,setImage]=useState({file:null,path:imagePath?`${API_URL}${imagePath
 
           <form onSubmit={handleSubmit}>
             <div className={styles.header}>
-              <Links home={true} back={true}/>
+              <Links home={true} back={true} />
               <button className="btn" type="submit">
                 Сохранить
               </button>
             </div>
-            
+
             <div className={styles.content}>
               <div className={styles.input_field}>
                 <div className={styles.input_block}>
@@ -209,18 +212,11 @@ const [image,setImage]=useState({file:null,path:imagePath?`${API_URL}${imagePath
                   <div className={styles.image_container}>
                     {image.path ? (
                       <div className={styles.image}>
-                        <img
-                          src={image.path}
-                          
-                        />
+                        <img src={image.path} />
                       </div>
                     ) : (
                       <div className={styles.image}>
-                        <img
-                          src={`${NOIMAGE}`}
-                          
-                          alt="No Image"
-                        />
+                        <img src={`${NOIMAGE}`} alt="No Image" />
                       </div>
                     )}
                     <div className={styles.image_footer}>
@@ -274,11 +270,12 @@ const [image,setImage]=useState({file:null,path:imagePath?`${API_URL}${imagePath
             </div>
           </form>
 
-          <Modal
-            show={showModal}
-            onClose={() => setShowModal(false)}  
-          >
-            <ImageUpload setShowModal={setShowModal} image={image} setImage={setImage} />
+          <Modal show={showModal} onClose={() => setShowModal(false)}>
+            <ImageUpload
+              setShowModal={setShowModal}
+              image={image}
+              setImage={setImage}
+            />
           </Modal>
         </div>
       ) : (

@@ -15,7 +15,7 @@ import Links from "@/components/Links"
 
 export default function add_brandPage() {
   const {
-    user: { isAdmin },
+    user: { isAdmin,token },
   } = useContext(AuthContext)
 
   const router = useRouter()
@@ -86,13 +86,14 @@ export default function add_brandPage() {
       method: "POST",
       headers: {
         enctype: "multipart/form-data",
+        authorization:`Bearer ${token}`
       },
       body: formData,
     })
     const data = await res.json()
 
     if (!res.ok) {
-      toast.error("Что-то пошло не так")
+      toast.error(data.message)
     } else {
       router.push("/")
     }
@@ -108,9 +109,9 @@ export default function add_brandPage() {
 
           <form onSubmit={handleSubmit}>
             <div className={styles.header}>
-              <Link href="/">
+              
                 <Links home={true} />
-              </Link>
+             
               <button className="btn" type="submit">
                 Сохранить
               </button>

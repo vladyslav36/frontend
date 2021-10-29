@@ -16,7 +16,7 @@ import SelectOptions from "@/components/SelectOptions"
 
 export default function editProductPage({ categories, brands,product }) {
   const {
-    user: { isAdmin },
+    user: { isAdmin,token },
   } = useContext(AuthContext)
 
   const [values, setValues] = useState({
@@ -102,12 +102,13 @@ export default function editProductPage({ categories, brands,product }) {
       method: "PUT",
       headers: {
         enctype: "multipart/form-data",
+        authorization: `Bearer ${token}`,
       },
       body: formData,
     })
 
     if (!res.ok) {
-      toast.error("Что-то пошло не так")
+      toast.error(data.message)
     } else {
       router.push("/")
     }

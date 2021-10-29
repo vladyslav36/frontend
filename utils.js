@@ -168,7 +168,7 @@ export const getMailString = ({ cart, totalAmount, values }) => {
   return `
   <div style='font-size:16px;'>
   
-  <div style='margin:auto;width:200px;color:blue'>Заказ от 23.12.2021</div>
+  <div style='margin:auto;width:200px;color:blue'>Заказ от ${new Date().toLocaleDateString()}</div>
     <div >
       <div><em>Получатель:</em>${name} ${surname}</div>
     <div><em>Телефон:</em>${phone}</div>

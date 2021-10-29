@@ -1,17 +1,16 @@
 import styles from "@/styles/AdminPanel.module.css"
 import AuthContext from "@/context/AuthContext"
-
 import { useContext, useEffect, useState } from "react"
 import Link from "next/link"
-
 import { API_URL } from "../config"
 import useSWR, { mutate } from "swr"
+import { toast, ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 export default function AdminPanel() {
   const {
-    user: { isAdmin },
+    user: { isAdmin, token },
   } = useContext(AuthContext)
-  
 
   const { data } = useSWR(`${API_URL}/api/currencyrate`)
   const [values, setValues] = useState({
@@ -24,7 +23,6 @@ export default function AdminPanel() {
       EUR: data ? data.currencyRate.EUR.toString() : "",
     })
   }, [data])
-  
 
   const handleChange = (e) => {
     e.preventDefault()
@@ -36,19 +34,24 @@ export default function AdminPanel() {
     const valuesToSend = { USD: +values.USD, EUR: +values.EUR }
 
     // send data
-    await fetch(`${API_URL}/api/currencyrate`, {
+    const res = await fetch(`${API_URL}/api/currencyrate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(valuesToSend),
     })
-    
+    const data = await res.json()
+    if (!res.ok) {
+      toast.error(data.message)
+    }
     mutate(`${API_URL}/api/currencyrate`)
   }
 
   return (
     <div>
+      <ToastContainer />
       {isAdmin ? (
         <div className={styles.container}>
           <div className={styles.container_item}>

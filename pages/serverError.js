@@ -5,7 +5,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 
 export default function serverErrorPage() {
   return (
-    <Layout title="Strver Error">
+    <Layout title="Server Error">
       <div className={styles.error}>
         <h1>
           <FaExclamationTriangle />

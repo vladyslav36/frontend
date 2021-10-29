@@ -7,12 +7,19 @@ import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
 import Links from "@/components/Links"
+import { useContext } from "react"
+import AuthContext from "@/context/AuthContext"
+import AccessDenied from "@/components/AccessDenied"
 
 export default function edit_brand_listPage({ brands }) {
   const router = useRouter()
+  const { user: { isAdmin,token }}=useContext(AuthContext)
   const handleDeleteBrand = async (id) => {
     if (confirm("Уверены?")) {
       const res = await fetch(`${API_URL}/api/brands/${id}`, {
+        headers: {
+          authorization:`Bearer ${token}`
+        },
         method: "DELETE",
       })
       const data = await res.json()
@@ -27,7 +34,10 @@ export default function edit_brand_listPage({ brands }) {
   return (
     <Layout title="Список брендов">
       <ToastContainer />
-      <div className={styles.container}>
+      {!isAdmin ? (
+        <AccessDenied/>
+      ): (
+        <div className={styles.container}>
         <Link href="/">
           <Links home={true} />
         </Link>
@@ -52,6 +62,8 @@ export default function edit_brand_listPage({ brands }) {
           </div>
         ))}
       </div>
+      )}
+      
     </Layout>
   )
 }

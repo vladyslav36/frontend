@@ -18,7 +18,7 @@ import useSWR from "swr"
 
 export default  function editProductListPage({products,categories,brands}) {
   const {
-    user: { isAdmin },
+    user: { isAdmin,token },
   } = useContext(AuthContext)
   const router = useRouter()  
   
@@ -38,6 +38,9 @@ export default  function editProductListPage({products,categories,brands}) {
     if (confirm("Уверены?")) {
       const res = await fetch(`${API_URL}/api/products/${_id}`, {
         method: "DELETE",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       })
       const data = await res.json()
       if (!res.ok) {
