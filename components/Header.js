@@ -1,6 +1,6 @@
 import styles from "@/styles/Header.module.css"
 import Link from "next/link"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import AuthContext from "@/context/AuthContext"
 import ProductsContext from "@/context/ProductsContext"
 
@@ -22,35 +22,34 @@ import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import { useRouter } from "next/router"
 import useSWR from "swr"
 import Loupe from "./Loupe"
+import { toast } from "react-toastify"
 
 export default function Header() {
   const router = useRouter()
   const { setUser,user } = useContext(AuthContext)
   const { currencyShop, setCurrencyShop, cart } = useContext(ProductsContext)
-
+const[delayTimer,setDelayTimer]=useState(new Date())
   const [isShowList, setIsShowList] = useState(false)
   const [isShowLoupe, setIsShowLoupe] = useState(false)
   const [image, setImage] = useState("")
   const [searchString, setSearchString] = useState("")
-  
-
-  const getSearchItemsList = (items, searchString) => {
-    const limit = 10
-    const list = items
-      .filter(
-        ({ name, model }) =>
-          name.toLowerCase().indexOf(searchString.toLowerCase()) >= 0 ||
-          model.toLowerCase().indexOf(searchString.toLowerCase()) >= 0
-      )
-      .slice(0, limit)
-
-    return list
-  }
+  const [products,setProducts]=useState([]) 
 
   
   const handleChange = (e) => {
     e.preventDefault()
-    setSearchString(e.target.value)
+    const string=e.target.value
+    setSearchString(string)    
+    clearTimeout(delayTimer)    
+    setDelayTimer(setTimeout(async() => {
+      const res=await fetch(`${API_URL}/api/products/search?string=${string.trim()}`)
+      const { products } = await res.json()
+      if (!res.ok) {
+        toast.error('Server error')
+        return
+      } 
+      setProducts(products)
+    },1000))
   }
   
   const handleClick = (name) => {
@@ -58,7 +57,7 @@ export default function Header() {
     setSearchString(name)
   }
   
-  const { data } = useSWR(`${API_URL}/api/products`)
+  
   
   const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
  
@@ -134,13 +133,13 @@ export default function Header() {
               onBlur={() => setIsShowList(false)}
             >
               <input type="text" value={searchString} onChange={handleChange} />
-              {data && data.products.length ? (
+              {products.length ? (
                 <ul
                   className={
                     styles.drop_down_list + " " + (isShowList && styles.active)
                   }
                 >
-                  {getSearchItemsList(data.products, searchString).map(
+                  {products.map(
                     (item, i) => (
                       <Link href={`/product/${item.slug}`} key={i}>
                         <li onClick={() => handleClick(item.name)}>

@@ -15,7 +15,7 @@ import Links from "@/components/Links"
 
 export default function add_brandPage() {
   const {
-    user: { isAdmin,token },
+    user: {isAdmin, token },
   } = useContext(AuthContext)
 
   const router = useRouter()

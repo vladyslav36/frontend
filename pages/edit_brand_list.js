@@ -38,9 +38,9 @@ export default function edit_brand_listPage({ brands }) {
         <AccessDenied/>
       ): (
         <div className={styles.container}>
-        <Link href="/">
+        
           <Links home={true} />
-        </Link>
+        
         {brands.map((item) => (
           <div key={item._id} className={styles.item}>
             {item.name}

@@ -1,20 +1,18 @@
 import styles from "@/styles/Category.module.css"
 import Layout from "@/components/Layout"
 import { API_URL } from "@/config/index"
-import { useRouter } from "next/router"
 import Link from "next/link"
 import ProductsList from "@/components/ProductsList"
 import { useEffect, useState } from "react"
-import { getArrayCategoryTree, getQntProdInCat } from "utils"
+import { getArrayCategoryTree } from "utils"
 import Navbar from "@/components/Navbar"
 import CategoriesList from "@/components/CategoriesList"
 import { FaList, FaTh } from "react-icons/fa"
 
 import Links from "@/components/Links"
-import useSWR from "swr"
+
 
 export default function categoryPage({ categories, params: { slug } }) {
-  const router = useRouter()
 
   const [isShowCategories, setIsShowCategories] = useState(false)
   const [isShowProducts, setIsShowProducts] = useState(false)
@@ -25,14 +23,7 @@ export default function categoryPage({ categories, params: { slug } }) {
   const childrenList = categories.filter(
     (item) => item.parentCategoryId === category._id
   )
-  const { data: dataProd } = useSWR(`${API_URL}/api/products`)
-
-  const qnt =
-    dataProd &&
-    getQntProdInCat({
-      products: dataProd.products,
-      categories,
-    })
+    
   useEffect(async () => {
     if (childrenList.length) {
       setIsShowCategories(true)
@@ -100,7 +91,7 @@ export default function categoryPage({ categories, params: { slug } }) {
         </div>
         <div className={styles.right_content}>
           {isShowCategories ? (
-            <CategoriesList categories={childrenList} qnt={qnt ? qnt : ""} />
+            <CategoriesList categories={childrenList} />
           ) : null}
           {isShowProducts ? (
             productList.length ? (

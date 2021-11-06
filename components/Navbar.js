@@ -1,12 +1,10 @@
 import styles from "@/styles/Navbar.module.css"
 import { useContext, useEffect, useState } from "react"
 import AuthContext from "@/context/AuthContext"
-
 import { useRouter } from "next/router"
 import useSWR from "swr"
 import { API_URL } from "../config"
-import ProductsContext from "@/context/ProductsContext"
-import { getQntProdInCat } from "utils"
+
 
 export default function Navbar() {
   const {
@@ -19,15 +17,9 @@ export default function Navbar() {
   }
 
   const { data: dataCat } = useSWR(`${API_URL}/api/categories`)
-  const { data: dataProd } = useSWR(`${API_URL}/api/products`)
+  
 
-  const qnt =
-    dataProd &&
-    dataCat &&
-    getQntProdInCat({
-      products: dataProd.products,
-      categories: dataCat.categories,
-    })
+  
 
   return (
     <div className={styles.container}>
@@ -57,7 +49,8 @@ export default function Navbar() {
                                 }}
                                 key={item._id}
                               >
-                                {item.name}&nbsp;({qnt ? qnt[item._id] : ""})
+                                {item.name}&nbsp;({item.qntProducts})
+                                
                               </li>
                             )
                           )}

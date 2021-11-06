@@ -6,8 +6,8 @@
 }
 
 .item {
-  padding: 10px;
-  font-size: 18px;
+  padding:5px;
+  font-size: 15px;
   background-color: #d7dbdd;
   display: flex;
   justify-content: space-between;

@@ -4,12 +4,13 @@ import Layout from "@/components/Layout"
 import Modal from "@/components/Modal"
 import ImagesUpload from "@/components/ImagesUpload"
 import AuthContext from "@/context/AuthContext"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { FaImage, FaPlus, FaTimes } from "react-icons/fa"
+import { FaCheck, FaImage, FaPlus, FaTimes } from "react-icons/fa"
+import { GiCheckMark } from "react-icons/gi"
 import { useRouter } from "next/router"
-import Link from "next/link"
+
 import { API_URL } from "@/config/index"
 import { getCategoriesTree, stringToPrice } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
@@ -19,6 +20,7 @@ export default function addProductPage({ categories, brands }) {
   const {
     user: { isAdmin,token },
   } = useContext(AuthContext)
+  
   const [values, setValues] = useState({
     name: "",
     model: "",
@@ -160,7 +162,7 @@ export default function addProductPage({ categories, brands }) {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-  console.log(values)
+  
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
@@ -334,8 +336,17 @@ export default function addProductPage({ categories, brands }) {
                 </div>
 
                 <div className={styles.checkbox_wrapper}>
-                  <div className={styles.checkbox}>
-                    <label htmlFor="isShowcase">Показывать на витрине</label>
+                  <div className={styles.custom_checkbox}>
+                    <label htmlFor="isShowcase">Показывать на витрине </label>
+
+                    <GiCheckMark
+                      className={
+                        styles.check_icon +
+                        " " +
+                        (values.isShowcase ? styles.visible : "")
+                      }
+                    />
+
                     <input
                       type="checkbox"
                       name="isShowcase"
@@ -345,8 +356,15 @@ export default function addProductPage({ categories, brands }) {
                     />
                   </div>
 
-                  <div className={styles.checkbox}>
+                  <div className={styles.custom_checkbox}>
                     <label htmlFor="isInStock">В наличии</label>
+                    <GiCheckMark
+                      className={
+                        styles.check_icon +
+                        " " +
+                        (values.isInStock ? styles.visible : "")
+                      }
+                    />
                     <input
                       type="checkbox"
                       name="isInStock"

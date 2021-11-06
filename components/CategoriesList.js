@@ -2,7 +2,7 @@ import styles from "@/styles/CategoriesList.module.css"
 import Link from "next/link"
 import { API_URL, NOIMAGE } from "@/config/index"
 
-export default function CategoriesList({ categories = [], qnt }) {
+export default function CategoriesList({ categories = [] }) {
   const fakeArray = ["", "", "", "", "", "", ""]
   return (
     <div className={styles.content}>
@@ -19,7 +19,7 @@ export default function CategoriesList({ categories = [], qnt }) {
                 </div>
                 <div className={item.name}>
                   <p>
-                    {item.name}&nbsp;({qnt[item._id]})
+                    {item.name}&nbsp;({item.qntProducts})
                   </p>
                 </div>
               </div>

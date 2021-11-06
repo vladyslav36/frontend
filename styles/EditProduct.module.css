@@ -93,8 +93,8 @@
 
 .form {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  column-gap: 30px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 100px;
+  column-gap: 20px;
   padding: 5px;
   margin: 5px 0;
 }
@@ -112,10 +112,20 @@
   margin: 5px 0 5px 0;
   font-size: 14px;
 }
-
+.form .button_wrapper{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
 .form .button {
-  width: 50%;
-  margin-left: 50%;
+  padding-top:25px;
+  text-align: center;
+  display:flex;
+  align-items: center;
+  font-size: 25px;;
+  border:none;
+  background-color: inherit;
+  color:steelblue;
   cursor: pointer;
 }
 
@@ -124,7 +134,6 @@
     grid-template-columns: 1fr;
   }
   .form .button {
-    width: 20%;
-    margin-left: 80%;
+    font-size:30px;
   }
 }
