@@ -3,13 +3,13 @@
   background-color:#d6eaf8    ;
   color:#000;
   width:100%;
-  padding:3px 10px;
+  
   border-radius:5px;
   display:flex;
   justify-content: space-between;
   align-items:center;
   font-size:14px;
-  letter-spacing: 0.2ex;
+  
   line-height: 1.1;
 }
 
@@ -19,12 +19,12 @@ display:flex;
 justify-content:flex-start;
 align-items:center;
 flex-wrap:wrap;
-
+column-gap: 10px;
 }
 
 .category{
-  padding:2px 5px;  
-  margin:5px 0;
+  padding: 5px;  
+  margin:5px;
   position:relative;
 }
 

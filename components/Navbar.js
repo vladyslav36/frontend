@@ -24,11 +24,11 @@ export default function Navbar() {
   return (
     <div className={styles.container}>
       {dataCat
-        ? dataCat.categories.length && (
+        && dataCat.categories.length ?(
             <ul className={styles.list}>
               {dataCat.categories.map(
                 (category) =>
-                  category.level === 0 && (
+                  category.parentCategoryId === null && (
                     <li
                       className={styles.category}
                       key={category._id}

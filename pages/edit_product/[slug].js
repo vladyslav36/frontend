@@ -97,7 +97,7 @@ export default function editProductPage({ categories, brands,product }) {
     formData.append("values", JSON.stringify(values))
     const imageClientPaths = images.map(item => item.path)
     formData.append('imageClientPaths',JSON.stringify(imageClientPaths))
-    images.forEach((item) => formData.append("images", item.file))
+    images.forEach((item) => formData.append("images", item.file)) 
     const res = await fetch(`${API_URL}/api/products`, {
       method: "PUT",
       headers: {

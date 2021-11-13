@@ -1,11 +1,10 @@
 import Layout from "@/components/Layout"
 import AuthContext from "@/context/AuthContext"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { API_URL, NOIMAGE } from "../../config/index"
 import styles from "@/styles/BrandForm.module.css"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-
 import { FaImage, FaTimes } from "react-icons/fa"
 import ImageUpload from "@/components/ImageUpload"
 import Modal from "@/components/Modal"
@@ -40,12 +39,15 @@ export default function edit_brandPage({ brands, slug }) {
     file: null,
     path: imagePath ? `${API_URL}${imagePath}` : "",
   })
+  
+  
   const [listName, setListName] = useState("")
 
   const [showModal, setShowModal] = useState(false)
 
   const listNameRu = { colors: "Цвета", sizes: "Размеры", heights: "Роста" }
 
+  
   const handleChange = (e) => {
     e.preventDefault()
     const { name, value } = e.target
