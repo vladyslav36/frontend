@@ -11,6 +11,8 @@
   border: 1px solid #999;
   border-radius: 5px;  
   display:none;
+  max-height: 350px;
+  overflow: auto;
  }
 
   .drop_down_list.active{

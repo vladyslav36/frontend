@@ -9,7 +9,10 @@
 column-gap: 50px;
 
 }
-
+.input{
+  position:relative;
+  width:300px;
+}
 
 .input label{
   display:flex;
@@ -20,7 +23,7 @@ column-gap: 50px;
 
 .input input{
   height:25px;
-  width:280px;
+  width:100%;
   font-size:15px;
   padding:0 5px;
 }

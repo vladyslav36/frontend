@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify"
 import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import Image from "next/image"
+
 import { API_URL, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../utils"
@@ -118,9 +118,9 @@ export default function addCategoryPage({ categories }) {
             <div className={styles.form}>
               <form onSubmit={handleSubmit}>
                 <div className={styles.header}>
-                  <Link href="/">
+                  
                     <Links home={true} />
-                  </Link>
+                 
 
                   <input type="submit" value="Сохранить" className="btn" />
                 </div>

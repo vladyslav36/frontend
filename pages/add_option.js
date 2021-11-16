@@ -11,11 +11,13 @@ import { useRouter } from "next/router"
 
 import AccessDenied from "@/components/AccessDenied"
 import Links from "@/components/Links"
+import DropDownList from "@/components/DropDownList"
 
-export default function add_optionPage() {
+export default function add_optionPage({ categories }) {
   // const {
   //   user: { isAdmin, token },
   // } = useContext(AuthContext)
+  const categoriesList = categories.map((item) => item.name).sort()
   const isAdmin = true
   const router = useRouter()
   const [inputValue, setInputValue] = useState({
@@ -24,13 +26,38 @@ export default function add_optionPage() {
   })
 
   const [options, setOptions] = useState([])
+  //example  [{name:'color',values:[red,green,blue]},{...},{...}]
   const [isShowList, setIsShowList] = useState({})
+  //example {color:true,size:false,height:false}
+  const [isShow, setIsShow] = useState(false)
+  // dropdown list for categories
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log("submit")
+    const value = {
+      name: inputValue.brand,
+      brandId: categories.find((item) => item.name === inputValue.brand)._id,
+      options: options,
+    }
+    console.log(value)
+    const res = await fetch(`${API_URL}/api/options`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(value),
+    })
+    const data = await res.json()
+    console.log(data.data)
+    if (!res.ok) {
+      toast.error(data.message)
+    } else {
+      toast.success("Опции успешно сохранены")
+      setOptions([])
+      setInputValue({ brand: "", option: "" })
+    }
   }
-  const handleInput = (e) => {
+  const handleInput = async (e) => {
     e.preventDefault()
 
     const { name, value } = e.target
@@ -83,7 +110,6 @@ export default function add_optionPage() {
   const handlePress = ({ e, cb }) => {
     if (e.key === "Enter") {
       e.preventDefault()
-      console.log("handle")
       cb()
     }
   }
@@ -98,12 +124,29 @@ export default function add_optionPage() {
   }
 
   const deleteOptionsValue = (idx) => {
-    const name=getShowKey()
-    const newOption={name,values:options.find(item=>item.name===name).values.filter((item,i)=>i!==idx)}
-  setOptions(options.map(item=>item.name===name?newOption:item))
-    
+    const name = getShowKey()
+    const newOption = {
+      name,
+      values: options
+        .find((item) => item.name === name)
+        .values.filter((item, i) => i !== idx),
+    }
+    setOptions(options.map((item) => (item.name === name ? newOption : item)))
   }
-  
+  const deleteOption = (name) => {
+    const newShowList = { ...isShowList }
+    delete newShowList[name]
+    setIsShowList(newShowList)
+    setOptions(options.filter((item) => item.name !== name))
+  }
+  const handleClick = (name) => {
+    if (name !== inputValue.brand) {
+      setOptions([])
+      setInputValue({ brand: name, option: "" })
+    }
+    setIsShow(false)
+  }
+
   return (
     <Layout title="Добавление опций">
       {!isAdmin ? (
@@ -122,7 +165,15 @@ export default function add_optionPage() {
             </div>
             <div className={styles.content}>
               <div className={styles.content_left}>
-                <div className={styles.input}>
+                <div
+                  className={styles.input}
+                  onFocus={() => {
+                    clearIsShowList
+                    setIsShow(true)
+                  }}
+                  onBlur={() => setIsShow(false)}
+                  tabIndex={0}
+                >
                   <label htmlFor="brand">Категория</label>
                   <input
                     type="text"
@@ -130,7 +181,12 @@ export default function add_optionPage() {
                     name="brand"
                     value={inputValue.brand}
                     onChange={handleInput}
-                    onFocus={clearIsShowList}
+                    readOnly
+                  />
+                  <DropDownList
+                    isShow={isShow}
+                    itemsList={categoriesList}
+                    handleClick={handleClick}
                   />
                 </div>
                 <div className={styles.input}>
@@ -165,7 +221,11 @@ export default function add_optionPage() {
                         <div className={styles.input}>
                           <label htmlFor={item.name}>
                             {item.name}
-                            <button type='button' title="Удалить опцию">
+                            <button
+                              type="button"
+                              title="Удалить опцию"
+                              onClick={() => deleteOption(item.name)}
+                            >
                               <FaTimes className={styles.icon_delete} />
                             </button>
                           </label>
@@ -207,7 +267,8 @@ export default function add_optionPage() {
               </div>
 
               <div className={styles.content_right}>
-                {Object.values(isShowList).some((value) => value) ? (
+                {Object.values(isShowList).some((value) => value) &&
+                options.length ? (
                   <>
                     <p>Опция: {getShowKey()}</p>
                     <div className={styles.option_list}>
@@ -217,7 +278,7 @@ export default function add_optionPage() {
                           <div key={i} className={styles.list_item}>
                             <div>{item}</div>
                             <button
-                              type='button'
+                              type="button"
                               title="Удалить значение опции"
                               onClick={() => deleteOptionsValue(i)}
                             >
@@ -235,4 +296,15 @@ export default function add_optionPage() {
       )}
     </Layout>
   )
+}
+
+export async function getServerSideProps() {
+  const res = await fetch(`${API_URL}/api/categories/brands`)
+  const { categories } = await res.json()
+
+  return {
+    props: {
+      categories,
+    },
+  }
 }
