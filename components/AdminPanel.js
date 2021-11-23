@@ -53,18 +53,7 @@ export default function AdminPanel() {
     <div>
       <ToastContainer />
       {isAdmin ? (
-        <div className={styles.container}>
-          <div className={styles.container_item}>
-            Бренд
-            <ul className={styles.dropdown_list}>
-              <Link href="/add_brand">
-                <li>Добавить</li>
-              </Link>
-              <Link href="/edit_brand_list">
-                <li>Редактировать</li>
-              </Link>
-            </ul>
-          </div>
+        <div className={styles.container}>         
           <div className={styles.container_item}>
             Категории
             <ul className={styles.dropdown_list}>
@@ -72,6 +61,17 @@ export default function AdminPanel() {
                 <li>Добавить</li>
               </Link>
               <Link href="/edit_category_list">
+                <li>Редактировать</li>
+              </Link>
+            </ul>
+          </div>
+          <div className={styles.container_item}>
+            Опции
+            <ul className={styles.dropdown_list}>
+              <Link href="/add_option">
+                <li>Добавить</li>
+              </Link>
+              <Link href="/edit_option_list">
                 <li>Редактировать</li>
               </Link>
             </ul>

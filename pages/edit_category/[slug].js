@@ -240,6 +240,11 @@ export default function editCategoryPage({ categories, slug }) {
 export async function getServerSideProps({ params: { slug } }) {
   const data = await fetch(`${API_URL}/api/categories`)
   const { categories } = await data.json()
+   if (!data.ok || !categories) {
+     return {
+       notFound: true,
+     }
+   }
   return {
     props: {
       slug,

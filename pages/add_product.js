@@ -12,26 +12,22 @@ import { GiCheckMark } from "react-icons/gi"
 import { useRouter } from "next/router"
 
 import { API_URL } from "@/config/index"
-import { getCategoriesTree, stringToPrice } from "../utils"
+import { getBrand, getCategoriesTree, stringToPrice } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 
-export default function addProductPage({ categories, brands }) {
+export default function addProductPage({ categories }) {
   const {
     user: { isAdmin,token },
   } = useContext(AuthContext)
   
   const [values, setValues] = useState({
     name: "",
-    model: "",
-    brand: "",
-    brandId: null,
+    model: "",    
     description: "",
     category: "",
     categoryId: null,
-    colors: [],
-    sizes: [],
-    heights: [],
+    options:[],
     isInStock: true,
     price: "",
     retailPrice: "",
@@ -41,17 +37,22 @@ export default function addProductPage({ categories, brands }) {
 
   const [images, setImages] = useState([])
   const [showModal, setShowModal] = useState(false)
-  const [isShowList, setIsShowList] = useState(false)
-  const [isShowBrandsList, setIsShowBrandsList] = useState(false)
+  const [isShowList, setIsShowList] = useState(false)  
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
-  const [listForBrandsMenu, setListForBrandsMenu] = useState(
-    getListForMenu(brands, "")
-  )
-  const [upploadCb, setUpploadCb] = useState({})
+  const [brand, setBrand] = useState({})
+  
+  
 
   const [imageIdx, setImageIdx] = useState(0)
 
   const router = useRouter()
+
+  // Сортировка option перед отправкой на сервер
+  const sortOptions = () => {
+    setValues({
+      ...values, options: values.options.map(option => ({ ...option, values: [...option.values.sort((a, b) => a.name > b.name ? 1 : -1)] }))
+    })
+  }
   // Функция возвращает список категорий или брендов в соответствии со строкой поиска
   function getListForMenu(items, value) {
     const list = items.filter(
@@ -80,18 +81,9 @@ export default function addProductPage({ categories, brands }) {
     } else {
       values.categoryId = null
     }
-    // Проверка на наличие и соответствии бренда в брендах
-    if (values.brand) {
-      const isValid = brands.some(
-        (item) => item.name === values.brand && item._id === values.brandId
-      )
-      if (!isValid) {
-        toast.error("Бренд должен  быть выбран из списка")
-        return
-      }
-    } else {
-      values.brandId = null
-    }
+    
+    sortOptions()
+    
     // Send data
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))
@@ -141,34 +133,28 @@ export default function addProductPage({ categories, brands }) {
     setIsShowList(true)
     setListForMenu(getListForMenu(categories, value))
   }
-  // Input for brands
-  const handleChangeBrand = (e) => {
-    e.preventDefault()
-    const { name, value } = e.target
-    setValues({ ...values, [name]: value })
-    setIsShowBrandsList(true)
-    setListForBrandsMenu(getListForMenu(brands, value))
-  }
+  
 
-  const handleListClick = ({ name, id }) => {
-    setValues({ ...values, category: name, categoryId: id })
+  const handleListClick = (category) => {
+  
+    setValues({ ...values, category: category.name, categoryId: category._id })
+
     setIsShowList(false)
+   setBrand(getBrand(category,categories))
   }
-  const handleListBrandClick = ({ name, id }) => {
-    setValues({ ...values, brand: name, brandId: id })
-    setIsShowBrandsList(false)
-  }
+  
   const deleteImage = (i) => {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-  
+  console.log(values)
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
         <AccessDenied />
       ) : (
-        <div className={styles.container}>
+          <div className={styles.container}>
+            <button onClick={sortOptions}>click</button>
           <div className={styles.form}>
             <form onSubmit={handleSubmit}>
               <div className={styles.header}>
@@ -197,50 +183,8 @@ export default function addProductPage({ categories, brands }) {
                     value={values.model}
                     onChange={handleChange}
                   />
-                </div>
-                <div>
-                  <label htmlFor="brand">Бренд</label>
-                  <div
-                    className={styles.input_group_menu}
-                    tabIndex={0}
-                    onFocus={() => setIsShowBrandsList(true)}
-                    onBlur={() => setIsShowBrandsList(false)}
-                  >
-                    <input
-                      type="text"
-                      id="brand"
-                      name="brand"
-                      value={values.brand}
-                      onChange={handleChangeBrand}
-                    />
-
-                    <ul
-                      className={
-                        styles.dropdown_menu +
-                        " " +
-                        (isShowBrandsList && styles.active)
-                      }
-                    >
-                      {listForBrandsMenu && (
-                        <>
-                          {listForBrandsMenu.map((brand) => (
-                            <li
-                              key={brand._id}
-                              onClick={() =>
-                                handleListBrandClick({
-                                  id: brand._id,
-                                  name: brand.name,
-                                })
-                              }
-                            >
-                              {brand.name}
-                            </li>
-                          ))}
-                        </>
-                      )}
-                    </ul>
-                  </div>
-                </div>
+                </div>               
+                  
                 <div>
                   <label htmlFor="category">Категория</label>
                   <div
@@ -270,10 +214,9 @@ export default function addProductPage({ categories, brands }) {
                             <li
                               key={category._id}
                               onClick={() =>
-                                handleListClick({
-                                  name: category.name,
-                                  id: category._id,
-                                })
+                                handleListClick(
+                                  category
+                                )
                               }
                             >
                               {getCategoriesTree(category, categories)}
@@ -375,15 +318,14 @@ export default function addProductPage({ categories, brands }) {
                   </div>
                 </div>
               </div>
-              {values.brand && (
+              {Object.keys(brand).length ? (
                 <SelectOptions
-                  brandId={values.brandId}
-                  brands={brands}
+                  brand={brand}
                   values={values}
                   setValues={setValues}
                   toast={toast}
                 />
-              )}
+              ):null}
               <div>
                 <label htmlFor="description">Описание</label>
                 <textarea
@@ -453,12 +395,11 @@ export default function addProductPage({ categories, brands }) {
 export async function getServerSideProps() {
   const categoriesData = await fetch(`${API_URL}/api/categories`)
   const { categories } = await categoriesData.json()
-  const brandsData = await fetch(`${API_URL}/api/brands`)
-  const { brands } = await brandsData.json()
+  
   return {
     props: {
       categories,
-      brands,
+      
     },
   }
 }

@@ -1,0 +1,40 @@
+.content {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap:10px;
+}
+
+.option_item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid green;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.icons_wrapper {
+  display: flex;
+  justify-content: space-around;
+  column-gap: 5px;
+}
+
+.icon:first-child {
+  color: blue;
+}
+
+.icon:last-child {
+  color: red;
+}
+
+.icon {
+  font-size: 16px;
+  display: flex;
+  padding: 3px;
+}
+
+.icon :hover {
+  cursor: pointer;
+}

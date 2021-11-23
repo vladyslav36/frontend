@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout"
 import AuthContext from "@/context/AuthContext"
 import { useContext, useRef, useState } from "react"
-import { API_URL, NOIMAGE_PATH } from "../config"
+import { API_URL, NOIMAGE_PATH } from "../../config"
 import styles from "@/styles/OptionForm.module.css"
 import "react-toastify/dist/ReactToastify.css"
 import { toast, ToastContainer } from "react-toastify"
@@ -12,49 +12,44 @@ import { useRouter } from "next/router"
 import AccessDenied from "@/components/AccessDenied"
 import Links from "@/components/Links"
 import DropDownList from "@/components/DropDownList"
+import { removeKeyInObj } from "utils"
 
-export default function add_optionPage({ categories }) {
+export default function edit_optionPage({ categories, brand }) {
   // const {
   //   user: { isAdmin, token },
   // } = useContext(AuthContext)
-  const categoriesList = categories.map((item) => item.name).sort()
+
   const isAdmin = true
   const router = useRouter()
+  const emptyValues = brand.options.map((item) => ({ [item.name]: "" }))
+  const initialValues = Object.assign({ option: "" }, ...emptyValues)
+
   const [inputValue, setInputValue] = useState({
-    brand: "",
-    option: "",
+    ...initialValues,
   })
 
-  const [options, setOptions] = useState([])
+  const [options, setOptions] = useState(brand.options)
   //example  [{name:'color',values:[red,green,blue]},{...},{...}]
   const [isShowList, setIsShowList] = useState({})
   //example {color:true,size:false,height:false}
-  const [isShow, setIsShow] = useState(false)
-  // dropdown list for categories
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const value = {
-      name: inputValue.brand,
-      brandId: categories.find((item) => item.name === inputValue.brand)._id,
-      options: options,
-    }
-    console.log(value)
     const res = await fetch(`${API_URL}/api/options`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type':'application/json'
       },
-      method: "POST",
-      body: JSON.stringify(value),
+      method: 'PUT',
+      body: JSON.stringify({
+        _id: brand._id,
+        options:options
+      })
     })
-    const data = await res.json()
-    console.log(data.data)
+    const data=await res.json()
     if (!res.ok) {
       toast.error(data.message)
-    } else {
-      toast.success("Опции успешно сохранены")
-      setOptions([])
-      setInputValue({ brand: "", option: "" })
+    } else {      
+    router.back()
     }
   }
   const handleInput = async (e) => {
@@ -133,26 +128,18 @@ export default function add_optionPage({ categories }) {
     }
     setOptions(options.map((item) => (item.name === name ? newOption : item)))
   }
-  const deleteOption = (name) => {
+  const deleteOption = (name) => {    
     const newShowList = { ...isShowList }
     delete newShowList[name]
     const newInputValue = { ...inputValue }
     delete newInputValue[name]
-    setInputValue({...newInputValue})
-    setIsShowList({ ...newShowList })
-
+    setInputValue({ ...newInputValue })
+    setIsShowList({ ...newShowList })   
     setOptions(options.filter((item) => item.name !== name))
   }
-  const handleClick = (name) => {
-    if (name !== inputValue.brand) {
-      setOptions([])
-      setInputValue({ brand: name, option: "" })
-    }
-    setIsShow(false)
-  }
-
+  
   return (
-    <Layout title="Добавление опций">
+    <Layout title="Редактирование опции опций">
       {!isAdmin ? (
         <AccessDenied />
       ) : (
@@ -161,7 +148,7 @@ export default function add_optionPage({ categories }) {
 
           <form onSubmit={handleSubmit}>
             <div className={styles.header}>
-              <Links home={true} />
+              <Links home={true} back={true} />
 
               <button className="btn" type="submit">
                 Сохранить
@@ -169,29 +156,8 @@ export default function add_optionPage({ categories }) {
             </div>
             <div className={styles.content}>
               <div className={styles.content_left}>
-                <div
-                  className={styles.input}
-                  onFocus={() => {
-                    clearIsShowList
-                    setIsShow(true)
-                  }}
-                  onBlur={() => setIsShow(false)}
-                  tabIndex={0}
-                >
-                  <label htmlFor="brand">Категория</label>
-                  <input
-                    type="text"
-                    id="brand"
-                    name="brand"
-                    value={inputValue.brand}
-                    onChange={handleInput}
-                    readOnly
-                  />
-                  <DropDownList
-                    isShow={isShow}
-                    itemsList={categoriesList}
-                    handleClick={handleClick}
-                  />
+                <div>
+                  <p>Категория: {brand.name}</p>
                 </div>
                 <div className={styles.input}>
                   <label htmlFor="option">Опция</label>
@@ -204,6 +170,7 @@ export default function add_optionPage({ categories }) {
                       onChange={handleInput}
                       onKeyPress={(e) => handlePress({ e, cb: addOption })}
                       onFocus={clearIsShowList}
+                      maxLength="15"
                     />
                     <button
                       type="button"
@@ -250,6 +217,7 @@ export default function add_optionPage({ categories }) {
                                     }),
                                 })
                               }
+                              maxLength="15"
                             />
                             <button
                               type="button"
@@ -302,13 +270,17 @@ export default function add_optionPage({ categories }) {
   )
 }
 
-export async function getServerSideProps() {
-  const res = await fetch(`${API_URL}/api/categories/brands`)
-  const { categories } = await res.json()
-
+export async function getServerSideProps({ params: { id } }) {
+  const res = await fetch(`${API_URL}/api/options/${id}`)
+  const { brand } = await res.json()
+  if (!res.ok || !brand) {
+    return {
+      notFound: true,
+    }
+  }
   return {
     props: {
-      categories,
+      brand,
     },
   }
 }

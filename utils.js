@@ -44,7 +44,19 @@ export const getCategoriesTree = (category, categories) => {
 
   return result.reverse().join(" ➔ ")
 }
-
+export const getBrand = (category, categories) => {
+  let result = category
+  const findParent = (item) => {
+    const parent = categories.find((elem) => elem._id === item.parentCategoryId)
+    if (parent) {
+      result = parent
+      findParent(parent)
+    }
+    return
+  }
+  findParent(category)
+  return result
+}
 export const getArrayCategoryTree = (category, categories) => {
   var result = [{ name: category.name, slug: category.slug }]
   const findParent = (category) => {
@@ -88,8 +100,8 @@ export const getShortDescription = (description, length) => {
 
 export const stringToPrice = (string) => {
   if (!isNaN(+string)) {
-    const priceNum=Math.abs((+string).toFixed(2))
-    return { price: "" +priceNum==0?'':priceNum , error: false }
+    const priceNum = Math.abs((+string).toFixed(2))
+    return { price: "" + priceNum == 0 ? "" : priceNum, error: false }
   } else {
     return { price: string, error: true }
   }
@@ -109,37 +121,6 @@ export const getTotalInCart = (cart) =>
       EUR: 0,
     }
   )
-// export const getQntProdInCat = ({ categories, products }) => {
-//   const idToString = (id) => {
-//     return id === null ? "" : id.toString()
-//   }
-//   // Подсчет кол-ва товаров в каждой категории
-//   const qnt = categories
-//     .map((category) => {
-//       let count = 0
-//       const qntProducts = (category) => {
-//         const children = categories.filter(
-//           (item) =>
-//             idToString(item.parentCategoryId) === idToString(category._id)
-//         )
-//         if (children.length) {
-//           children.forEach((child) => {
-//             qntProducts(child)
-//           })
-//         } else {
-//           const prodInCategory = products.filter(
-//             (item) => idToString(item.categoryId) === idToString(category._id)
-//           )
-
-//           count += prodInCategory.length
-//         }
-//       }
-//       qntProducts(category)
-//       return { [category._id]: count }
-//     })
-//   //
-//   return Object.assign({}, ...qnt)
-// }
 
 export const getTotalAmount = (cart) => {
   const totalObj = getTotalInCart(cart)

@@ -1,34 +1,48 @@
 import styles from "@/styles/Form.module.css"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import useSWR from "swr"
 import { stringToPrice } from "utils"
+import { API_URL } from "../config"
 
-export default function SelectOptions({
-  brands,
-  brandId,
-  values,
-  setValues,
-  toast,
-}) {
-  const { colors, sizes, heights } = brands.find((item) => item._id === brandId)
+export default function SelectOptions({ brand, values, setValues, toast }) {
   const [changePriceOption, setChangePriceOption] = useState("")
-
-  const clearRestOptions = (options) => {
-    options.forEach((option) =>
-      values[option].forEach((item) => (item.price = ""))
-    )
-  }
-  const findOption = ({ name, option }) => {
-    return values[name].find((item) => item.name === option)
-  }
-  
+  const [brandOptions, setBrandOptions] = useState([])
+  useEffect(() => {
+    const fetchOptions = async () => {
+      const res = await fetch(`${API_URL}/api/options/brandid/${brand._id}`)
+      let { data } = await res.json()
+      if (!res.ok || !data) {
+        toast.error('Нет данных с сервкера')
+        return
+      }
+      // Прикручиваем опции /color,aize.../ в общий value.options
+      const productOptions = data.options.map((item) => ({
+        name: item.name,
+        values: [],
+        isChangePrice: false,
+      }))
+      setBrandOptions(data)
+      setValues({ ...values, options: productOptions })
+    }
+    fetchOptions()
+  }, [brand])
 
   const handleChangePrice = ({ name, option, e }) => {
     e.preventDefault()
 
     setValues({
       ...values,
-      [name]: values[name].map((item) =>
-        item.name === option ? { name: option, price: e.target.value } : item
+      options: values.options.map((opt) =>
+        opt.name !== name
+          ? opt
+          : {
+              ...opt,
+              values: opt.values.map((value) =>
+                value.name !== option
+                  ? value
+                  : { ...value, price: e.target.value }
+              ),
+            }
       ),
     })
   }
@@ -41,241 +55,149 @@ export default function SelectOptions({
     }
     setValues({
       ...values,
-      [name]: values[name].map((item) =>
-        item.name === option ? { name: option, price } : item
+      options: values.options.map((opt) =>
+        opt.name !== name
+          ? opt
+          : {
+              ...opt,
+              values: opt.values.map((value) =>
+                value.name !== option ? value : { ...value, price }
+              ),
+            }
       ),
     })
   }
   const handleCheckbox = ({ name, option, checked }) => {
-    
     if (!checked) {
+      // Удаление значения опции /{name:red,price:''} из values.options
       setValues({
         ...values,
-        [name]: values[name].filter((item) => item.name !== option),
+        options: values.options.map((item) =>
+          item.name === name
+            ? {
+                ...item,
+                values: item.values.filter((value) => value.name !== option),
+              }
+            : item
+        ),
       })
     } else {
+      // Добавление опции /{name:red,price:''}/ в values.options
       setValues({
         ...values,
-        [name]: [...values[name], { name: option, price: "" }],
+        options: values.options.map((item) =>
+          item.name === name
+            ? {
+                ...item,
+                values: [...item.values, { name: option, price: "" }],
+              }
+            : item
+        ),
       })
     }
   }
+  // toggle делает так что checkbox ведет себя и как radio и как checkbox
+  const toggleCheck = (e) => {
+    const value = e.target.value
+    const newChangePriceOption = changePriceOption === value ? "" : value
+
+    setValues({
+      ...values,
+      options: values.options.map((option) =>
+        option.name === newChangePriceOption
+          ? { ...option, isChangePrice: true }
+          : {
+              ...option,
+              isChangePrice: false,
+              values: option.values.map((value) => ({ ...value, price: "" })),
+            }
+      ),
+    })
+    setChangePriceOption(newChangePriceOption)
+  }
+  
   return (
     <div>
-      {colors.length ? (
-        <div>
-          <div className={styles.header_options}>
-            <h3>Цвета</h3>
-            <div className={styles.custom_radio}>
-              <input
-                type="radio"
-                id="colors"
-                name="changePrice"
-                value="colors"
-                onChange={(e) => {
-                  setChangePriceOption(e.target.value)
-                }}
-                checked={changePriceOption === "colors"}
-              />
-              <label htmlFor="colors">Менять прайс</label>
-            </div>
-            <button type='button' onClick={()=>setChangePriceOption('')}>Сброс</button>
-          </div>
-
-          <div className={styles.flex_block}>
-            {colors.map((item, i) => (
-              <div key={i} className={styles.custom_checkbox}>
-                <input
-                  type="checkbox"
-                  id={item.name}
-                  name="colors"
-                  value={item.name}
-                  onChange={(e) =>
-                    handleCheckbox({
-                      name: "colors",
-                      option: e.target.value,
-                      checked: e.target.checked,
-                    })
-                  }
-                />
-                <label htmlFor={item.name}>
-                  {item.name}
-                  {changePriceOption === "colors" &&
-                    findOption({ name: "colors", option: item.name }) && (
-                      <div className={styles.option_price} tabIndex={0}>
-                        <input
-                          type="text"
-                          value={
-                            values.colors.find(
-                              (color) => color.name === item.name
-                            ).price
-                          }
-                          onChange={(e) =>
-                            handleChangePrice({
-                              name: "colors",
-                              option: item.name,
-                              e,
-                            })
-                          }
-                          onBlur={(e) => {
-                            formatPrice({
-                              name: "colors",
-                              option: item.name,
-                              value: e.target.value,
-                            })
-                            clearRestOptions(["sizes", "heights"])
-                          }}
-                        />
-                      </div>
-                    )}
-                </label>
+      {Object.keys(brandOptions).length
+        ? brandOptions.options.map((item, i) => (
+            <div key={i}>
+              <div className={styles.header_options}>
+                <h3>{item.name}</h3>
+                <div className={styles.custom_radio}>
+                  <input
+                    type="checkbox"
+                    id={item.name}
+                    name="changePrice"
+                    value={item.name}
+                    onChange={toggleCheck}
+                    checked={changePriceOption === item.name}
+                  />
+                  <label htmlFor={item.name}>Менять прайс</label>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
 
-      {sizes.length ? (
-        <div>
-          <div className={styles.header_options}>
-            <h3>Размеры</h3>
-            <div className={styles.custom_radio}>
-              <input
-                type="radio"
-                id="sizes"
-                name="changePrice"
-                value="sizes"
-                onChange={(e) => {
-                  setChangePriceOption(e.target.value)
-                }}
-                checked={changePriceOption === "sizes"}
-              />
-              <label htmlFor="sizes">Менять прайс</label>
-            </div>
-          </div>
+              <div className={styles.flex_block}>
+                {item.values.map((optionValue, i) => (
+                  <div key={i} className={styles.custom_checkbox}>
+                    <input
+                      type="checkbox"
+                      id={optionValue}
+                      name={item.name}
+                      value={optionValue}
+                      onChange={(e) =>
+                        handleCheckbox({
+                          name: item.name,
+                          option: e.target.value,
+                          checked: e.target.checked,
+                        })
+                      }
+                    />
+                    <label htmlFor={optionValue} tabIndex={0}>
+                      {optionValue}
 
-          <div className={styles.flex_block}>
-            {sizes.map((item, i) => (
-              <div key={i} className={styles.custom_checkbox}>
-                <input
-                  type="checkbox"
-                  id={item.name}
-                  name="sizes"
-                  value={item.name}
-                  onChange={(e) =>
-                    handleCheckbox({
-                      name: "sizes",
-                      option: e.target.value,
-                      checked: e.target.checked,
-                    })
-                  }
-                />
-                <label htmlFor={item.name}>
-                  {item.name}
-                  {changePriceOption === "sizes" &&
-                    findOption({ name: "sizes", option: item.name }) && (
-                      <div className={styles.option_price} tabIndex={0}>
-                        <input
-                          type="text"
-                          value={
-                            values.sizes.find((size) => size.name === item.name)
-                              .price
-                          }
-                          onChange={(e) =>
-                            handleChangePrice({
-                              name: "sizes",
-                              option: item.name,
-                              e,
-                            })
-                          }
-                          onBlur={(e) => {
-                            formatPrice({
-                              name: "sizes",
-                              option: item.name,
-                              value: e.target.value,
-                            })
-                            clearRestOptions(["colors", "heights"])
-                          }}
-                        />
-                      </div>
-                    )}
-                </label>
+                      {values.options.length &&
+                        values.options.find(
+                          (option) => option.name === item.name
+                        ).isChangePrice &&
+                        values.options
+                          .find((option) => option.name === item.name)
+                          .values.find(
+                            (value) => value.name === optionValue
+                          ) && (
+                          <div className={styles.option_price}>
+                            <input
+                              type="text"
+                              value={
+                                values.options
+                                  .find((option) => option.name === item.name)
+                                  .values.find(
+                                    (value) => value.name === optionValue
+                                  ).price
+                              }
+                              onChange={(e) =>
+                                handleChangePrice({
+                                  name: item.name,
+                                  option: optionValue,
+                                  e,
+                                })
+                              }
+                              onBlur={(e) => {
+                                formatPrice({
+                                  name: item.name,
+                                  option: optionValue,
+                                  value: e.target.value,
+                                })
+                              }}
+                            />
+                          </div>
+                        )}
+                    </label>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
-      {heights.length ? (
-        <div>
-          <div className={styles.header_options}>
-            <h3>Роста</h3>
-            <div className={styles.custom_radio}>
-              <input
-                type="radio"
-                id="heights"
-                name="changePrice"
-                value="heights"
-                onChange={(e) => {
-                  setChangePriceOption(e.target.value)
-                }}
-                checked={changePriceOption === "heights"}
-              />
-              <label htmlFor="heights">Менять прайс</label>
             </div>
-          </div>
-
-          <div className={styles.flex_block}>
-            {heights.map((item, i) => (
-              <div key={i} className={styles.custom_checkbox}>
-                <input
-                  type="checkbox"
-                  id={item.name}
-                  name="heights"
-                  value={item.name}
-                  onChange={(e) =>
-                    handleCheckbox({
-                      name: "heights",
-                      option: e.target.value,
-                      checked: e.target.checked,
-                    })
-                  }
-                />
-                <label htmlFor={item.name}>
-                  {item.name}
-                  {changePriceOption === "heights" &&
-                    findOption({ name: "heights", option: item.name }) && (
-                      <div className={styles.option_price} tabIndex={0}>
-                        <input
-                          type="text"
-                          value={
-                            values.heights.find(
-                              (height) => height.name === item.name
-                            ).price
-                          }
-                          onChange={(e) =>
-                            handleChangePrice({
-                              name: "heights",
-                              option: item.name,
-                              e,
-                            })
-                          }
-                          onBlur={(e) => {
-                            formatPrice({
-                              name: "heights",
-                              option: item.name,
-                              value: e.target.value,
-                            })
-                            clearRestOptions(["colors", "sizes"])
-                          }}
-                        />
-                      </div>
-                    )}
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
+          ))
+        : null}
     </div>
   )
 }

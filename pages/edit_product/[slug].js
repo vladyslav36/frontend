@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree, stringToPrice } from "../../utils"
 import SelectOptions from "@/components/SelectOptions"
 
-export default function editProductPage({ categories, brands,product }) {
+export default function editProductPage({ categories,product }) {
   const {
     user: { isAdmin,token },
   } = useContext(AuthContext)
@@ -23,14 +23,11 @@ export default function editProductPage({ categories, brands,product }) {
     _id:product._id,
     name: product.name,
     model: product.model,
-    brand: product.brand,
-    brandId: product.brandId,        
+           
     description: product.description,
     category: product.category,
     categoryId: product.categoryId,
-    colors: [...product.colors],
-    sizes: [...product.sizes],
-    heights: [...product.heights],
+    options:product.options,
     isInStock: product.isInStock,
     price: product.price,
     retailPrice: product.retailPrice,
@@ -45,9 +42,7 @@ export default function editProductPage({ categories, brands,product }) {
   const [isShowList, setIsShowList] = useState(false)
   const [isShowBrandsList, setIsShowBrandsList] = useState(false)
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
-  const [listForBrandsMenu, setListForBrandsMenu] = useState(
-    getListForMenu(brands, "")
-  )
+  
    
   const [imageIdx, setImageIdx] = useState(0)
 
@@ -438,14 +433,13 @@ console.log(images)
 export async function getServerSideProps({params:{slug}}) {
   const categoriesData = await fetch(`${API_URL}/api/categories`)
   const { categories } = await categoriesData.json()  
-  const brandsData = await fetch(`${API_URL}/api/brands`)
-  const { brands } = await brandsData.json()
+  
   const res = await fetch(`${API_URL}/api/products/${slug}`)
   const { product } = await res.json()
   return {
     props: {
       categories,
-      brands,
+      
       product,
       
     }
