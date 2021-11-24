@@ -45,6 +45,7 @@ export const getCategoriesTree = (category, categories) => {
   return result.reverse().join(" ➔ ")
 }
 export const getBrand = (category, categories) => {
+  
   let result = category
   const findParent = (item) => {
     const parent = categories.find((elem) => elem._id === item.parentCategoryId)
@@ -55,6 +56,7 @@ export const getBrand = (category, categories) => {
     return
   }
   findParent(category)
+  
   return result
 }
 export const getArrayCategoryTree = (category, categories) => {

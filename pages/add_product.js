@@ -18,16 +18,16 @@ import Links from "@/components/Links"
 
 export default function addProductPage({ categories }) {
   const {
-    user: { isAdmin,token },
+    user: { isAdmin, token },
   } = useContext(AuthContext)
-  
+
   const [values, setValues] = useState({
     name: "",
-    model: "",    
+    model: "",
     description: "",
     category: "",
     categoryId: null,
-    options:[],
+    options: [],
     isInStock: true,
     price: "",
     retailPrice: "",
@@ -37,11 +37,9 @@ export default function addProductPage({ categories }) {
 
   const [images, setImages] = useState([])
   const [showModal, setShowModal] = useState(false)
-  const [isShowList, setIsShowList] = useState(false)  
-  const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
+  const [isShowList, setIsShowList] = useState(false)
+  const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))  
   const [brand, setBrand] = useState({})
-  
-  
 
   const [imageIdx, setImageIdx] = useState(0)
 
@@ -50,10 +48,14 @@ export default function addProductPage({ categories }) {
   // Сортировка option перед отправкой на сервер
   const sortOptions = () => {
     setValues({
-      ...values, options: values.options.map(option => ({ ...option, values: [...option.values.sort((a, b) => a.name > b.name ? 1 : -1)] }))
+      ...values,
+      options: values.options.map((option) => ({
+        ...option,
+        values: [...option.values.sort((a, b) => (a.name > b.name ? 1 : -1))],
+      })),
     })
   }
-  // Функция возвращает список категорий или брендов в соответствии со строкой поиска
+  // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(items, value) {
     const list = items.filter(
       ({ name }) => name.toLowerCase().indexOf(value.toLowerCase()) >= 0
@@ -81,9 +83,9 @@ export default function addProductPage({ categories }) {
     } else {
       values.categoryId = null
     }
-    
+
     sortOptions()
-    
+
     // Send data
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))
@@ -133,28 +135,26 @@ export default function addProductPage({ categories }) {
     setIsShowList(true)
     setListForMenu(getListForMenu(categories, value))
   }
-  
 
   const handleListClick = (category) => {
-  
     setValues({ ...values, category: category.name, categoryId: category._id })
 
     setIsShowList(false)
-   setBrand(getBrand(category,categories))
+    setBrand(getBrand(category, categories))
   }
-  
+
   const deleteImage = (i) => {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-  console.log(values)
+  
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
         <AccessDenied />
       ) : (
-          <div className={styles.container}>
-            <button onClick={sortOptions}>click</button>
+        <div className={styles.container}>
+          
           <div className={styles.form}>
             <form onSubmit={handleSubmit}>
               <div className={styles.header}>
@@ -183,8 +183,8 @@ export default function addProductPage({ categories }) {
                     value={values.model}
                     onChange={handleChange}
                   />
-                </div>               
-                  
+                </div>
+
                 <div>
                   <label htmlFor="category">Категория</label>
                   <div
@@ -213,11 +213,7 @@ export default function addProductPage({ categories }) {
                           {listForMenu.map((category) => (
                             <li
                               key={category._id}
-                              onClick={() =>
-                                handleListClick(
-                                  category
-                                )
-                              }
+                              onClick={() => handleListClick(category)}
                             >
                               {getCategoriesTree(category, categories)}
                             </li>
@@ -298,7 +294,7 @@ export default function addProductPage({ categories }) {
                       checked={values.isShowcase}
                     />
                   </div>
-
+   
                   <div className={styles.custom_checkbox}>
                     <label htmlFor="isInStock">В наличии</label>
                     <GiCheckMark
@@ -325,7 +321,7 @@ export default function addProductPage({ categories }) {
                   setValues={setValues}
                   toast={toast}
                 />
-              ):null}
+              ) : null}
               <div>
                 <label htmlFor="description">Описание</label>
                 <textarea
