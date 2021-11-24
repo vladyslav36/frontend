@@ -303,7 +303,8 @@ export default function addProductPage({ categories }) {
                         " " +
                         (values.isInStock ? styles.visible : "")
                       }
-                    />
+                      />
+                      
                     <input
                       type="checkbox"
                       name="isInStock"
