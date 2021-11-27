@@ -38,8 +38,8 @@ export default function addProductPage({ categories }) {
   const [images, setImages] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
-  const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))  
- 
+  const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
+
   const [brandOptions, setBrandOptions] = useState({})
 
   const [imageIdx, setImageIdx] = useState(0)
@@ -127,6 +127,7 @@ export default function addProductPage({ categories }) {
     }
   }
 
+  
   // input for parentCategory
   const handleChangeCategory = (e) => {
     e.preventDefault()
@@ -137,10 +138,10 @@ export default function addProductPage({ categories }) {
     setListForMenu(getListForMenu(categories, value))
   }
 
-  const handleListClick =async (category) => {
+  const handleListClick = async (category) => {
     setValues({ ...values, category: category.name, categoryId: category._id })
     setIsShowList(false)
-    const brand=getBrand(category,categories)
+    const brand = getBrand(category, categories)
     const res = await fetch(`${API_URL}/api/options/brandid/${brand._id}`)
     const { data } = await res.json()
     if (!res.ok || !data) {
@@ -148,29 +149,30 @@ export default function addProductPage({ categories }) {
       setBrandOptions({})
       return
     }
-    
+
     setValues({
-      ...values,  options: data.options.map(item => ({
+      ...values,
+      options: data.options.map((item) => ({
         name: item.name,
         values: [],
-        isChangePrice:false
-      })) })
-      
-      setBrandOptions(data)
+        isChangePrice: false,
+      })),
+    })
+
+    setBrandOptions(data)
   }
 
   const deleteImage = (i) => {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-  
+
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
         <AccessDenied />
       ) : (
         <div className={styles.container}>
-          
           <div className={styles.form}>
             <form onSubmit={handleSubmit}>
               <div className={styles.header}>
@@ -310,7 +312,7 @@ export default function addProductPage({ categories }) {
                       checked={values.isShowcase}
                     />
                   </div>
-   
+
                   <div className={styles.custom_checkbox}>
                     <label htmlFor="isInStock">В наличии</label>
                     <GiCheckMark
@@ -319,8 +321,8 @@ export default function addProductPage({ categories }) {
                         " " +
                         (values.isInStock ? styles.visible : "")
                       }
-                      />
-                      
+                    />
+
                     <input
                       type="checkbox"
                       name="isInStock"
@@ -331,7 +333,7 @@ export default function addProductPage({ categories }) {
                   </div>
                 </div>
               </div>
-              {Object.keys(brandOptions).length? (
+              {Object.keys(brandOptions).length ? (
                 <SelectOptions
                   brandOptions={brandOptions}
                   values={values}
@@ -408,11 +410,10 @@ export default function addProductPage({ categories }) {
 export async function getServerSideProps() {
   const categoriesData = await fetch(`${API_URL}/api/categories`)
   const { categories } = await categoriesData.json()
-  
+
   return {
     props: {
       categories,
-      
     },
   }
 }
