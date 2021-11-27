@@ -27,7 +27,6 @@ export default function SelectOptions({
       ),
     })
   }
-
   const formatPrice = ({ name, option, value }) => {
     let { price, error } = stringToPrice(value)
     if (error) {
