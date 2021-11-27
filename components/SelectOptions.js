@@ -1,32 +1,13 @@
 import styles from "@/styles/Form.module.css"
-import { useEffect, useState } from "react"
-import useSWR from "swr"
+
 import { stringToPrice } from "utils"
-import { API_URL } from "../config"
 
-export default function SelectOptions({ brand, values, setValues, toast }) {
-  const [changePriceOption, setChangePriceOption] = useState("")
-  const [brandOptions, setBrandOptions] = useState([])
-  useEffect(() => {
-    const fetchOptions = async () => {
-      const res = await fetch(`${API_URL}/api/options/brandid/${brand._id}`)
-      let { data } = await res.json()
-      if (!res.ok || !data) {
-        toast.error('Нет данных с сервкера')
-        return
-      }
-      // Прикручиваем опции /color,aize.../ в общий value.options
-      const productOptions = data.options.map((item) => ({
-        name: item.name,
-        values: [],
-        isChangePrice: false,
-      }))
-      setBrandOptions(data)
-      setValues({ ...values, options: productOptions })
-    }
-    fetchOptions()
-  }, [brand])
-
+export default function SelectOptions({
+  brandOptions,
+  values,
+  setValues,
+  toast,
+}) {
   const handleChangePrice = ({ name, option, e }) => {
     e.preventDefault()
 
@@ -99,13 +80,13 @@ export default function SelectOptions({ brand, values, setValues, toast }) {
   // toggle делает так что checkbox ведет себя и как radio и как checkbox
   const toggleCheck = (e) => {
     const value = e.target.value
-    const newChangePriceOption = changePriceOption === value ? "" : value
+    const checked = e.target.checked
 
     setValues({
       ...values,
       options: values.options.map((option) =>
-        option.name === newChangePriceOption
-          ? { ...option, isChangePrice: true }
+        option.name === value
+          ? { ...option, isChangePrice: checked }
           : {
               ...option,
               isChangePrice: false,
@@ -113,9 +94,8 @@ export default function SelectOptions({ brand, values, setValues, toast }) {
             }
       ),
     })
-    setChangePriceOption(newChangePriceOption)
   }
-  
+
   return (
     <div>
       {Object.keys(brandOptions).length
@@ -130,7 +110,10 @@ export default function SelectOptions({ brand, values, setValues, toast }) {
                     name="changePrice"
                     value={item.name}
                     onChange={toggleCheck}
-                    checked={changePriceOption === item.name}
+                    checked={
+                      values.options.find((option) => option.name === item.name)
+                        .isChangePrice
+                    }
                   />
                   <label htmlFor={item.name}>Менять прайс</label>
                 </div>
@@ -151,6 +134,9 @@ export default function SelectOptions({ brand, values, setValues, toast }) {
                           checked: e.target.checked,
                         })
                       }
+                      checked={values.options
+                        .find((option) => option.name === item.name)
+                        .values.some((value) => value.name === optionValue)}
                     />
                     <label htmlFor={optionValue} tabIndex={0}>
                       {optionValue}

@@ -4,7 +4,7 @@ import Layout from "@/components/Layout"
 import Modal from "@/components/Modal"
 import ImagesUpload from "@/components/ImagesUpload"
 import AuthContext from "@/context/AuthContext"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { FaImage, FaPlus, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
@@ -16,7 +16,7 @@ import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 import { GiCheckMark } from "react-icons/gi"
 
-export default function editProductPage({ categories,product }) {
+export default function editProductPage({ categories, product }) {
   const {
     user: { isAdmin, token },
   } = useContext(AuthContext)
@@ -25,7 +25,6 @@ export default function editProductPage({ categories,product }) {
     _id: product._id,
     name: product.name,
     model: product.model,
-
     description: product.description,
     category: product.category,
     categoryId: product.categoryId,
@@ -36,8 +35,7 @@ export default function editProductPage({ categories,product }) {
     isShowcase: product.isShowcase,
     currencyValue: product.currencyValue,
   })
-  const findBrand = (id) => categories.find(item => item._id === id)
-  
+
   const [images, setImages] = useState(
     product.images.map((item) => {
       return { file: null, path: `${API_URL}${item}` }
@@ -45,9 +43,27 @@ export default function editProductPage({ categories,product }) {
   )
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
+  const [brandOptions, setBrandOptions] = useState({})
 
+  useEffect(() => {
+    const getOptions = async () => {
+      const category = categories.find(
+        (item) => item._id === product.categoryId
+      )
+      const brand = getBrand(category, categories)
+      const res = await fetch(`${API_URL}/api/options/brandid/${brand._id}`)
+      const { data } = await res.json()
+      if (!res.ok || !data) {
+        toast.error("Нет опций у бренда")
+
+        setBrandOptions({})
+      }
+      setBrandOptions(data)
+    }
+    getOptions()
+    
+  }, [])
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
-  const [brand, setBrand] = useState(()=>getBrand(findBrand(product.categoryId),categories))
 
   const [imageIdx, setImageIdx] = useState(0)
 
@@ -91,7 +107,7 @@ export default function editProductPage({ categories,product }) {
     } else {
       values.categoryId = null
     }
-    
+
     // Send data
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))
@@ -141,20 +157,35 @@ export default function editProductPage({ categories,product }) {
     setIsShowList(true)
     setListForMenu(getListForMenu(categories, value))
   }
-  
 
-  const handleListClick = (category) => {
+  const handleListClick = async (category) => {
     setValues({ ...values, category: category.name, categoryId: category.id })
     setIsShowList(false)
-    setBrand(getBrand(category, categories))
+    const brand = getBrand(category, categories)
+    const res = await fetch(`${API_URL}/api/options/brandid/${brand._id}`)
+    const { data } = await res.json()
+    if (!res.ok || !data) {
+      toast.error("Нет опций у бренда")
+      setBrandOptions({})
+      return
+    }
+    setBrandOptions(data)
+
+    setValues({
+      ...values,
+      options: data.options.map((item) => ({
+        name: item.name,
+        values: [],
+        isChangePrice: false,
+      })),
+    })
   }
-  
 
   const deleteImage = (i) => {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-  console.log(values)
+  console.log(values.options)
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
@@ -219,9 +250,7 @@ export default function editProductPage({ categories,product }) {
                           {listForMenu.map((category) => (
                             <li
                               key={category._id}
-                              onClick={() =>
-                                handleListClick(category)
-                              }
+                              onClick={() => handleListClick(category)}
                             >
                               {getCategoriesTree(category, categories)}
                             </li>
@@ -320,9 +349,9 @@ export default function editProductPage({ categories,product }) {
                   </div>
                 </div>
               </div>
-              {Object.keys(brand).length ? (
+              {Object.keys(brandOptions).length ? (
                 <SelectOptions
-                  brand={brand}
+                  brandOptions={brandOptions}
                   values={values}
                   setValues={setValues}
                   toast={toast}
@@ -394,25 +423,17 @@ export default function editProductPage({ categories,product }) {
   )
 }
 
-export async function getServerSideProps({params:{slug}}) {
+export async function getServerSideProps({ params: { slug } }) {
   const categoriesData = await fetch(`${API_URL}/api/categories`)
-  const { categories } = await categoriesData.json()  
-  
+  const { categories } = await categoriesData.json()
+
   const res = await fetch(`${API_URL}/api/products/${slug}`)
   const { product } = await res.json()
   return {
     props: {
       categories,
-      
+
       product,
-      
-    }
+    },
   }
 }
-
-
-
-
-
-
-

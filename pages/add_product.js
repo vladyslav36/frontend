@@ -39,7 +39,8 @@ export default function addProductPage({ categories }) {
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false)
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))  
-  const [brand, setBrand] = useState({})
+ 
+  const [brandOptions, setBrandOptions] = useState({})
 
   const [imageIdx, setImageIdx] = useState(0)
 
@@ -136,11 +137,26 @@ export default function addProductPage({ categories }) {
     setListForMenu(getListForMenu(categories, value))
   }
 
-  const handleListClick = (category) => {
+  const handleListClick =async (category) => {
     setValues({ ...values, category: category.name, categoryId: category._id })
-
     setIsShowList(false)
-    setBrand(getBrand(category, categories))
+    const brand=getBrand(category,categories)
+    const res = await fetch(`${API_URL}/api/options/brandid/${brand._id}`)
+    const { data } = await res.json()
+    if (!res.ok || !data) {
+      toast.error("Нет опций у бренда")
+      setBrandOptions({})
+      return
+    }
+    
+    setValues({
+      ...values,  options: data.options.map(item => ({
+        name: item.name,
+        values: [],
+        isChangePrice:false
+      })) })
+      
+      setBrandOptions(data)
   }
 
   const deleteImage = (i) => {
@@ -315,9 +331,9 @@ export default function addProductPage({ categories }) {
                   </div>
                 </div>
               </div>
-              {Object.keys(brand).length ? (
+              {Object.keys(brandOptions).length? (
                 <SelectOptions
-                  brand={brand}
+                  brandOptions={brandOptions}
                   values={values}
                   setValues={setValues}
                   toast={toast}
