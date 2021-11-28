@@ -88,7 +88,7 @@ export default function productPage({ slug, product }) {
     setCart([...cart, ...chosen])
     setChosen([])
   }
-  console.log(cart)
+  
   const changeHandler = (e) => {
     e.preventDefault()
     const { name, value } = e.target

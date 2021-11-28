@@ -96,7 +96,7 @@ export default function SelectOptions({
   }
 
   return (
-    <div>
+    <div className={styles.options_container}>
       {Object.keys(brandOptions).length
         ? brandOptions.options.map((item, i) => (
             <div key={i}>

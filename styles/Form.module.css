@@ -14,6 +14,7 @@
 }
 .grid label {
   font-size: 14px;
+  display:block;
 }
 .form .header {
   display: flex;
@@ -36,7 +37,7 @@
 
   font-size: 14px;
 }
-.form .input,
+/* .form .input, */
 .form select {
   display: block;
   width: 100%;
@@ -68,6 +69,7 @@
 
 .form .input_price {
   display: flex;
+ 
   width: 100%;
 }
 .form .input_price div {
@@ -77,6 +79,7 @@
 .form .labels {
   display: flex;
   justify-content: space-around;
+  
 }
 .form input[submit] {
   display: block;
@@ -177,32 +180,18 @@
   padding: 5px 0;
 }
 
+.options_container{
+  padding:10px 0;
+}
 .flex_block {
   display: flex;
   flex-wrap: wrap;
   font-size: 16;
 
-  margin: 10px 0;
+  padding:5px 0;
 }
 
-/* .flex_block_item {
-  display: flex;
-  border: 1px solid #333;
-  align-items: center;
-}
 
-.flex_block_item .option {
-  padding: 0 20px;
-  border-right: 1px solid #333;
-  height: 100%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-} */
-
-/* .flex_block_item .option.active_item {
-  background-color: #a3e4d7;
-} */
 
 .option_price input {
   height: 20px;
@@ -216,6 +205,7 @@
   justify-content: flex-start;
   align-items: center;
   column-gap: 10px;
+  padding:10px 0;
 }
 .header_options input {
   margin: 0;
