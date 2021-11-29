@@ -24,6 +24,7 @@ export default function editProductPage({ categories, product }) {
   const [values, setValues] = useState({
     _id: product._id,
     name: product.name,
+    brand: product.brand,
     model: product.model,
     description: product.description,
     category: product.category,
@@ -61,7 +62,6 @@ export default function editProductPage({ categories, product }) {
       setBrandOptions(data)
     }
     getOptions()
-    
   }, [])
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
 
@@ -159,13 +159,19 @@ export default function editProductPage({ categories, product }) {
   }
 
   const handleListClick = async (category) => {
-    setValues({ ...values, category: category.name, categoryId: category.id })
-    setIsShowList(false)
     const brand = getBrand(category, categories)
+
+    setIsShowList(false)
     const res = await fetch(`${API_URL}/api/options/brandid/${brand._id}`)
     const { data } = await res.json()
     if (!res.ok || !data) {
-      toast.error("Нет опций у бренда")
+      toast.info("Нет опций у бренда")
+      setValues({
+        ...values,
+        category: category.name,
+        categoryId: category.id,
+        brand: brand.name,
+      })
       setBrandOptions({})
       return
     }
@@ -173,6 +179,9 @@ export default function editProductPage({ categories, product }) {
 
     setValues({
       ...values,
+      category: category.name,
+      categoryId: category.id,
+      brand: brand.name,
       options: data.options.map((item) => ({
         name: item.name,
         values: [],
@@ -187,7 +196,7 @@ export default function editProductPage({ categories, product }) {
   }
   console.log(values.options)
   return (
-    <Layout title="Добавление товара">
+    <Layout title="Редактирование товара">
       {!isAdmin ? (
         <AccessDenied />
       ) : (

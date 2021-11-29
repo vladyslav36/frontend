@@ -23,6 +23,7 @@ export default function addProductPage({ categories }) {
 
   const [values, setValues] = useState({
     name: "",
+    brand:'',
     model: "",
     description: "",
     category: "",
@@ -127,7 +128,7 @@ export default function addProductPage({ categories }) {
     }
   }
 
-  
+
   // input for parentCategory
   const handleChangeCategory = (e) => {
     e.preventDefault()
@@ -139,19 +140,28 @@ export default function addProductPage({ categories }) {
   }
 
   const handleListClick = async (category) => {
-    setValues({ ...values, category: category.name, categoryId: category._id })
-    setIsShowList(false)
     const brand = getBrand(category, categories)
+    
+    setIsShowList(false)
     const res = await fetch(`${API_URL}/api/options/brandid/${brand._id}`)
     const { data } = await res.json()
     if (!res.ok || !data) {
-      toast.error("Нет опций у бренда")
+      toast.info("Нет опций у бренда")
+      setValues({
+        ...values,
+        category: category.name,
+        categoryId: category._id,
+        brand: brand.name,
+      })
       setBrandOptions({})
       return
     }
 
     setValues({
       ...values,
+      category: category.name,
+      categoryId: category._id,
+      brand: brand.name,
       options: data.options.map((item) => ({
         name: item.name,
         values: [],
@@ -166,7 +176,7 @@ export default function addProductPage({ categories }) {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-
+console.log(values)
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (

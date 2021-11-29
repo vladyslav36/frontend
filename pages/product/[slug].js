@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Link from "next/link"
 import { FaShoppingCart, FaTimes } from "react-icons/fa"
-import { getCurrencySymbol, getPriceForShow } from "utils"
+import { getBrand, getCurrencySymbol, getPriceForShow } from "utils"
 import { useContext, useEffect, useRef, useState } from "react"
 import DropDownList from "@/components/DropDownList"
 import Slider from "@/components/Slider"
@@ -20,55 +20,60 @@ export default function productPage({ slug, product }) {
   const { currencyShop } = useContext(ProductsContext)
   const { cart, setCart } = useContext(ProductsContext)
   const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
-  const [values, setValues] = useState({
-    color: "",
-    size: "",
-    height: "",
-    qnt: "",
-  })
+  const [values, setValues] = useState(
+    Object.assign({}, ...product.options.map((item) => ({ [item.name]: "" })), {
+      qnt: "",
+    })
+  )
 
-  const [isShowList, setIsShowList] = useState({
-    color: false,
-    size: false,
-    height: false,
-  })
+  const [isShowList, setIsShowList] = useState(
+    Object.assign(
+      {},
+      ...product.options.map((item) => ({ [item.name]: false }))
+    )
+  )
+
   const inputQnt = useRef()
   const [chosen, setChosen] = useState([])
   const [sliderValues, setSliderValues] = useState({
     isShow: false,
     idx: 0,
   })
+  // Прайс на единицу товара с учетом опции
+  const [currentPrice, setCurrentPrice] = useState(product.price)
+
   const [mainImageIdx, setMainImageIdx] = useState(0)
   const fakeArray = ["", "", "", "", "", "", ""]
-
+// Устанавливаем currentPrice. Если опционного нет, тогда без изменений, если есть-меняем на опционный
+  //находим меняющуюся опцию, берем value из values и если оно есть берем price
+  useEffect(() => {
+    const option = product.options.find(item => item.isChangePrice)
+    if (option) {
+      const value = values[option.name]      
+      const price = value ? option.values.find(val => val.name === value).price : ''
+      setCurrentPrice(price||product.price)
+    }
+  }, [values])
+  
   // Функция добавляет опционную цену к строке опции
   const getList = (name) => {
-    return product[name].map((item) =>
-      item.price
-        ? `${item.name} : ${item.price} ${getCurrencySymbol(
+    const option = product.options.find((item) => item.name === name)
+    return option.values.map((value) =>
+      value.price
+        ? `${value.name} : ${value.price} ${getCurrencySymbol(
             product.currencyValue
           )}`
-        : item.name
+        : value.name
     )
   }
   //
-  // Функция возвращает опционный прайс при выбранных color size height(если таковой есть) или пустую строку
-  const getOptionPrice = () => {
-    const colorItem = product.colors.find((item) => item.name === values.color)
-    const sizeItem = product.sizes.find((item) => item.name === values.size)
-    const heightItem = product.heights.find(
-      (item) => item.name === values.height
-    )
-    const optionPrice =
-      (values.color && colorItem ? colorItem.price : "") ||
-      (values.size && sizeItem ? sizeItem.price : "") ||
-      (values.height && heightItem ? heightItem.price : "")
-    return optionPrice
-  }
+
   //
   const listItemClick = ({ item, option }) => {
     setIsShowList({ ...isShowList, [option]: false })
-    setValues({ ...values, [option]: item.split(":")[0].trim() })
+    const optionValue=item.split(":")[0].trim()
+    setValues({ ...values, [option]: optionValue })
+    
   }
 
   const getTotalQnt = () => {
@@ -88,7 +93,7 @@ export default function productPage({ slug, product }) {
     setCart([...cart, ...chosen])
     setChosen([])
   }
-  
+
   const changeHandler = (e) => {
     e.preventDefault()
     const { name, value } = e.target
@@ -99,18 +104,6 @@ export default function productPage({ slug, product }) {
   const addedValues = (e) => {
     e.preventDefault()
 
-    if (product.sizes.length && !values.size) {
-      toast.error("Поле Размер должно быть заполнено")
-      return
-    }
-    if (product.colors.length && !values.color) {
-      toast.error("Поле Цвет должно быть заполнено")
-      return
-    }
-    if (product.heights.length && !values.height) {
-      toast.error("Поле Рост должно быть заполнено")
-      return
-    }
     if (!values.qnt) {
       toast.error("Поле Количество должно быть заполнено")
       return
@@ -153,7 +146,7 @@ export default function productPage({ slug, product }) {
   const handleDelete = (num) => {
     setChosen(chosen.filter((item, i) => i !== num))
   }
-
+  console.log(values, isShowList)
   return (
     <Layout title={`Страница товара ${slug}`}>
       <Navbar />
@@ -214,6 +207,10 @@ export default function productPage({ slug, product }) {
                   <p>{product.brand}</p>
                 </div>
                 <div>
+                  <h5>Категория:</h5>
+                  <p>{product.category}</p>
+                </div>
+                <div>
                   <h5>Модель:</h5>
                   <p>{product.name}</p>
                 </div>
@@ -229,7 +226,7 @@ export default function productPage({ slug, product }) {
                       currencyRate: dataRate.currencyRate,
                       currencyValue: product.currencyValue,
                       currencyShop,
-                      price: product.price,
+                      price: currentPrice,
                     })}{" "}
                     {getCurrencySymbol(currencyShop)}
                   </p>
@@ -238,82 +235,39 @@ export default function productPage({ slug, product }) {
             </div>
 
             <div className={styles.inputs}>
-              {/* <div> */}
-              {product.sizes.length ? (
-                <div
-                  tabIndex={0}
-                  onFocus={() => setIsShowList({ ...isShowList, size: true })}
-                  onBlur={() => setIsShowList({ ...isShowList, size: false })}
-                >
-                  <label htmlFor="size">Размер</label>
-                  <input
-                    type="text"
-                    id="size"
-                    name="size"
-                    value={values.size}
-                    onChange={changeHandler}
-                    autoComplete="off"
-                    readOnly
-                  />
-                  <DropDownList
-                    isShow={isShowList.size}
-                    itemsList={getList("sizes")}
-                    handleClick={(item) =>
-                      listItemClick({ item, option: "size" })
-                    }
-                  />
-                </div>
-              ) : null}
-              {product.colors.length ? (
-                <div
-                  tabIndex={0}
-                  onFocus={() => setIsShowList({ ...isShowList, color: true })}
-                  onBlur={() => setIsShowList({ ...isShowList, color: false })}
-                >
-                  <label htmlFor="color">Цвет</label>
-                  <input
-                    type="text"
-                    id="color"
-                    name="color"
-                    value={values.color}
-                    onChange={changeHandler}
-                    autoComplete="off"
-                    readOnly
-                  />
-                  <DropDownList
-                    isShow={isShowList.color}
-                    itemsList={getList("colors")}
-                    handleClick={(item) =>
-                      listItemClick({ item, option: "color" })
-                    }
-                  />
-                </div>
-              ) : null}
-              {product.heights.length ? (
-                <div
-                  tabIndex={0}
-                  onFocus={() => setIsShowList({ ...isShowList, height: true })}
-                  onBlur={() => setIsShowList({ ...isShowList, height: false })}
-                >
-                  <label htmlFor="height">Рост</label>
-                  <input
-                    type="text"
-                    id="height"
-                    name="height"
-                    value={values.height}
-                    onChange={changeHandler}
-                    autoComplete="off"
-                    readOnly
-                  />
-                  <DropDownList
-                    isShow={isShowList.height}
-                    itemsList={getList("heights")}
-                    handleClick={(item) =>
-                      listItemClick({ item, option: "height" })
-                    }
-                  />
-                </div>
-              ) : null}
+              {product.options.length
+                ? product.options.map((option, i) => (
+                    <div
+                      key={i}
+                      tabIndex={0}
+                      onFocus={() =>
+                        setIsShowList({ ...isShowList, [option.name]: true })
+                      }
+                      onBlur={() =>
+                        setIsShowList({ ...isShowList, [option.name]: false })
+                      }
+                    >
+                      <label htmlFor={option.name}>{option.name}</label>
+                      <input
+                        type="text"
+                        id={option.name}
+                        // name={option.name}
+                        value={values[option.name]}
+                        // onChange={changeHandler}
+                        autoComplete="off"
+                        readOnly
+                      />
+                      <DropDownList
+                        isShow={isShowList[option.name]}
+                        itemsList={getList(option.name)}
+                        handleClick={(item) =>
+                          listItemClick({ item, option: option.name })
+                        }
+                      />
+                    </div>
+                  ))
+                : null}
+
               <div>
                 <label htmlFor="qnt">Количество</label>
                 <input
@@ -325,19 +279,18 @@ export default function productPage({ slug, product }) {
                   value={values.qnt}
                 />
               </div>
-              {/* </div> */}
             </div>
             <div className={styles.button}>
               <button type="button" onClick={addedValues}>
                 Выбрать
-              </button>              
+              </button>
             </div>
             <div className={styles.table}>
               <table>
                 <caption>Выбрано товаров</caption>
                 <thead>
                   <tr>
-                    <th
+                    {/* <th
                       style={
                         product.heights.length
                           ? {}
@@ -345,8 +298,8 @@ export default function productPage({ slug, product }) {
                       }
                     >
                       Рост
-                    </th>
-                    <th
+                    </th> */}
+                    {/* <th
                       style={
                         product.sizes.length
                           ? {}
@@ -354,8 +307,8 @@ export default function productPage({ slug, product }) {
                       }
                     >
                       Размер
-                    </th>
-                    <th
+                    </th> */}
+                    {/* <th
                       style={
                         product.colors.length
                           ? {}
@@ -363,7 +316,7 @@ export default function productPage({ slug, product }) {
                       }
                     >
                       Цвет
-                    </th>
+                    </th> */}
                     <th>Кол-во</th>
                     <th>
                       Цена&nbsp;{getCurrencySymbol(product.currencyValue)}
