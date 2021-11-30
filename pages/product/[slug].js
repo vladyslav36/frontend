@@ -44,17 +44,19 @@ export default function productPage({ slug, product }) {
 
   const [mainImageIdx, setMainImageIdx] = useState(0)
   const fakeArray = ["", "", "", "", "", "", ""]
-// Устанавливаем currentPrice. Если опционного нет, тогда без изменений, если есть-меняем на опционный
+  // Устанавливаем currentPrice. Если опционного нет, тогда без изменений, если есть-меняем на опционный
   //находим меняющуюся опцию, берем value из values и если оно есть берем price
   useEffect(() => {
-    const option = product.options.find(item => item.isChangePrice)
+    const option = product.options.find((item) => item.isChangePrice)
     if (option) {
-      const value = values[option.name]      
-      const price = value ? option.values.find(val => val.name === value).price : ''
-      setCurrentPrice(price||product.price)
+      const value = values[option.name]
+      const price = value
+        ? option.values.find((val) => val.name === value).price
+        : ""
+      setCurrentPrice(price || product.price)
     }
   }, [values])
-  
+
   // Функция добавляет опционную цену к строке опции
   const getList = (name) => {
     const option = product.options.find((item) => item.name === name)
@@ -71,9 +73,8 @@ export default function productPage({ slug, product }) {
   //
   const listItemClick = ({ item, option }) => {
     setIsShowList({ ...isShowList, [option]: false })
-    const optionValue=item.split(":")[0].trim()
+    const optionValue = item.split(":")[0].trim()
     setValues({ ...values, [option]: optionValue })
-    
   }
 
   const getTotalQnt = () => {
@@ -103,13 +104,24 @@ export default function productPage({ slug, product }) {
 
   const addedValues = (e) => {
     e.preventDefault()
-
+    const options = product.options.map((item) => item.name)
+    let error = false
+    if (options.length) {
+      options.forEach((name) => {
+        if (!values[name]) {
+          toast.error(`Поле ${name} должно быть заполнено`)
+          error = true
+          return
+        }
+      })
+    }
+    if (error) return
     if (!values.qnt) {
       toast.error("Поле Количество должно быть заполнено")
       return
     }
-    if (+values.qnt <= 0) {
-      toast.error("Количество должно быть больше нуля")
+    if (+values.qnt <= 0 || +values.qnt > 999) {
+      toast.error("Количество должно быть больше нуля и меньше 1000")
       setValues({ ...values, qnt: "" })
       inputQnt.current.focus()
       return
@@ -124,29 +136,35 @@ export default function productPage({ slug, product }) {
       ...chosen,
       {
         name: product.name,
-        color: values.color,
-        size: values.size,
-        height: values.height,
+        options: options
+          ? Object.assign(
+              {},
+              ...options.map((item) => ({ [item]: values[item] }))
+            )
+          : {},
         qnt: values.qnt,
-        price: getOptionPrice() || product.price,
+        price: currentPrice,
         currencyValue: product.currencyValue,
       },
     ])
     clearValues()
   }
   const clearValues = () => {
-    setValues({
-      color: "",
-      size: "",
-      height: "",
-      qnt: "",
-    })
+    setValues(
+      Object.assign(
+        {},
+        ...product.options.map((item) => ({ [item.name]: "" })),
+        {
+          qnt: "",
+        }
+      )
+    )
   }
 
   const handleDelete = (num) => {
     setChosen(chosen.filter((item, i) => i !== num))
   }
-  console.log(values, isShowList)
+  console.log(chosen)
   return (
     <Layout title={`Страница товара ${slug}`}>
       <Navbar />
@@ -290,33 +308,12 @@ export default function productPage({ slug, product }) {
                 <caption>Выбрано товаров</caption>
                 <thead>
                   <tr>
-                    {/* <th
-                      style={
-                        product.heights.length
-                          ? {}
-                          : { visibility: "hidden", width: 0 }
-                      }
-                    >
-                      Рост
-                    </th> */}
-                    {/* <th
-                      style={
-                        product.sizes.length
-                          ? {}
-                          : { visibility: "hidden", width: 0 }
-                      }
-                    >
-                      Размер
-                    </th> */}
-                    {/* <th
-                      style={
-                        product.colors.length
-                          ? {}
-                          : { visibility: "hidden", width: 0 }
-                      }
-                    >
-                      Цвет
-                    </th> */}
+                    {product.options
+                      ? product.options.map((item, i) => (
+                          <th key={i}>{item.name}</th>
+                        ))
+                      : null}
+
                     <th>Кол-во</th>
                     <th>
                       Цена&nbsp;{getCurrencySymbol(product.currencyValue)}
@@ -328,9 +325,11 @@ export default function productPage({ slug, product }) {
                   {chosen.length ? (
                     chosen.map((item, i) => (
                       <tr key={i}>
-                        <td>{item.height}</td>
-                        <td>{item.size}</td>
-                        <td>{item.color}</td>
+                        {product.options
+                          ? product.options.map((opt, i) => (
+                              <td key={i}>{item.options[opt.name]}</td>
+                            ))
+                          : null}
                         <td>{item.qnt}</td>
                         <td>{item.price}</td>
                         <td className={styles.flex}>
@@ -366,9 +365,13 @@ export default function productPage({ slug, product }) {
             </div>
           </div>
         </div>
+        {product.description ? (
+          <>
+            <h4>Описание</h4>
+            <p>{product.description}</p>
+          </>
+        ) : null}
 
-        <h4>Описание</h4>
-        <p>{product.description}</p>
         {sliderValues.isShow && (
           <Slider
             setSliderValues={setSliderValues}

@@ -204,46 +204,13 @@
   font-size:13px;
   border: 1px solid #999;
 }
-.center table tbody tr :nth-child(1){
-text-align: center;
-}
-.center table tbody tr :nth-child(2){
-text-align: center;
-}
-.center table tbody tr :nth-child(3){
-text-align: center;
-}
-.center table tbody tr :nth-child(4){
-text-align: center;
-}
-.center table tbody tr :nth-child(5){
-text-align: center;
-}
-
-
-.center  thead tr :nth-child(1){
-  width:70px;
+.center table thead tr th{
   text-align: center;
+  width:100%;
 }
-.center  thead tr :nth-child(2){
-  width:70px;
+.center table tbody tr td{
   text-align: center;
-}
-.center  thead tr :nth-child(3){
-  width:150px;
-  text-align: center;
-}
-.center  thead tr :nth-child(4){
-  width:50px;
-  text-align: center;
-}
-.center  thead tr :nth-child(5){
-  width:70px;
-  text-align: center;
-}
-.center  thead tr :nth-child(6){
-  width:30px;
-  text-align: center;
+  width:100%;
 }
 
 .hide_col{
