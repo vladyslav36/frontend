@@ -45,7 +45,6 @@ export const getCategoriesTree = (category, categories) => {
   return result.reverse().join(" ➔ ")
 }
 export const getBrand = (category, categories) => {
-  
   let result = category
   const findParent = (item) => {
     const parent = categories.find((elem) => elem._id === item.parentCategoryId)
@@ -56,7 +55,7 @@ export const getBrand = (category, categories) => {
     return
   }
   findParent(category)
-  
+
   return result
 }
 export const getArrayCategoryTree = (category, categories) => {
@@ -135,7 +134,7 @@ export const getTotalAmount = (cart) => {
   return strArr.join(" + ") || "0"
 }
 
-export const getMailString = ({ cart, totalAmount, values }) => {
+export const getMailString = ({ cart, totalAmount, values,count }) => {
   const {
     name,
     surname,
@@ -144,17 +143,17 @@ export const getMailString = ({ cart, totalAmount, values }) => {
     carrier,
     branch,
     pickup,
-    courier,
+
     prepaid,
-    postpaid,
   } = values
-  const isAttrInCart = (attr) => {
-    return cart.some((item) => item[attr] !== "")
-  }
+  const options =
+    cart.length && Object.keys(cart[0].options).length
+      ? Object.keys(cart[0].options)
+      : []
   return `
   <div style='font-size:16px;'>
   
-  <div style='margin:auto;width:200px;color:blue'>Заказ от ${new Date().toLocaleDateString()}</div>
+  <div style='margin:auto;width:200px;color:blue'>Заказ № ${count+1} от ${new Date().toLocaleDateString()}</div>
     <div >
       <div><em>Получатель:</em>${name} ${surname}</div>
     <div><em>Телефон:</em>${phone}</div>
@@ -175,15 +174,16 @@ export const getMailString = ({ cart, totalAmount, values }) => {
       <thead >
         <tr>
           <td>Модель</td>
-          <td style='${
-            isAttrInCart("height") ? "" : "visibility:hiden;width:0"
-          }'>Рост</td>
-          <td '${
-            isAttrInCart("size") ? "" : "visibility:hiden;width:0"
-          }'>Размер</td>
-          <td '${
-            isAttrInCart("color") ? "" : "visibility:hiden;width:0"
-          }'>Цвет</td>
+          ${
+            options.length
+              ? options.map(
+                  (item) => `
+                   <td>
+                    ${item}
+                  </td> `
+                ).join("")
+              : null
+          }
           <td>Цена</td>
           <td>Кол-во</td>
         </tr>
@@ -194,9 +194,11 @@ export const getMailString = ({ cart, totalAmount, values }) => {
           (item) => `
         <tr style='border:1px solid #999;'>
           <td >${item.name}</td>
-        <td>${item.height}</td>
-        <td>${item.size}</td>
-        <td>${item.color}</td>
+        ${options.length ? options.map((option, i) => `
+                    <td key={i}>
+                      ${item.options[option]}
+                    </td>`
+                  ).join(""):null}
         <td>${item.price}${getCurrencySymbol(item.currencyValue)}</td>
         <td>${item.qnt}</td>
         </tr> 

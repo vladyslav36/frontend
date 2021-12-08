@@ -12,14 +12,13 @@ import router from "next/router"
 export default function Cart() {
   const { cart, setCart } = useContext(ProductsContext)  
 
+  const options=cart.length && Object.keys(cart[0].options).length ? Object.keys(cart[0].options):[]
   
-  const isAttrInCart = (attr) => {
-    return cart.some((item) => item[attr] !== "")
-  }
 
   const handleCheckout = () => {
     router.push('/checkout')
   }
+  
   return (
     <Layout title="Корзина">
       <div className={styles.header}>
@@ -34,31 +33,13 @@ export default function Cart() {
           <thead>
             <tr>
               <td>Модель</td>
-              <td
-                style={
-                  isAttrInCart("height")
-                    ? {}
-                    : { visibility: "hidden", width: 0 }
-                }
-              >
-                Рост
-              </td>
-              <td
-                style={
-                  isAttrInCart("size") ? {} : { visibility: "hidden", width: 0 }
-                }
-              >
-                Размер
-              </td>
-              <td
-                style={
-                  isAttrInCart("color")
-                    ? {}
-                    : { visibility: "hidden", width: 0 }
-                }
-              >
-                Цвет
-              </td>
+              {options.length ? (
+                options.map((item, i) => (
+                  <td key={i}>
+                    { item}
+                  </td>
+                ))
+              ):null}
               <td>Цена</td>
               <td>Кол-во</td>
               <td>
@@ -76,9 +57,11 @@ export default function Cart() {
               cart.map((item, i) => (
                 <tr key={i}>
                   <td>{item.name}</td>
-                  <td>{item.height}</td>
-                  <td>{item.size}</td>
-                  <td>{item.color}</td>
+                  {options.length ? options.map((option, i) => (
+                    <td key={i}>
+                      {item.options[option]}
+                    </td>
+                  )):null}
                   <td>
                     {item.price}&nbsp;{getCurrencySymbol(item.currencyValue)}
                   </td>

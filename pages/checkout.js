@@ -5,7 +5,7 @@ import styles from "@/styles/Checkout.module.css"
 import { useContext, useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { getMailString, getTotalAmount } from "utils"
+import { getMailString, getQntInCart, getTotalAmount } from "utils"
 import { API_URL } from "../config"
 
 export default function Checkout() {
@@ -17,10 +17,9 @@ export default function Checkout() {
     city: "",
     carrier: "",
     branch: "",
-    pickup: true,
-    courier: false,
+    pickup: true,   
     prepaid: true,
-    postpaid: false,
+    
   })
   useEffect(() => {
     const data = localStorage.getItem("checkout")
@@ -31,15 +30,15 @@ export default function Checkout() {
     if (name === "delMethod") {
       setValues({
         ...values,
-        ["pickup"]: value === "pickup",
-        ["courier"]: value === "courier",
+        ["pickup"]: value === "pickup"
+        
       })
     } else {
       if (name === "payment") {
         setValues({
           ...values,
-          ["prepaid"]: value === "prepaid",
-          ["postpaid"]: value === "postpaid",
+          ["prepaid"]: value === "prepaid"
+          
         })
       } else {
         e.preventDefault()
@@ -50,7 +49,10 @@ export default function Checkout() {
 
   const handleSendOrder = async () => {
     const totalAmount = getTotalAmount(cart)
-    const mailString=getMailString({cart,totalAmount,values})
+    const totalQnt = getQntInCart(cart)
+    const res1 = await fetch(`${API_URL}/api/order/count`)
+    const { count }=await res1.json()
+    const mailString=getMailString({cart,totalAmount,values,count})
     localStorage.setItem("checkout", JSON.stringify(values))
     const res = await fetch(`${API_URL}/api/cart/mail`, {
       method:'POST',
@@ -59,13 +61,30 @@ export default function Checkout() {
       },
       body:JSON.stringify({mailString})
     })
-    if (res.ok) {
-      toast.success('Заказ успешно отправлен')
+    const res2 = await fetch(`${API_URL}/api/order`, {
+      method: 'POST',
+      headers: {
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({
+        orderItems: cart,
+        delivery: values,
+        totalQnt,
+        totalAmount,
+        count:count+1,
+        user:null
+      })
+    })
+
+    
+
+    if ( res.ok && res2.ok) {
+      toast.success("Заказ успешно отправлен")
     } else {
-      toast.error('Ошибка при отправке заказа')
+      toast.error("Ошибка при отправке или сохранении заказа")
     }
   }
-  
+  console.log(cart,values)
   return (
     <Layout title="Оформление заказа">
       <ToastContainer/>
@@ -128,13 +147,13 @@ export default function Checkout() {
                   id="courier"
                   name="delMethod"
                   value="courier"
-                  checked={values.courier}
+                  checked={!values.pickup}
                   onChange={handleChange}
                 />
               </div>
             </div>
           </div>
-          {values.courier ? (
+          {!values.pickup ? (
             <>
               <div className={styles.input}>
                 <label htmlFor="city">Населенный пункт</label>
@@ -184,7 +203,7 @@ export default function Checkout() {
                       id="postpaid"
                       name="payment"
                       value="postpaid"
-                      checked={values.postpaid}
+                      checked={!values.prepaid}
                       onChange={handleChange}
                     />
                   </div>

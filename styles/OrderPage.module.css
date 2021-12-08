@@ -1,0 +1,21 @@
+.container{
+  padding:0 10px;
+}
+
+.container h4{
+  text-align: center;
+}
+
+.table{
+  padding:10px 0;
+  max-height: 300px;
+  overflow: auto;
+  line-height: 1;
+}
+.table table{
+  border-collapse:collapse;
+  border:1px solid #888;
+  width:100%;
+  table-layout: fixed;
+}
+

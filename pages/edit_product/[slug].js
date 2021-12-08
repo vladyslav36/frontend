@@ -25,6 +25,7 @@ export default function editProductPage({ categories, product }) {
     _id: product._id,
     name: product.name,
     brand: product.brand,
+    brandId:product.brandId,
     model: product.model,
     description: product.description,
     category: product.category,
@@ -171,6 +172,7 @@ export default function editProductPage({ categories, product }) {
         category: category.name,
         categoryId: category.id,
         brand: brand.name,
+        brandId:brand._id
       })
       setBrandOptions({})
       return
@@ -182,6 +184,7 @@ export default function editProductPage({ categories, product }) {
       category: category.name,
       categoryId: category.id,
       brand: brand.name,
+      brandId:brand._id,
       options: data.options.map((item) => ({
         name: item.name,
         values: [],

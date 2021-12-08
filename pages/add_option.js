@@ -39,7 +39,7 @@ export default function add_optionPage({ categories }) {
       brandId: categories.find((item) => item.name === inputValue.brand)._id,
       options: options,
     }
-    console.log(value)
+    
     const res = await fetch(`${API_URL}/api/options`, {
       headers: {
         "Content-Type": "application/json",
@@ -61,10 +61,16 @@ export default function add_optionPage({ categories }) {
     e.preventDefault()
 
     const { name, value } = e.target
-    setInputValue({ ...inputValue, [name]: value })
+    const ucValue=value.charAt(0).toUpperCase()+value.slice(1)
+    setInputValue({ ...inputValue, [name]: ucValue })
+    console.log(value)
   }
 
   const addOption = () => {
+    if (options.length === 4) {
+      toast.warning('Не рекомендуется делать кол-во опций больше 4')
+      return
+    }
     const elem = document.getElementById("option")
     elem.focus()
     if (!inputValue.option.trim()) {
@@ -75,7 +81,7 @@ export default function add_optionPage({ categories }) {
     const isRepeat = keys.find((item) => item === inputValue.option)
     if (!isRepeat) {
       setInputValue({ ...inputValue, [inputValue.option]: "", option: "" })
-      setOptions([...options, { name: inputValue.option, values: [] }])
+      setOptions([...options, { name:inputValue.option , values: [] }])
       setIsShowList({ ...isShowList, [inputValue.option]: false })
     } else {
       toast.error("Такая опция уже существует или зарезервирована")

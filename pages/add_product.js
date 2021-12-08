@@ -23,7 +23,8 @@ export default function addProductPage({ categories }) {
 
   const [values, setValues] = useState({
     name: "",
-    brand:'',
+    brand: '',
+    brandId:null,
     model: "",
     description: "",
     category: "",
@@ -152,6 +153,7 @@ export default function addProductPage({ categories }) {
         category: category.name,
         categoryId: category._id,
         brand: brand.name,
+        brandId:brand._id
       })
       setBrandOptions({})
       return
@@ -162,6 +164,7 @@ export default function addProductPage({ categories }) {
       category: category.name,
       categoryId: category._id,
       brand: brand.name,
+      brandId:brand._id,
       options: data.options.map((item) => ({
         name: item.name,
         values: [],

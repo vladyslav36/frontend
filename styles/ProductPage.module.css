@@ -38,7 +38,7 @@
 
 .content{
   display:grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 2fr 4fr;
   width:100%;
  column-gap: 15px;
 
@@ -178,6 +178,7 @@
 }
 .table{
   padding-right:5px;
+ overflow-x: auto;
 }
 .center table{
   table-layout: fixed;
@@ -197,20 +198,21 @@
   border: 1px solid #999;
   
 }
-/* .table table th{
-  border: 1px solid #999;
-} */
+
 .center table tbody{
   font-size:13px;
-  border: 1px solid #999;
+  border: 1px solid #999; 
+  
 }
 .center table thead tr th{
   text-align: center;
   width:100%;
+  
 }
 .center table tbody tr td{
   text-align: center;
   width:100%;
+  
 }
 
 .hide_col{

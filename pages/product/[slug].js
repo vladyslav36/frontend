@@ -90,7 +90,7 @@ export default function productPage({ slug, product }) {
   }
 
   const handleCartClick = () => {
-    console.log("cart click")
+    
     setCart([...cart, ...chosen])
     setChosen([])
   }
@@ -164,7 +164,7 @@ export default function productPage({ slug, product }) {
   const handleDelete = (num) => {
     setChosen(chosen.filter((item, i) => i !== num))
   }
-  console.log(chosen)
+  
   return (
     <Layout title={`Страница товара ${slug}`}>
       <Navbar />
@@ -318,7 +318,14 @@ export default function productPage({ slug, product }) {
                     <th>
                       Цена&nbsp;{getCurrencySymbol(product.currencyValue)}
                     </th>
-                    <th>&nbsp;</th>
+                    <th className={styles.flex}>
+                      <div className={styles.icon_wrapper}>
+                        <FaTimes
+                          className={styles.icon}
+                          onClick={() => setChosen([])}
+                        />
+                      </div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
