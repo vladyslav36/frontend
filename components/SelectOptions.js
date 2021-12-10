@@ -2,183 +2,119 @@ import styles from "@/styles/Form.module.css"
 
 import { stringToPrice } from "utils"
 
-export default function SelectOptions({
-  brandOptions,
-  values,
-  setValues,
-  toast,
-}) {
+export default function SelectOptions({ values, setValues, toast }) {
+
   const handleChangePrice = ({ name, option, e }) => {
     e.preventDefault()
-
-    setValues({
-      ...values,
-      options: values.options.map((opt) =>
-        opt.name !== name
-          ? opt
-          : {
-              ...opt,
-              values: opt.values.map((value) =>
-                value.name !== option
-                  ? value
-                  : { ...value, price: e.target.value }
-              ),
-            }
-      ),
-    })
+    
+   const newValues={...values}
+    newValues.options[name].values[option].price = e.target.value
+    setValues(newValues)
   }
-  const formatPrice = ({ name, option, value }) => {
-    let { price, error } = stringToPrice(value)
+  const formatPrice = ({ name, option, e }) => {
+    const { price, error }=stringToPrice(e.target.value)
     if (error) {
-      price = ""
-      toast.error("Цена должна быть числом")
+      toast.error('Прайс должен быть числом')
+      return
     }
-    setValues({
-      ...values,
-      options: values.options.map((opt) =>
-        opt.name !== name
-          ? opt
-          : {
-              ...opt,
-              values: opt.values.map((value) =>
-                value.name !== option ? value : { ...value, price }
-              ),
-            }
-      ),
-    })
+    const newValues = { ...values }
+    newValues.options[name].values[option].price = price
+    setValues(newValues)
   }
+  
   const handleCheckbox = ({ name, option, checked }) => {
-    if (!checked) {
-      // Удаление значения опции /{name:red,price:''} из values.options
-      setValues({
-        ...values,
-        options: values.options.map((item) =>
-          item.name === name
-            ? {
-                ...item,
-                values: item.values.filter((value) => value.name !== option),
-              }
-            : item
-        ),
-      })
-    } else {
-      // Добавление опции /{name:red,price:''}/ в values.options
-      setValues({
-        ...values,
-        options: values.options.map((item) =>
-          item.name === name
-            ? {
-                ...item,
-                values: [...item.values, { name: option, price: "" }],
-              }
-            : item
-        ),
-      })
-    }
+    const newValues = { ...values }
+    newValues.options[name].values[option].checked = checked
+    setValues(newValues)
   }
-  // toggle делает так что checkbox ведет себя и как radio и как checkbox
+  // toggle делает так что checkbox ведет себя так что может быть нажата только одна кнопка или ни одной
   const toggleCheck = (e) => {
-    const value = e.target.value
+    const option = e.target.value
     const checked = e.target.checked
-
-    setValues({
-      ...values,
-      options: values.options.map((option) =>
-        option.name === value
-          ? { ...option, isChangePrice: checked }
-          : {
-              ...option,
-              isChangePrice: false,
-              values: option.values.map((value) => ({ ...value, price: "" })),
-            }
-      ),
-    })
+    
+    if (checked) {
+      const restOptions = Object.keys(values.options).filter(item => item !== option)
+      const newValues = { ...values }
+      newValues.options[option].isChangePrice = checked
+      restOptions.forEach(item=>newValues.options[item].isChangePrice=false)
+      setValues(newValues)
+    } else {
+      const newValues = { ...values }
+      newValues.options[option].isChangePrice = checked
+      setValues(newValues)
+    }
+    
   }
 
   return (
     <div className={styles.options_container}>
-      {Object.keys(brandOptions).length
-        ? brandOptions.options.map((item, i) => (
+      {Object.keys(values.options).length
+        ? Object.keys(values.options).map((item, i) => (
             <div key={i}>
               <div className={styles.header_options}>
-                <h3>{item.name}</h3>
+                <h3>{item}</h3>
                 <div className={styles.custom_radio}>
                   <input
                     type="checkbox"
-                    id={item.name}
-                    name="changePrice"
-                    value={item.name}
+                    id={item}
+                    name='changePrice'
+                    value={item}
                     onChange={toggleCheck}
-                    checked={
-                      values.options.find((option) => option.name === item.name)
-                        .isChangePrice
-                    }
+                    checked={values.options[item].isChangePrice}
                   />
-                  <label htmlFor={item.name}>Менять прайс</label>
+                  <label htmlFor={item}>Менять прайс</label>
                 </div>
               </div>
 
               <div className={styles.flex_block}>
-                {item.values.map((optionValue, i) => (
-                  <div key={i} className={styles.custom_checkbox}>
-                    <input
-                      type="checkbox"
-                      id={optionValue}
-                      name={item.name}
-                      value={optionValue}
-                      onChange={(e) =>
-                        handleCheckbox({
-                          name: item.name,
-                          option: e.target.value,
-                          checked: e.target.checked,
-                        })
-                      }
-                      checked={values.options
-                        .find((option) => option.name === item.name)
-                        .values.some((value) => value.name === optionValue)}
-                    />
-                    <label htmlFor={optionValue} tabIndex={0}>
-                      {optionValue}
+                {Object.keys(values.options[item].values)
+                  .sort()
+                  .map((optionValue, i) => (
+                    <div key={i} className={styles.custom_checkbox}>
+                      <input
+                        type="checkbox"
+                        id={optionValue}
+                        name={item}
+                        value={optionValue}
+                        onChange={(e) =>
+                          handleCheckbox({
+                            name: item,
+                            option: e.target.value,
+                            checked: e.target.checked,
+                          })
+                        }
+                        checked={
+                          values.options[item].values[optionValue].checked
+                        }
+                      />
+                      <label htmlFor={optionValue} tabIndex={0}>
+                        {optionValue}
 
-                      {values.options.length &&
-                        values.options.find(
-                          (option) => option.name === item.name
-                        ).isChangePrice &&
-                        values.options
-                          .find((option) => option.name === item.name)
-                          .values.find(
-                            (value) => value.name === optionValue
-                          ) && (
+                        {values.options[item].isChangePrice && values.options[item].values[optionValue].checked &&(
                           <div className={styles.option_price}>
                             <input
                               type="text"
-                              value={
-                                values.options
-                                  .find((option) => option.name === item.name)
-                                  .values.find(
-                                    (value) => value.name === optionValue
-                                  ).price
-                              }
+                              value={values.options[item].values[optionValue].price}
                               onChange={(e) =>
                                 handleChangePrice({
-                                  name: item.name,
+                                  name: item,
                                   option: optionValue,
                                   e,
                                 })
                               }
                               onBlur={(e) => {
                                 formatPrice({
-                                  name: item.name,
+                                  name: item,
                                   option: optionValue,
-                                  value: e.target.value,
+                                  e,
                                 })
                               }}
                             />
                           </div>
                         )}
-                    </label>
-                  </div>
-                ))}
+                      </label>
+                    </div>
+                  ))}
               </div>
             </div>
           ))

@@ -40,7 +40,7 @@ export default function editOptionList({ data }) {
 const  editOption = (item) => {
     router.push(`/edit_option/${item._id}`)
   }
-  
+  console.log(options)
   return (
     <Layout title="Редактирование опций">
       {!isAdmin ? (

@@ -44,42 +44,13 @@ export default function editProductPage({ categories, product }) {
     })
   )
   const [showModal, setShowModal] = useState(false)
-  const [isShowList, setIsShowList] = useState(false)
-  const [brandOptions, setBrandOptions] = useState({})
-
-  useEffect(() => {
-    const getOptions = async () => {
-      const category = categories.find(
-        (item) => item._id === product.categoryId
-      )
-      const brand = getBrand(category, categories)
-      const res = await fetch(`${API_URL}/api/options/brandid/${brand._id}`)
-      const { data } = await res.json()
-      if (!res.ok || !data) {
-        toast.error("Нет опций у бренда")
-
-        setBrandOptions({})
-      }
-      setBrandOptions(data)
-    }
-    getOptions()
-  }, [])
+  const [isShowList, setIsShowList] = useState(false) 
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
 
   const [imageIdx, setImageIdx] = useState(0)
 
   const router = useRouter()
-
-  // Сортировка option перед отправкой на сервер
-  const sortOptions = () => {
-    setValues({
-      ...values,
-      options: values.options.map((option) => ({
-        ...option,
-        values: [...option.values.sort((a, b) => (a.name > b.name ? 1 : -1))],
-      })),
-    })
-  }
+  
   // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(items, value) {
     const list = items.filter(
@@ -172,24 +143,21 @@ export default function editProductPage({ categories, product }) {
         category: category.name,
         categoryId: category.id,
         brand: brand.name,
-        brandId:brand._id
+        brandId: brand._id,
+        options: {}
       })
-      setBrandOptions({})
+      
       return
     }
-    setBrandOptions(data)
+    
 
     setValues({
       ...values,
       category: category.name,
       categoryId: category.id,
       brand: brand.name,
-      brandId:brand._id,
-      options: data.options.map((item) => ({
-        name: item.name,
-        values: [],
-        isChangePrice: false,
-      })),
+      brandId: brand._id,
+      options: data.options,
     })
   }
 
@@ -197,7 +165,7 @@ export default function editProductPage({ categories, product }) {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-  console.log(values.options)
+  
   return (
     <Layout title="Редактирование товара">
       {!isAdmin ? (
@@ -361,9 +329,8 @@ export default function editProductPage({ categories, product }) {
                   </div>
                 </div>
               </div>
-              {Object.keys(brandOptions).length ? (
-                <SelectOptions
-                  brandOptions={brandOptions}
+              {Object.keys(values.options).length ? (
+                <SelectOptions                  
                   values={values}
                   setValues={setValues}
                   toast={toast}

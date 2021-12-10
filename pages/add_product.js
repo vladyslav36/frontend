@@ -29,7 +29,7 @@ export default function addProductPage({ categories }) {
     description: "",
     category: "",
     categoryId: null,
-    options: [],
+    options: {},
     isInStock: true,
     price: "",
     retailPrice: "",
@@ -42,22 +42,13 @@ export default function addProductPage({ categories }) {
   const [isShowList, setIsShowList] = useState(false)
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
 
-  const [brandOptions, setBrandOptions] = useState({})
+  
 
   const [imageIdx, setImageIdx] = useState(0)
 
   const router = useRouter()
 
-  // Сортировка option перед отправкой на сервер
-  const sortOptions = () => {
-    setValues({
-      ...values,
-      options: values.options.map((option) => ({
-        ...option,
-        values: [...option.values.sort((a, b) => (a.name > b.name ? 1 : -1))],
-      })),
-    })
-  }
+  
   // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(items, value) {
     const list = items.filter(
@@ -87,7 +78,7 @@ export default function addProductPage({ categories }) {
       values.categoryId = null
     }
 
-    sortOptions()
+    
 
     // Send data
     const formData = new FormData()
@@ -153,9 +144,10 @@ export default function addProductPage({ categories }) {
         category: category.name,
         categoryId: category._id,
         brand: brand.name,
-        brandId:brand._id
+        brandId: brand._id,
+        options: {}
       })
-      setBrandOptions({})
+      
       return
     }
 
@@ -165,21 +157,16 @@ export default function addProductPage({ categories }) {
       categoryId: category._id,
       brand: brand.name,
       brandId:brand._id,
-      options: data.options.map((item) => ({
-        name: item.name,
-        values: [],
-        isChangePrice: false,
-      })),
+      options: data.options
     })
-
-    setBrandOptions(data)
+    
   }
 
   const deleteImage = (i) => {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-console.log(values)
+
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
@@ -346,9 +333,8 @@ console.log(values)
                   </div>
                 </div>
               </div>
-              {Object.keys(brandOptions).length ? (
-                <SelectOptions
-                  brandOptions={brandOptions}
+              {Object.keys(values.options).length ? (
+                <SelectOptions                  
                   values={values}
                   setValues={setValues}
                   toast={toast}

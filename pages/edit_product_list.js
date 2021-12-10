@@ -67,7 +67,7 @@ export default function editProductListPage() {
     setDelayTimer(
       setTimeout(async () => {
         const res = await fetch(
-          `${API_URL}/api/search/list_names/${name}?string=${value}`
+          `${API_URL}/api/search/list_names/${name}?string=${value.trim()}`
         )
         const data = await res.json()
         setListNames({ ...listNames, [name]: data.list })

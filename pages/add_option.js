@@ -25,15 +25,30 @@ export default function add_optionPage({ categories }) {
     option: "",
   })
 
-  const [options, setOptions] = useState([])
-  //example  [{name:'color',values:[red,green,blue]},{...},{...}]
-  const [isShowList, setIsShowList] = useState({})
-  //example {color:true,size:false,height:false}
+  const [options, setOptions] = useState({})
+  // example options.color.values.red.price  
+  const [activeOption, setActiveOption] = useState('')
+  // activeOption-опция, значения которой надо показывать
   const [isShow, setIsShow] = useState(false)
   // dropdown list for categories
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!Object.keys(options).length) {
+      toast.warning('Ни введена ни одна опция')
+      return
+    }
+    let error=false
+    Object.keys(options).forEach(option => {
+      
+      if (!Object.keys(options[option].values).length) {
+        toast.warning('Опция введена без значений')
+        error=true
+      }
+      
+    })
+    if (error) return
+
     const value = {
       name: inputValue.brand,
       brandId: categories.find((item) => item.name === inputValue.brand)._id,
@@ -47,13 +62,14 @@ export default function add_optionPage({ categories }) {
       method: "POST",
       body: JSON.stringify(value),
     })
-    const data = await res.json()
-    console.log(data.data)
+     const data=await res.json()
+    
     if (!res.ok) {
       toast.error(data.message)
     } else {
       toast.success("Опции успешно сохранены")
-      setOptions([])
+      setActiveOption('')
+      setOptions({})
       setInputValue({ brand: "", option: "" })
     }
   }
@@ -63,11 +79,11 @@ export default function add_optionPage({ categories }) {
     const { name, value } = e.target
     const ucValue=value.charAt(0).toUpperCase()+value.slice(1)
     setInputValue({ ...inputValue, [name]: ucValue })
-    console.log(value)
+    
   }
 
   const addOption = () => {
-    if (options.length === 4) {
+    if (Object.keys(options).length === 4) {
       toast.warning('Не рекомендуется делать кол-во опций больше 4')
       return
     }
@@ -81,8 +97,8 @@ export default function add_optionPage({ categories }) {
     const isRepeat = keys.find((item) => item === inputValue.option)
     if (!isRepeat) {
       setInputValue({ ...inputValue, [inputValue.option]: "", option: "" })
-      setOptions([...options, { name:inputValue.option , values: [] }])
-      setIsShowList({ ...isShowList, [inputValue.option]: false })
+      setOptions({ ...options, [inputValue.option]: { values: {},isChangePrice:false} })     
+      setActiveOption('')
     } else {
       toast.error("Такая опция уже существует или зарезервирована")
     }
@@ -95,23 +111,14 @@ export default function add_optionPage({ categories }) {
     }
     const elem = document.getElementById(name)
     elem.focus()
-    setOptions(
-      options.map((item) =>
-        item.name !== name ? item : { name, values: [...item.values, value] }
-      )
-    )
+    const newOptions = { ...options }
+    newOptions[name].values[value] = {price:'',checked:false}
+    
+    setOptions(newOptions)
+    
     setInputValue({ ...inputValue, [name]: "" })
   }
-
-  const getShowKey = () =>
-    Object.keys(isShowList).find((key) => isShowList[key])
-
-  const handleFocusList = (name) => {
-    Object.keys(isShowList).forEach((key) => {
-      isShowList[key] = false
-    })
-    setIsShowList({ ...isShowList, [name]: true })
-  }
+  
 
   const handlePress = ({ e, cb }) => {
     if (e.key === "Enter") {
@@ -120,43 +127,30 @@ export default function add_optionPage({ categories }) {
     }
   }
 
-  const clearIsShowList = () => {
-    return setIsShowList(
-      Object.assign(
-        {},
-        ...Object.keys(isShowList).map((key) => ({ [key]: false }))
-      )
-    )
-  }
-
-  const deleteOptionsValue = (idx) => {
-    const name = getShowKey()
-    const newOption = {
-      name,
-      values: options
-        .find((item) => item.name === name)
-        .values.filter((item, i) => i !== idx),
-    }
-    setOptions(options.map((item) => (item.name === name ? newOption : item)))
+  const deleteOptionsValue = (value) => {
+    const newOptions = { ...options }
+    delete newOptions[activeOption].values[value]
+    setOptions({...newOptions})
   }
   const deleteOption = (name) => {
-    const newShowList = { ...isShowList }
-    delete newShowList[name]
+    
     const newInputValue = { ...inputValue }
     delete newInputValue[name]
-    setInputValue({...newInputValue})
-    setIsShowList({ ...newShowList })
-
-    setOptions(options.filter((item) => item.name !== name))
+    const newOptions = { ...options }
+    delete newOptions[name]
+    setActiveOption('')
+    setInputValue({...newInputValue})    
+    setOptions({...newOptions})
   }
+  
   const handleClick = (name) => {
     if (name !== inputValue.brand) {
-      setOptions([])
+      setOptions({})
       setInputValue({ brand: name, option: "" })
     }
     setIsShow(false)
   }
-
+console.log(options)
   return (
     <Layout title="Добавление опций">
       {!isAdmin ? (
@@ -177,8 +171,8 @@ export default function add_optionPage({ categories }) {
               <div className={styles.content_left}>
                 <div
                   className={styles.input}
-                  onFocus={() => {
-                    clearIsShowList
+                  onFocus={() => {                   
+                    setActiveOption('')
                     setIsShow(true)
                   }}
                   onBlur={() => setIsShow(false)}
@@ -209,7 +203,8 @@ export default function add_optionPage({ categories }) {
                       value={inputValue.option}
                       onChange={handleInput}
                       onKeyPress={(e) => handlePress({ e, cb: addOption })}
-                      onFocus={clearIsShowList}
+                        onFocus={() => setActiveOption('')}
+                        
                     />
                     <button
                       type="button"
@@ -221,20 +216,20 @@ export default function add_optionPage({ categories }) {
                   </div>
                 </div>
 
-                {options.length
-                  ? options.map((item, i) => (
+                {Object.keys(options).length
+                  ?Object.keys(options).map((item, i) => (
                       <div
                         key={i}
                         tabIndex={0}
-                        onFocus={() => handleFocusList(item.name)}
+                        onFocus={()=>setActiveOption(item)}
                       >
                         <div className={styles.input}>
-                          <label htmlFor={item.name}>
-                            {item.name}
+                          <label htmlFor={item}>
+                            {item}
                             <button
                               type="button"
                               title="Удалить опцию"
-                              onClick={() => deleteOption(item.name)}
+                              onClick={() => deleteOption(item)}
                             >
                               <FaTimes className={styles.icon_delete} />
                             </button>
@@ -242,17 +237,17 @@ export default function add_optionPage({ categories }) {
                           <div className={styles.input_button}>
                             <input
                               type="text"
-                              id={item.name}
-                              name={item.name}
-                              value={inputValue[item.name]}
+                              id={item}
+                              name={item}
+                              value={inputValue[item]}
                               onChange={handleInput}
                               onKeyPress={(e) =>
                                 handlePress({
                                   e,
                                   cb: () =>
                                     addOptionValue({
-                                      name: item.name,
-                                      value: inputValue[item.name],
+                                      name: item,
+                                      value: inputValue[item],
                                     }),
                                 })
                               }
@@ -261,8 +256,8 @@ export default function add_optionPage({ categories }) {
                               type="button"
                               onClick={() =>
                                 addOptionValue({
-                                  name: item.name,
-                                  value: inputValue[item.name],
+                                  name: item,
+                                  value: inputValue[item],
                                 })
                               }
                               title="Добавить значение опции"
@@ -277,20 +272,18 @@ export default function add_optionPage({ categories }) {
               </div>
 
               <div className={styles.content_right}>
-                {Object.values(isShowList).some((value) => value) &&
-                options.length ? (
+                {activeOption ? (
                   <>
-                    <p>Опция: {getShowKey()}</p>
+                    <p>Опция: {activeOption}</p>
                     <div className={styles.option_list}>
-                      {options
-                        .find((item) => item.name === getShowKey())
-                        .values.map((item, i) => (
+                      {Object.keys(options[activeOption].values)
+                        .map((item, i) => (
                           <div key={i} className={styles.list_item}>
                             <div>{item}</div>
                             <button
                               type="button"
                               title="Удалить значение опции"
-                              onClick={() => deleteOptionsValue(i)}
+                              onClick={() => deleteOptionsValue(item)}
                             >
                               <FaTimes className={styles.icon_delete} />
                             </button>

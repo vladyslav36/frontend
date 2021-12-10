@@ -101,7 +101,7 @@ export const getShortDescription = (description, length) => {
 
 export const stringToPrice = (string) => {
   if (!isNaN(+string)) {
-    const priceNum = Math.abs((+string).toFixed(2))
+    const priceNum = Math.abs(+string).toFixed(2)
     return { price: "" + priceNum == 0 ? "" : priceNum, error: false }
   } else {
     return { price: string, error: true }
