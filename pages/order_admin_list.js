@@ -12,7 +12,7 @@ import Links from "@/components/Links"
 import { FaEye, FaTimes } from "react-icons/fa"
 import {useRouter} from "next/router"
 
-export default function OrderList() {
+export default function OrderAdminList() {
   const { user } = useContext(AuthContext)
   const router=useRouter()
   const [orders, setOrders] = useState([])

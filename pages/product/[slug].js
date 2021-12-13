@@ -21,15 +21,17 @@ export default function productPage({ slug, product }) {
   const { cart, setCart } = useContext(ProductsContext)
   const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
   const [values, setValues] = useState(
-    Object.assign({}, ...product.options.map((item) => ({ [item.name]: "" })), {
-      qnt: "",
-    })
+    Object.assign(
+      {},
+      ...Object.keys(product.options).map((item) => ({ [item]: "" })),
+      { qnt: "" }
+    )
   )
 
   const [isShowList, setIsShowList] = useState(
     Object.assign(
       {},
-      ...product.options.map((item) => ({ [item.name]: false }))
+      ...Object.keys(product.options).map((item) => ({ [item]: false }))
     )
   )
 
@@ -45,13 +47,13 @@ export default function productPage({ slug, product }) {
   const [mainImageIdx, setMainImageIdx] = useState(0)
   const fakeArray = ["", "", "", "", "", "", ""]
   // Устанавливаем currentPrice. Если опционного нет, тогда без изменений, если есть-меняем на опционный
-  //находим меняющуюся опцию, берем value из values и если оно есть берем price
+  // находим меняющуюся опцию, берем value из values и если оно есть берем price
   useEffect(() => {
-    const option = product.options.find((item) => item.isChangePrice)
+    const option =Object.keys(product.options).find((item) => product.options[item].isChangePrice)
     if (option) {
-      const value = values[option.name]
+      const value = values[option]
       const price = value
-        ? option.values.find((val) => val.name === value).price
+        ? product.options[option].values[value].price
         : ""
       setCurrentPrice(price || product.price)
     }
@@ -59,15 +61,22 @@ export default function productPage({ slug, product }) {
 
   // Функция добавляет опционную цену к строке опции
   const getList = (name) => {
-    const option = product.options.find((item) => item.name === name)
-    return option.values.map((value) =>
-      value.price
-        ? `${value.name} : ${value.price} ${getCurrencySymbol(
-            product.currencyValue
-          )}`
-        : value.name
-    )
+    
+    const option = product.options[name]
+    if (option.isChangePrice) {
+      const symbol = getCurrencySymbol(product.currencyValue)
+      const checkedValues = Object.keys(option.values).filter(item => option.values[item].checked)
+      
+      return checkedValues.map(item=>option.values[item].price?`${item} : ${option.values[item].price}${symbol}`:`${item}`)
+      
+    } else {
+      
+      return Object.keys(option.values).filter((item) =>
+        option.values[item].checked)
+      
+    }
   }
+
   //
 
   //
@@ -90,7 +99,6 @@ export default function productPage({ slug, product }) {
   }
 
   const handleCartClick = () => {
-    
     setCart([...cart, ...chosen])
     setChosen([])
   }
@@ -104,7 +112,7 @@ export default function productPage({ slug, product }) {
 
   const addedValues = (e) => {
     e.preventDefault()
-    const options = product.options.map((item) => item.name)
+    const options = Object.keys(product.options)
     let error = false
     if (options.length) {
       options.forEach((name) => {
@@ -136,7 +144,7 @@ export default function productPage({ slug, product }) {
       ...chosen,
       {
         name: product.name,
-        options: options
+        options: options.length
           ? Object.assign(
               {},
               ...options.map((item) => ({ [item]: values[item] }))
@@ -153,7 +161,7 @@ export default function productPage({ slug, product }) {
     setValues(
       Object.assign(
         {},
-        ...product.options.map((item) => ({ [item.name]: "" })),
+        ...Object.keys(product.options).map((item) => ({ [item]: "" })),
         {
           qnt: "",
         }
@@ -164,7 +172,7 @@ export default function productPage({ slug, product }) {
   const handleDelete = (num) => {
     setChosen(chosen.filter((item, i) => i !== num))
   }
-  
+  console.log(chosen)
   return (
     <Layout title={`Страница товара ${slug}`}>
       <Navbar />
@@ -253,33 +261,31 @@ export default function productPage({ slug, product }) {
             </div>
 
             <div className={styles.inputs}>
-              {product.options.length
-                ? product.options.map((option, i) => (
+              {Object.keys(product.options).length
+                ? Object.keys(product.options).map((option, i) => (
                     <div
                       key={i}
                       tabIndex={0}
                       onFocus={() =>
-                        setIsShowList({ ...isShowList, [option.name]: true })
+                        setIsShowList({ ...isShowList, [option]: true })
                       }
                       onBlur={() =>
-                        setIsShowList({ ...isShowList, [option.name]: false })
+                        setIsShowList({ ...isShowList, [option]: false })
                       }
                     >
-                      <label htmlFor={option.name}>{option.name}</label>
+                      <label htmlFor={option}>{option}</label>
                       <input
                         type="text"
-                        id={option.name}
-                        // name={option.name}
-                        value={values[option.name]}
-                        // onChange={changeHandler}
+                        id={option}
+                        value={values[option]}
                         autoComplete="off"
                         readOnly
                       />
                       <DropDownList
-                        isShow={isShowList[option.name]}
-                        itemsList={getList(option.name)}
+                        isShow={isShowList[option]}
+                        itemsList={getList(option)}
                         handleClick={(item) =>
-                          listItemClick({ item, option: option.name })
+                          listItemClick({ item, option: option })
                         }
                       />
                     </div>
@@ -298,19 +304,21 @@ export default function productPage({ slug, product }) {
                 />
               </div>
             </div>
+
             <div className={styles.button}>
               <button type="button" onClick={addedValues}>
                 Выбрать
               </button>
             </div>
+
             <div className={styles.table}>
               <table>
                 <caption>Выбрано товаров</caption>
                 <thead>
                   <tr>
-                    {product.options
-                      ? product.options.map((item, i) => (
-                          <th key={i}>{item.name}</th>
+                    {Object.keys(product.options).length
+                      ? Object.keys(product.options).map((item, i) => (
+                          <th key={i}>{item}</th>
                         ))
                       : null}
 
@@ -332,9 +340,9 @@ export default function productPage({ slug, product }) {
                   {chosen.length ? (
                     chosen.map((item, i) => (
                       <tr key={i}>
-                        {product.options
-                          ? product.options.map((opt, i) => (
-                              <td key={i}>{item.options[opt.name]}</td>
+                        {Object.keys(product.options).length
+                          ? Object.keys(product.options).map((opt, i) => (
+                              <td key={i}>{item.options[opt]}</td>
                             ))
                           : null}
                         <td>{item.qnt}</td>

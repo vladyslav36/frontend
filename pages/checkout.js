@@ -84,7 +84,7 @@ export default function Checkout() {
       toast.error("Ошибка при отправке или сохранении заказа")
     }
   }
-  console.log(cart,values)
+  console.log(cart)
   return (
     <Layout title="Оформление заказа">
       <ToastContainer/>

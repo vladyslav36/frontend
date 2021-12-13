@@ -53,7 +53,7 @@ export default function AdminPanel() {
     <div>
       <ToastContainer />
       {isAdmin ? (
-        <div className={styles.container}>         
+        <div className={styles.container}>
           <div className={styles.container_item}>
             Категории
             <ul className={styles.dropdown_list}>
@@ -127,6 +127,12 @@ export default function AdminPanel() {
               <li>Редактировать</li>
             </ul>
           </div>
+
+          <Link href="order_admin_list">
+            <a className={styles.single_link}>
+              <div className={styles.container_item}>Заказы</div>
+            </a>
+          </Link>
         </div>
       ) : null}
     </div>
