@@ -29,9 +29,11 @@ export default function LoginPage() {
       toast.error(user.message)
       return
     }
+    console.log(user)
     setUser(user)
     router.push('/')
   }
+  
   return (
     <Layout title='User login'>
       <div className={styles.container}>

@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout"
 import Links from "@/components/Links"
+import AuthContext from "@/context/AuthContext"
 import ProductsContext from "@/context/ProductsContext"
 import styles from "@/styles/Checkout.module.css"
 import { useContext, useEffect, useState } from "react"
@@ -9,7 +10,8 @@ import { getMailString, getQntInCart, getTotalAmount } from "utils"
 import { API_URL } from "../config"
 
 export default function Checkout() {
-  const { cart }=useContext(ProductsContext)
+  const { cart } = useContext(ProductsContext)
+  const { user }=useContext(AuthContext)
   const [values, setValues] = useState({
     name: "",
     surname: "",
@@ -72,7 +74,7 @@ export default function Checkout() {
         totalQnt,
         totalAmount,
         count:count+1,
-        user:null
+        userId:user._id
       })
     })
 

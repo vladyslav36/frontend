@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout"
 import Link from "next/link"
-import styles from "@/styles/OrderList.module.css"
+import styles from "@/styles/OrderAdminList.module.css"
 import { API_URL } from "@/config/index"
 import moment from 'moment'
 import { useContext, useEffect, useState } from "react"

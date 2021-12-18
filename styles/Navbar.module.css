@@ -39,12 +39,19 @@ column-gap: 10px;
   z-index:900;
   padding:5px 0;
   top:100%;
-  left:0;  
+  
+  
   min-width:160px;
   background-color:  #fbfcfc ;
 color:#000;
   border:1px solid  #ccd1d1;
 ;
+}
+.drop_down_list.right_side{  
+  right:0;
+}
+.drop_down_list.left_side{  
+  left:0;
 }
 .category:hover .drop_down_list{
   display:block;

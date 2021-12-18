@@ -61,7 +61,7 @@ const[delayTimer,setDelayTimer]=useState(new Date())
   
   const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
  
-
+console.log(user)
   return (
     <header className={styles.header}>
       <div className={styles.header_top}>
@@ -102,10 +102,20 @@ const[delayTimer,setDelayTimer]=useState(new Date())
               <p>Войти</p>
             </a>
           </Link>
-          ):(<button className={styles.logout} onClick={()=>setUser({})}>
-            <FaSignOutAlt className={styles.icon} />
+          ) : (<div className={styles.logout}>
               <p>{user.name}</p>
-          </button>
+              <ul className={styles.dropdown_list}>
+                <Link href={`/order_user_list/${user._id}`}>
+                <li>Мои заказы</li>
+                </Link>
+                
+                <li onClick={() => setUser({})}>Выйти</li>
+              </ul>
+          </div>
+            // <button className={styles.logout} onClick={() => setUser({})}>
+            // <FaSignOutAlt className={styles.icon} />
+             
+          // </button>
           )}
           
           
