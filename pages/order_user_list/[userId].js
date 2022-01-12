@@ -3,15 +3,34 @@ import Link from "next/link"
 import styles from "@/styles/OrderUserList.module.css"
 import { API_URL } from "@/config/index"
 import moment from "moment"
-import {  useState } from "react"
+import {  useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
 import { FaEye, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
+import { useContext } from "react/cjs/react.development"
+import AuthContext from "@/context/AuthContext"
 
-export default function OrderUserList({orders}) {
-  
+export default function OrderUserList() {
+  const { user } = useContext(AuthContext)
+  const [orders, setOrders] = useState([])
+  useEffect(() => {
+    const fetchOrdersById = async () => {
+      const res = await fetch(`${API_URL}/api/order/user/${user._id}`, {
+        headers: {
+          authorization:`Bearer ${user.token}`
+        }
+      })
+      const { orders } = await res.json()
+      setOrders(orders)
+    }
+    if (Object.keys(user).length) {
+      fetchOrdersById()
+    } else {
+      router.push('/404')
+    }
+  },[user])
   const router = useRouter()
   
   moment.locale("ru")
@@ -19,7 +38,7 @@ export default function OrderUserList({orders}) {
   const openOrder = (order) => {
     router.push(`/order_page/${order._id}`)
   }
-  
+  console.log(user)
   return (
     <Layout title="Список заказов">
       <ToastContainer />
@@ -59,12 +78,4 @@ export default function OrderUserList({orders}) {
   )
 }
 
-export async function getServerSideProps({ params: { userId } }) {
-   const res = await fetch(`${API_URL}/api/order/user/${userId}`)
-   const { orders } = await res.json()
-  return {
-    props: {
-      orders
-    }
-  }
-}
+

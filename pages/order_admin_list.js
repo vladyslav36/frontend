@@ -13,26 +13,43 @@ import { FaEye, FaTimes } from "react-icons/fa"
 import {useRouter} from "next/router"
 
 export default function OrderAdminList() {
-  const { user } = useContext(AuthContext)
+  
+  const { user} = useContext(AuthContext)
+
+  
+ 
   const router=useRouter()
   const [orders, setOrders] = useState([])
   moment.locale('ru')
   console.log(orders)
   useEffect(() => {
     const fetchAllOrders = async () => {
-      const res = await fetch(`${API_URL}/api/order`)
+      const res = await fetch(`${API_URL}/api/order`,{
+        headers: {
+          authorization:`Bearer ${user.token}`
+        }
+      })
       const { orders } = await res.json()
       
       setOrders(orders.reverse())
     }
-    fetchAllOrders()
-  }, [])
+    if (Object.keys(user).length && user.isAdmin) {
+      fetchAllOrders()
+    } else {
+      router.push('/404')
+    }
+  }, [user])
   const openOrder = (order) => {
     router.push(`/order_page/${order._id}`)
   }
   const deleteOrder = async ({ order, idx }) => {
-    console.log(order._id)
-    const res = await fetch(`${API_URL}/api/order/delete/${order._id}`)
+   
+    const res = await fetch(`${API_URL}/api/order/delete/${order._id}`, {
+      method: "DELETE",
+      headers: {
+        authorization: `Bearer ${user.token}`,
+      }
+    })
     if (res.ok) {
        setOrders(orders.filter((item,i)=>i!==idx))
     } else {

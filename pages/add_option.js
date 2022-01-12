@@ -14,11 +14,11 @@ import Links from "@/components/Links"
 import DropDownList from "@/components/DropDownList"
 
 export default function add_optionPage({ categories }) {
-  // const {
-  //   user: { isAdmin, token },
-  // } = useContext(AuthContext)
+  const {
+    user: { isAdmin, token },
+  } = useContext(AuthContext)
   const categoriesList = categories.map((item) => item.name).sort()
-  const isAdmin = true
+  
   const router = useRouter()
   const [inputValue, setInputValue] = useState({
     brand: "",
@@ -58,6 +58,7 @@ export default function add_optionPage({ categories }) {
     const res = await fetch(`${API_URL}/api/options`, {
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
       },
       method: "POST",
       body: JSON.stringify(value),
@@ -150,7 +151,7 @@ export default function add_optionPage({ categories }) {
     }
     setIsShow(false)
   }
-console.log(options)
+
   return (
     <Layout title="Добавление опций">
       {!isAdmin ? (

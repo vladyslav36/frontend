@@ -61,7 +61,6 @@ const[delayTimer,setDelayTimer]=useState(new Date())
   
   const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
  
-console.log(user)
   return (
     <header className={styles.header}>
       <div className={styles.header_top}>
@@ -108,7 +107,9 @@ console.log(user)
                 <Link href={`/order_user_list/${user._id}`}>
                 <li>Мои заказы</li>
                 </Link>
-                
+                <Link href={`/account/profile`}>
+                  <li>Профиль</li>
+                </Link>
                 <li onClick={() => setUser({})}>Выйти</li>
               </ul>
           </div>

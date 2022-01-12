@@ -23,9 +23,9 @@ export default function Checkout() {
     prepaid: true,
     
   })
-  useEffect(() => {
-    const data = localStorage.getItem("checkout")
-    if (data) setValues(JSON.parse(data))
+  useEffect(() => {    
+       const data = localStorage.getItem("checkout")
+      if (data) setValues(JSON.parse(data))   
   }, [])
   const handleChange = (e) => {
     const { name, value, checked } = e.target
@@ -63,10 +63,16 @@ export default function Checkout() {
       },
       body:JSON.stringify({mailString})
     })
-    const res2 = await fetch(`${API_URL}/api/order`, {
+    if (res.ok) {
+      toast.success("Заказ успешно отправлен")
+    } else {
+      toast.error("Ошибка при отправке заказа")
+    }
+    
+      const res2 = await fetch(`${API_URL}/api/order`, {
       method: 'POST',
       headers: {
-        'Content-Type':'application/json'
+        'Content-Type': 'application/json'        
       },
       body: JSON.stringify({
         orderItems: cart,
@@ -74,19 +80,17 @@ export default function Checkout() {
         totalQnt,
         totalAmount,
         count:count+1,
-        userId:user._id
+        userId:Object.keys(user).length?user._id:null
       })
-    })
-
-    
-
-    if ( res.ok && res2.ok) {
-      toast.success("Заказ успешно отправлен")
-    } else {
-      toast.error("Ошибка при отправке или сохранении заказа")
-    }
+      })
+       if (res2.ok) {
+         toast.success("Заказ успешно сохранен")
+       } else {
+         toast.error("Ошибка при сохранении заказа")
+       }
+     
   }
-  console.log(cart)
+  console.log(values)
   return (
     <Layout title="Оформление заказа">
       <ToastContainer/>

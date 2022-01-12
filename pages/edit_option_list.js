@@ -19,15 +19,18 @@ import Links from "@/components/Links"
 import DropDownList from "@/components/DropDownList"
 
 export default function editOptionList({ data }) {
-  // const {
-  //   user: { isAdmin, token },
-  // } = useContext(AuthContext)
+  const {
+    user: { isAdmin, token },
+  } = useContext(AuthContext)
   const [options,setOptions]=useState(data)
-  const isAdmin = true
+  
  const deleteOption = async (item) => {
    
    const res = await fetch(`${API_URL}/api/options/${item._id}`, {
-     method:'DELETE'
+     headers: {
+       authorization: `Bearer ${token}`,
+     },
+     method: "DELETE",
    })
    if (!res.ok) {
      toast.error('Не удалось удалить опцию')

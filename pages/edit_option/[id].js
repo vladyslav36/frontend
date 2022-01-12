@@ -14,9 +14,9 @@ import Links from "@/components/Links"
 
 
 export default function edit_optionPage({ brandOption }) {
-  // const {
-  //   user: { isAdmin, token },
-  // } = useContext(AuthContext)
+  const {
+    user: { isAdmin, token },
+  } = useContext(AuthContext)
   
 
   const isAdmin = true
@@ -52,6 +52,7 @@ export default function edit_optionPage({ brandOption }) {
     const res = await fetch(`${API_URL}/api/options`, {
       headers: {
         "Content-Type": "application/json",
+        authorization:`Bearer ${token}`
       },
       method: "PUT",
       body: JSON.stringify({

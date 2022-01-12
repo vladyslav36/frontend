@@ -15,6 +15,15 @@
   font-size:15px;
   box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
 }
+.form h2{  
+  display:flex;
+  align-items:center;
+  justify-content: space-between;  
+}
+.form h2 pre{
+  color:green;
+  
+}
 .input_wrapper{
   padding:5px 0;
 }
@@ -32,4 +41,32 @@
 .bottom{
   display:flex;
   justify-content: space-between;
+}
+
+.custom_checkbox{
+  position:relative;
+display:flex;
+gap:10px;
+align-items: center;
+padding:5px 0;
+}
+.custom_checkbox label{
+  border:1px solid #888;
+  padding: 5px;
+cursor:pointer;
+border-radius: 5px;
+}
+.custom_checkbox input{
+  z-index:-1;
+  position:absolute;
+}
+
+.custom_checkbox .icon{
+font-size:20px;
+color:green;
+visibility:hidden;
+}
+
+.custom_checkbox .visible{
+  visibility: visible;
 }

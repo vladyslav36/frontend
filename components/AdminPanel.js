@@ -12,6 +12,7 @@ export default function AdminPanel() {
     user: { isAdmin, token },
   } = useContext(AuthContext)
 
+  
   const { data } = useSWR(`${API_URL}/api/currencyrate`)
   const [values, setValues] = useState({
     USD: "",
@@ -120,13 +121,7 @@ export default function AdminPanel() {
               </ul>
             </form>
           </div>
-          <div className={styles.container_item}>
-            Пользователь
-            <ul className={styles.dropdown_list}>
-              <li>Добавить</li>
-              <li>Редактировать</li>
-            </ul>
-          </div>
+          
 
           <Link href="order_admin_list">
             <a className={styles.single_link}>

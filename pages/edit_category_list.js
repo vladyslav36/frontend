@@ -35,7 +35,7 @@ export default function editCategoryListPage({categories}) {
     }
   }
 
-  const { data } = useSWR(`${API_URL}/api/categories`)
+  
 
   return (
     <div>
