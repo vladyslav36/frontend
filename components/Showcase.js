@@ -1,5 +1,5 @@
 import styles from "@/styles/Showcase.module.css"
-import { API_URL } from "../config"
+import { API_URL, NOIMAGE } from "../config"
 import Link from "next/link"
 import { getCurrencySymbol, getPriceForShow } from "utils"
 import ProductsContext from "@/context/ProductsContext"

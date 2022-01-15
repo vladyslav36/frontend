@@ -51,9 +51,8 @@ export default function UserProfile() {
       toast.error(data.message)
       return
     }
-    setUser(data)
-    console.log(data)
-    // router.push("/")
+    setUser(data)    
+    router.push("/")
   }
   return (
     <Layout title="User Register">

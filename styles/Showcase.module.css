@@ -24,7 +24,7 @@
   box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
 }
 .fake_image{
-  width:230px;
+  width:210px;
   height:0;
 }
 .item:hover{
@@ -37,7 +37,7 @@
   justify-content: flex-start;
 }
 .header>img {
-  max-width: 210px;
+  max-width: 205px;
   max-height: 280px;
   margin:5px;
   border:1px solid #888;
