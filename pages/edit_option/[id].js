@@ -19,7 +19,7 @@ export default function edit_optionPage({ brandOption }) {
   } = useContext(AuthContext)
   
 
-  const isAdmin = true
+  
   const router = useRouter()
   const emptyValues = Object.keys(brandOption.options).map((item) => ({ [item]: "" }))
   const initialValues = Object.assign({ option: "" }, ...emptyValues)

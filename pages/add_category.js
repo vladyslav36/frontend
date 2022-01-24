@@ -241,6 +241,11 @@ export default function addCategoryPage({ categories }) {
 export async function getServerSideProps() {
   const data = await fetch(`${API_URL}/api/categories`)
   const { categories } = await data.json()
+  if (!data  || !categories) {
+    return {
+      notFound: true,
+    }
+  }
   return {
     props: {
       categories,

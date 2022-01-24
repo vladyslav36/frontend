@@ -230,11 +230,11 @@ export default function productPage({ slug, product }) {
               <div>
                 <div>
                   <h5>Бренд:</h5>
-                  <p>{product.brand}</p>
+                  <p>{product.brandId.name}</p>
                 </div>
                 <div>
                   <h5>Категория:</h5>
-                  <p>{product.category}</p>
+                  <p>{product.categoryId.name}</p>
                 </div>
                 <div>
                   <h5>Модель:</h5>

@@ -24,12 +24,12 @@ export default function editProductPage({ categories, product }) {
   const [values, setValues] = useState({
     _id: product._id,
     name: product.name,
-    brand: product.brand,
-    brandId:product.brandId,
+    brand: product.brandId.name,
+    brandId:product.brandId._id,
     model: product.model,
     description: product.description,
-    category: product.category,
-    categoryId: product.categoryId,
+    category: product.categoryId.name,
+    categoryId: product.categoryId._id,
     options: product.options,
     isInStock: product.isInStock,
     price: product.price,
@@ -46,10 +46,29 @@ export default function editProductPage({ categories, product }) {
   const [showModal, setShowModal] = useState(false)
   const [isShowList, setIsShowList] = useState(false) 
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
+  
+  
 
   const [imageIdx, setImageIdx] = useState(0)
 
   const router = useRouter()
+  
+  useEffect(() => {
+    const fetcher = async () => {
+      const res = await fetch(`${API_URL}/api/options/brandid/${product.brandId._id}`)
+    const { data } = await res.json()
+      if (!res.ok || !data) {
+        toast.info("Нет опций у бренда")
+      } else {
+        setValues({...values,options:data.options})
+      }
+      
+    }
+    if (!Object.keys(product.options).length) {
+      fetcher()      
+    }
+  }, [])
+  
   
   // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(items, value) {
@@ -141,8 +160,7 @@ export default function editProductPage({ categories, product }) {
       setValues({
         ...values,
         category: category.name,
-        categoryId: category.id,
-        brand: brand.name,
+        categoryId: category._id,        
         brandId: brand._id,
         options: {}
       })
@@ -154,8 +172,7 @@ export default function editProductPage({ categories, product }) {
     setValues({
       ...values,
       category: category.name,
-      categoryId: category.id,
-      brand: brand.name,
+      categoryId: category._id,      
       brandId: brand._id,
       options: data.options,
     })
@@ -408,10 +425,15 @@ export async function getServerSideProps({ params: { slug } }) {
 
   const res = await fetch(`${API_URL}/api/products/${slug}`)
   const { product } = await res.json()
+
+  if (!res.ok || !categoriesData||!product||!categories) {
+    return {
+      notFound: true,
+    }
+  }
   return {
     props: {
       categories,
-
       product,
     },
   }

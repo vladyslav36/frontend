@@ -84,7 +84,7 @@ export default function add_optionPage({ categories }) {
   }
 
   const addOption = () => {
-    if (Object.keys(options).length === 4) {
+    if (Object.keys(options).length === 5) {
       toast.warning('Не рекомендуется делать кол-во опций больше 4')
       return
     }
@@ -305,7 +305,11 @@ export default function add_optionPage({ categories }) {
 export async function getServerSideProps() {
   const res = await fetch(`${API_URL}/api/categories/brands`)
   const { categories } = await res.json()
-
+if (!res.ok|| !categories) {
+  return {
+    notFound: true,
+  }
+}
   return {
     props: {
       categories,
