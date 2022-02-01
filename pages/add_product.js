@@ -15,6 +15,7 @@ import { API_URL } from "@/config/index"
 import { getBrand, getCategoriesTree, stringToPrice } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
+import { useEffect } from "react/cjs/react.development"
 
 export default function addProductPage({ categories }) {
   const {
@@ -23,7 +24,7 @@ export default function addProductPage({ categories }) {
 
   const [values, setValues] = useState({
     name: "",
-    brand: '',
+    // brand: '',
     brandId:null,
     model: "",
     description: "",
@@ -47,7 +48,17 @@ export default function addProductPage({ categories }) {
   const [imageIdx, setImageIdx] = useState(0)
 
   const router = useRouter()
+useEffect(() => {
+  const names = categories.map((item) => item.name)
+  const isExist = names.includes(values.category)
+  if (!isExist) {
+    setValues({ ...values, categoryId: null })
+  }
+}, [values.category])
 
+useEffect(() => {
+  if (!values.categoryId) setValues({ ...values, options: {} })
+}, [values.categoryId])
   
   // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(items, value) {
@@ -64,19 +75,17 @@ export default function addProductPage({ categories }) {
       toast.error("Поле Название и Модель должны быть заполнены")
       return
     }
-    // Проверка на наличие и соответствие родительской категории в категориях
+    // Проверка на наличие и соответствие категории в категориях
     if (values.category) {
       const isValid = categories.some(
         (item) =>
           item.name === values.category && item._id === values.categoryId
       )
       if (!isValid) {
-        toast.error("Родительская категория должна быть выбрана из списка")
+        toast.error("Категория должна быть выбрана из списка")
         return
       }
-    } else {
-      values.categoryId = null
-    }
+    } 
 
     
 
@@ -121,7 +130,7 @@ export default function addProductPage({ categories }) {
   }
 
 
-  // input for parentCategory
+  // input for category
   const handleChangeCategory = (e) => {
     e.preventDefault()
     const { name, value } = e.target
@@ -135,30 +144,14 @@ export default function addProductPage({ categories }) {
     const brand = getBrand(category, categories)
     
     setIsShowList(false)
-    const res = await fetch(`${API_URL}/api/options/brandid/${brand._id}`)
-    const { data } = await res.json()
-    if (!res.ok || !data) {
-      toast.info("Нет опций у бренда")
+    
       setValues({
         ...values,
         category: category.name,
         categoryId: category._id,
-        brand: brand.name,
         brandId: brand._id,
-        options: {}
-      })
-      
-      return
-    }
-
-    setValues({
-      ...values,
-      category: category.name,
-      categoryId: category._id,
-      brand: brand.name,
-      brandId:brand._id,
-      options: data.options
-    })
+        options: {...brand.options}
+      })    
     
   }
 

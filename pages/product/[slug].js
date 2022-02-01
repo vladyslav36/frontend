@@ -172,7 +172,7 @@ export default function productPage({ slug, product }) {
   const handleDelete = (num) => {
     setChosen(chosen.filter((item, i) => i !== num))
   }
-  console.log(chosen)
+  
   return (
     <Layout title={`Страница товара ${slug}`}>
       <Navbar />

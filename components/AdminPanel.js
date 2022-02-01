@@ -12,7 +12,6 @@ export default function AdminPanel() {
     user: { isAdmin, token },
   } = useContext(AuthContext)
 
-  
   const { data } = useSWR(`${API_URL}/api/currencyrate`)
   const [values, setValues] = useState({
     USD: "",
@@ -61,7 +60,7 @@ export default function AdminPanel() {
               <Link href="/add_category">
                 <li>Добавить</li>
               </Link>
-              <Link href="/edit_category_list">
+              <Link href="/edit_category">
                 <li>Редактировать</li>
               </Link>
             </ul>
@@ -83,7 +82,7 @@ export default function AdminPanel() {
               <Link href="add_product">
                 <li>Добавить</li>
               </Link>
-              <Link href="edit_product_list">
+              <Link href="edit_product">
                 <li>Редактировать</li>
               </Link>
             </ul>
@@ -121,8 +120,7 @@ export default function AdminPanel() {
               </ul>
             </form>
           </div>
-          
-
+         
           <Link href="order_admin_list">
             <a className={styles.single_link}>
               <div className={styles.container_item}>Заказы</div>

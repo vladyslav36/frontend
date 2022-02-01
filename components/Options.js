@@ -1,72 +1,26 @@
-import Layout from "@/components/Layout"
+
 import AuthContext from "@/context/AuthContext"
-import { useContext, useRef, useState } from "react"
-import { API_URL, NOIMAGE_PATH } from "../../config"
+import { useContext,  useState } from "react"
 import styles from "@/styles/OptionForm.module.css"
 import "react-toastify/dist/ReactToastify.css"
 import { toast, ToastContainer } from "react-toastify"
-import { FaImage, FaPlus, FaPlusCircle, FaTimes } from "react-icons/fa"
-
-import { useRouter } from "next/router"
-
-import AccessDenied from "@/components/AccessDenied"
-import Links from "@/components/Links"
+import {  FaPlusCircle, FaTimes } from "react-icons/fa"
 
 
-export default function edit_optionPage({ brandOption }) {
-  const {
-    user: { isAdmin, token },
-  } = useContext(AuthContext)
-  
 
-  
-  const router = useRouter()
-  const emptyValues = Object.keys(brandOption.options).map((item) => ({ [item]: "" }))
-  const initialValues = Object.assign({ option: "" }, ...emptyValues)
 
-  const [inputValue, setInputValue] = useState({
-    ...initialValues,
+export default function Options({ values, setValues }) {  
+  const [inputValue, setInputValue] = useState({    
+    option: "",
   })
-
-  const [options, setOptions] = useState(brandOption.options)
- 
+  
+  // example options.color.values.red.price
   const [activeOption, setActiveOption] = useState("")
   // activeOption-опция, значения которой надо показывать
+  const [isShow, setIsShow] = useState(false)
+  // dropdown list for categories
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-     if (!Object.keys(options).length) {
-       toast.warning("Ни введена ни одна опция")
-       return
-     }
-     let error = false
-     Object.keys(options).forEach((option) => {
-       if (!Object.keys(options[option].values).length) {
-         toast.warning("Опция введена без значений")
-         error = true
-       }
-     })
-    if (error) return
-    
-    const res = await fetch(`${API_URL}/api/options`, {
-      headers: {
-        "Content-Type": "application/json",
-        authorization:`Bearer ${token}`
-      },
-      method: "PUT",
-      body: JSON.stringify({
-        _id: brandOption._id,
-        options: options,
-      }),
-    })
-    const data = await res.json()
-    if (!res.ok) {
-      toast.error(data.message)
-    } else {
-      router.back()
-    }
-  }
+ 
   const handleInput = async (e) => {
     e.preventDefault()
 
@@ -76,7 +30,7 @@ export default function edit_optionPage({ brandOption }) {
   }
 
   const addOption = () => {
-    if (Object.keys(options).length === 4) {
+    if (Object.keys(values.options).length === 4) {
       toast.warning("Не рекомендуется делать кол-во опций больше 4")
       return
     }
@@ -90,9 +44,7 @@ export default function edit_optionPage({ brandOption }) {
     const isRepeat = keys.find((item) => item === inputValue.option)
     if (!isRepeat) {
       setInputValue({ ...inputValue, [inputValue.option]: "", option: "" })
-      setOptions({
-        ...options,
-        [inputValue.option]: { values: {}, isChangePrice: false },
+      setValues({...values,options:{...values.options, [inputValue.option]: { values: {}, isChangePrice: false }}       
       })
       setActiveOption("")
     } else {
@@ -107,14 +59,13 @@ export default function edit_optionPage({ brandOption }) {
     }
     const elem = document.getElementById(name)
     elem.focus()
-    const newOptions = { ...options }
+    const newOptions = { ...values.options }
     newOptions[name].values[value] = { price: "", checked: false }
 
-    setOptions(newOptions)
+    setValues({...values,options:newOptions})
 
     setInputValue({ ...inputValue, [name]: "" })
   }
-  
 
   const handlePress = ({ e, cb }) => {
     if (e.key === "Enter") {
@@ -123,43 +74,36 @@ export default function edit_optionPage({ brandOption }) {
     }
   }
 
-  
-
   const deleteOptionsValue = (value) => {
-    const newOptions = { ...options }
+    const newOptions = { ...values.options }
     delete newOptions[activeOption].values[value]
-    setOptions({ ...newOptions })
+    setValues({ ...values, options: { ...newOptions }})
   }
   const deleteOption = (name) => {
     const newInputValue = { ...inputValue }
     delete newInputValue[name]
-    const newOptions = { ...options }
+    const newOptions = { ...values.options }
     delete newOptions[name]
     setActiveOption("")
     setInputValue({ ...newInputValue })
-    setOptions({ ...newOptions })
-  }
+    setValues({ ...values, options: { ...newOptions } })
+  }  
   
-  return (
-    <Layout title="Редактирование опции опций">
-      {!isAdmin ? (
-        <AccessDenied />
-      ) : (
+  return (   
         <div>
-          <ToastContainer />
-
-          <form onSubmit={handleSubmit}>
-            <div className={styles.header}>
-              <Links home={true} back={true} />
-
-              <button className="btn" type="submit">
-                Сохранить
-              </button>
-            </div>
+          <ToastContainer />            
             <div className={styles.content}>
               <div className={styles.content_left}>
-                <div>
-                  <p>Категория: {brandOption.name}</p>
+                <div
+                  className={styles.input}
+                  onFocus={() => {
+                    setActiveOption("")
+                    setIsShow(true)
+                  }}
+                  onBlur={() => setIsShow(false)}
+                  tabIndex={0}
+                >
+                  
                 </div>
                 <div className={styles.input}>
                   <label htmlFor="option">Опция</label>
@@ -172,7 +116,6 @@ export default function edit_optionPage({ brandOption }) {
                       onChange={handleInput}
                       onKeyPress={(e) => handlePress({ e, cb: addOption })}
                       onFocus={() => setActiveOption("")}
-                      maxLength="15"
                     />
                     <button
                       type="button"
@@ -184,8 +127,8 @@ export default function edit_optionPage({ brandOption }) {
                   </div>
                 </div>
 
-                {Object.keys(options).length
-                  ? Object.keys(options).map((item, i) => (
+                {Object.keys(values.options).length
+                  ? Object.keys(values.options).map((item, i) => (
                       <div
                         key={i}
                         tabIndex={0}
@@ -219,7 +162,6 @@ export default function edit_optionPage({ brandOption }) {
                                     }),
                                 })
                               }
-                              maxLength="15"
                             />
                             <button
                               type="button"
@@ -245,7 +187,7 @@ export default function edit_optionPage({ brandOption }) {
                   <>
                     <p>Опция: {activeOption}</p>
                     <div className={styles.option_list}>
-                      {Object.keys(options[activeOption].values).map(
+                      {Object.keys(values.options[activeOption].values).map(
                         (item, i) => (
                           <div key={i} className={styles.list_item}>
                             <div>{item}</div>
@@ -263,26 +205,10 @@ export default function edit_optionPage({ brandOption }) {
                   </>
                 ) : null}
               </div>
-            </div>
-          </form>
+            </div>          
         </div>
-      )}
-    </Layout>
+      
   )
 }
 
-export async function getServerSideProps({ params: { id } }) {
-  const res = await fetch(`${API_URL}/api/options/${id}`)
-  const { brandOption } = await res.json()
-  
-  if (!res.ok || !brandOption) {
-    return {
-      notFound: true,
-    }
-  }
-  return {
-    props: {
-      brandOption,
-    },
-  }
-}
+

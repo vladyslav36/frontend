@@ -1,33 +1,23 @@
 import styles from "@/styles/EditProduct.module.css"
 
-import AccessDenied from "@/components/AccessDenied"
-import Layout from "@/components/Layout"
-import AuthContext from "@/context/AuthContext"
-import { useContext, useState } from "react"
+
+
+import {  useState } from "react"
 import { getCurrencySymbol } from "utils"
 import DropDownList from "@/components/DropDownList"
 import { API_URL } from "../config"
 import { FaPencilAlt, FaSearch, FaTimes } from "react-icons/fa"
-import Link from "next/link"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
 
 import Links from "@/components/Links"
 
-
-export default function editProductListPage() {
-  const {
-    user: { isAdmin, token },
-  } = useContext(AuthContext)
+export default function EditProductList({values,setValues,prodList,setProdList,setIsShowProduct,setProduct,token}) {
+  
   const router = useRouter()
 
-  const [values, setValues] = useState({
-    name: "",
-    model: "",
-    category: "",
-    brand: "",
-  })
+  
   const [isShowList, setIsShowList] = useState({
     name: false,
     model: false,
@@ -40,8 +30,16 @@ export default function editProductListPage() {
     category: [],
     brand: [],
   })
-  const [prodList, setProdList] = useState([])
+  
   const [delayTimer, setDelayTimer] = useState()
+
+  const listNamesFetcher = async (name, value) => {
+    const res = await fetch(
+      `${API_URL}/api/search/list_names/${name}?string=${value.trim()}`
+    )
+    const data = await res.json()
+    setListNames({ ...listNames, [name]: data.list })
+  }
 
   const handleDeleteProduct = async ({ _id, idx }) => {
     if (confirm("Уверены?")) {
@@ -66,15 +64,11 @@ export default function editProductListPage() {
     clearTimeout(delayTimer)
     setDelayTimer(
       setTimeout(async () => {
-        const res = await fetch(
-          `${API_URL}/api/search/list_names/${name}?string=${value.trim()}`
-        )
-        const data = await res.json()
-        setListNames({ ...listNames, [name]: data.list })
+        await listNamesFetcher(name, value)
       }, 1000)
     )
   }
-  const handleListClick = ({ item, name }) => {
+  const handleListClick = async ({ item, name }) => {
     setValues({ ...values, [name]: item })
   }
   const submitHandler = async (e) => {
@@ -87,14 +81,13 @@ export default function editProductListPage() {
 
     setProdList([...products])
   }
-  
+
   return (
     <div>
-      <Layout title="Редактирование товаров">
+      
         <ToastContainer />
-        {!isAdmin ? (
-          <AccessDenied />
-        ) : (
+
+        
           <div className={styles.container}>
             <Links home={true} back={false} />
             <form onSubmit={submitHandler} className={styles.form}>
@@ -104,8 +97,9 @@ export default function editProductListPage() {
                 <div
                   className={styles.input_group}
                   tabIndex={0}
-                  onFocus={() => {
+                  onFocus={async () => {
                     setIsShowList({ ...isShowList, name: true })
+                    await listNamesFetcher("name", "")
                   }}
                   onBlur={() => setIsShowList({ ...isShowList, name: false })}
                 >
@@ -134,8 +128,9 @@ export default function editProductListPage() {
                 <div
                   className={styles.input_group}
                   tabIndex={0}
-                  onFocus={() => {
+                  onFocus={async () => {
                     setIsShowList({ ...isShowList, model: true })
+                    await listNamesFetcher("model", "")
                   }}
                   onBlur={() => setIsShowList({ ...isShowList, model: false })}
                 >
@@ -163,9 +158,10 @@ export default function editProductListPage() {
                 <div
                   className={styles.input_group}
                   tabIndex={0}
-                  onFocus={() =>
+                  onFocus={async () => {
                     setIsShowList({ ...isShowList, category: true })
-                  }
+                    await listNamesFetcher("category", "")
+                  }}
                   onBlur={() =>
                     setIsShowList({ ...isShowList, category: false })
                   }
@@ -194,7 +190,10 @@ export default function editProductListPage() {
                 <div
                   className={styles.input_group}
                   tabIndex={0}
-                  onFocus={() => setIsShowList({ ...isShowList, brand: true })}
+                  onFocus={async () => {
+                    setIsShowList({ ...isShowList, brand: true })
+                    await listNamesFetcher("brand", "")
+                  }}
                   onBlur={() => setIsShowList({ ...isShowList, brand: false })}
                 >
                   <input
@@ -218,11 +217,14 @@ export default function editProductListPage() {
               </div>
               <div className={styles.button_wrapper}>
                 <div>&nbsp;</div>
-                  {/* <input type="submit" className={styles.button} value="Найти" /> */}
-                  <button type='submit' className={styles.button}><FaSearch/></button>
+                {/* <input type="submit" className={styles.button} value="Найти" /> */}
+                <button type="submit" className={styles.button}>
+                  <FaSearch />
+                </button>
               </div>
-            </form>
-            <table>
+        </form>
+        <div className={styles.table}>
+           <table>
               <thead>
                 <tr>
                   <th>&nbsp;</th>
@@ -256,13 +258,17 @@ export default function editProductListPage() {
                         </td>
                         <td>
                           <div className={styles.buttons_wrapper}>
-                            <div className={styles.edit}>
-                              <Link href={`/edit_product/${item.slug}`}>
-                                <a>
+                          <button className={styles.edit} onClick={() => {
+                            
+                            setProduct(item)
+                            setIsShowProduct(true)
+                          }
+                          }>
+                              
+                             
                                   <FaPencilAlt className={styles.icon} />
-                                </a>
-                              </Link>
-                            </div>
+                                
+                            </button>
                             <div>
                               <button
                                 className={styles.delete}
@@ -285,11 +291,11 @@ export default function editProductListPage() {
                   : null}
               </tbody>
             </table>
+        </div>
+           
           </div>
-        )}
-      </Layout>
+        
+      
     </div>
   )
 }
-
-

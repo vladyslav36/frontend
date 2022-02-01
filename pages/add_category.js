@@ -10,10 +10,12 @@ import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import Link from "next/link"
 
-import { API_URL, NOIMAGE_PATH } from "@/config/index"
+import { API_URL, NOIMAGE, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../utils"
 import Links from "@/components/Links"
+import Options from "@/components/Options"
+import { useEffect } from "react/cjs/react.development"
 
 export default function addCategoryPage({ categories }) {
   const {
@@ -24,6 +26,7 @@ export default function addCategoryPage({ categories }) {
     parentCategory: "",
     parentCategoryId: null,
     description: "",
+    options: {}
   })
 
   const [showModal, setShowModal] = useState(false)
@@ -31,7 +34,19 @@ export default function addCategoryPage({ categories }) {
   const [image, setImage] = useState({ path: "", file: null })
 
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
+  
+  useEffect(() => {
+    const names = categories.map(item => item.name)
+    const isExist = names.includes(values.parentCategory)
+    if (!isExist) {
+      setValues({ ...values, parentCategoryId: null })
+    }    
+  }, [values.parentCategory])
 
+  useEffect(() => {
+    if (values.parentCategoryId) setValues({ ...values, options: {}})
+  },[values.parentCategoryId])
+  
   const router = useRouter()
   // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(categories, value) {
@@ -59,10 +74,24 @@ export default function addCategoryPage({ categories }) {
         toast.error("Родительская категория должна быть выбрана из списка")
         return
       }
-    } else {
-      values.parentCategoryId = null
-    }
+      
+    } 
 
+    // Проверка опций
+     
+    let error=false
+     Object.keys(values.options).forEach((option) => {
+       if (!Object.keys(values.options[option].values).length) {
+         toast.warning("Опция введена без значений")
+         error=true
+       }
+     })
+    if (error) return
+    
+    
+      
+     
+    
     // Send data
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))
@@ -96,6 +125,7 @@ export default function addCategoryPage({ categories }) {
     setValues({ ...values, [name]: value })
     setIsShowList(true)
     setListForMenu(getListForMenu(categories, value))
+    
   }
 
   const handleListClick = ({ id, name }) => {
@@ -107,7 +137,7 @@ export default function addCategoryPage({ categories }) {
     URL.revokeObjectURL(image.path)
     setImage({ path: "", file: null })
   }
-
+console.log(listForMenu)
   return (
     <div>
       <Layout title="Добавление категории">
@@ -118,9 +148,7 @@ export default function addCategoryPage({ categories }) {
             <div className={styles.form}>
               <form onSubmit={handleSubmit}>
                 <div className={styles.header}>
-                  
-                    <Links home={true} />
-                 
+                  <Links home={true} />
 
                   <input type="submit" value="Сохранить" className="btn" />
                 </div>
@@ -204,7 +232,7 @@ export default function addCategoryPage({ categories }) {
                     </div>
                   ) : (
                     <div className={styles.image}>
-                      <img src="/noimage.png" alt="No Image" />
+                      <img src={`${NOIMAGE}`} alt="No Image" />
                     </div>
                   )}
                   <div className={styles.image_footer}>
@@ -223,6 +251,9 @@ export default function addCategoryPage({ categories }) {
                   </div>
                 </div>
               </div>
+              {!values.parentCategory ? (
+                <Options values={values} setValues={setValues} />
+              ) : null}
             </div>
           </>
         )}

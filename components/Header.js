@@ -96,30 +96,29 @@ const[delayTimer,setDelayTimer]=useState(new Date())
         <nav>
           {Object.keys(user).length === 0 ? (
             <Link href="/account/login">
-            <a className={styles.login}>
-              <FaSignInAlt className={styles.icon} />
-              <p>Войти</p>
-            </a>
-          </Link>
-          ) : (<div className={styles.logout}>
+              <a className={styles.login}>
+                <FaSignInAlt className={styles.icon} />
+                <p>Войти</p>
+              </a>
+            </Link>
+          ) : (
+            <div className={styles.logout}>
               <p>{user.name}</p>
               <ul className={styles.dropdown_list}>
                 <Link href={`/order_user_list/${user._id}`}>
-                <li>Мои заказы</li>
+                  <li>Мои заказы</li>
                 </Link>
                 <Link href={`/account/profile`}>
                   <li>Профиль</li>
                 </Link>
                 <li onClick={() => setUser({})}>Выйти</li>
               </ul>
-          </div>
+            </div>
             // <button className={styles.logout} onClick={() => setUser({})}>
             // <FaSignOutAlt className={styles.icon} />
-             
-          // </button>
+
+            // </button>
           )}
-          
-          
         </nav>
       </div>
       <div className={styles.header_bottom}>
@@ -136,7 +135,7 @@ const[delayTimer,setDelayTimer]=useState(new Date())
           </div>
         </Link>
         <div className={styles.search_check_wrapper}>
-          <form  className={styles.search}>
+          <form className={styles.search}>
             <div
               className={styles.input_group}
               tabIndex={0}
@@ -150,52 +149,50 @@ const[delayTimer,setDelayTimer]=useState(new Date())
                     styles.drop_down_list + " " + (isShowList && styles.active)
                   }
                 >
-                  {products.map(
-                    (item, i) => (
-                      <Link href={`/product/${item.slug}`} key={i}>
-                        <li onClick={() => handleClick(item.name)}>
-                          <div className={styles.left_wrapper}>
-                            <img
-                              src={
-                                item.imagesSm[0]
-                                  ? `${API_URL}${item.imagesSm[0]}`
-                                  : `${NOIMAGE}`
-                              }
-                              alt="No image"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setIsShowLoupe(true)
-                                setImage(item.images[0])
-                              }}
-                            />
-                            <div>
-                              {item.model ? <p>Артикул:{item.model}</p> : null}
-                              <p>Модель:{item.name}</p>
-                            </div>
+                  {products.map((item, i) => (
+                    <Link href={`/product/${item.slug}`} key={i}>
+                      <li onClick={() => handleClick(item.name)}>
+                        <div className={styles.left_wrapper}>
+                          <img
+                            src={
+                              item.imagesSm[0]
+                                ? `${API_URL}${item.imagesSm[0]}`
+                                : `${NOIMAGE}`
+                            }
+                            alt="No image"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setIsShowLoupe(true)
+                              setImage(item.images[0])
+                            }}
+                          />
+                          <div>
+                            {item.model ? <p>Артикул:{item.model}</p> : null}
+                            <p>Модель:{item.name}</p>
                           </div>
-                          <div className={styles.right_wrapper}>
-                            {dataRate ? (
-                              <p>
-                                {getPriceForShow({
-                                  currencyShop,
-                                  currencyRate: dataRate.currencyRate,
-                                  currencyValue: item.currencyValue,
-                                  price: item.price,
-                                })}
-                                &nbsp;{getCurrencySymbol(currencyShop)}
-                              </p>
-                            ) : null}
-                          </div>
-                        </li>
-                      </Link>
-                    )
-                  )}
+                        </div>
+                        <div className={styles.right_wrapper}>
+                          {dataRate ? (
+                            <p>
+                              {getPriceForShow({
+                                currencyShop,
+                                currencyRate: dataRate.currencyRate,
+                                currencyValue: item.currencyValue,
+                                price: item.price,
+                              })}
+                              &nbsp;{getCurrencySymbol(currencyShop)}
+                            </p>
+                          ) : null}
+                        </div>
+                      </li>
+                    </Link>
+                  ))}
                 </ul>
               ) : null}
               {isShowLoupe ? (
                 <Loupe setIsShow={setIsShowLoupe} image={image} />
               ) : null}
-              <button type='button'>
+              <button type="button">
                 <FaSearch />
               </button>
             </div>

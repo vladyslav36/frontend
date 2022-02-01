@@ -14,29 +14,35 @@
 }
 .grid label {
   font-size: 14px;
-  display:block;
+  display: block;
 }
 .form .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
-.form .header input {
-  width: 100px;
+form .header input{
+  width:100px;
 }
+.header .buttons_flex_wrapper {
+  display: flex;
+  color: green;
+  gap: 10px;
+}
+
 .form .header a {
   display: flex;
   align-items: center;
 }
 .form input {
   display: block;
-  width: 100%;
+  width:100%;
   height: 30px;
-  padding: 5px;
-
+  padding: 5px 10px;
+  
   font-size: 14px;
 }
+
 /* .form .input, */
 .form select {
   display: block;
@@ -50,10 +56,10 @@
 .checkbox_wrapper {
   padding-top: 20px;
   display: flex;
-  align-items:center;
+  align-items: center;
   justify-content: space-around;
 }
-.form .checkbox {  
+.form .checkbox {
   flex: auto;
   font-size: 14px;
   display: flex;
@@ -63,13 +69,12 @@
 
 .form .checkbox input[type="checkbox"] {
   height: 20px;
-  width:30px;
-  
+  width: 30px;
 }
 
 .form .input_price {
   display: flex;
- 
+
   width: 100%;
 }
 .form .input_price div {
@@ -79,7 +84,6 @@
 .form .labels {
   display: flex;
   justify-content: space-around;
-  
 }
 .form input[submit] {
   display: block;
@@ -146,7 +150,7 @@
   font-size: 14px;
   display: none;
   width: 100%;
-  max-height:300px;
+  max-height: 300px;
   overflow: auto;
   position: absolute;
   z-index: 900;
@@ -180,18 +184,16 @@
   padding: 5px 0;
 }
 
-.options_container{
-  padding:10px 0;
+.options_container {
+  padding: 10px 0;
 }
 .flex_block {
   display: flex;
   flex-wrap: wrap;
   font-size: 16;
 
-  padding:5px 0;
+  padding: 5px 0;
 }
-
-
 
 .option_price input {
   height: 20px;
@@ -205,7 +207,7 @@
   justify-content: flex-start;
   align-items: center;
   column-gap: 10px;
-  padding:10px 0;
+  padding: 10px 0;
 }
 .header_options input {
   margin: 0;
@@ -215,70 +217,71 @@
   cursor: pointer;
 }
 
-.header_options button{
-  padding:3px 7px;
-  font-size:inherit;
-  border:1px solid  #b03a2e;
+.header_options button {
+  padding: 3px 7px;
+  font-size: inherit;
+  border: 1px solid #b03a2e;
   background-color: inherit;
-border-radius:5px;
+  border-radius: 5px;
 }
 
-.header_options button:hover{
-  cursor:pointer;
+.header_options button:hover {
+  cursor: pointer;
 }
 
-.custom_checkbox,.custom_radio{
-  position:relative;
-  display:flex;
-  align-items:center;
-  column-gap: 5px;;
+.custom_checkbox,
+.custom_radio {
+  position: relative;
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
 }
-.check_icon{
-  visibility:hidden;
-  color:green;
-  font-size: 20px;;
+.check_icon {
+  visibility: hidden;
+  color: green;
+  font-size: 20px;
 }
-.visible{
+.visible {
   visibility: visible;
 }
-.custom_checkbox input[type='checkbox'],.custom_radio input[type='checkbox']{
-  position:absolute;
-  z-index:-1;
-  opacity:0;
+.custom_checkbox input[type="checkbox"],
+.custom_radio input[type="checkbox"] {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
 }
-.custom_checkbox label{
-  border:1px solid #0e6655 ;
-  padding:3px 10px;
-  margin:2px;
-  border-radius:5px;
-  display:flex;
+.custom_checkbox label {
+  border: 1px solid #0e6655;
+  padding: 3px 10px;
+  margin: 2px;
+  border-radius: 5px;
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
 }
 
-.custom_checkbox label:hover{
-  cursor:pointer;
-  
+.custom_checkbox label:hover {
+  cursor: pointer;
 }
-.custom_checkbox [type='checkbox']:checked ~ label{
-  background-color: #0e6655 ;
-  color:#fff;
-}
-
-.custom_radio label{
-display:block;
-  border:1px solid  #935116 ;
-  padding:3px 7px;
-border-radius: 5px;
-background-color: #f9e79f;
+.custom_checkbox [type="checkbox"]:checked ~ label {
+  background-color: #0e6655;
+  color: #fff;
 }
 
-.custom_radio label:hover{
-  cursor:pointer;
+.custom_radio label {
+  display: block;
+  border: 1px solid #935116;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background-color: #f9e79f;
 }
-.custom_radio input[type='checkbox']:checked ~ label{
-  box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+
+.custom_radio label:hover {
+  cursor: pointer;
+}
+.custom_radio input[type="checkbox"]:checked ~ label {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
   transform: scale(0.97);
 }
 @media (max-width: 768px) {
