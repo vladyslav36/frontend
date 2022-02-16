@@ -3,10 +3,11 @@ import Showcase from "@/components/Showcase"
 import Navbar from "@/components/Navbar"
 
 import AdminPanel from "@/components/AdminPanel"
+import { API_URL } from "../config/index.js"
 
 
 
-export default function HomePage() {  
+export default function HomePage({showcaseProducts}) {  
   return (
     <Layout
       title="Кармен"
@@ -15,12 +16,21 @@ export default function HomePage() {
     >
       <Navbar />
       <AdminPanel/>
-      <Showcase />
+      <Showcase showcaseProducts={showcaseProducts}/>
     </Layout>
   )
 }
 
-
+export async function getServerSideProps() {
+  const res = await fetch(`${API_URL}/api/products/showcase`)
+  const { showcaseProducts } = await res.json()  
+  
+  return {
+    props: {
+      showcaseProducts
+    }
+  }
+}
 
 
 

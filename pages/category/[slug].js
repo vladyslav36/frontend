@@ -1,6 +1,6 @@
 import styles from "@/styles/Category.module.css"
 import Layout from "@/components/Layout"
-import { API_URL } from "@/config/index"
+import { API_URL, NOIMAGE } from "@/config/index"
 import Link from "next/link"
 import ProductsList from "@/components/ProductsList"
 import { useEffect, useState } from "react"
@@ -80,7 +80,7 @@ export default function categoryPage({ categories, params: { slug } }) {
           <div className={styles.image}>
             <img
               src={
-                category.image ? `${API_URL}${category.image}` : "/noimage.png"
+                category.image ? `${API_URL}${category.image}` : `${NOIMAGE}`
               }
               alt="No image"
             />

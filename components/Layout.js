@@ -3,7 +3,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Head from 'next/head'
 
-export default function Layout({ children, title, keywords, description, products, currencyRate }) {
+export default function Layout({ children, title, keywords, description }) {
   
   return (
     <div>
@@ -12,7 +12,7 @@ export default function Layout({ children, title, keywords, description, product
         <meta name='description' content={description} />
         <meta name='keywords' content={keywords}/>
       </Head>
-      <Header products={products} currencyRate={currencyRate}/>
+      <Header />
       <div className={styles.container}>
         {children}
       </div>

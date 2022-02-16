@@ -5,25 +5,21 @@ import { getCurrencySymbol, getPriceForShow } from "utils"
 import ProductsContext from "@/context/ProductsContext"
 import { useContext, useState } from "react"
 import Loupe from "./Loupe"
-import useSWR from "swr"
 
 
 
-export default function Showcase() {
-  const { currencyShop } = useContext(ProductsContext)  
+
+export default function Showcase({showcaseProducts}) {
+  const { currencyShop,currencyRate } = useContext(ProductsContext)  
   const [image, setImage] = useState("")
   const [isShow, setIsShow] = useState(false)
-  const fakeImages = ["", "", "", "", ""]
-
-  const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
- 
-  const { data: dataShow } = useSWR(`${API_URL}/api/products/showcase`)
+  const fakeImages = ["", "", "", "", ""] 
   
   
   return (
     <div className={styles.container}>
       <>
-        {dataShow?dataShow.showcaseProducts.map((product, i) => (
+        {showcaseProducts.length?showcaseProducts.map((product, i) => (
           <Link href={`/product/${product.slug}`} key={i}>
             <div>
               <div className={styles.item}>
@@ -47,10 +43,10 @@ export default function Showcase() {
                 </div>
 
                 <div className={styles.footer}>
-                  {dataRate ? (
+                  {Object.keys(currencyRate).length ? (
                       <p>
                     {getPriceForShow({
-                      currencyRate:dataRate.currencyRate,
+                      currencyRate,
                       currencyShop,
                       price: product.price,
                       currencyValue: product.currencyValue,

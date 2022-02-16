@@ -3,23 +3,19 @@ import Layout from "@/components/Layout"
 import { API_URL, NOIMAGE } from "@/config/index.js"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import Link from "next/link"
 import { FaShoppingCart, FaTimes } from "react-icons/fa"
 import { getBrand, getCurrencySymbol, getPriceForShow } from "utils"
 import { useContext, useEffect, useRef, useState } from "react"
 import DropDownList from "@/components/DropDownList"
 import Slider from "@/components/Slider"
-import { useRouter } from "next/router"
 import Navbar from "@/components/Navbar"
 import ProductsContext from "@/context/ProductsContext"
-import useSWR from "swr"
 import Links from "@/components/Links"
 
 export default function productPage({ slug, product }) {
-  const router = useRouter()
+  
   const { currencyShop } = useContext(ProductsContext)
-  const { cart, setCart } = useContext(ProductsContext)
-  const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
+  const { cart, setCart,currencyRate } = useContext(ProductsContext)  
   const [values, setValues] = useState(
     Object.assign(
       {},
@@ -77,9 +73,6 @@ export default function productPage({ slug, product }) {
     }
   }
 
-  //
-
-  //
   const listItemClick = ({ item, option }) => {
     setIsShowList({ ...isShowList, [option]: false })
     const optionValue = item.split(":")[0].trim()
@@ -246,10 +239,10 @@ export default function productPage({ slug, product }) {
                 </div>
               </div>
               <div>
-                {dataRate ? (
+                {Object.keys(currencyRate).length? (
                   <p className={styles.price}>
                     {getPriceForShow({
-                      currencyRate: dataRate.currencyRate,
+                      currencyRate,
                       currencyValue: product.currencyValue,
                       currencyShop,
                       price: currentPrice,

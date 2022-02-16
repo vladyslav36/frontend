@@ -10,8 +10,10 @@ import {  FaPlusCircle, FaTimes } from "react-icons/fa"
 
 
 export default function Options({ values, setValues }) {  
+  
+  const initialOptions = Object.assign({}, ...Object.keys(values.options).map(option => ({ [option]: '' })))  
   const [inputValue, setInputValue] = useState({    
-    option: "",
+    option: "", ...initialOptions
   })
   
   // example options.color.values.red.price

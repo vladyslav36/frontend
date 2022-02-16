@@ -137,7 +137,7 @@ export default function addCategoryPage({ categories }) {
     URL.revokeObjectURL(image.path)
     setImage({ path: "", file: null })
   }
-console.log(listForMenu)
+
   return (
     <div>
       <Layout title="Добавление категории">

@@ -27,7 +27,7 @@ import { toast } from "react-toastify"
 export default function Header() {
   const router = useRouter()
   const { setUser,user } = useContext(AuthContext)
-  const { currencyShop, setCurrencyShop, cart } = useContext(ProductsContext)
+  const { currencyShop, setCurrencyShop, cart,currencyRate } = useContext(ProductsContext)
 const[delayTimer,setDelayTimer]=useState(new Date())
   const [isShowList, setIsShowList] = useState(false)
   const [isShowLoupe, setIsShowLoupe] = useState(false)
@@ -55,11 +55,7 @@ const[delayTimer,setDelayTimer]=useState(new Date())
   const handleClick = (name) => {
     setIsShowList(false)
     setSearchString(name)
-  }
-  
-  
-  
-  const { data: dataRate } = useSWR(`${API_URL}/api/currencyrate`)
+  }  
  
   return (
     <header className={styles.header}>
@@ -67,8 +63,18 @@ const[delayTimer,setDelayTimer]=useState(new Date())
         <div className={styles.header_top_left}>
           <div className={styles.currency_wrapper}>
             <div className={styles.currencies}>
-              <p>USD: {dataRate ? dataRate.currencyRate.USD.toFixed(2) : ""}</p>
-              <p>EUR: {dataRate ? dataRate.currencyRate.EUR.toFixed(2) : ""}</p>
+              <p>
+                USD:{" "}
+                {Object.keys(currencyRate).length
+                  ? currencyRate.USD.toFixed(2)
+                  : ""}
+              </p>
+              <p>
+                EUR:{" "}
+                {Object.keys(currencyRate).length
+                  ? currencyRate.EUR.toFixed(2)
+                  : ""}
+              </p>
             </div>
             <div className={styles.select}>
               <p>{getCurrencySymbol(currencyShop)} Валюта магазина</p>
@@ -172,11 +178,11 @@ const[delayTimer,setDelayTimer]=useState(new Date())
                           </div>
                         </div>
                         <div className={styles.right_wrapper}>
-                          {dataRate ? (
+                          {Object.keys(currencyRate).length ? (
                             <p>
                               {getPriceForShow({
                                 currencyShop,
-                                currencyRate: dataRate.currencyRate,
+                                currencyRate,
                                 currencyValue: item.currencyValue,
                                 price: item.price,
                               })}

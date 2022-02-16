@@ -3,26 +3,25 @@ import AuthContext from "@/context/AuthContext"
 import { useContext, useEffect, useState } from "react"
 import Link from "next/link"
 import { API_URL } from "../config"
-import useSWR, { mutate } from "swr"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import ProductsContext from "@/context/ProductsContext"
 
 export default function AdminPanel() {
   const {
     user: { isAdmin, token },
   } = useContext(AuthContext)
-
-  const { data } = useSWR(`${API_URL}/api/currencyrate`)
+  const { currencyRate, setCurrencyRate }=useContext(ProductsContext)  
   const [values, setValues] = useState({
     USD: "",
     EUR: "",
   })
   useEffect(() => {
     setValues({
-      USD: data ? data.currencyRate.USD.toString() : "",
-      EUR: data ? data.currencyRate.EUR.toString() : "",
+      USD: Object.keys(currencyRate).length ? currencyRate.USD.toString() : "",
+      EUR: Object.keys(currencyRate).length ? currencyRate.EUR.toString() : "",
     })
-  }, [data])
+  }, [currencyRate])
 
   const handleChange = (e) => {
     e.preventDefault()
@@ -46,7 +45,8 @@ export default function AdminPanel() {
     if (!res.ok) {
       toast.error(data.message)
     }
-    mutate(`${API_URL}/api/currencyrate`)
+    
+    setCurrencyRate(data)
   }
 
   return (
@@ -64,18 +64,7 @@ export default function AdminPanel() {
                 <li>Редактировать</li>
               </Link>
             </ul>
-          </div>
-          <div className={styles.container_item}>
-            Опции
-            <ul className={styles.dropdown_list}>
-              <Link href="/add_option">
-                <li>Добавить</li>
-              </Link>
-              <Link href="/edit_option_list">
-                <li>Редактировать</li>
-              </Link>
-            </ul>
-          </div>
+          </div>         
           <div className={styles.container_item}>
             Товар
             <ul className={styles.dropdown_list}>
@@ -124,6 +113,11 @@ export default function AdminPanel() {
           <Link href="order_admin_list">
             <a className={styles.single_link}>
               <div className={styles.container_item}>Заказы</div>
+            </a>
+          </Link>
+          <Link href="edit_information">
+            <a className={styles.single_link}>
+              <div className={styles.container_item}>Информация</div>
             </a>
           </Link>
         </div>

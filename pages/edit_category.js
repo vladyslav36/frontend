@@ -25,7 +25,7 @@ export default function editCategory({categories:dbCategories}) {
       {!isAdmin ? (
         <AccessDenied />
       ) : isShowCategory ? (
-          <EditCategory category={category} categories={categories} setIsShowCategory={setIsShowCategory }/>
+          <EditCategory category={category} categories={categories} setIsShowCategory={setIsShowCategory} token={token}/>
         ) : (
             <EditCategoryList categories={categories} setCategory={setCategory} setIsShowCategory={setIsShowCategory} setCategories={setCategories}/>
           )

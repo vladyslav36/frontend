@@ -13,7 +13,7 @@ import { getCategoriesTree } from "../utils"
 import Links from "@/components/Links"
 import Options from "@/components/Options"
 
-export default function EditCategory({ category,categories,setIsShowCategory }) { 
+export default function EditCategory({ category,categories,setIsShowCategory,token }) { 
   const [values, setValues] = useState({
     _id: category._id,
     name: category.name,
@@ -22,7 +22,7 @@ export default function EditCategory({ category,categories,setIsShowCategory }) 
     description: category.description,
     options: category.options,
   })
-console.log(category)
+
   const [image, setImage] = useState({
     path: category.image ? `${API_URL}${category.image}` : "",
     file: null,
@@ -102,7 +102,7 @@ console.log(category)
     if (!res.ok) {
       toast.error(data.message)
     } else {
-      router.push("/edit_category_list")
+      setIsShowCategory(false)
     }
   }
   // input для name & description

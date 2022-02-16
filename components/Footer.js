@@ -1,6 +1,7 @@
 import styles from "@/styles/Footer.module.css"
 import { FaPhone,FaSistrix,FaRegClock, FaRegCreditCard } from 'react-icons/fa'
 import Link from "next/link"
+import { PHONE1, PHONE2 } from "../config"
 export default function Footer() {
   return (
     <footer className={styles.footer}>
@@ -23,16 +24,16 @@ export default function Footer() {
         <div className={styles.contacts}>
           <h3>Контакты</h3>
           <p>
-            <FaPhone /> 0509501671, 0982086083
+            <FaPhone />&nbsp; {PHONE1}, {PHONE2}
           </p>
           <Link href="/contacts/address">
             <a>
-              <FaRegClock /> Адрес, режим работы
+              <FaRegClock />&nbsp; Адрес, режим работы
             </a>
           </Link>
           <Link href="/contacts/map">
             <a>
-              <FaSistrix /> Мы на карте
+              <FaSistrix />&nbsp; Мы на карте
             </a>
           </Link>
         </div>
@@ -40,7 +41,7 @@ export default function Footer() {
           <h3>Оплата</h3>
           <Link href="/payment/bankPayment">
             <a>
-              <FaRegCreditCard /> Банковской картой
+              <FaRegCreditCard />&nbsp; Банковской картой
             </a>
           </Link>
         </div>
