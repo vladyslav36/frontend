@@ -12,12 +12,18 @@ import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
 
 import Links from "@/components/Links"
+import DropDownListItems from "./DropDownListItems"
 
-export default function EditProductList({values,setValues,prodList,setProdList,setIsShowProduct,setProduct,token}) {
+export default function EditProductList({prodList,setProdList,setIsShowProduct,setProduct,token,categories}) {
   
   const router = useRouter()
 
-  
+  const [values, setValues] = useState({
+    name: "",
+    model: "",
+    category: "",
+    brand: "",
+  })
   const [isShowList, setIsShowList] = useState({
     name: false,
     model: false,
@@ -35,7 +41,13 @@ export default function EditProductList({values,setValues,prodList,setProdList,s
 
   const listNamesFetcher = async (name, value) => {
     const res = await fetch(
-      `${API_URL}/api/search/list_names/${name}?string=${value.trim()}`
+      `${API_URL}/api/search/list_names/${name}?string=${value.trim()}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify(values)
+      }
     )
     const data = await res.json()
     setListNames({ ...listNames, [name]: data.list })
@@ -73,9 +85,13 @@ export default function EditProductList({values,setValues,prodList,setProdList,s
   }
   const submitHandler = async (e) => {
     e.preventDefault()
-
+    // Для бренда и категории меняем название на их id, т.к. в продуктуе названий бренда и категоии нет, только id
+    const category = categories.find(item => item.name === values.category) || ''
+    const brand = categories.find(item => item.name === values.brand) || ''
+    const categoryId = category ? category._id : ''
+    const brandId=brand?brand._id:''
     const res = await fetch(
-      `${API_URL}/api/products/edit_search?name=${values.name.trim()}&category=${values.category.trim()}&brand=${values.brand.trim()}&model=${values.model.trim()}`
+      `${API_URL}/api/products/edit_search?name=${values.name.trim()}&categoryId=${categoryId}&brandId=${brandId}&model=${values.model.trim()}`
     )
     const { products } = await res.json()
 

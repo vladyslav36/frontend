@@ -110,7 +110,12 @@ export default function editInformationPage({ information }) {
 
 export async function getServerSideProps() {
   const res=await fetch(`${API_URL}/api/information`)
-  const { information }=await res.json()
+  const { information } = await res.json()
+  if (!res.ok) {
+    return {
+      notFound: true,
+    }
+  }
   return {
     props: {
       information

@@ -37,8 +37,13 @@ export default function editCategory({categories:dbCategories}) {
 }
 
 export async function getServerSideProps() {
-  const data = await fetch(`${API_URL}/api/categories`)
-  const { categories } = await data.json()
+  const res = await fetch(`${API_URL}/api/categories`)
+  const { categories } = await res.json()
+  if (!res.ok) {
+    return {
+      notFound: true,
+    }
+  }
   return {
     props: {
       categories,

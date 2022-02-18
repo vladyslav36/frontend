@@ -20,9 +20,9 @@ export default function categoryPage({ categories, params: { slug } }) {
   const [isShowAsList, setIsShowAsList] = useState(true)
   const category = categories.find((item) => item.slug === slug)
 
-  const childrenList = categories.filter(
+  const childrenList =Object.keys(category).length? categories.filter(
     (item) => item.parentCategoryId === category._id
-  )
+  ):[]
     
   useEffect(async () => {
     if (childrenList.length) {
@@ -111,14 +111,14 @@ export default function categoryPage({ categories, params: { slug } }) {
 
 export async function getServerSideProps({ params }) {
   const res = await fetch(`${API_URL}/api/categories`)
-  const data = await res.json()
+  const {categories} = await res.json()
 
-  if (!data) {
+  if (!res.ok) {
     return {
       notFound: true,
     }
   }
-  const { categories } = data
+  
   return {
     props: {
       categories,

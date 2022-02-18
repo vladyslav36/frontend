@@ -24,6 +24,11 @@ export default function HomePage({showcaseProducts}) {
 export async function getServerSideProps() {
   const res = await fetch(`${API_URL}/api/products/showcase`)
   const { showcaseProducts } = await res.json()  
+  if (!res.ok) {
+    return {
+      notFound: true,
+    }
+  }
   
   return {
     props: {
