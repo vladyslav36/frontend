@@ -19,10 +19,10 @@ export default function EditProductList({prodList,setProdList,setIsShowProduct,s
   const router = useRouter()
 
   const [values, setValues] = useState({
-    name: "",
-    model: "",
-    category: "",
-    brand: "",
+    name: {name:'',id:''},
+    model: {name:'',id:''},
+    category: {name:'',id:''},
+    brand: {name:'',id:''}
   })
   const [isShowList, setIsShowList] = useState({
     name: false,
@@ -40,13 +40,14 @@ export default function EditProductList({prodList,setProdList,setIsShowProduct,s
   const [delayTimer, setDelayTimer] = useState()
 
   const listNamesFetcher = async (name, value) => {
+    
     const res = await fetch(
       `${API_URL}/api/search/list_names/${name}?string=${value.trim()}`, {
         method: 'POST',
         headers: {
           'Content-Type':'application/json'
         },
-        body:JSON.stringify(values)
+        body: JSON.stringify(values)
       }
     )
     const data = await res.json()
@@ -72,7 +73,7 @@ export default function EditProductList({prodList,setProdList,setIsShowProduct,s
   const handleChange = (e) => {
     e.preventDefault()
     const { name, value } = e.target
-    setValues({ ...values, [name]: value })
+    setValues({ ...values, [name]: {...values[name],name:value,id:''} })
     clearTimeout(delayTimer)
     setDelayTimer(
       setTimeout(async () => {
@@ -84,18 +85,16 @@ export default function EditProductList({prodList,setProdList,setIsShowProduct,s
     setValues({ ...values, [name]: item })
   }
   const submitHandler = async (e) => {
-    e.preventDefault()
-    // Для бренда и категории меняем название на их id, т.к. в продуктуе названий бренда и категоии нет, только id
-    const category = categories.find(item => item.name === values.category) || ''
-    const brand = categories.find(item => item.name === values.brand) || ''
-    const categoryId = category ? category._id : ''
-    const brandId=brand?brand._id:''
+    e.preventDefault()    
+   
     const res = await fetch(
-      `${API_URL}/api/products/edit_search?name=${values.name.trim()}&categoryId=${categoryId}&brandId=${brandId}&model=${values.model.trim()}`
+      `${API_URL}/api/products/edit_search?name=${values.name.name.trim()}&categoryId=${values.category.id}&brandId=${values.brand.id}&model=${values.model.name.trim()}`
     )
-    const { products } = await res.json()
-
-    setProdList([...products])
+    const data = await res.json()
+    if (!res.ok) {
+  toast.error(data.message)
+}
+    setProdList([...data.products])
   }
 
   return (
@@ -123,12 +122,12 @@ export default function EditProductList({prodList,setProdList,setIsShowProduct,s
                     type="text"
                     id="name"
                     name="name"
-                    value={values.name}
+                    value={values.name.name}
                     onChange={handleChange}
                     autoComplete="off"
                   />
 
-                  <DropDownList
+                  <DropDownListItems
                     isShow={isShowList.name}
                     itemsList={listNames.name}
                     handleClick={(item) => {
@@ -154,12 +153,12 @@ export default function EditProductList({prodList,setProdList,setIsShowProduct,s
                     type="text"
                     id="model"
                     name="model"
-                    value={values.model}
+                    value={values.model.name}
                     onChange={handleChange}
                     autoComplete="off"
                   />
 
-                  <DropDownList
+                  <DropDownListItems
                     isShow={isShowList.model}
                     itemsList={listNames.model}
                     handleClick={(item) => {
@@ -186,12 +185,12 @@ export default function EditProductList({prodList,setProdList,setIsShowProduct,s
                     type="text"
                     id="category"
                     name="category"
-                    value={values.category}
+                    value={values.category.name}
                     onChange={handleChange}
                     autoComplete="off"
                   />
 
-                  <DropDownList
+                  <DropDownListItems
                     isShow={isShowList.category}
                     itemsList={listNames.category}
                     handleClick={(item) => {
@@ -216,12 +215,12 @@ export default function EditProductList({prodList,setProdList,setIsShowProduct,s
                     type="text"
                     id="brand"
                     name="brand"
-                    value={values.brand}
+                    value={values.brand.name}
                     onChange={handleChange}
                     autoComplete="off"
                   />
 
-                  <DropDownList
+                  <DropDownListItems
                     isShow={isShowList.brand}
                     itemsList={listNames.brand}
                     handleClick={(item) => {

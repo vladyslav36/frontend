@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
 
-export default function EditCategoryList({ categories,setCategory,setIsShowCategory,setCategories }) {  
+export default function EditCategoryList({ categories,setCategory,setIsShowCategory,setCategories,token }) {  
   
   const arrayTree = categories.map((item) => {
     return { _id: item._id, tree: getCategoriesTree(item, categories) }

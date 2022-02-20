@@ -21,17 +21,26 @@ export default function editCategory({categories:dbCategories}) {
   const [category, setCategory] = useState({})
 
   return (
-    <Layout title='Редактирование категорий'>
+    <Layout title="Редактирование категорий">
       {!isAdmin ? (
         <AccessDenied />
       ) : isShowCategory ? (
-          <EditCategory category={category} categories={categories} setIsShowCategory={setIsShowCategory} token={token}/>
-        ) : (
-            <EditCategoryList categories={categories} setCategory={setCategory} setIsShowCategory={setIsShowCategory} setCategories={setCategories}/>
-          )
-          
-         
-        }
+        <EditCategory
+          category={category}
+            categories={categories}
+            setCategories={setCategories}
+          setIsShowCategory={setIsShowCategory}
+          token={token}
+        />
+      ) : (
+        <EditCategoryList
+          categories={categories}
+          setCategory={setCategory}
+          setIsShowCategory={setIsShowCategory}
+          setCategories={setCategories}
+          token={token}
+        />
+      )}
     </Layout>
   )
 }

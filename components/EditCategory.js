@@ -13,7 +13,7 @@ import { getCategoriesTree } from "../utils"
 import Links from "@/components/Links"
 import Options from "@/components/Options"
 
-export default function EditCategory({ category,categories,setIsShowCategory,token }) { 
+export default function EditCategory({ category,categories,setCategories, setIsShowCategory,token }) { 
   const [values, setValues] = useState({
     _id: category._id,
     name: category.name,
@@ -103,6 +103,14 @@ export default function EditCategory({ category,categories,setIsShowCategory,tok
       toast.error(data.message)
     } else {
       setIsShowCategory(false)
+      // Обновляем категории чтобы не перезагружать страницу
+      const res=await fetch(`${API_URL}/api/categories`)
+      const data = await res.json()
+      if (!res.ok) {
+        toast.error(data.message)
+      } else {
+        setCategories(data.categories)
+      }
     }
   }
   // input для name & description
