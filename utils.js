@@ -146,10 +146,15 @@ export const getMailString = ({ cart, totalAmount, values,count }) => {
 
     prepaid,
   } = values
-  const options =
-    cart.length && Object.keys(cart[0].options).length
-      ? Object.keys(cart[0].options)
-      : []
+  const optionList = cart.length
+    ? cart.reduce((acc, item) => {
+        const itemOptions = Object.keys(item.options)
+        itemOptions.forEach((option) => {
+          if (!acc.includes(option)) acc.push(option)
+        })
+        return acc
+      }, [])
+    : []
   return `
   <div style='font-size:16px;'>
   
@@ -175,8 +180,8 @@ export const getMailString = ({ cart, totalAmount, values,count }) => {
         <tr>
           <td>Модель</td>
           ${
-            options.length
-              ? options.map(
+            optionList.length
+              ? optionList.map(
                   (item) => `
                    <td>
                     ${item}
@@ -194,9 +199,9 @@ export const getMailString = ({ cart, totalAmount, values,count }) => {
           (item) => `
         <tr style='border:1px solid #999;'>
           <td >${item.name}</td>
-        ${options.length ? options.map((option, i) => `
+        ${optionList.length ? optionList.map((option, i) => `
                     <td key={i}>
-                      ${item.options[option]}
+                      ${item.options[option]?item.options[option]:''}
                     </td>`
                   ).join(""):null}
         <td>${item.price}${getCurrencySymbol(item.currencyValue)}</td>

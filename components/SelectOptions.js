@@ -22,8 +22,8 @@ export default function SelectOptions({ values, setValues, toast }) {
     setValues(newValues)
   }
   
-  const handleCheckbox = ({ name, option, checked }) => {
-    
+  const handleCheckbox = ({ name, option, checked,id }) => {
+    console.log(id)
     const newValues = { ...values }
     newValues.options[name].values[option].checked = checked
     setValues(newValues)
@@ -58,7 +58,7 @@ export default function SelectOptions({ values, setValues, toast }) {
                   <input
                     type="checkbox"
                     id={item}
-                    name='changePrice'
+                    name="changePrice"
                     value={item}
                     onChange={toggleCheck}
                     checked={values.options[item].isChangePrice}
@@ -74,7 +74,7 @@ export default function SelectOptions({ values, setValues, toast }) {
                     <div key={i} className={styles.custom_checkbox}>
                       <input
                         type="checkbox"
-                        id={optionValue}
+                        id={`${item}${optionValue}`}
                         name={item}
                         value={optionValue}
                         onChange={(e) =>
@@ -82,37 +82,41 @@ export default function SelectOptions({ values, setValues, toast }) {
                             name: item,
                             option: e.target.value,
                             checked: e.target.checked,
+                            id: e.target.id,
                           })
                         }
                         checked={
                           values.options[item].values[optionValue].checked
                         }
                       />
-                      <label htmlFor={optionValue} tabIndex={0}>
+                      <label htmlFor={`${item}${optionValue}`} tabIndex={0}>
                         {optionValue}
 
-                        {values.options[item].isChangePrice && values.options[item].values[optionValue].checked &&(
-                          <div className={styles.option_price}>
-                            <input
-                              type="text"
-                              value={values.options[item].values[optionValue].price}
-                              onChange={(e) =>
-                                handleChangePrice({
-                                  name: item,
-                                  option: optionValue,
-                                  e,
-                                })
-                              }
-                              onBlur={(e) => {
-                                formatPrice({
-                                  name: item,
-                                  option: optionValue,
-                                  e,
-                                })
-                              }}
-                            />
-                          </div>
-                        )}
+                        {values.options[item].isChangePrice &&
+                          values.options[item].values[optionValue].checked && (
+                            <div className={styles.option_price}>
+                              <input
+                                type="text"
+                                value={
+                                  values.options[item].values[optionValue].price
+                                }
+                                onChange={(e) =>
+                                  handleChangePrice({
+                                    name: item,
+                                    option: optionValue,
+                                    e,
+                                  })
+                                }
+                                onBlur={(e) => {
+                                  formatPrice({
+                                    name: item,
+                                    option: optionValue,
+                                    e,
+                                  })
+                                }}
+                              />
+                            </div>
+                          )}
                       </label>
                     </div>
                   ))}

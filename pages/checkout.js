@@ -90,7 +90,7 @@ export default function Checkout() {
        }
      
   }
-  console.log(values)
+  console.log(cart)
   return (
     <Layout title="Оформление заказа">
       <ToastContainer/>

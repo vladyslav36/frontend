@@ -12,7 +12,15 @@ import router from "next/router"
 export default function Cart() {
   const { cart, setCart } = useContext(ProductsContext)  
 
-  const options=cart.length && Object.keys(cart[0].options).length ? Object.keys(cart[0].options):[]
+  // optionList собирает все возможные опции из корзины  
+  const optionList = cart.length ? (cart.reduce((acc, item) => {
+    const itemOptions = Object.keys(item.options)
+    itemOptions.forEach(option => {
+      if (!acc.includes(option)) acc.push(option)
+      
+    })
+    return acc
+  }, [])) : []
   
 
   const handleCheckout = () => {
@@ -33,8 +41,8 @@ export default function Cart() {
           <thead>
             <tr>
               <td>Модель</td>
-              {options.length ? (
-                options.map((item, i) => (
+              {optionList.length ? (
+                optionList.map((item, i) => (
                   <td key={i}>
                     { item}
                   </td>
@@ -57,7 +65,7 @@ export default function Cart() {
               cart.map((item, i) => (
                 <tr key={i}>
                   <td>{item.name}</td>
-                  {options.length ? options.map((option, i) => (
+                  {optionList.length ? optionList.map((option, i) => (
                     <td key={i}>
                       {item.options[option]}
                     </td>
