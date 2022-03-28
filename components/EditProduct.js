@@ -152,7 +152,7 @@ const data=await res.json()
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-console.log(values.options)
+
   return (
     <>
       <>

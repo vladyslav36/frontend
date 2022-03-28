@@ -8,7 +8,7 @@ import { useContext, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
-import Link from "next/link"
+
 
 import { API_URL, NOIMAGE, NOIMAGE_PATH } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
@@ -17,7 +17,11 @@ import Links from "@/components/Links"
 import Options from "@/components/Options"
 import { useEffect } from "react/cjs/react.development"
 
+
+
 export default function addCategoryPage({ categories }) {
+  
+  
   const {
     user: { isAdmin,token },
   } = useContext(AuthContext)
@@ -140,7 +144,7 @@ export default function addCategoryPage({ categories }) {
 
   return (
     <div>
-      <Layout title="Добавление категории">
+      <Layout title="Добавление категории">        
         {!isAdmin ? (
           <AccessDenied />
         ) : (

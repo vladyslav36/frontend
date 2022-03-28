@@ -5,7 +5,7 @@ import { CgEnter } from "react-icons/cg"
 import { getCurrencySymbol, getPriceForShow, getShortDescription } from "utils"
 import { useContext, useEffect, useState } from "react"
 import ProductsContext from "@/context/ProductsContext"
-import useSWR from "swr"
+
 import Loupe from "./Loupe"
 
 export default function ProductsList({ products = [], isShowAsList }) {
@@ -14,7 +14,7 @@ export default function ProductsList({ products = [], isShowAsList }) {
     setInnerWidth(window.innerWidth)
   }, [])
 
-  const { currencyShop } = useContext(ProductsContext)
+  const { currencyShop,currencyRate } = useContext(ProductsContext)  
   const [isShow, setIsShow] = useState(false)
   const [image, setImage] = useState("")
   const fakeArray=['','','','','','']
@@ -22,7 +22,7 @@ export default function ProductsList({ products = [], isShowAsList }) {
     console.log("cart")
   }
 
-  const { data } = useSWR(`${API_URL}/api/currencyrate`)
+
 
   return (
     <>
@@ -75,10 +75,10 @@ export default function ProductsList({ products = [], isShowAsList }) {
                           )}
                         </td>
                         <td>
-                          {item.price && data ? (
+                          {item.price && currencyRate ? (
                             <div>
                               {getPriceForShow({
-                                currencyRate: data.currencyRate,
+                                currencyRate,
                                 currencyShop,
                                 price: item.price,
                                 currencyValue: item.currencyValue,
@@ -124,10 +124,10 @@ export default function ProductsList({ products = [], isShowAsList }) {
                   </div>
 
                   <div className={styles.footer_card}>
-                    {item.price && data ? (
+                    {item.price && currencyRate ? (
                       <p>
                       {getPriceForShow({
-                        currencyRate: data.currencyRate,
+                        currencyRate,
                         currencyShop,
                         price: item.price,
                         currencyValue: item.currencyValue,

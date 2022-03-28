@@ -23,7 +23,7 @@ export default function OrderUserList() {
         }
       })
       const { orders } = await res.json()
-      setOrders(orders)
+      setOrders(orders.reverse())
     }
     if (Object.keys(user).length) {
       fetchOrdersById()
@@ -38,7 +38,7 @@ export default function OrderUserList() {
   const openOrder = (order) => {
     router.push(`/order_page/${order._id}`)
   }
-  console.log(user)
+  
   return (
     <Layout title="Список заказов">
       <ToastContainer />

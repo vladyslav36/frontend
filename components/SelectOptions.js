@@ -22,8 +22,7 @@ export default function SelectOptions({ values, setValues, toast }) {
     setValues(newValues)
   }
   
-  const handleCheckbox = ({ name, option, checked,id }) => {
-    console.log(id)
+  const handleCheckbox = ({ name, option, checked,id }) => {    
     const newValues = { ...values }
     newValues.options[name].values[option].checked = checked
     setValues(newValues)

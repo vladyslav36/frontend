@@ -20,43 +20,46 @@ import {
 } from "utils"
 import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import { useRouter } from "next/router"
-import useSWR from "swr"
 import Loupe from "./Loupe"
 import { toast } from "react-toastify"
 
 export default function Header() {
   const router = useRouter()
-  const { setUser,user } = useContext(AuthContext)
-  const { currencyShop, setCurrencyShop, cart,currencyRate } = useContext(ProductsContext)
-const[delayTimer,setDelayTimer]=useState(new Date())
+  const { setUser, user } = useContext(AuthContext)
+  const { currencyShop, setCurrencyShop, cart, currencyRate } =
+    useContext(ProductsContext)
+  const [delayTimer, setDelayTimer] = useState(new Date())
   const [isShowList, setIsShowList] = useState(false)
   const [isShowLoupe, setIsShowLoupe] = useState(false)
   const [image, setImage] = useState("")
   const [searchString, setSearchString] = useState("")
-  const [products,setProducts]=useState([]) 
+  const [products, setProducts] = useState([])
 
-  
   const handleChange = (e) => {
     e.preventDefault()
-    const string=e.target.value
-    setSearchString(string)    
-    clearTimeout(delayTimer)    
-    setDelayTimer(setTimeout(async() => {
-      const res=await fetch(`${API_URL}/api/products/search?string=${string.trim()}`)
-      const { products } = await res.json()
-      if (!res.ok) {
-        toast.error('Server error')
-        return
-      } 
-      setProducts(products)
-    },1000))
+    const string = e.target.value
+    setSearchString(string)
+    clearTimeout(delayTimer)
+    setDelayTimer(
+      setTimeout(async () => {
+        const res = await fetch(
+          `${API_URL}/api/products/search?string=${string.trim()}`
+        )
+        const { products } = await res.json()
+        if (!res.ok) {
+          toast.error("Server error")
+          return
+        }
+        setProducts(products)
+      }, 1000)
+    )
   }
-  
+
   const handleClick = (name) => {
     setIsShowList(false)
     setSearchString(name)
-  }  
- 
+  }
+
   return (
     <header className={styles.header}>
       <div className={styles.header_top}>

@@ -12,10 +12,21 @@ import Navbar from "@/components/Navbar"
 import ProductsContext from "@/context/ProductsContext"
 import Links from "@/components/Links"
 
-export default function productPage({ slug, product }) {
+export default function productPage({ slug, product:productDb }) {
   
   const { currencyShop } = useContext(ProductsContext)
-  const { cart, setCart,currencyRate } = useContext(ProductsContext)  
+  const { cart, setCart, currencyRate } = useContext(ProductsContext)  
+  
+  const product = { ...productDb }
+
+  // Удаляем опции в товаре которые в нем не используются
+  Object.keys(product.options).forEach(option => {
+    const isCheck = Object.keys(product.options[option].values).some(
+    (item) => product.options[option].values[item].checked
+  )
+  if (!isCheck) delete product.options[option]
+  })
+  
   const [values, setValues] = useState(
     Object.assign(
       {},
@@ -54,6 +65,8 @@ export default function productPage({ slug, product }) {
       setCurrentPrice(price || product.price)
     }
   }, [values])
+
+
 
   // Функция добавляет опционную цену к строке опции
   const getList = (name) => {
@@ -165,7 +178,7 @@ export default function productPage({ slug, product }) {
   const handleDelete = (num) => {
     setChosen(chosen.filter((item, i) => i !== num))
   }
-  
+  console.log(product.options)
   return (
     <Layout title={`Страница товара ${slug}`}>
       <Navbar />
@@ -256,6 +269,7 @@ export default function productPage({ slug, product }) {
             <div className={styles.inputs}>
               {Object.keys(product.options).length
                 ? Object.keys(product.options).map((option, i) => (
+                   
                     <div
                       key={i}
                       tabIndex={0}
@@ -282,6 +296,7 @@ export default function productPage({ slug, product }) {
                         }
                       />
                     </div>
+                  
                   ))
                 : null}
 

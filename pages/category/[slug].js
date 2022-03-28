@@ -11,20 +11,20 @@ import { FaList, FaTh } from "react-icons/fa"
 
 import Links from "@/components/Links"
 
-
-export default function categoryPage({ categories, params: { slug } }) {
-
+export default function categoryPage({ params: { slug }, categories }) {
   const [isShowCategories, setIsShowCategories] = useState(false)
   const [isShowProducts, setIsShowProducts] = useState(false)
   const [productList, setProductList] = useState([])
   const [isShowAsList, setIsShowAsList] = useState(true)
-  const category = categories.find((item) => item.slug === slug)
+  const category = categories.length
+    ? categories.find((item) => item.slug === slug)
+    : {}
 
-  const childrenList =Object.keys(category).length? categories.filter(
-    (item) => item.parentCategoryId === category._id
-  ):[]
-    
-  useEffect(async () => {
+  const childrenList = Object.keys(category).length
+    ? categories.filter((item) => item.parentCategoryId === category._id)
+    : []
+
+  useEffect(() => {
     if (childrenList.length) {
       setIsShowCategories(true)
       setIsShowProducts(false)
@@ -37,6 +37,7 @@ export default function categoryPage({ categories, params: { slug } }) {
         const { products } = await res.json()
         setProductList(products)
       }
+
       fetchProduct()
       setIsShowCategories(false)
       setIsShowProducts(true)
@@ -45,7 +46,8 @@ export default function categoryPage({ categories, params: { slug } }) {
 
   return (
     <Layout title="Категории">
-      <Navbar />
+      <Navbar categories={categories} />
+
       <div className={styles.header}>
         <div className={styles.header_left}>
           <Links home={true} back={true} />
@@ -111,14 +113,8 @@ export default function categoryPage({ categories, params: { slug } }) {
 
 export async function getServerSideProps({ params }) {
   const res = await fetch(`${API_URL}/api/categories`)
-  const {categories} = await res.json()
+  const { categories } = await res.json()
 
-  if (!res.ok) {
-    return {
-      notFound: true,
-    }
-  }
-  
   return {
     props: {
       categories,
