@@ -1,7 +1,7 @@
 import styles from "@/styles/EditProduct.module.css"
 
 import { useState } from "react"
-import { getCurrencySymbol } from "utils"
+import { getCurrencySymbol, getShortDescription } from "utils"
 import DropDownList from "@/components/DropDownList"
 import { API_URL } from "../config"
 import { FaPencilAlt, FaSearch, FaTimes } from "react-icons/fa"
@@ -278,7 +278,7 @@ export default function EditProductList({
                       </td>
                       <td>{item.name}</td>
                       <td>{item.model}</td>
-                      <td>{item.description}</td>
+                      <td>{getShortDescription(item.description,150)}</td>
                       <td>
                         {item.price}&nbsp;
                         {getCurrencySymbol(item.currencyValue)}

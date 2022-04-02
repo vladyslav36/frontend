@@ -1,13 +1,11 @@
 import styles from "@/styles/Navbar.module.css"
-import { useContext, useEffect, useState } from "react"
-import AuthContext from "@/context/AuthContext"
+import {  useEffect, useState } from "react"
+
 import { useRouter } from "next/router"
 import { API_URL } from "../config"
 
 export default function Navbar({ categories: categoriesProps }) {
-  const {
-    user: { isAdmin },
-  } = useContext(AuthContext)
+  
   const router = useRouter()
   const [isShowRight, setIsShowRight] = useState(false)
   const [categories, setCategories] = useState([])

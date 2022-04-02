@@ -7,7 +7,8 @@ import { API_URL } from "../config/index.js"
 
 
 
-export default function HomePage({showcaseProducts}) {  
+export default function HomePage({ showcaseProducts }) {  
+  
   return (
     <Layout
       title="Кармен"
