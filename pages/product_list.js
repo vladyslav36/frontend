@@ -33,7 +33,7 @@ export default function ProductListPage() {
           </tr>
         </thead>
         <tbody>
-          {products.length
+          {products&&products.length
             ? products.map((item, i) => (
                 <tr key={i}>
                   <td>
