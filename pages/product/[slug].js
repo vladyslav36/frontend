@@ -4,7 +4,7 @@ import { API_URL, NOIMAGE } from "@/config/index.js"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { FaShoppingCart, FaTimes } from "react-icons/fa"
-import { getBrand, getCurrencySymbol, getPriceForShow } from "utils"
+import { getCurrencySymbol, getPriceForShow } from "utils"
 import { useContext, useEffect, useRef, useState } from "react"
 import DropDownList from "@/components/DropDownList"
 import Slider from "@/components/Slider"
@@ -12,21 +12,20 @@ import Navbar from "@/components/Navbar"
 import ProductsContext from "@/context/ProductsContext"
 import Links from "@/components/Links"
 
-export default function productPage({ slug, product:productDb }) {
-  
+export default function productPage({ slug, product: productDb }) {
   const { currencyShop } = useContext(ProductsContext)
-  const { cart, setCart, currencyRate } = useContext(ProductsContext)  
-  
+  const { cart, setCart, currencyRate } = useContext(ProductsContext)
+
   const product = { ...productDb }
 
   // Удаляем опции в товаре которые в нем не используются
-  Object.keys(product.options).forEach(option => {
+  Object.keys(product.options).forEach((option) => {
     const isCheck = Object.keys(product.options[option].values).some(
-    (item) => product.options[option].values[item].checked
-  )
-  if (!isCheck) delete product.options[option]
+      (item) => product.options[option].values[item].checked
+    )
+    if (!isCheck) delete product.options[option]
   })
-  
+
   const [values, setValues] = useState(
     Object.assign(
       {},
@@ -56,33 +55,34 @@ export default function productPage({ slug, product:productDb }) {
   // Устанавливаем currentPrice. Если опционного нет, тогда без изменений, если есть-меняем на опционный
   // находим меняющуюся опцию, берем value из values и если оно есть берем price
   useEffect(() => {
-    const option =Object.keys(product.options).find((item) => product.options[item].isChangePrice)
+    const option = Object.keys(product.options).find(
+      (item) => product.options[item].isChangePrice
+    )
     if (option) {
       const value = values[option]
-      const price = value
-        ? product.options[option].values[value].price
-        : ""
+      const price = value ? product.options[option].values[value].price : ""
       setCurrentPrice(price || product.price)
     }
   }, [values])
 
-
-
   // Функция добавляет опционную цену к строке опции
   const getList = (name) => {
-    
     const option = product.options[name]
     if (option.isChangePrice) {
       const symbol = getCurrencySymbol(product.currencyValue)
-      const checkedValues = Object.keys(option.values).filter(item => option.values[item].checked)
-      
-      return checkedValues.map(item=>option.values[item].price?`${item} : ${option.values[item].price}${symbol}`:`${item}`)
-      
+      const checkedValues = Object.keys(option.values).filter(
+        (item) => option.values[item].checked
+      )
+
+      return checkedValues.map((item) =>
+        option.values[item].price
+          ? `${item} : ${option.values[item].price}${symbol}`
+          : `${item}`
+      )
     } else {
-      
-      return Object.keys(option.values).filter((item) =>
-        option.values[item].checked)
-      
+      return Object.keys(option.values).filter(
+        (item) => option.values[item].checked
+      )
     }
   }
 
@@ -252,7 +252,7 @@ export default function productPage({ slug, product:productDb }) {
                 </div>
               </div>
               <div>
-                {Object.keys(currencyRate).length? (
+                {Object.keys(currencyRate).length ? (
                   <p className={styles.price}>
                     {getPriceForShow({
                       currencyRate,
@@ -269,7 +269,6 @@ export default function productPage({ slug, product:productDb }) {
             <div className={styles.inputs}>
               {Object.keys(product.options).length
                 ? Object.keys(product.options).map((option, i) => (
-                   
                     <div
                       key={i}
                       tabIndex={0}
@@ -296,7 +295,6 @@ export default function productPage({ slug, product:productDb }) {
                         }
                       />
                     </div>
-                  
                   ))
                 : null}
 

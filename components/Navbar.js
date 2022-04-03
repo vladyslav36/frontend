@@ -1,6 +1,5 @@
 import styles from "@/styles/Navbar.module.css"
 import {  useEffect, useState } from "react"
-
 import { useRouter } from "next/router"
 import { API_URL } from "../config"
 

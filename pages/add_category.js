@@ -4,33 +4,26 @@ import Layout from "@/components/Layout"
 import Modal from "@/components/Modal"
 import ImageUpload from "@/components/ImageUpload"
 import AuthContext from "@/context/AuthContext"
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
-
-
-import { API_URL, NOIMAGE, NOIMAGE_PATH } from "@/config/index"
+import { API_URL, NOIMAGE } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../utils"
 import Links from "@/components/Links"
 import Options from "@/components/Options"
-import { useEffect } from "react/cjs/react.development"
-
-
 
 export default function addCategoryPage({ categories }) {
-  
-  
   const {
-    user: { isAdmin,token },
+    user: { isAdmin, token },
   } = useContext(AuthContext)
   const [values, setValues] = useState({
     name: "",
     parentCategory: "",
     parentCategoryId: null,
     description: "",
-    options: {}
+    options: {},
   })
 
   const [showModal, setShowModal] = useState(false)
@@ -38,19 +31,19 @@ export default function addCategoryPage({ categories }) {
   const [image, setImage] = useState({ path: "", file: null })
 
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
-  
+
   useEffect(() => {
-    const names = categories.map(item => item.name)
+    const names = categories.map((item) => item.name)
     const isExist = names.includes(values.parentCategory)
     if (!isExist) {
       setValues({ ...values, parentCategoryId: null })
-    }    
+    }
   }, [values.parentCategory])
 
   useEffect(() => {
-    if (values.parentCategoryId) setValues({ ...values, options: {}})
-  },[values.parentCategoryId])
-  
+    if (values.parentCategoryId) setValues({ ...values, options: {} })
+  }, [values.parentCategoryId])
+
   const router = useRouter()
   // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(categories, value) {
@@ -78,24 +71,19 @@ export default function addCategoryPage({ categories }) {
         toast.error("Родительская категория должна быть выбрана из списка")
         return
       }
-      
-    } 
+    }
 
     // Проверка опций
-     
-    let error=false
-     Object.keys(values.options).forEach((option) => {
-       if (!Object.keys(values.options[option].values).length) {
-         toast.warning("Опция введена без значений")
-         error=true
-       }
-     })
+
+    let error = false
+    Object.keys(values.options).forEach((option) => {
+      if (!Object.keys(values.options[option].values).length) {
+        toast.warning("Опция введена без значений")
+        error = true
+      }
+    })
     if (error) return
-    
-    
-      
-     
-    
+
     // Send data
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))
@@ -129,7 +117,6 @@ export default function addCategoryPage({ categories }) {
     setValues({ ...values, [name]: value })
     setIsShowList(true)
     setListForMenu(getListForMenu(categories, value))
-    
   }
 
   const handleListClick = ({ id, name }) => {
@@ -144,7 +131,7 @@ export default function addCategoryPage({ categories }) {
 
   return (
     <div>
-      <Layout title="Добавление категории">        
+      <Layout title="Добавление категории">
         {!isAdmin ? (
           <AccessDenied />
         ) : (
@@ -276,7 +263,7 @@ export default function addCategoryPage({ categories }) {
 export async function getServerSideProps() {
   const data = await fetch(`${API_URL}/api/categories`)
   const { categories } = await data.json()
-  if (!data  || !categories) {
+  if (!data || !categories) {
     return {
       notFound: true,
     }

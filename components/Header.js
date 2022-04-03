@@ -3,20 +3,17 @@ import Link from "next/link"
 import { useContext, useEffect, useState } from "react"
 import AuthContext from "@/context/AuthContext"
 import ProductsContext from "@/context/ProductsContext"
-
 import {
   FaHome,
   FaPhone,
   FaSearch,
   FaShoppingCart,
-  FaSignInAlt,
-  FaSignOutAlt,
+  FaSignInAlt  
 } from "react-icons/fa"
 import {
   getCurrencySymbol,
   getPriceForShow,
-  getQntInCart,
-  getTotalInCart,
+  getQntInCart  
 } from "utils"
 import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import { useRouter } from "next/router"

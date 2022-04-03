@@ -1,5 +1,4 @@
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa"
-import Image from 'next/image'
 import styles from "@/styles/Slider.module.css"
 import { API_URL } from "../config"
 import { useState } from "react"

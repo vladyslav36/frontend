@@ -2,6 +2,7 @@ import styles from "@/styles/Footer.module.css"
 import { FaPhone,FaSistrix,FaRegClock, FaRegCreditCard } from 'react-icons/fa'
 import Link from "next/link"
 import { PHONE1, PHONE2 } from "../config"
+
 export default function Footer() {
   return (
     <footer className={styles.footer}>

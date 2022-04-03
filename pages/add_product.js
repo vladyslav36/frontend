@@ -4,18 +4,16 @@ import Layout from "@/components/Layout"
 import Modal from "@/components/Modal"
 import ImagesUpload from "@/components/ImagesUpload"
 import AuthContext from "@/context/AuthContext"
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { FaCheck, FaImage, FaPlus, FaTimes } from "react-icons/fa"
 import { GiCheckMark } from "react-icons/gi"
 import { useRouter } from "next/router"
-
 import { API_URL } from "@/config/index"
 import { getBrand, getCategoriesTree, stringToPrice } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
-import { useEffect } from "react/cjs/react.development"
 
 export default function addProductPage({ categories }) {
   const {
@@ -25,7 +23,7 @@ export default function addProductPage({ categories }) {
   const [values, setValues] = useState({
     name: "",
     // brand: '',
-    brandId:null,
+    brandId: null,
     model: "",
     description: "",
     category: "",
@@ -43,23 +41,21 @@ export default function addProductPage({ categories }) {
   const [isShowList, setIsShowList] = useState(false)
   const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
 
-  
-
   const [imageIdx, setImageIdx] = useState(0)
 
   const router = useRouter()
-useEffect(() => {
-  const names = categories.map((item) => item.name)
-  const isExist = names.includes(values.category)
-  if (!isExist) {
-    setValues({ ...values, categoryId: null })
-  }
-}, [values.category])
+  useEffect(() => {
+    const names = categories.map((item) => item.name)
+    const isExist = names.includes(values.category)
+    if (!isExist) {
+      setValues({ ...values, categoryId: null })
+    }
+  }, [values.category])
 
-useEffect(() => {
-  if (!values.categoryId) setValues({ ...values, options: {} })
-}, [values.categoryId])
-  
+  useEffect(() => {
+    if (!values.categoryId) setValues({ ...values, options: {} })
+  }, [values.categoryId])
+
   // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(items, value) {
     const list = items.filter(
@@ -85,9 +81,7 @@ useEffect(() => {
         toast.error("Категория должна быть выбрана из списка")
         return
       }
-    } 
-
-    
+    }
 
     // Send data
     const formData = new FormData()
@@ -129,7 +123,6 @@ useEffect(() => {
     }
   }
 
-
   // input for category
   const handleChangeCategory = (e) => {
     e.preventDefault()
@@ -142,17 +135,16 @@ useEffect(() => {
 
   const handleListClick = async (category) => {
     const brand = getBrand(category, categories)
-    
+
     setIsShowList(false)
-    
-      setValues({
-        ...values,
-        category: category.name,
-        categoryId: category._id,
-        brandId: brand._id,
-        options: {...brand.options}
-      })    
-    
+
+    setValues({
+      ...values,
+      category: category.name,
+      categoryId: category._id,
+      brandId: brand._id,
+      options: { ...brand.options },
+    })
   }
 
   const deleteImage = (i) => {
@@ -327,7 +319,7 @@ useEffect(() => {
                 </div>
               </div>
               {Object.keys(values.options).length ? (
-                <SelectOptions                  
+                <SelectOptions
                   values={values}
                   setValues={setValues}
                   toast={toast}
@@ -402,11 +394,11 @@ useEffect(() => {
 export async function getServerSideProps() {
   const res = await fetch(`${API_URL}/api/categories`)
   const { categories } = await res.json()
-if (!res.ok || !categories) {
-  return {
-    notFound: true,
+  if (!res.ok || !categories) {
+    return {
+      notFound: true,
+    }
   }
-}
   return {
     props: {
       categories,

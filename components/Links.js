@@ -1,9 +1,7 @@
 import styles from "@/styles/Links.module.css"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import {
-  FaAngleDoubleRight,
-  FaArrowLeft,
+import {  
   FaChevronCircleLeft,
   FaHome,
 } from "react-icons/fa"

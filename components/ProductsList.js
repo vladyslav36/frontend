@@ -1,7 +1,6 @@
 import Link from "next/link"
 import styles from "@/styles/ProductList.module.css"
 import { API_URL, NOIMAGE } from "@/config/index"
-import { CgEnter } from "react-icons/cg"
 import { getCurrencySymbol, getPriceForShow, getShortDescription } from "utils"
 import { useContext, useEffect, useState } from "react"
 import ProductsContext from "@/context/ProductsContext"

@@ -3,7 +3,6 @@ import AccessDenied from "@/components/AccessDenied"
 import Layout from "@/components/Layout"
 import AuthContext from "@/context/AuthContext"
 import { useContext, useState } from "react"
-import { getCategoriesTree } from "utils"
 import { API_URL } from "../config"
 import EditCategory from '../components/EditCategory'
 import EditCategoryList from '../components/EditCategoryList'

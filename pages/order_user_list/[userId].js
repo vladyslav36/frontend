@@ -1,13 +1,12 @@
 import Layout from "@/components/Layout"
-import Link from "next/link"
 import styles from "@/styles/OrderUserList.module.css"
 import { API_URL } from "@/config/index"
 import moment from "moment"
-import {  useEffect, useState,useContext } from "react"
+import { useEffect, useState, useContext } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
-import { FaEye, FaTimes } from "react-icons/fa"
+import { FaEye } from "react-icons/fa"
 import { useRouter } from "next/router"
 import AuthContext from "@/context/AuthContext"
 
@@ -18,8 +17,8 @@ export default function OrderUserList() {
     const fetchOrdersById = async () => {
       const res = await fetch(`${API_URL}/api/order/user/${user._id}`, {
         headers: {
-          authorization:`Bearer ${user.token}`
-        }
+          authorization: `Bearer ${user.token}`,
+        },
       })
       const { orders } = await res.json()
       setOrders(orders.reverse())
@@ -27,17 +26,17 @@ export default function OrderUserList() {
     if (Object.keys(user).length) {
       fetchOrdersById()
     } else {
-      router.push('/404')
+      router.push("/404")
     }
-  },[user])
+  }, [user])
   const router = useRouter()
-  
+
   moment.locale("ru")
- 
+
   const openOrder = (order) => {
     router.push(`/order_page/${order._id}`)
   }
-  
+
   return (
     <Layout title="Список заказов">
       <ToastContainer />
@@ -48,9 +47,9 @@ export default function OrderUserList() {
             <thead>
               <tr>
                 <th>№</th>
-                <th>Дата</th>                
+                <th>Дата</th>
                 <th>Общая сумма</th>
-                <th>&nbsp;</th>                
+                <th>&nbsp;</th>
               </tr>
             </thead>
             <tbody>
@@ -58,14 +57,13 @@ export default function OrderUserList() {
                 ? orders.map((item, i) => (
                     <tr key={i}>
                       <td>{item.count}</td>
-                      <td>{moment(Date.parse(item.createdAt)).format("L")}</td>                      
+                      <td>{moment(Date.parse(item.createdAt)).format("L")}</td>
                       <td>{item.totalAmount}</td>
                       <td title="Смотреть заказ">
                         <button onClick={() => openOrder(item)}>
                           <FaEye className={styles.icon} />
                         </button>
                       </td>
-                      
                     </tr>
                   ))
                 : null}
@@ -76,5 +74,3 @@ export default function OrderUserList() {
     </Layout>
   )
 }
-
-

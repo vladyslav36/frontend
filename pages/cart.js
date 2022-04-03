@@ -1,7 +1,5 @@
 import styles from "@/styles/Cart.module.css"
-
-import { useContext, useState } from "react"
-import AuthContext from "@/context/AuthContext"
+import { useContext  } from "react"
 import ProductsContext from "@/context/ProductsContext"
 import Layout from "@/components/Layout"
 import { FaTimes } from "react-icons/fa"

@@ -9,7 +9,7 @@ import router from "next/router"
 import { API_URL } from "@/config/index.js"
 
 export default function RegisterPage() {
-  const [userName,setUserName]=useState('')
+  const [userName, setUserName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [passwordConfirm, setPasswordConfirm] = useState("")
@@ -17,22 +17,22 @@ export default function RegisterPage() {
   const submitHandler = async (e) => {
     e.preventDefault()
     if (password !== passwordConfirm) {
-      toast.error('Пароли не совпадают')
+      toast.error("Пароли не совпадают")
       return
     }
     const res = await fetch(`${API_URL}/api/user`, {
       headers: {
-        'Content-Type':'application/json'
+        "Content-Type": "application/json",
       },
-      method: 'POST',
-      body:JSON.stringify({email,password,name:userName})
+      method: "POST",
+      body: JSON.stringify({ email, password, name: userName }),
     })
-    const data=await res.json()
+    const data = await res.json()
     if (!res.ok) {
       toast.error(data.message)
       return
     }
-    router.push('/')
+    router.push("/")
   }
   return (
     <Layout title="User Register">

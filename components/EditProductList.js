@@ -1,14 +1,11 @@
 import styles from "@/styles/EditProduct.module.css"
-
 import { useState } from "react"
 import { getCurrencySymbol, getShortDescription } from "utils"
-import DropDownList from "@/components/DropDownList"
 import { API_URL } from "../config"
 import { FaPencilAlt, FaSearch, FaTimes } from "react-icons/fa"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
-
 import Links from "@/components/Links"
 import DropDownListItems from "./DropDownListItems"
 
