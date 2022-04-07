@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "prod_start":"next start -p 80"
   },
   "dependencies": {
     "js-file-downloader": "^1.1.22",
