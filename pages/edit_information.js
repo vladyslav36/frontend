@@ -3,6 +3,7 @@ import Layout from '@/components/Layout'
 import Links from '@/components/Links'
 import AuthContext from '@/context/AuthContext'
 import styles from '@/styles/EditInformation.module.css'
+import  { useRouter } from 'next/router'
 import React, { useContext, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
@@ -10,7 +11,7 @@ import { API_URL } from '../config'
 
 export default function editInformationPage({ information }) {
   const { user: { isAdmin, token } }= useContext(AuthContext)
-  
+  const router=useRouter()
   
   const [values, setValues] = useState({
     aboutUs: information.aboutUs || '',
@@ -38,6 +39,7 @@ export default function editInformationPage({ information }) {
     if (!res.ok) {
       toast.error(data.message)
     }
+    router.push('/')
   }
   
   return (
