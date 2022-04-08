@@ -107,13 +107,12 @@ export default function EditProductList({
     if (!res.ok) {
       toast.error(data.message)
     }
-    setProdList([...data.products])
+    setProdList([...data.products.sort((a,b)=>a.name>b.name?1:-1)])
   }
 
   return (
     <div>
       <ToastContainer />
-
       <div className={styles.container}>
         <Links home={true} back={false} />
         <form onSubmit={submitHandler} className={styles.form}>

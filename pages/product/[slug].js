@@ -11,6 +11,7 @@ import Slider from "@/components/Slider"
 import Navbar from "@/components/Navbar"
 import ProductsContext from "@/context/ProductsContext"
 import Links from "@/components/Links"
+import ProductOptions from "@/components/ProductOptions"
 
 export default function productPage({ slug, product: productDb }) {
   const { currencyShop } = useContext(ProductsContext)
@@ -266,7 +267,7 @@ export default function productPage({ slug, product: productDb }) {
               </div>
             </div>
 
-            <div className={styles.inputs}>
+            {/* <div className={styles.inputs}>
               {Object.keys(product.options).length
                 ? Object.keys(product.options).map((option, i) => (
                     <div
@@ -309,11 +310,14 @@ export default function productPage({ slug, product: productDb }) {
                   value={values.qnt}
                 />
               </div>
-            </div>
+            </div> */}
 
+            {Object.keys(product.options).length ? (
+              <ProductOptions options={product.options} currencyValue={product.currencyValue} values={values} setValues={setValues} toast={toast}/>
+            ) : null}
             <div className={styles.button}>
               <button type="button" onClick={addedValues}>
-                Выбрать
+                Выбрать 
               </button>
             </div>
 

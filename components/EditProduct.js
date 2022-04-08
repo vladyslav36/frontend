@@ -103,7 +103,7 @@ const data=await res.json()
     if (!res.ok) {
       toast.error(data.message)
     } else {
-      router.back()
+      setIsShowProduct(false)
     }
   }
   const formatPrice = ({ name, value }) => {
