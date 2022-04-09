@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css"
 import { FaShoppingCart, FaTimes } from "react-icons/fa"
 import { getCurrencySymbol, getPriceForShow } from "utils"
 import { useContext, useEffect, useRef, useState } from "react"
-import DropDownList from "@/components/DropDownList"
 import Slider from "@/components/Slider"
 import Navbar from "@/components/Navbar"
 import ProductsContext from "@/context/ProductsContext"
@@ -35,13 +34,6 @@ export default function productPage({ slug, product: productDb }) {
     )
   )
 
-  const [isShowList, setIsShowList] = useState(
-    Object.assign(
-      {},
-      ...Object.keys(product.options).map((item) => ({ [item]: false }))
-    )
-  )
-
   const inputQnt = useRef()
   const [chosen, setChosen] = useState([])
   const [sliderValues, setSliderValues] = useState({
@@ -66,33 +58,6 @@ export default function productPage({ slug, product: productDb }) {
     }
   }, [values])
 
-  // Функция добавляет опционную цену к строке опции
-  const getList = (name) => {
-    const option = product.options[name]
-    if (option.isChangePrice) {
-      const symbol = getCurrencySymbol(product.currencyValue)
-      const checkedValues = Object.keys(option.values).filter(
-        (item) => option.values[item].checked
-      )
-
-      return checkedValues.map((item) =>
-        option.values[item].price
-          ? `${item} : ${option.values[item].price}${symbol}`
-          : `${item}`
-      )
-    } else {
-      return Object.keys(option.values).filter(
-        (item) => option.values[item].checked
-      )
-    }
-  }
-
-  const listItemClick = ({ item, option }) => {
-    setIsShowList({ ...isShowList, [option]: false })
-    const optionValue = item.split(":")[0].trim()
-    setValues({ ...values, [option]: optionValue })
-  }
-
   const getTotalQnt = () => {
     return chosen.reduce((acc, item) => acc + +item.qnt, 0)
   }
@@ -108,13 +73,6 @@ export default function productPage({ slug, product: productDb }) {
   const handleCartClick = () => {
     setCart([...cart, ...chosen])
     setChosen([])
-  }
-
-  const changeHandler = (e) => {
-    e.preventDefault()
-    const { name, value } = e.target
-
-    setValues({ ...values, [name]: value })
   }
 
   const addedValues = (e) => {
@@ -179,7 +137,7 @@ export default function productPage({ slug, product: productDb }) {
   const handleDelete = (num) => {
     setChosen(chosen.filter((item, i) => i !== num))
   }
-  console.log(product.options)
+  
   return (
     <Layout title={`Страница товара ${slug}`}>
       <Navbar />
@@ -212,7 +170,6 @@ export default function productPage({ slug, product: productDb }) {
                 ? product.imagesSm.map((item, i) => (
                     <div
                       key={i}
-                      // className={i === mainImageIdx ? styles.image_active : ""}
                       className={
                         styles.added_image +
                         " " +
@@ -267,57 +224,18 @@ export default function productPage({ slug, product: productDb }) {
               </div>
             </div>
 
-            {/* <div className={styles.inputs}>
-              {Object.keys(product.options).length
-                ? Object.keys(product.options).map((option, i) => (
-                    <div
-                      key={i}
-                      tabIndex={0}
-                      onFocus={() =>
-                        setIsShowList({ ...isShowList, [option]: true })
-                      }
-                      onBlur={() =>
-                        setIsShowList({ ...isShowList, [option]: false })
-                      }
-                    >
-                      <label htmlFor={option}>{option}</label>
-                      <input
-                        type="text"
-                        id={option}
-                        value={values[option]}
-                        autoComplete="off"
-                        readOnly
-                      />
-                      <DropDownList
-                        isShow={isShowList[option]}
-                        itemsList={getList(option)}
-                        handleClick={(item) =>
-                          listItemClick({ item, option: option })
-                        }
-                      />
-                    </div>
-                  ))
-                : null}
-
-              <div>
-                <label htmlFor="qnt">Количество</label>
-                <input
-                  ref={inputQnt}
-                  type="text"
-                  id="qnt"
-                  name="qnt"
-                  onChange={changeHandler}
-                  value={values.qnt}
-                />
-              </div>
-            </div> */}
-
             {Object.keys(product.options).length ? (
-              <ProductOptions options={product.options} currencyValue={product.currencyValue} values={values} setValues={setValues} toast={toast}/>
+              <ProductOptions
+                options={product.options}
+                currencyValue={product.currencyValue}
+                values={values}
+                setValues={setValues}
+                toast={toast}
+              />
             ) : null}
             <div className={styles.button}>
               <button type="button" onClick={addedValues}>
-                Выбрать 
+                Выбрать
               </button>
             </div>
 

@@ -9,7 +9,7 @@ export default function ProductOptions({
   setValues,
   toast,
 }) {
-  console.log(values)
+  
   const handleClick = ({ option, value }) => {
     setValues({ ...values, [option]: value })
   }
@@ -32,14 +32,14 @@ export default function ProductOptions({
     <div className={styles.options_container}>
       {Object.keys(options).map((option, i) => (
         <div key={i}>
-          <div>{option}</div>
+          <div className={styles.option}>{option}</div>
           <div className={styles.options_wrapper}>
             {Object.keys(options[option].values).map((value, i) =>
               options[option].values[value].checked ? (
                 <div
                   key={i}
                   className={
-                    styles.option +
+                    styles.value +
                     " " +
                     (values[option] === value ? styles.active : "")
                   }
