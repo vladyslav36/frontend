@@ -55,6 +55,7 @@ export default function EditProductList({
       }),
     })
     const data = await res.json()
+    
     setListNames({ ...listNames, [name]: data.list })
   }
 
