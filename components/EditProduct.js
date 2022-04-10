@@ -7,17 +7,17 @@ import { FaImage, FaPlus, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import { API_URL } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
-import { getBrand, getCategoriesTree, stringToPrice } from "../utils"
+import { getBrand, getCategoriesTree, idToString, stringToPrice } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 import { GiCheckMark } from "react-icons/gi"
 
 export default function EditProduct({ categories, product, setIsShowProduct, token }) {
-  const brandOptions = categories.find(item => item._id === product.brandId).options
-  const categoryName=categories.find(item=>item._id===product.categoryId).name
+  const brandOptions = categories.find(item =>idToString(item._id) ===idToString(product.brandId)).options
+  const categoryName=categories.find(item=>idToString(item._id)===idToString(product.categoryId)).name
   const [values, setValues] = useState({
     _id: product._id,
-    name: product.name,    
+    name: product.name,
     brandId: product.brandId,
     model: product.model,
     description: product.description,

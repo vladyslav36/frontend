@@ -15,6 +15,10 @@ export function getCurrencySymbol(currencyShop) {
   }
 }
 
+export const idToString = (id) => {
+  return id === null ? "" : id.toString()
+}
+
 export function getPriceForShow({
   currencyShop,
   currencyRate,
