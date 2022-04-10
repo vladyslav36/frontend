@@ -73,7 +73,7 @@ export default function ProductOptions({
           <FaMinus className={styles.icons} onClick={decQnt} />
           <input
             type="text"
-            className={styles.input}
+            className={styles.counter}
             value={values.qnt}
             onChange={(e) => setValues({ ...values, qnt: e.target.value })}
           />{" "}
