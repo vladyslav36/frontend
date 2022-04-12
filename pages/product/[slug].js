@@ -3,7 +3,7 @@ import Layout from "@/components/Layout"
 import { API_URL, NOIMAGE } from "@/config/index.js"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { FaShoppingCart, FaTimes } from "react-icons/fa"
+import { FaShoppingCart, FaTimes,FaMinus,FaPlus } from "react-icons/fa"
 import { getCurrencySymbol, getPriceForShow } from "utils"
 import { useContext, useEffect, useRef, useState } from "react"
 import Slider from "@/components/Slider"
@@ -105,6 +105,8 @@ export default function productPage({ slug, product: productDb }) {
       inputQnt.current.focus()
       return
     }
+
+    
     setChosen([
       ...chosen,
       {
@@ -121,6 +123,21 @@ export default function productPage({ slug, product: productDb }) {
       },
     ])
     clearValues()
+  }
+
+  const decQnt = () => {
+    if (Number.isInteger(+values.qnt) && +values.qnt > 0) {
+      setValues({ ...values, qnt: "" + (+values.qnt - 1) })
+    } else {
+      toast.warning("Количество должно быть целым числом больше нуля")
+    }
+  }
+  const incQnt = () => {
+    if (Number.isInteger(+values.qnt) && +values.qnt >= 0) {
+      setValues({ ...values, qnt: "" + (+values.qnt + 1) })
+    } else {
+      toast.warning("Количество должно быть целым числом больше нуля")
+    }
   }
   const clearValues = () => {
     setValues(
@@ -229,10 +246,19 @@ export default function productPage({ slug, product: productDb }) {
                 options={product.options}
                 currencyValue={product.currencyValue}
                 values={values}
-                setValues={setValues}
-                toast={toast}
+                setValues={setValues}                
               />
             ) : null}
+            <div className={styles.counter_wrapper}>
+              <FaMinus className={styles.icons} onClick={decQnt} />
+              <input
+                type="text"
+                className={styles.counter}
+                value={values.qnt}
+                onChange={(e) => setValues({ ...values, qnt: e.target.value })}
+              />{" "}
+              <FaPlus className={styles.icons} onClick={incQnt} />
+            </div>
             <div className={styles.button}>
               <button type="button" onClick={addedValues}>
                 Выбрать

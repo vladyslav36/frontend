@@ -41,27 +41,4 @@
   color: #fbfcfc;
 }
 
-.counter_wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  column-gap: 10px;
-  margin: 10px 0;
-}
 
-.counter_wrapper .counter{
-  width: 80px;
-  font-size: 18px;
-  text-align: center;
-  height: 25px;
-}
-
-.icons {
-  font-size: 20px;
-  color: green;
-}
-
-.icons:hover {
-  cursor: pointer;
-}

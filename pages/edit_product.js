@@ -16,7 +16,7 @@ export default function editProductPage({ categories }) {
   const [product, setProduct] = useState({})
 
   return (
-    <Layout title="Редактирование продукта">
+    <Layout title={`Редактирование ${Object.keys(product).length?product.name:''}`}>
       {!isAdmin ? (
         <AccessDenied />
       ) : !isShowProduct ? (
