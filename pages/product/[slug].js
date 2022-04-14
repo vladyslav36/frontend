@@ -154,10 +154,22 @@ export default function productPage({ slug, product: productDb }) {
   const handleDelete = (num) => {
     setChosen(chosen.filter((item, i) => i !== num))
   }
-  
+  // ld+json for SEO
+  const schemaData = {
+    "@context": "http://www.schema.org",
+    "@type": "product",
+    brand: product.brandId.name,
+    category: product.categoryId.name,
+    name: product.name,
+    article: product.model,
+    image: product.images[0],
+    description: product.description,
+    price: product.price +' '+product.currencyValue,
+  }
   return (
     <Layout title={`Страница товара ${slug}`}>
       <Navbar />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}/>
       <div className={styles.header}>
         <Links home={true} back={true} />
         <button className={styles.cart_button} onClick={handleCartClick}>
