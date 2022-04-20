@@ -37,15 +37,7 @@ export default function Footer() {
               <FaSistrix />&nbsp; Мы на карте
             </a>
           </Link>
-        </div>
-        <div>
-          <h3>Оплата</h3>
-          <Link href="/payment/bankPayment">
-            <a>
-              <FaRegCreditCard />&nbsp; Банковской картой
-            </a>
-          </Link>
-        </div>
+        </div>        
       </div>
       <div className={styles.bottom}>
         <p>Все права защищены. Кармен &copy; 2021</p>
