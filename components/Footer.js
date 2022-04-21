@@ -24,9 +24,13 @@ export default function Footer() {
         </div>
         <div className={styles.contacts}>
           <h3>Контакты</h3>
-          <p>
-            <FaPhone />&nbsp; {PHONE1}, {PHONE2}
-          </p>
+          <div className={styles.phones_wrapper}>
+            <FaPhone />
+            <div className={styles.phones}>
+              <div>{PHONE1}</div>
+              <div>{PHONE2}</div>
+            </div>
+          </div>
           <Link href="/contacts/address">
             <a>
               <FaRegClock />&nbsp; Адрес, режим работы

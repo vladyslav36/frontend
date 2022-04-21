@@ -29,6 +29,15 @@ font-size: 15px;;
   flex-direction:column;
   align-items:flex-start;
 }
+.phones_wrapper{
+  display:flex;
+  align-items: center;
+  column-gap: 10px;
+}
+.phones{
+  display:flex;
+  flex-direction: column;
+}
 .footer a{
   color:#fff;
 }
@@ -41,9 +50,3 @@ font-size: 15px;;
   border-top:1px solid #444;  
 }
 
-@media(max-width:768px){
-  .top{
-    flex-direction:column;
-    
-  }
-}
