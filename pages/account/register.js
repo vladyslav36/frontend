@@ -45,9 +45,11 @@ export default function RegisterPage() {
           <div className={styles.input_wrapper}>
             <label htmlFor="userName">Имя</label>
             <input
+              placeholder="Имя. Максимум 12 символов"
               type="text"
               value={userName}
               id="username"
+              maxLength={12}
               onChange={(e) => setUserName(e.target.value)}
             />
           </div>
@@ -57,24 +59,29 @@ export default function RegisterPage() {
               type="email"
               value={email}
               id="email"
+              maxLength={20}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className={styles.input_wrapper}>
             <label htmlFor="password">Пароль</label>
             <input
+              placeholder="Пароль.Максимум 10символов"
               type="password"
               value={password}
               id="password"
+              maxLength={10}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className={styles.input_wrapper}>
             <label htmlFor="passwordConfirm">Подтвердить пароль</label>
             <input
+              placeholder="Пароль.Максимум 10символов"
               type="password"
               value={passwordConfirm}
               id="passwordConfirm"
+              maxLength={10}
               onChange={(e) => setPasswordConfirm(e.target.value)}
             />
           </div>

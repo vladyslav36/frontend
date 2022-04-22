@@ -15,9 +15,14 @@
   border:1px solid #888;
   border-radius: 5px;
   letter-spacing: 1px;
-  cursor:pointer;  
+   
+}
+.header .button:hover{
+  cursor:pointer; 
+  background-color:   #1e8449;
 }
 .header .button:disabled{
+   background-color: #196f3d;
   opacity:0.5;
   cursor:auto;
 }
