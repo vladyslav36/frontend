@@ -10,7 +10,7 @@ import { getMailString, getQntInCart, getTotalAmount } from "utils"
 import { API_URL } from "../config"
 
 export default function Checkout() {
-  const { cart } = useContext(ProductsContext)
+  const { cart,setCart } = useContext(ProductsContext)
   const { user }=useContext(AuthContext)
   const [values, setValues] = useState({
     name: "",
@@ -23,6 +23,8 @@ export default function Checkout() {
     prepaid: true,
     
   })
+  const [disable,setDisable]=useState(false)
+
   useEffect(() => {    
        const data = localStorage.getItem("checkout")
       if (data) setValues(JSON.parse(data))   
@@ -63,11 +65,11 @@ export default function Checkout() {
       },
       body:JSON.stringify({mailString})
     })
-    if (res.ok) {
-      toast.success("Заказ успешно отправлен")
-    } else {
-      toast.error("Ошибка при отправке заказа")
-    }
+    // if (res.ok) {
+    //   toast.success("Заказ успешно отправлен")
+    // } else {
+    //   toast.error("Ошибка при отправке заказа")
+    // }
     
       const res2 = await fetch(`${API_URL}/api/order`, {
       method: 'POST',
@@ -83,21 +85,27 @@ export default function Checkout() {
         userId:Object.keys(user).length?user._id:null
       })
       })
-       if (res2.ok) {
-         toast.success("Заказ успешно сохранен")
-       } else {
-         toast.error("Ошибка при сохранении заказа")
-       }
-     
+      //  if (res2.ok) {
+      //    toast.success("Заказ успешно сохранен")
+      //  } else {
+      //    toast.error("Ошибка при сохранении заказа")
+      //  }
+    if (res.ok && res2.ok) {
+      toast.success('Заказ обработан успешно')
+      setCart([])
+      setDisable(true)
+    } else {
+      toast.error('Ошибка при обработке заказа')
+     }
   }
-  console.log(cart)
+  
   return (
     <Layout title="Оформление заказа">
       <ToastContainer/>
       <div className={styles.container}>
         <div className={styles.header}>
           <Links home={true} back={true} />
-          <button className={styles.button} onClick={handleSendOrder}>
+          <button className={styles.button} onClick={handleSendOrder} disabled={disable}>
             Отправить заказ
           </button>
         </div>

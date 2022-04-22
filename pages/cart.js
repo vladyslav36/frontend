@@ -7,6 +7,7 @@ import { getCurrencySymbol, getQntInCart,getTotalAmount } from "utils"
 import Links from "@/components/Links"
 import router from "next/router"
 
+
 export default function Cart() {
   const { cart, setCart } = useContext(ProductsContext)  
 
@@ -21,7 +22,7 @@ export default function Cart() {
   }, [])) : []
   
 
-  const handleCheckout = () => {
+  const handleCheckout = () => {    
     router.push('/checkout')
   }
   
@@ -34,7 +35,7 @@ export default function Cart() {
         </div>
       </div>
 
-      <div className={styles.table}>
+      <div className={styles.table} id='table'>
         <table>
           <thead>
             <tr>
