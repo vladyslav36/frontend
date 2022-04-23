@@ -148,7 +148,7 @@ export default function Header() {
               onFocus={() => setIsShowList(true)}
               onBlur={() => setIsShowList(false)}
             >
-              <input type="text" value={searchString} onChange={handleChange} />
+              <input type="text" value={searchString} onChange={handleChange} title='Поиск по модели или артикулу'/>
               {products.length ? (
                 <ul
                   className={
