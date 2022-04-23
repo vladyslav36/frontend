@@ -21,8 +21,6 @@ export default function ProductsList({ products = [], isShowAsList }) {
     console.log("cart")
   }
 
-
-
   return (
     <>
       {isShowAsList ? (
