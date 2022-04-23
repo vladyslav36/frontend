@@ -5,7 +5,7 @@ import styles from "@/styles/Information.module.css"
 
 export default function ConditionsPage({information}) {
   return (
-    <Layout title='Условия сотрудничества'>
+    <Layout title='Условия сотрудничества' description='Условия сотрудничечтва с магазином Кармен'>
       <Links home={true} back={true} />
       <div className={styles.container}>
         <h1>Условия сотрудничества</h1> 

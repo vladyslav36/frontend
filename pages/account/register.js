@@ -50,7 +50,7 @@ export default function RegisterPage() {
               value={userName}
               id="username"
               maxLength={12}
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setUserName(e.target.value.trimLeft())}
             />
           </div>
           <div className={styles.input_wrapper}>
@@ -60,7 +60,7 @@ export default function RegisterPage() {
               value={email}
               id="email"
               maxLength={20}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.trimLeft())}
             />
           </div>
           <div className={styles.input_wrapper}>
@@ -71,7 +71,7 @@ export default function RegisterPage() {
               value={password}
               id="password"
               maxLength={10}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value.trimLeft())}
             />
           </div>
           <div className={styles.input_wrapper}>
@@ -82,7 +82,7 @@ export default function RegisterPage() {
               value={passwordConfirm}
               id="passwordConfirm"
               maxLength={10}
-              onChange={(e) => setPasswordConfirm(e.target.value)}
+              onChange={(e) => setPasswordConfirm(e.target.value.trimLeft())}
             />
           </div>
           <input type="submit" className="btn" value="Зарегистрироваться" />

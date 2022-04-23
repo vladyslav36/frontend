@@ -45,7 +45,10 @@ export default function categoryPage({ params: { slug }, categories }) {
   }, [category])
 
   return (
-    <Layout title="Категории">
+    <Layout
+      title={`Категория ${Object.keys(category).length ? category.name : ""}`}
+      keywords={Object.keys(category).length ? category.name : ""}
+    >
       <Navbar categories={categories} />
 
       <div className={styles.header}>

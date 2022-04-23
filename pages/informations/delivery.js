@@ -5,7 +5,7 @@ import styles from "@/styles/Information.module.css"
 
 export default function DeliveryPage({information}) {
   return (
-    <Layout title='Доставка заказов'>
+    <Layout title='Доставка заказов' description='Способы доставки заказов покупателям магазина Кармен'>
       <Links home={true} back={true} />
       <div className={styles.container}>
          <h1>Доставка заказов</h1> 

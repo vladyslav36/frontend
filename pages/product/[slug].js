@@ -167,9 +167,17 @@ export default function productPage({ slug, product: productDb }) {
     price: product.price +' '+product.currencyValue,
   }
   return (
-    <Layout title={`Страница товара ${slug}`}>
+    <Layout
+      title={`Страница товара ${
+        Object.keys(product).length ? product.name : ""
+      }`}
+      
+    >
       <Navbar />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}/>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      />
       <div className={styles.header}>
         <Links home={true} back={true} />
         <button className={styles.cart_button} onClick={handleCartClick}>
@@ -258,7 +266,7 @@ export default function productPage({ slug, product: productDb }) {
                 options={product.options}
                 currencyValue={product.currencyValue}
                 values={values}
-                setValues={setValues}                
+                setValues={setValues}
               />
             ) : null}
             <div className={styles.counter_wrapper}>

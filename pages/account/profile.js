@@ -53,7 +53,7 @@ export default function UserProfile() {
     router.push("/")
   }
   return (
-    <Layout title="User Register">
+    <Layout title="User profile">
       <Navbar />
       <Links home={true} back={true} />
       {Object.keys(user).length ? (

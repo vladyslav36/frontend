@@ -6,7 +6,7 @@ import styles from '@/styles/Information.module.css'
 export default function AddressPage({ information }) {
   console.log(information.workingHours)
   return (
-    <Layout title="Адрес и режим работы">
+    <Layout title="Адрес и режим работы магазина Кармен">
       <Links home={true} back={true} />
       <div className={styles.container}>
         <h1>Адрес магазина</h1>  
