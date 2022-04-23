@@ -29,6 +29,7 @@
   font-size: 15px;
   margin: 0 10px;
   display: flex;
+  flex-wrap: wrap;
   color: var(--links-color);
 }
 .crumbs a {
