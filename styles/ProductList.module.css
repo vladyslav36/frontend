@@ -16,10 +16,10 @@
   width:60px;
   }
 .table thead :nth-child(2){
-  width:100px;
+  width:130px;
   }
 .table thead :nth-child(3){
-  width:70px;
+  width:80px;
   }
 .table thead :nth-child(4){
   width:auto;
@@ -146,15 +146,6 @@ justify-content: space-between;
   font-size:15px;
   padding:5px 0;
 }
-
-
-
-@media(max-width:768px){
-  .table thead :nth-child(4){
-  width:150px;
-  }
-}
-
 
 
 @media(max-width:400px){

@@ -11,23 +11,16 @@ import { FaList, FaTh } from "react-icons/fa"
 
 import Links from "@/components/Links"
 
-export default function categoryPage({ params: { slug }, categories }) {
-  const [isShowCategories, setIsShowCategories] = useState(false)
-  const [isShowProducts, setIsShowProducts] = useState(false)
+export default function categoryPage({ category, categories }) {
   const [productList, setProductList] = useState([])
   const [isShowAsList, setIsShowAsList] = useState(true)
-  const category = categories.length
-    ? categories.find((item) => item.slug === slug)
-    : {}
 
-  const childrenList = Object.keys(category).length
+  const childrenList = category
     ? categories.filter((item) => item.parentCategoryId === category._id)
     : []
 
   useEffect(() => {
     if (childrenList.length) {
-      setIsShowCategories(true)
-      setIsShowProducts(false)
       setProductList([])
     } else {
       const fetchProduct = async () => {
@@ -39,8 +32,6 @@ export default function categoryPage({ params: { slug }, categories }) {
       }
 
       fetchProduct()
-      setIsShowCategories(false)
-      setIsShowProducts(true)
     }
   }, [category])
 
@@ -50,7 +41,6 @@ export default function categoryPage({ params: { slug }, categories }) {
       keywords={Object.keys(category).length ? category.name : ""}
     >
       <Navbar categories={categories} />
-
       <div className={styles.header}>
         <div className={styles.header_left}>
           <Links home={true} back={true} />
@@ -68,7 +58,7 @@ export default function categoryPage({ params: { slug }, categories }) {
             })}
           </div>
         </div>
-        {isShowProducts ? (
+        {!childrenList.length ? (
           <div className={styles.toggles}>
             <div title="Список" onClick={() => setIsShowAsList(true)}>
               <FaList />
@@ -95,18 +85,10 @@ export default function categoryPage({ params: { slug }, categories }) {
           </div>
         </div>
         <div className={styles.right_content}>
-          {isShowCategories ? (
+          {childrenList.length ? (
             <CategoriesList categories={childrenList} />
-          ) : null}
-          {isShowProducts ? (
-            productList.length ? (
-              <ProductsList
-                products={productList}
-                isShowAsList={isShowAsList}
-              />
-            ) : (
-              <h3>В этой категории нет товаров</h3>
-            )
+          ) : productList.length ? (
+            <ProductsList products={productList} isShowAsList={isShowAsList} />
           ) : null}
         </div>
       </div>
@@ -114,14 +96,20 @@ export default function categoryPage({ params: { slug }, categories }) {
   )
 }
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params: { slug } }) {
   const res = await fetch(`${API_URL}/api/categories`)
   const { categories } = await res.json()
-
+  const res2 = await fetch(`${API_URL}/api/categories/slug/${slug}`)
+  const { category } = await res2.json()
+  if (!res.ok || !res2.ok) {
+    return {
+      notFound: true,
+    }
+  }
   return {
     props: {
       categories,
-      params,
+      category,
     },
   }
 }
