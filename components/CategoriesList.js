@@ -17,10 +17,8 @@ export default function CategoriesList({ categories = [] }) {
                     alt="No image"
                   />
                 </div>
-                <div className={item.name}>
-                  <p>
-                    {item.name}&nbsp;({item.qntProducts})
-                  </p>
+                <div className={styles.item_name}>
+                  {item.name}&nbsp;({item.qntProducts})
                 </div>
               </div>
             </Link>

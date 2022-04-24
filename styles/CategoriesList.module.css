@@ -11,7 +11,7 @@
 
 .item{
   color:#000;
-  width:220px;
+  width:260px;
   height:90px;
   border:1px solid #999;
   display:flex;
@@ -19,14 +19,17 @@
   font-size:15px;
   line-height: 1.1;
  box-shadow: 5px 5px 5px  rgba(0, 0, 0, 0.20);
+ overflow:hidden;
 }
 .item:hover{
   transform: scale(0.98);
   cursor:pointer;
 }
-
+.item_name{
+  display:flex;  
+}
 .fake_image{
-  width:220px;
+  width:260px;
   height:0;
 }
 .image{
