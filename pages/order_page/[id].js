@@ -13,25 +13,30 @@ import { getCurrencySymbol } from "utils"
 
 export default function orderPage({ id }) {
   const { user } = useContext(AuthContext)
-  const router=useRouter()
+  const router = useRouter()
   const [order, setOrder] = useState({})
+  const [isOptions, setIsOptions] = useState(false)
+  
   useEffect(() => {
-    const fetchOrderById = async () => {
+    const fetchOrderById = async (id) => {
       const res = await fetch(`${API_URL}/api/order/${id}`, {
         headers: {
           authorization: `Bearer ${user.token}`,
         },
       })
       const { order } = await res.json()
+
       setOrder(order)
+      setIsOptions("options" in order.orderItems[0])
     }
     if (Object.keys(user).length) {
-      fetchOrderById()
+      fetchOrderById(id)
     } else {
       router.push("/404")
     }
-  },[user])
-  moment.locale("ru") 
+  }, [user])
+  moment.locale("ru")
+
   return (
     <Layout title="Страница заказа">
       <ToastContainer />
@@ -83,11 +88,11 @@ export default function orderPage({ id }) {
                   <thead>
                     <tr>
                       <td>Модель</td>
-                      {Object.keys(order.orderItems[0].options).map(
-                        (option, i) => (
-                          <td key={i}>{option}</td>
-                        )
-                      )}
+                      {isOptions
+                        ? Object.keys(order.orderItems[0].options).map(
+                            (option, i) => <td key={i}>{option}</td>
+                          )
+                        : null}
                       <td>Цена</td>
                       <td>Кол-во</td>
                     </tr>
@@ -96,7 +101,7 @@ export default function orderPage({ id }) {
                     {order.orderItems.map((item, i) => (
                       <tr key={i}>
                         <td>{item.name}</td>
-                        {Object.keys(item.options).length
+                        {isOptions && Object.keys(item.options).length
                           ? Object.keys(item.options).map((opt, j) => (
                               <td key={j}>{item.options[opt]}</td>
                             ))
@@ -112,7 +117,9 @@ export default function orderPage({ id }) {
                     <tr>
                       <td
                         colSpan={
-                          Object.keys(order.orderItems[0].options).length + 3
+                          (isOptions
+                            ? Object.keys(order.orderItems[0].options).length
+                            : 0) + 3
                         }
                       >
                         <div>
@@ -126,16 +133,16 @@ export default function orderPage({ id }) {
               </div>
             ) : null}
           </div>
-        ):null}
+        ) : null}
       </div>
     </Layout>
   )
 }
 
-export async function getServerSideProps({ params: { id } }) {  
+export async function getServerSideProps({ params: { id } }) {
   return {
     props: {
-      id
+      id,
     },
   }
 }

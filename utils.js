@@ -191,7 +191,7 @@ export const getMailString = ({ cart, totalAmount, values,count }) => {
                     ${item}
                   </td> `
                 ).join("")
-              : null
+              : ''
           }
           <td>Цена</td>
           <td>Кол-во</td>
@@ -207,7 +207,7 @@ export const getMailString = ({ cart, totalAmount, values,count }) => {
                     <td key={i}>
                       ${item.options[option]?item.options[option]:''}
                     </td>`
-                  ).join(""):null}
+                  ).join(""):''}
         <td>${item.price}${getCurrencySymbol(item.currencyValue)}</td>
         <td>${item.qnt}</td>
         </tr> 

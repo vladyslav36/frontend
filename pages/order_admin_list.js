@@ -13,14 +13,11 @@ import {useRouter} from "next/router"
 
 export default function OrderAdminList() {
   
-  const { user} = useContext(AuthContext)
-
-  
- 
+  const { user} = useContext(AuthContext) 
   const router=useRouter()
   const [orders, setOrders] = useState([])
   moment.locale('ru')
-  console.log(orders)
+  
   useEffect(() => {
     const fetchAllOrders = async () => {
       const res = await fetch(`${API_URL}/api/order`,{

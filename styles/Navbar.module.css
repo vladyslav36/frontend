@@ -23,6 +23,8 @@ column-gap: 10px;
 }
 
 .category{
+  display:flex;
+  flex-wrap: nowrap;
   padding: 5px;  
   margin:5px;
   position:relative;
