@@ -12,6 +12,7 @@ import ProductsContext from "@/context/ProductsContext"
 import Links from "@/components/Links"
 import ProductOptions from "@/components/ProductOptions"
 
+
 export default function productPage({ slug, product: productDb }) {
   const { currencyShop } = useContext(ProductsContext)
   const { cart, setCart, currencyRate } = useContext(ProductsContext)
@@ -361,13 +362,14 @@ export default function productPage({ slug, product: productDb }) {
           </>
         ) : null}
 
-        {sliderValues.isShow && (
-          <Slider
+        {sliderValues.isShow && (          
+            <Slider
             setSliderValues={setSliderValues}
             sliderValues={sliderValues}
             images={product.images}
             setMainImageIdx={setMainImageIdx}
-          />
+          />   
+          
         )}
       </div>
     </Layout>

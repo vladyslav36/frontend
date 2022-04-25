@@ -14,6 +14,8 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
           <div id='modal-root'></div>
+          <div id='slider'></div>
+          <div id='loupe'></div>
         </body>
       </Html>
     )

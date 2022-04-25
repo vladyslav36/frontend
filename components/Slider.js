@@ -1,10 +1,17 @@
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa"
 import styles from "@/styles/Slider.module.css"
 import { API_URL } from "../config"
-import { useState } from "react"
+import { useState,useEffect } from "react"
+import ReactDom from "react-dom"
+
 
 export default function Slider({ images, setSliderValues,sliderValues,setMainImageIdx }) {
   const [num, setNum] = useState(sliderValues.idx)  
+  const [isBrowser, setIsBrowser] = useState(false)
+
+  useEffect(() => {
+    setIsBrowser(true)
+  }, [])
   const lastNumber = images.length - 1  
   const prevImage = () => {
     if (num===0) {
@@ -27,8 +34,8 @@ export default function Slider({ images, setSliderValues,sliderValues,setMainIma
     setSliderValues({ ...sliderValues, isShow: false })
   }
   const imageHeight = window.innerHeight * 0.95
-  
-  return (
+   
+  const content= (
     <div className={styles.slider}>
       <div className={styles.container}>        
         {lastNumber?(<button onClick={prevImage} className={styles.prev_button}><FaArrowLeft/></button>):null}  
@@ -43,4 +50,13 @@ export default function Slider({ images, setSliderValues,sliderValues,setMainIma
       <FaTimes onClick={() => closeSlider(num)} className={styles.times_icon}/>
     </div>
   )
+
+  if (isBrowser) {
+    return ReactDom.createPortal(
+      content,
+      document.getElementById("slider")
+    )
+  } else {
+    return null
+  }
 }
