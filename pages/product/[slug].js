@@ -169,9 +169,9 @@ export default function productPage({ slug, product: productDb }) {
   }
   return (
     <Layout
-      title={`Страница товара ${
+      title={
         Object.keys(product).length ? product.name : ""
-      }`}
+      }
       
     >
       <Navbar />
