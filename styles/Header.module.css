@@ -219,12 +219,11 @@
   font-size: 13px;
   color: #333;
 }
-.header .cart a:hover p {
-  border-bottom: 1px solid #333;
-}
+
 
 .header .cart a:hover {
   cursor: pointer;
+  background-color: #e5e7e9;
 }
 
 .check_block {

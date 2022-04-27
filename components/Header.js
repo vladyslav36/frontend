@@ -205,7 +205,7 @@ export default function Header() {
           </form>
         </div>
 
-        <div className={styles.cart}>
+        <div className={styles.cart} title='Перейти в корзину'>
           <Link href="/cart">
             <a>
               <FaShoppingCart className={styles.icon} />
