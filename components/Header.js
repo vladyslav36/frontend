@@ -8,13 +8,9 @@ import {
   FaPhone,
   FaSearch,
   FaShoppingCart,
-  FaSignInAlt  
+  FaSignInAlt,
 } from "react-icons/fa"
-import {
-  getCurrencySymbol,
-  getPriceForShow,
-  getQntInCart  
-} from "utils"
+import { getCurrencySymbol, getPriceForShow, getQntInCart } from "utils"
 import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import { useRouter } from "next/router"
 import Loupe from "./Loupe"
@@ -148,7 +144,12 @@ export default function Header() {
               onFocus={() => setIsShowList(true)}
               onBlur={() => setIsShowList(false)}
             >
-              <input type="text" value={searchString} onChange={handleChange} title='Поиск по модели или артикулу'/>
+              <input
+                type="text"
+                value={searchString}
+                onChange={handleChange}
+                title="Поиск по модели или артикулу"
+              />
               {products.length ? (
                 <ul
                   className={
@@ -205,7 +206,7 @@ export default function Header() {
           </form>
         </div>
 
-        <div className={styles.cart} title='Перейти в корзину'>
+        <div className={styles.cart} title="Перейти в корзину">
           <Link href="/cart">
             <a>
               <FaShoppingCart className={styles.icon} />
