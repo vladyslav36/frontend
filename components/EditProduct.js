@@ -7,14 +7,28 @@ import { FaImage, FaPlus, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import { API_URL } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
-import { getBrand, getCategoriesTree, idToString, stringToPrice } from "../utils"
+import {
+  getBrand,
+  getCategoriesTree,
+  idToString,
+  stringToPrice,
+} from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 import { GiCheckMark } from "react-icons/gi"
 
-export default function EditProduct({ categories, product, setIsShowProduct, token }) {
-  const brandOptions = categories.find(item =>idToString(item._id) ===idToString(product.brandId)).options
-  const categoryName=categories.find(item=>idToString(item._id)===idToString(product.categoryId)).name
+export default function EditProduct({
+  categories,
+  product,
+  setIsShowProduct,
+  token,
+}) {
+  const brandOptions = categories.find(
+    (item) => idToString(item._id) === idToString(product.brandId)
+  ).options
+  const categoryName = categories.find(
+    (item) => idToString(item._id) === idToString(product.categoryId)
+  ).name
   const [values, setValues] = useState({
     _id: product._id,
     name: product.name,
@@ -23,14 +37,16 @@ export default function EditProduct({ categories, product, setIsShowProduct, tok
     description: product.description,
     category: categoryName,
     categoryId: product.categoryId,
-    options: Object.keys(product.options).length?product.options:brandOptions,
+    options: Object.keys(product.options).length
+      ? product.options
+      : brandOptions,
     isInStock: product.isInStock,
     price: product.price,
     retailPrice: product.retailPrice,
     isShowcase: product.isShowcase,
     currencyValue: product.currencyValue,
   })
-  
+
   const [images, setImages] = useState(
     product.images.map((item) => {
       return { file: null, path: `${API_URL}${item}` }
@@ -55,8 +71,6 @@ export default function EditProduct({ categories, product, setIsShowProduct, tok
   useEffect(() => {
     if (!values.categoryId) setValues({ ...values, options: {} })
   }, [values.categoryId])
-
-  
 
   // Функция возвращает список категорий в соответствии со строкой поиска
   function getListForMenu(items, value) {
@@ -99,7 +113,7 @@ export default function EditProduct({ categories, product, setIsShowProduct, tok
       },
       body: formData,
     })
-const data=await res.json()
+    const data = await res.json()
     if (!res.ok) {
       toast.error(data.message)
     } else {
@@ -168,9 +182,7 @@ const data=await res.json()
                   onClick={() => setIsShowProduct(false)}
                 />
                 <input type="submit" value="Сохранить" className="btn" />
-             </div>
-                
-             
+              </div>
             </div>
 
             <ToastContainer />
