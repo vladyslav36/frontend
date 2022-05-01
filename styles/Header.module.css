@@ -77,8 +77,9 @@
 .select select {
   appearance: none;
   font-size: 14px;
+  text-align: center;
   border: none;
-  background-color: #eaeded;
+  background-color: inherit;
 }
 .select select:hover {
   cursor: pointer;
