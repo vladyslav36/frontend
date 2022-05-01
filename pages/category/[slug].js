@@ -19,6 +19,15 @@ export default function categoryPage({ category, categories }) {
     ? categories.filter((item) => item.parentCategoryId === category._id)
     : []
 
+  // ld+json for SEO
+  const schemaData = {
+    "@context": "http://www.schema.org",
+    "@type": "category",    
+    name: category.name,    
+    image: category.image,
+    description: category.description    
+  }
+
   useEffect(() => {
     if (childrenList.length) {
       setProductList([])
@@ -41,6 +50,10 @@ export default function categoryPage({ category, categories }) {
       keywords={Object.keys(category).length ? category.name : ""}
     >
       <Navbar categories={categories} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      />
       <div className={styles.header}>
         <div className={styles.header_left}>
           <Links home={true} back={true} />

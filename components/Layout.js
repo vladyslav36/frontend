@@ -8,9 +8,9 @@ export default function Layout({ children, title, keywords, description }) {
   "@context": "http://www.schema.org",
   "@type": "Organization",
   "name": "Karmen",
-  "url": "https://karmen.kh.ua",
+  "url": "https://karmen.in.ua",
   "sameAs": [
-    "http:karmen.in.ua"
+    "http://karmen.in.ua"
   ],
   "description": "Оптовый магазин по продаже чулочно-носочных изделий",
   "address": {

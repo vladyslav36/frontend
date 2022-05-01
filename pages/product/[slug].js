@@ -3,7 +3,7 @@ import Layout from "@/components/Layout"
 import { API_URL, NOIMAGE } from "@/config/index.js"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { FaShoppingCart, FaTimes, FaMinus, FaPlus } from "react-icons/fa"
+import { FaShoppingCart, FaTimes,FaMinus,FaPlus } from "react-icons/fa"
 import { getCurrencySymbol, getPriceForShow } from "utils"
 import { useContext, useEffect, useRef, useState } from "react"
 import Slider from "@/components/Slider"
@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar"
 import ProductsContext from "@/context/ProductsContext"
 import Links from "@/components/Links"
 import ProductOptions from "@/components/ProductOptions"
+
 
 export default function productPage({ slug, product: productDb }) {
   const { currencyShop } = useContext(ProductsContext)
@@ -106,6 +107,7 @@ export default function productPage({ slug, product: productDb }) {
       return
     }
 
+    
     setChosen([
       ...chosen,
       {
@@ -163,10 +165,15 @@ export default function productPage({ slug, product: productDb }) {
     article: product.model,
     image: product.images[0],
     description: product.description,
-    price: product.price + " " + product.currencyValue,
+    price: product.price +' '+product.currencyValue,
   }
   return (
-    <Layout title={Object.keys(product).length ? product.name : ""}>
+    <Layout
+      title={
+        Object.keys(product).length ? product.name : ""
+      }
+      
+    >
       <Navbar />
       <script
         type="application/ld+json"
@@ -174,11 +181,7 @@ export default function productPage({ slug, product: productDb }) {
       />
       <div className={styles.header}>
         <Links home={true} back={true} />
-        <button
-          className={styles.cart_button}
-          onClick={handleCartClick}
-          title="Добавить в корзину"
-        >
+        <button className={styles.cart_button} onClick={handleCartClick} title='Добавить в корзину'>
           <FaShoppingCart className={styles.icon} />
           <span>В корзину</span>
         </button>
@@ -359,13 +362,14 @@ export default function productPage({ slug, product: productDb }) {
           </>
         ) : null}
 
-        {sliderValues.isShow && (
-          <Slider
+        {sliderValues.isShow && (          
+            <Slider
             setSliderValues={setSliderValues}
             sliderValues={sliderValues}
             images={product.images}
             setMainImageIdx={setMainImageIdx}
-          />
+          />   
+          
         )}
       </div>
     </Layout>
