@@ -11,9 +11,10 @@ import Links from "@/components/Links"
 import { useRouter } from "next/router"
 import { getCurrencySymbol } from "utils"
 
-export default function orderPage({ id }) {
+export default function orderPage() {
   const { user } = useContext(AuthContext)
   const router = useRouter()
+  const { id } = router.query  
   const [order, setOrder] = useState({})
   const [isOptions, setIsOptions] = useState(false)
   
@@ -139,10 +140,4 @@ export default function orderPage({ id }) {
   )
 }
 
-export async function getServerSideProps({ params: { id } }) {
-  return {
-    props: {
-      id,
-    },
-  }
-}
+

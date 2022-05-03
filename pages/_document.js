@@ -16,6 +16,7 @@ class MyDocument extends Document {
           <div id='modal-root'></div>
           <div id='slider'></div>
           <div id='loupe'></div>
+          <div id='confirm'></div>
         </body>
       </Html>
     )

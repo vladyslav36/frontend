@@ -15,7 +15,7 @@ export default function Layout({ children, title, keywords, description }) {
   "description": "Оптовый магазин по продаже чулочно-носочных изделий",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "г. Харбков, ТЦ Барабашово, маг. ВКМ-307",
+    "streetAddress": "г. Харьков, ТЦ Барабашово, маг. ВКМ-307",
     "addressLocality": "Харьков"
   },
   "openingHours": "Mo, Tu, We, Th, Sa, Su 08:00-14:30 Fr -",

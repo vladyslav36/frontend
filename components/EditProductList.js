@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
 import Links from "@/components/Links"
 import DropDownListItems from "./DropDownListItems"
+import Confirm from "./Confirm"
 
 export default function EditProductList({
   prodList,
@@ -39,6 +40,10 @@ export default function EditProductList({
   })
 
   const [delayTimer, setDelayTimer] = useState()
+  // Компонент Confirm берет аргументами isShow и аргументы товара или категориии которые надо удалить,
+  //  сохраняет их в стейте и затем в Confirm передается функция удаления вместе с аргуиентми
+  const [isShowConfirm, setIsShowConfirm] = useState(false)
+  const [deleteArg, setDeleteArg] = useState({})
 
   const listNamesFetcher = async (name, value) => {
     const res = await fetch(`${API_URL}/api/search/list_names/${name}`, {
@@ -55,24 +60,23 @@ export default function EditProductList({
       }),
     })
     const data = await res.json()
-    
+
     setListNames({ ...listNames, [name]: data.list })
   }
 
   const handleDeleteProduct = async ({ _id, idx }) => {
-    if (confirm("Уверены?")) {
-      const res = await fetch(`${API_URL}/api/products/${_id}`, {
-        method: "DELETE",
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        toast.error(data.message)
-      } else {
-        setProdList(prodList.filter((item, i) => i != idx))
-      }
+    const res = await fetch(`${API_URL}/api/products/${_id}`, {
+      method: "DELETE",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    const data = await res.json()
+    if (!res.ok) {
+      toast.error(data.message)
+    } else {
+      setProdList(prodList.filter((item, i) => i != idx))
+      setDeleteArg({})
     }
   }
   const handleChange = (e) => {
@@ -108,12 +112,20 @@ export default function EditProductList({
     if (!res.ok) {
       toast.error(data.message)
     }
-    setProdList([...data.products.sort((a,b)=>a.name>b.name?1:-1)])
+    setProdList([...data.products.sort((a, b) => (a.name > b.name ? 1 : -1))])
   }
 
   return (
     <div>
       <ToastContainer />
+      {isShowConfirm ? (
+        <Confirm
+          itemName={deleteArg.name}
+          setIsShowConfirm={setIsShowConfirm}
+          handleDelete={() => handleDeleteProduct(deleteArg)}
+          setDeleteArg={setDeleteArg}
+        />
+      ) : null}
       <div className={styles.container}>
         <Links home={true} back={false} />
         <form onSubmit={submitHandler} className={styles.form}>
@@ -275,7 +287,7 @@ export default function EditProductList({
                       </td>
                       <td>{item.name}</td>
                       <td>{item.model}</td>
-                      <td>{getShortDescription(item.description,150)}</td>
+                      <td>{getShortDescription(item.description, 150)}</td>
                       <td>
                         {item.price}&nbsp;
                         {getCurrencySymbol(item.currencyValue)}
@@ -294,12 +306,21 @@ export default function EditProductList({
                           <div>
                             <button
                               className={styles.delete}
-                              onClick={() =>
-                                handleDeleteProduct({
+                              // onClick={() =>
+                              //   handleDeleteProduct({
+                              //     _id: `${item._id}`,
+                              //     idx: i,
+                              //     name:item.name
+                              //   })
+                              // }
+                              onClick={() => {
+                                setIsShowConfirm(true)
+                                setDeleteArg({
                                   _id: `${item._id}`,
                                   idx: i,
+                                  name: item.name,
                                 })
-                              }
+                              }}
                             >
                               <span>
                                 <FaTimes className={styles.icon} />

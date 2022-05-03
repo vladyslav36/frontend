@@ -18,6 +18,8 @@ import Links from "@/components/Links"
 import { GiCheckMark } from "react-icons/gi"
 
 export default function EditProduct({
+  setProdList,
+  prodList,
   categories,
   product,
   setIsShowProduct,
@@ -114,9 +116,11 @@ export default function EditProduct({
       body: formData,
     })
     const data = await res.json()
+    
     if (!res.ok) {
       toast.error(data.message)
     } else {
+      setProdList(prodList.map(item=>item._id!=data.product._id?item:data.product))
       setIsShowProduct(false)
     }
   }

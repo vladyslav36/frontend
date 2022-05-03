@@ -102,15 +102,9 @@ export default function EditCategory({ category,categories,setCategories, setIsS
     if (!res.ok) {
       toast.error(data.message)
     } else {
+      setCategories(categories.map(item=>item._id!=data.category._id?item:data.category))
       setIsShowCategory(false)
-      // Обновляем категории чтобы не перезагружать страницу
-      const res=await fetch(`${API_URL}/api/categories`)
-      const data = await res.json()
-      if (!res.ok) {
-        toast.error(data.message)
-      } else {
-        setCategories(data.categories)
-      }
+     
     }
   }
   // input для name & description

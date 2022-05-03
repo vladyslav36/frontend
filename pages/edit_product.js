@@ -29,7 +29,9 @@ export default function editProductPage({ categories }) {
           categories={categories}
         />
       ) : (
-        <EditProduct
+            <EditProduct
+              setProdList={setProdList}
+              prodList={prodList}
           categories={categories}
           product={product}
           setIsShowProduct={setIsShowProduct}

@@ -76,6 +76,12 @@
  
 }
 
+.buttons_wrapper button{
+  background-color: inherit;
+  border:none;
+  
+}
+
 .edit {   
   color: #2874a6;
   cursor: pointer;  
@@ -135,7 +141,7 @@
   color:steelblue;
   cursor: pointer;
 }
-
+ 
 @media (max-width: 768px) {
   .form {
     grid-template-columns: 1fr;
