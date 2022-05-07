@@ -169,10 +169,8 @@ export default function productPage({ slug, product: productDb }) {
   }
   return (
     <Layout
-      title={
-        Object.keys(product).length ? product.name : ""
-      }
-      
+      title={Object.keys(product).length ? product.name : ""}
+      description={Object.keys(product).length ? product.description : ""}
     >
       <Navbar />
       <script
@@ -181,7 +179,11 @@ export default function productPage({ slug, product: productDb }) {
       />
       <div className={styles.header}>
         <Links home={true} back={true} />
-        <button className={styles.cart_button} onClick={handleCartClick} title='Добавить в корзину'>
+        <button
+          className={styles.cart_button}
+          onClick={handleCartClick}
+          title="Добавить в корзину"
+        >
           <FaShoppingCart className={styles.icon} />
           <span>В корзину</span>
         </button>
@@ -362,14 +364,13 @@ export default function productPage({ slug, product: productDb }) {
           </>
         ) : null}
 
-        {sliderValues.isShow && (          
-            <Slider
+        {sliderValues.isShow && (
+          <Slider
             setSliderValues={setSliderValues}
             sliderValues={sliderValues}
             images={product.images}
             setMainImageIdx={setMainImageIdx}
-          />   
-          
+          />
         )}
       </div>
     </Layout>

@@ -47,7 +47,7 @@ export default function categoryPage({ category, categories }) {
   return (
     <Layout
       title={`Категория ${Object.keys(category).length ? category.name : ""}`}
-      keywords={Object.keys(category).length ? category.name : ""}
+      description={Object.keys(category).length ? category.description : ""}
     >
       <Navbar categories={categories} />
       <script
