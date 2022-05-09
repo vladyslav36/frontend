@@ -28,7 +28,7 @@
   align-items: center;
   justify-content: space-between;
   padding:5px 10px; 
-   
+   box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
   cursor:pointer;
 }
 .cart_button .icon{
@@ -121,6 +121,8 @@
   padding:2px 0;
 }
 .price{
+  display:flex;
+  column-gap: 5px;  
   font-size: 27px;
   font-weight: 600;
   color:    #424949;

@@ -251,15 +251,19 @@ export default function productPage({ slug, product: productDb }) {
               </div>
               <div>
                 {Object.keys(currencyRate).length ? (
-                  <p className={styles.price}>
-                    {getPriceForShow({
+                  <div className={styles.price}>
+                    <div>
+                      {getPriceForShow({
                       currencyRate,
                       currencyValue: product.currencyValue,
                       currencyShop,
                       price: currentPrice,
-                    })}{" "}
-                    {getCurrencySymbol(currencyShop)}
-                  </p>
+                    })}
+                    </div>
+                    <div>
+                       {getCurrencySymbol(currencyShop)}
+                    </div>                   
+                  </div>
                 ) : null}
               </div>
             </div>
