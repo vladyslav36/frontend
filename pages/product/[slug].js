@@ -254,20 +254,18 @@ export default function productPage({ slug, product: productDb }) {
                   <div className={styles.price}>
                     <div>
                       {getPriceForShow({
-                      currencyRate,
-                      currencyValue: product.currencyValue,
-                      currencyShop,
-                      price: currentPrice,
-                    })}
+                        currencyRate,
+                        currencyValue: product.currencyValue,
+                        currencyShop,
+                        price: currentPrice,
+                      })}
                     </div>
-                    <div>
-                       {getCurrencySymbol(currencyShop)}
-                    </div>                   
+                    <div>{getCurrencySymbol(currencyShop)}</div>
                   </div>
                 ) : null}
               </div>
             </div>
-
+           
             {Object.keys(product.options).length ? (
               <ProductOptions
                 options={product.options}
@@ -291,7 +289,6 @@ export default function productPage({ slug, product: productDb }) {
                 Выбрать
               </button>
             </div>
-
             <div className={styles.table}>
               <table>
                 <caption>Выбрано товаров</caption>

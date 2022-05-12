@@ -23,12 +23,19 @@ export default function Options({ values, setValues }) {
   // dropdown list for categories
 
  
-  const handleInput = async (e) => {
+  const handleInputOption = async (e) => {
     e.preventDefault()
 
     const { name, value } = e.target
     const ucValue = value.charAt(0).toUpperCase() + value.slice(1)
     setInputValue({ ...inputValue, [name]: ucValue })
+  }
+  const handleInputValue = async (e) => {
+    e.preventDefault()
+
+    const { name, value } = e.target
+    
+    setInputValue({ ...inputValue, [name]:value })
   }
 
   const addOption = () => {
@@ -115,7 +122,7 @@ export default function Options({ values, setValues }) {
                       id="option"
                       name="option"
                       value={inputValue.option}
-                      onChange={handleInput}
+                      onChange={handleInputOption}
                       onKeyPress={(e) => handlePress({ e, cb: addOption })}
                       onFocus={() => setActiveOption("")}
                     />
@@ -153,7 +160,7 @@ export default function Options({ values, setValues }) {
                               id={item}
                               name={item}
                               value={inputValue[item]}
-                              onChange={handleInput}
+                              onChange={handleInputValue}
                               onKeyPress={(e) =>
                                 handlePress({
                                   e,

@@ -17,7 +17,7 @@ export default function ProductOptions({
         <div key={i}>
           <div className={styles.option}>{option}</div>
           <div className={styles.options_wrapper}>
-            {Object.keys(options[option].values).map((value, i) =>
+            {Object.keys(options[option].values).sort().map((value, i) =>
               options[option].values[value].checked ? (
                 <div
                   key={i}
