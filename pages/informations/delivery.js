@@ -1,17 +1,33 @@
 import Layout from "@/components/Layout";
 import Links from "@/components/Links";
-import { API_URL } from "@/config/index.js";
+import { API_URL, UPOST_IMAGE,NEW_POST_IMAGE, AUTOLUX_IMAGE } from "@/config/index.js";
 import styles from "@/styles/Information.module.css"
 
 export default function DeliveryPage({information}) {
   return (
-    <Layout title='Доставка заказов' description='Способы доставки заказов покупателям магазина Кармен'>
+    <Layout
+      title="Доставка заказов"
+      description="Способы доставки заказов покупателям магазина Кармен"
+    >
       <Links home={true} back={true} />
       <div className={styles.container}>
-         <h1>Доставка заказов</h1> 
-      <pre>{information.delivery}</pre>
+        <h1>Доставка заказов</h1>
+
+        <pre>{information.delivery}</pre>
+       
+          <div className={styles.logos}>
+            <div className={styles.image}>
+              <img title="Новая почта" src={NEW_POST_IMAGE} />
+            </div>
+            <div className={styles.image}>
+              <img title="Автолюкс" src={AUTOLUX_IMAGE} />
+            </div>
+            <div className={styles.image}>
+              <img title="Укрпочта" src={UPOST_IMAGE} />
+            </div>
+          </div>
+        
       </div>
-     
     </Layout>
   )
 }
