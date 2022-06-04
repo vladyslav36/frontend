@@ -1,6 +1,6 @@
 import styles from "@/styles/Header.module.css"
 import Link from "next/link"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import AuthContext from "@/context/AuthContext"
 import ProductsContext from "@/context/ProductsContext"
 import {
@@ -116,10 +116,6 @@ export default function Header() {
                 <li onClick={() => setUser({})}>Выйти</li>
               </ul>
             </div>
-            // <button className={styles.logout} onClick={() => setUser({})}>
-            // <FaSignOutAlt className={styles.icon} />
-
-            // </button>
           )}
         </nav>
       </div>
@@ -132,7 +128,7 @@ export default function Header() {
               </a>
             </div>
             <div className={styles.logo}>
-              <a>Кармен</a>
+              <img src="/logo.png" title="На главную" />
             </div>
           </div>
         </Link>

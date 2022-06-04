@@ -33,18 +33,15 @@
   height: 70px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  line-height: 1;
+  justify-content: center;  
+}
+.logo img{
+  width:100%;
 }
 
-.logo a {
-  display: flex;
-  color: red;
-  font-size: 30px;
-}
-.logo a:hover {
-  color: #000;
+.logo:hover {  
   cursor: pointer;
+  transform: scale(1.02);
 }
 .logo_home {
   display: none;
