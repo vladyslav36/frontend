@@ -1,5 +1,6 @@
-.container pre{
-  font-family: 'Roboto',sans-serif;
+.container{
+  width:100%;
+  padding:5px;
 }
 
 .logos{

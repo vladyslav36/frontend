@@ -12,8 +12,10 @@ export default function DeliveryPage({information}) {
       <Links home={true} back={true} />
       <div className={styles.container}>
         <h1>Доставка заказов</h1>
-
-        <pre>{information.delivery}</pre>
+        <div>
+          {information.delivery}
+</div>
+        
        
           <div className={styles.logos}>
             <div className={styles.image}>
