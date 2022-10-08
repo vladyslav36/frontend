@@ -1,75 +1,73 @@
-.container{
-  margin:5px 0;
+.container {
+  margin: 5px 0;
   /* background-color:#d6eaf8    ; */
-  background: linear-gradient(180deg,#d6eaf8 ,  #d4e6f1
- );
-  color:#000;
-  width:100%;
-  padding:5px;
-  border-radius:5px;
-  display:flex;
+  background: linear-gradient(180deg, #d6eaf8, #d4e6f1);
+  color: #000;
+  width: 100%;
+  padding: 5px;
+  border-radius: 5px;
+  display: flex;
   justify-content: space-between;
-  align-items:center;
-  font-size:14px;
-  
+  align-items: center;
+  font-size: 14px;
+
   line-height: 1.1;
 }
 
-.container .list{
-list-style:none;
-display:flex;
-justify-content:flex-start;
-align-items:center;
-flex-wrap:wrap;
-column-gap: 10px;
+.container .list {
+  list-style: none;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 10px;
 }
 
-.category{
-  display:flex;
+.category {
+  display: flex;
   flex-wrap: nowrap;
-  padding: 5px;  
-  margin:5px;
-  position:relative;
-  border:1px solid  #2874a6 ;
-  border-radius:5px;
-  
+  padding: 5px;
+  margin: 5px;
+  position: relative;
+  border: 1px solid #2874a6;
+  border-radius: 5px;
+  /* overflow:hidden; */
 }
 
-.category:hover{ 
+.category:hover {
   background-color: #aed6f1;
-  cursor:pointer;
+  cursor: pointer;
 }
-.drop_down_list{
-  position:absolute;
-  list-style: none; 
-  display:none;
-  z-index:900;
-  padding:5px 0;
-  top:100%;
-  
-  
-  min-width:160px;
-  background-color:  #fbfcfc ;
-color:#000;
-  border:1px solid  #ccd1d1;
-;
+.drop_down_list {
+  position: absolute;
+  list-style: none;
+  /* display:none; */
+  visibility: hidden;
+  z-index: 900;
+  padding: 5px 0;
+  top: calc(100% );
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  min-width: 160px;
+  background-color: #fbfcfc;
+  color: #000;
+  border: 1px solid #ccd1d1;
+  box-shadow:5px 5px 5px rgba(0,0,0,0.3)
 }
-.drop_down_list.right_side{  
-  right:0;
+.drop_down_list.right_side {
+  right: 0;
 }
-.drop_down_list.left_side{  
-  left:0;
+.drop_down_list.left_side {
+  left: 0;
 }
-.category:hover .drop_down_list{
-  display:block;
-  
+.category:hover .drop_down_list {
+  /* display:block; */
+  visibility: visible;
+  opacity: 1;
 }
-.drop_down_list li{
-  padding:3px 10px; 
-  
+.drop_down_list li {
+  padding: 3px 10px;
 }
-.drop_down_list li:hover{
-  background-color: 
-#aed6f1;
- 
+.drop_down_list li:hover {
+  background-color: #aed6f1;
 }

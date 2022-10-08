@@ -220,3 +220,21 @@ export const getMailString = ({ cart, totalAmount, values,count }) => {
   </div>
   `
 }
+export const addRiple = (e) => {
+  const circle = document.createElement("span")
+  circle.classList.add('riple')
+  const button = e.target
+  const x = e.clientX
+  const y = e.clientY
+  const buttonY = e.target.offsetTop
+  const buttonX = e.target.offsetLeft
+  const insideX = x - buttonX
+  const insideY = y - buttonY
+  circle.style.top = insideY + "px"
+  circle.style.left = insideX + "px"
+
+  button.appendChild(circle)
+  setTimeout(() => {
+    circle.remove()
+  }, 1000)
+}
