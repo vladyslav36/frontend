@@ -41,7 +41,10 @@
 
 .logo:hover {  
   cursor: pointer;
-  transform: scale(1.02);
+  
+}
+.logo:active{
+  transform:scale(0.95)
 }
 .logo_home {
   display: none;
@@ -52,6 +55,9 @@
   font-size: 25px;
   color: red;
   cursor: pointer;
+}
+.logo_home:active{
+  transform:scale(0.9)
 }
 .currencies {
   display: flex;
@@ -223,6 +229,10 @@
 .header .cart a:hover {
   cursor: pointer;
   background-color: #e5e7e9;
+}
+.header .cart a:active {
+  transform: scale(0.98);
+  box-shadow: inset 2px 2px 2px rgba(0,0,0,0.2);
 }
 
 .check_block {

@@ -21,9 +21,13 @@
  box-shadow: 5px 5px 5px  rgba(0, 0, 0, 0.20);
  overflow:hidden;
 }
-.item:hover{
-  transform: scale(0.98);
+.item:hover{ 
   cursor:pointer;
+  background-color:  #f8f9f9;
+
+}
+.item:active{
+   transform: scale(0.98);
 }
 .item_name{
   display:flex;  

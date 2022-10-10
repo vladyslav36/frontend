@@ -2,7 +2,7 @@ import styles from "@/styles/Navbar.module.css"
 import {  useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { API_URL } from "../config"
-import { addRiple } from "utils"
+
 
 
 export default function Navbar({ categories: categoriesProps }) {
@@ -48,13 +48,12 @@ export default function Navbar({ categories: categoriesProps }) {
                     className={styles.category}
                     key={category._id}
                     onClick={(e) => {
-                      e.stopPropagation()  
-                      // addRiple(e)
+                      e.stopPropagation()                        
                       router.push(`/category/${category.slug}`)
                     }}
                     onMouseEnter={(e) => getSpace(e)}
                   >
-                    {category.name}
+                    <span>{category.name}</span>                    
                     {getChildren(category, categories).length ? (
                       <ul
                         className={
@@ -70,6 +69,7 @@ export default function Navbar({ categories: categoriesProps }) {
                               router.push(`/category/${item.slug}`)
                             }}
                             key={item._id}
+                            
                           >
                             {item.name}&nbsp;({item.qntProducts})
                           </li>

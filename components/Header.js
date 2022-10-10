@@ -10,7 +10,7 @@ import {
   FaShoppingCart,
   FaSignInAlt,
 } from "react-icons/fa"
-import { getCurrencySymbol, getPriceForShow, getQntInCart } from "utils"
+import { addRiple, getCurrencySymbol, getPriceForShow, getQntInCart } from "utils"
 import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import { useRouter } from "next/router"
 import Loupe from "./Loupe"

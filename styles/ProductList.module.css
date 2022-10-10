@@ -35,7 +35,10 @@
     border-left: 2px solid var(--links-color);
     border-right: 2px solid var(--links-color);
     cursor:pointer;
+    background-color:  #f8f9f9;
   }
+  
+
   .table tbody td{
     text-align: center;
     border:1px solid #888;
@@ -56,8 +59,12 @@
 }
 .image img:hover{
   cursor:zoom-in;
-  transform:scale(0.98)
+  
 }
+.image img:active{  
+  transform:scale(0.96)
+}
+
 .button{
   display:flex;
   justify-content: center;
