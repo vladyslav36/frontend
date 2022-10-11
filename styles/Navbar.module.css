@@ -31,7 +31,7 @@
   position: relative;
   border: 1px solid #2874a6;
   border-radius: 5px;
-  /* overflow:hidden; */
+  
 }
 
 .category:hover {
@@ -45,14 +45,14 @@
   transform:scale(0.96); 
 }
 .drop_down_list {
+  display:none;
   position: absolute;
   list-style: none;  
-  visibility: hidden;
+ 
   z-index: 900;
   padding: 5px 0;
   top: calc(100% );
-  opacity: 0;
-  transition: opacity 0.4s ease-in-out;
+  
   min-width: 160px;
   background-color: #fbfcfc;
   color: #000;
@@ -66,9 +66,8 @@
   left: 0;
 }
 .category:hover .drop_down_list {
-  /* display:block; */
-  visibility: visible;
-  opacity: 1;
+  display:block;
+ 
 }
 .drop_down_list li {
   padding: 3px 10px;
