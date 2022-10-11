@@ -179,14 +179,14 @@ export default function productPage({ slug, product: productDb }) {
       />
       <div className={styles.header}>
         <Links home={true} back={true} />
-        <button
+        <div
           className={styles.cart_button}
           onClick={handleCartClick}
           title="Добавить в корзину"
         >
           <FaShoppingCart className={styles.icon} />
           <span>В корзину</span>
-        </button>
+        </div>
       </div>
       <ToastContainer />
       <div className={styles.container}>
