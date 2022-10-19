@@ -3,6 +3,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Head from 'next/head'
 
+
 export default function Layout({ children, title, keywords, description }) {
   const schemaDate = {    
   "@context": "http://www.schema.org",
