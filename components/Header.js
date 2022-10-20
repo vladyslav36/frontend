@@ -265,7 +265,7 @@ export default function Header() {
             <i className="fa-solid fa-phone fa-ml"></i>
           </span>
           <span>
-            <Link href="tel: +390508501671">{PHONE1}</Link>
+            <Link href="tel: +390509501671">{PHONE1}</Link>
             <Link href="tel: +380982086083">{PHONE2}</Link>
           </span>
         </div>
