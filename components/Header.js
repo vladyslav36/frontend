@@ -269,7 +269,7 @@ export default function Header() {
             <Link href="tel: +380982086083">{PHONE2}</Link>
           </span>
         </div>
-        <div className={styles.cart}>
+        <div className={styles.cart} title='Корзина'>
           <Link href="/cart">
             <a>
               <i className="fa-solid fa-cart-shopping fa-2x"></i>

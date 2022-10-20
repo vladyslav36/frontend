@@ -3,7 +3,7 @@ import Layout from "@/components/Layout"
 import { API_URL, NOIMAGE } from "@/config/index.js"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { FaShoppingCart, FaTimes,FaMinus,FaPlus } from "react-icons/fa"
+import { FaShoppingCart, FaTimes, FaMinus, FaPlus } from "react-icons/fa"
 import { getCurrencySymbol, getPriceForShow } from "utils"
 import { useContext, useEffect, useRef, useState } from "react"
 import Slider from "@/components/Slider"
@@ -11,7 +11,6 @@ import Navbar from "@/components/Navbar"
 import ProductsContext from "@/context/ProductsContext"
 import Links from "@/components/Links"
 import ProductOptions from "@/components/ProductOptions"
-
 
 export default function productPage({ slug, product: productDb }) {
   const { currencyShop } = useContext(ProductsContext)
@@ -107,7 +106,6 @@ export default function productPage({ slug, product: productDb }) {
       return
     }
 
-    
     setChosen([
       ...chosen,
       {
@@ -165,7 +163,7 @@ export default function productPage({ slug, product: productDb }) {
     article: product.model,
     image: product.images[0],
     description: product.description,
-    price: product.price +' '+product.currencyValue,
+    price: product.price + " " + product.currencyValue,
   }
   return (
     <Layout
@@ -179,14 +177,6 @@ export default function productPage({ slug, product: productDb }) {
       />
       <div className={styles.header}>
         <Links home={true} back={true} />
-        <div
-          className={styles.cart_button}
-          onClick={handleCartClick}
-          title="Добавить в корзину"
-        >
-          <FaShoppingCart className={styles.icon} />
-          <span>В корзину</span>
-        </div>
       </div>
       <ToastContainer />
       <div className={styles.container}>
@@ -265,7 +255,7 @@ export default function productPage({ slug, product: productDb }) {
                 ) : null}
               </div>
             </div>
-           
+
             {Object.keys(product.options).length ? (
               <ProductOptions
                 options={product.options}
@@ -274,21 +264,37 @@ export default function productPage({ slug, product: productDb }) {
                 setValues={setValues}
               />
             ) : null}
-            <div className={styles.counter_wrapper}>
-              <FaMinus className={styles.icons} onClick={decQnt} />
-              <input
-                type="text"
-                className={styles.counter}
-                value={values.qnt}
-                onChange={(e) => setValues({ ...values, qnt: e.target.value })}
-              />{" "}
-              <FaPlus className={styles.icons} onClick={incQnt} />
+            <div className={styles.counter_cart_wrapper}>
+              <div className={styles.counter_wrapper}>
+                <i class="fa-solid fa-square-minus fa-2xl" onClick={decQnt}></i>
+                <input
+                  type="text"
+                  className={styles.counter}
+                  value={values.qnt}
+                  onChange={(e) =>
+                    setValues({ ...values, qnt: e.target.value })
+                  }
+                />{" "}
+                
+                <i class="fa-solid fa-square-plus fa-2xl" onClick={incQnt}></i>
+              </div>
+
+              <div
+                className={styles.choose_button}
+                onClick={addedValues}
+                title="Выбрать"
+              >
+                <i class="fa-solid fa-circle-down fa-2x"></i>
+              </div>
+              <div
+                className={styles.add_cart_icon}
+                onClick={handleCartClick}
+                title="Добавить в корзину"
+              >
+                <i class="fa-solid fa-cart-arrow-down fa-2xl"></i>
+              </div>
             </div>
-            <div className={styles.button}>
-              <button type="button" onClick={addedValues}>
-                Выбрать
-              </button>
-            </div>
+
             <div className={styles.table}>
               <table>
                 <caption>Выбрано товаров</caption>
