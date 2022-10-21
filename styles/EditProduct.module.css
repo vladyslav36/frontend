@@ -85,9 +85,11 @@
 .edit {   
   color: #2874a6;
   cursor: pointer;  
+  display:flex;
 }
 
 .delete { 
+  display:flex;
   border: none;
   cursor: pointer;  
   color: red;  
@@ -140,6 +142,55 @@
   background-color: inherit;
   color:steelblue;
   cursor: pointer;
+}
+.dialog::backdrop{
+backdrop-filter: blur(2px);
+}
+.dialog{
+  margin:auto;
+width: 320px;
+  height: 170px;
+  background-color: #fdfefe;  
+  border: #888;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+  
+}
+
+.dialog_wrapper{
+  height:100%;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100px 70px;
+}
+
+.dialog_wrapper p{
+  grid-column: 1/3;
+  grid-row: 1/2;
+  letter-spacing: 1px;;
+  justify-self: center;
+  align-self: center; 
+  text-align: center;
+  font-size: 18px;;
+}
+
+.dialog_wrapper div{
+  justify-self: center;
+  align-self: center;
+  font-size:18px;
+  color:#fff;
+  padding:5px 20px;
+  border-radius: 5px;;
+  cursor:pointer;
+}
+
+.dialog_wrapper div:nth-child(2){
+  background-color: red;
+  
+}
+.dialog_wrapper div:nth-child(3){
+  background-color: green;
+  
 }
  
 @media (max-width: 768px) {

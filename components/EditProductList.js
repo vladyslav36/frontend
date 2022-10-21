@@ -1,22 +1,20 @@
 import styles from "@/styles/EditProduct.module.css"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { getCurrencySymbol, getShortDescription } from "utils"
 import { API_URL } from "../config"
-import { FaPencilAlt, FaSearch, FaTimes } from "react-icons/fa"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
 import Links from "@/components/Links"
 import DropDownListItems from "./DropDownListItems"
-import Confirm from "./Confirm"
+
 
 export default function EditProductList({
   prodList,
   setProdList,
   setIsShowProduct,
   setProduct,
-  token,
-  categories,
+  token  
 }) {
   const router = useRouter()
 
@@ -40,11 +38,10 @@ export default function EditProductList({
   })
 
   const [delayTimer, setDelayTimer] = useState()
-  // Компонент Confirm берет аргументами isShow и аргументы товара или категориии которые надо удалить,
-  //  сохраняет их в стейте и затем в Confirm передается функция удаления вместе с аргуиентми
-  const [isShowConfirm, setIsShowConfirm] = useState(false)
-  const [deleteArg, setDeleteArg] = useState({})
-
+ 
+  const [prodForDelete, setProdForDelete] = useState({})
+  const elemModal = useRef()
+  
   const listNamesFetcher = async (name, value) => {
     const res = await fetch(`${API_URL}/api/search/list_names/${name}`, {
       method: "POST",
@@ -64,7 +61,7 @@ export default function EditProductList({
     setListNames({ ...listNames, [name]: data.list })
   }
 
-  const handleDeleteProduct = async ({ _id, idx }) => {
+  const handleDeleteProduct = async ({ _id }) => {
     const res = await fetch(`${API_URL}/api/products/${_id}`, {
       method: "DELETE",
       headers: {
@@ -75,8 +72,8 @@ export default function EditProductList({
     if (!res.ok) {
       toast.error(data.message)
     } else {
-      setProdList(prodList.filter((item, i) => i != idx))
-      setDeleteArg({})
+      setProdList(prodList.filter((item) => item._id!==_id))
+      
     }
   }
   const handleChange = (e) => {
@@ -115,17 +112,22 @@ export default function EditProductList({
     setProdList([...data.products.sort((a, b) => (a.name > b.name ? 1 : -1))])
   }
 
+  const handleModal = (item) => {
+    elemModal.current.showModal()
+    setProdForDelete(item)
+    
+  }
+  const handle = (rez) => {
+    if (rez) {
+      handleDeleteProduct(prodForDelete)
+    }
+    setProdForDelete({})
+    elemModal.current.close()
+  }
+
   return (
     <div>
-      <ToastContainer />
-      {isShowConfirm ? (
-        <Confirm
-          itemName={deleteArg.name}
-          setIsShowConfirm={setIsShowConfirm}
-          handleDelete={() => handleDeleteProduct(deleteArg)}
-          setDeleteArg={setDeleteArg}
-        />
-      ) : null}
+      <ToastContainer />      
       <div className={styles.container}>
         <Links home={true} back={false} />
         <form onSubmit={submitHandler} className={styles.form}>
@@ -255,7 +257,7 @@ export default function EditProductList({
             <div>&nbsp;</div>
             {/* <input type="submit" className={styles.button} value="Найти" /> */}
             <button type="submit" className={styles.button}>
-              <FaSearch />
+              <i class="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
         </form>
@@ -301,30 +303,14 @@ export default function EditProductList({
                               setIsShowProduct(true)
                             }}
                           >
-                            <FaPencilAlt className={styles.icon} />
+                            <i class="fa-solid fa-pencil fa-lg"></i>
                           </button>
                           <div>
                             <button
-                              className={styles.delete}
-                              // onClick={() =>
-                              //   handleDeleteProduct({
-                              //     _id: `${item._id}`,
-                              //     idx: i,
-                              //     name:item.name
-                              //   })
-                              // }
-                              onClick={() => {
-                                setIsShowConfirm(true)
-                                setDeleteArg({
-                                  _id: `${item._id}`,
-                                  idx: i,
-                                  name: item.name,
-                                })
-                              }}
+                              className={styles.delete}                             
+                            onClick={()=>handleModal(item)}
                             >
-                              <span>
-                                <FaTimes className={styles.icon} />
-                              </span>
+                              <i class="fa-solid fa-xmark fa-xl"></i>
                             </button>
                           </div>
                         </div>
@@ -336,6 +322,13 @@ export default function EditProductList({
           </table>
         </div>
       </div>
+      <dialog className={styles.dialog} ref={elemModal}>
+        <div className={styles.dialog_wrapper}>
+          <p>Удалить товар {prodForDelete.name}?</p>
+          <div onClick={() => handle(true)}>Да</div>
+          <div onClick={() => handle(false)}>Нет</div>
+        </div>
+      </dialog>
     </div>
   )
 }

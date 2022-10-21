@@ -1,12 +1,10 @@
 import styles from "@/styles/EditCategory.module.css"
 import { getCategoriesTree } from "../utils"
 import { API_URL } from "../config"
-import { FaPencilAlt, FaTimes } from "react-icons/fa"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
-import Confirm from "./Confirm"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 export default function EditCategoryList({
   categories,
@@ -15,10 +13,10 @@ export default function EditCategoryList({
   setCategories,
   token,
 }) {
-  // Компонент Confirm берет аргументами isShow и аргументы товара или категориии которые надо удалить,
-  //  сохраняет их в стейте и затем в Confirm передается функция удаления вместе с аргуиентми
-  const [isShowConfirm, setIsShowConfirm] = useState(false)
-  const [deleteArg, setDeleteArg] = useState({})
+ 
+   const [catForDelete, setCatForDelete] = useState({})
+
+  const elemModal = useRef()
 
   const arrayTree = categories.map((item) => {
     return {
@@ -34,12 +32,12 @@ export default function EditCategoryList({
     setIsShowCategory(true)
   }
 
-  const handleDeleteCategory = async ({ id }) => {
-    const isChildren = categories.some((item) => item.parentCategoryId === id)
+  const handleDeleteCategory = async ({ _id }) => {
+    const isChildren = categories.some((item) => item.parentCategoryId === _id)
     if (isChildren) {
       toast.error("Сначала удалите все подкатегории в этой категории")
     }
-    const res = await fetch(`${API_URL}/api/categories/${id}`, {
+    const res = await fetch(`${API_URL}/api/categories/${_id}`, {
       method: "DELETE",
       headers: {
         authorization: `Bearer ${token}`,
@@ -49,22 +47,26 @@ export default function EditCategoryList({
     if (!res.ok) {
       toast.error(data.message)
     } else {
-      setCategories(categories.filter((item) => item._id !== id))
-      setDeleteArg({})
+      setCategories(categories.filter((item) => item._id !== _id))
+      
     }
+  }
+
+  const handleModal = (item) => {
+    elemModal.current.showModal()
+    setCatForDelete(item)
+  }
+  const handle = (rez) => {
+    if (rez) {
+      handleDeleteCategory(catForDelete)
+    }
+    setCatForDelete({})
+    elemModal.current.close()
   }
 
   return (
     <div>
       <ToastContainer />
-      {isShowConfirm ? (
-        <Confirm
-          itemName={deleteArg.name}
-          setIsShowConfirm={setIsShowConfirm}
-          setDeleteArg={setDeleteArg}
-          handleDelete={() => handleDeleteCategory(deleteArg)}
-        />
-      ) : null}
       <div className={styles.container}>
         <Links back={false} home={true} />
         <div className={styles.list_wrapper}>
@@ -77,20 +79,14 @@ export default function EditCategoryList({
                       className={styles.edit}
                       onClick={() => handleEditCategory(item._id)}
                     >
-                      <FaPencilAlt className={styles.icon} />
+                      <i class="fa-solid fa-pencil"></i>
                     </button>
 
                     <button
                       className={styles.delete}
-                      // onClick={() => handleDeleteCategory(item._id)}
-                      onClick={() => {
-                        setIsShowConfirm(true)
-                        setDeleteArg({ id: item._id, name: item.name })
-                      }}
-                    >
-                      <span>
-                        <FaTimes className={styles.icon} />
-                      </span>
+                      onClick={() => handleModal(item)}
+                    >                                             
+                        <i class="fa-solid fa-xmark fa-lg"></i>                      
                     </button>
                   </div>
                 </div>
@@ -98,6 +94,13 @@ export default function EditCategoryList({
             : null}
         </div>
       </div>
+      <dialog className={styles.dialog} ref={elemModal}>
+        <div className={styles.dialog_wrapper}>
+          <p>Удалить категорию {catForDelete.name}?</p>
+          <div onClick={() => handle(true)}>Да</div>
+          <div onClick={() => handle(false)}>Нет</div>
+        </div>
+      </dialog>
     </div>
   )
 }
