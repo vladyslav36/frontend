@@ -22,6 +22,8 @@ a{
 }
 a:hover{
   color:var(--links-hover-color);
+  cursor:pointer;
+  text-decoration: underline;
 }
 
 .btn{

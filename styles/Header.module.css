@@ -262,14 +262,18 @@
   text-decoration: underline;
 }
 
-
-
-
-
-
 .header a{
   color:#333;
   text-decoration: none;
+}
+
+.dialog{
+  margin:auto;
+  border:none;
+}
+
+.dialog::backdrop{
+  backdrop-filter: blur(2px);
 }
 
 @media (max-width: 1200px) {

@@ -7,6 +7,8 @@ import { getCurrencySymbol, getPriceForShow, getQntInCart } from "utils"
 import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import Loupe from "./Loupe"
 import { toast } from "react-toastify"
+import Login from "./Login"
+import Register from "./Register"
 
 export default function Header() {
   const { setUser, user } = useContext(AuthContext)
@@ -17,9 +19,11 @@ export default function Header() {
   const [isShowLoupe, setIsShowLoupe] = useState(false)
   const [image, setImage] = useState("")
   const [searchString, setSearchString] = useState("")
-  const [products, setProducts] = useState([])  
+  const [products, setProducts] = useState([])
   const elemMainUserMenu = useRef()
   const elemBurgerMenu = useRef()
+  const elemDialog = useRef()
+  const [logRegMode, setLogRegMode] = useState(true)
   const isUser = Object.keys(user).length === 0 ? false : true
 
   const handleChange = (e) => {
@@ -44,7 +48,6 @@ export default function Header() {
 
   const handleClick = (name) => {
     setIsShowList(false)
-    
   }
 
   const toggleMainUserMenu = () => {
@@ -53,6 +56,11 @@ export default function Header() {
 
   const toggleBurgerMenu = () => {
     elemBurgerMenu.current.classList.toggle(styles.show)
+  }
+
+  const close = () => {
+    elemDialog.current.close()
+    setLogRegMode(true)
   }
 
   return (
@@ -148,7 +156,14 @@ export default function Header() {
               </Link>
             </li>
             <li className={isUser ? styles.hide : styles.show}>
-              <Link href="/account/login">Войти</Link>
+              <a
+                onClick={() => {
+                  elemMainUserMenu.current.classList.remove(styles.show)
+                  elemDialog.current.showModal()
+                }}
+              >
+                Войти
+              </a>
             </li>
             <li>
               <div
@@ -209,9 +224,14 @@ export default function Header() {
                 </Link>
               </li>
               <li className={isUser ? styles.hide : styles.show}>
-                <Link href="/account/login">
-                  <a>Войти</a>
-                </Link>
+                <a
+                  onClick={() => {
+                    elemBurgerMenu.current.classList.remove(styles.show)
+                    elemDialog.current.showModal()
+                  }}
+                >
+                  Войти
+                </a>
               </li>
               <div className={isUser ? styles.show : styles.hide}>
                 <li>
@@ -224,7 +244,14 @@ export default function Header() {
                     <a>Профиль</a>
                   </Link>
                 </li>
-                <li onClick={() => setUser({})}>Выйти</li>
+                <li
+                  onClick={() => {
+                    setUser({})
+                    elemBurgerMenu.current.classList.remove(styles.show)
+                  }}
+                >
+                  Выйти
+                </li>
               </div>
             </ul>
           </div>
@@ -269,7 +296,7 @@ export default function Header() {
             <Link href="tel: +380982086083">{PHONE2}</Link>
           </span>
         </div>
-        <div className={styles.cart} title='Корзина'>
+        <div className={styles.cart} title="Корзина">
           <Link href="/cart">
             <a>
               <i className="fa-solid fa-cart-shopping fa-2x"></i>
@@ -281,6 +308,16 @@ export default function Header() {
         </div>
       </div>
       {isShowLoupe ? <Loupe setIsShow={setIsShowLoupe} image={image} /> : null}
+      <dialog className={styles.dialog} ref={elemDialog}>
+        {logRegMode ? (
+          <Login
+            close={() => elemDialog.current.close()}
+            setLogRegMode={setLogRegMode}
+          />
+        ) : (
+          <Register close={close} setLogRegMode={setLogRegMode} />
+        )}
+      </dialog>
     </div>
   )
 }
