@@ -10,6 +10,7 @@ export default function Login({ close, setLogRegMode }) {
   const [password, setPassword] = useState("")
   const { setUser } = useContext(AuthContext)
 
+  
   const submitHandler = async (e) => {
     e.preventDefault()
     const res = await fetch(`${API_URL}/api/user/login`, {
@@ -61,6 +62,7 @@ export default function Login({ close, setLogRegMode }) {
           <p>Не зарегистрированы?</p>
           <a onClick={() => setLogRegMode(false)}>Регистрация</a>
         </div>
+        
       </form>
     </div>
   )

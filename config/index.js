@@ -4,4 +4,5 @@ export const PHONE1='+38 050 950 16 71'
 export const PHONE2 = '+38 098 208 60 83'
 export const UPOST_IMAGE='/delivery_logos/upost.png'
 export const NEW_POST_IMAGE='/delivery_logos/new_post.png'
-export const AUTOLUX_IMAGE='/delivery_logos/autolux.png'
+export const AUTOLUX_IMAGE = '/delivery_logos/autolux.png'
+
