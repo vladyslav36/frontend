@@ -35,8 +35,8 @@ export default function Register({ close, setLogRegMode }) {
       <ToastContainer />
       <form className={styles.form} onSubmit={submitHandler}>
         <div className={styles.header_icons}>
-          <i class="fa-solid fa-user fa-lg"></i>
-          <i class="fa-solid fa-xmark fa-xl" onClick={() => close()}></i>
+          <i className="fa-solid fa-user fa-lg"></i>
+          <i className="fa-solid fa-xmark fa-xl" onClick={() => close()}></i>
         </div>
         <div className={styles.input_wrapper}>
           <label htmlFor="userName">Имя</label>
