@@ -246,8 +246,8 @@ export default function Header() {
                 </li>
                 <li
                   onClick={() => {
-                    setUser({})
                     elemBurgerMenu.current.classList.remove(styles.show)
+                    setUser({})
                   }}
                 >
                   Выйти
