@@ -203,7 +203,7 @@ export default function Header() {
               <i className="fa-solid fa-bars fa-2xl"></i>
             </div>
 
-            <ul className={styles.burger_menu} ref={elemBurgerMenu}>
+            <ul className={styles.burger_menu} ref={elemBurgerMenu} id='burger_menu'>
               <li className={isUser ? styles.show : styles.hide}>
                 <i className="fa-solid fa-user"></i>&nbsp;
                 <span>{user.email}</span>
@@ -226,7 +226,10 @@ export default function Header() {
               <li className={isUser ? styles.hide : styles.show}>
                 <a
                   onClick={() => {
-                    elemBurgerMenu.current.classList.remove(styles.show)
+                    // elemBurgerMenu.current.classList.remove(styles.show)
+                    document
+                      .getElementById("burger_menu")
+                      .classList.remove(styles.show)
                     elemDialog.current.showModal()
                   }}
                 >
@@ -246,7 +249,9 @@ export default function Header() {
                 </li>
                 <li
                   onClick={() => {
-                    elemBurgerMenu.current.classList.remove(styles.show)
+                    // elemBurgerMenu.current.classList.remove(styles.show) 
+                    document.getElementById('burger_menu').classList.remove(styles.show)
+                    
                     setUser({})
                   }}
                 >
