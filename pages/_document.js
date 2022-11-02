@@ -14,7 +14,7 @@ export default function Document() {
 
         <script
           src="https://kit.fontawesome.com/ab965ee727.js"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         ></script>
       </Head>
       <body>

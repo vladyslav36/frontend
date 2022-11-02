@@ -79,14 +79,14 @@ export default function EditCategoryList({
                       className={styles.edit}
                       onClick={() => handleEditCategory(item._id)}
                     >
-                      <i class="fa-solid fa-pencil"></i>
+                      <i className="fa-solid fa-pencil"></i>
                     </button>
 
                     <button
                       className={styles.delete}
                       onClick={() => handleModal(item)}
                     >                                             
-                        <i class="fa-solid fa-xmark fa-lg"></i>                      
+                        <i className="fa-solid fa-xmark fa-lg"></i>                      
                     </button>
                   </div>
                 </div>

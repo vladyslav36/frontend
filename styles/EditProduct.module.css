@@ -22,21 +22,21 @@
   border-bottom: 1px solid #999;
 }
 .container thead :nth-child(2) {
-  width: 15%;
+ min-width: 15%;
   text-align: left;
 }
 .container thead :nth-child(3) {
-  width: 10%;
+  min-width: 10%;
   text-align: left;
 }
 .container thead :nth-child(4) {
   width: 50%;
 }
 .container thead :nth-child(5) {
-  width: 50px;
+  min-width: 50px;
 }
 .container thead :nth-child(6) {
-  width: 100px;
+  min-width: 100px;
 }
 
 .container tbody tr:nth-child(odd) {
@@ -145,6 +145,7 @@
 }
 .dialog::backdrop{
 background-color: rgba(0,0,0,0.3);
+backdrop-filter: blur(3px);
 }
 .dialog{
   margin:auto;
@@ -200,4 +201,12 @@ width: 320px;
   .form .button {
     font-size:30px;
   }
+  .container thead th:nth-child(4) {
+  width: 0px;
+  overflow:hidden;
+}
+.container tbody td:nth-child(4){
+  width:0;
+  overflow: hidden;
+}
 }

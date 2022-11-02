@@ -1,5 +1,5 @@
 
-/* @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Robotto:wght@400&display=swap'); */
+
 :root{
   --links-color:#2874a6;
   --links-hover-color: #1a5276;
@@ -45,11 +45,7 @@ a:hover{
   opacity:0.9;
 }
 
-.spinner{
-  position:absolute;
-  top:30%;
-  left:50%;  
-}
+
 
 .riple{   
   position:absolute;

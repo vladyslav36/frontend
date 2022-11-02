@@ -54,7 +54,7 @@ export default function UserProfile() {
   }
   return (
     <Layout title="User profile">
-      <Navbar />
+      <Navbar />      
       <Links home={true} back={true} />
       {Object.keys(user).length ? (
         <div className={styles.container}>

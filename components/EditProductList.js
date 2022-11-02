@@ -254,10 +254,9 @@ export default function EditProductList({
             </div>
           </div>
           <div className={styles.button_wrapper}>
-            <div>&nbsp;</div>
-            {/* <input type="submit" className={styles.button} value="Найти" /> */}
+            <div>&nbsp;</div>            
             <button type="submit" className={styles.button}>
-              <i class="fa-solid fa-magnifying-glass"></i>
+              <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
         </form>
@@ -303,14 +302,14 @@ export default function EditProductList({
                               setIsShowProduct(true)
                             }}
                           >
-                            <i class="fa-solid fa-pencil fa-lg"></i>
+                            <i className="fa-solid fa-pencil fa-lg"></i>
                           </button>
                           <div>
                             <button
                               className={styles.delete}                             
                             onClick={()=>handleModal(item)}
                             >
-                              <i class="fa-solid fa-xmark fa-xl"></i>
+                              <i className="fa-solid fa-xmark fa-xl"></i>
                             </button>
                           </div>
                         </div>
