@@ -3,7 +3,7 @@ import Layout from "@/components/Layout"
 import { API_URL, NOIMAGE } from "@/config/index.js"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import {  FaTimes } from "react-icons/fa"
+import { FaTimes } from "react-icons/fa"
 import { getCurrencySymbol, getPriceForShow } from "utils"
 import { useContext, useEffect, useRef, useState } from "react"
 import Slider from "@/components/Slider"
@@ -44,7 +44,7 @@ export default function productPage({ slug, product: productDb }) {
   const [currentPrice, setCurrentPrice] = useState(product.price)
 
   const [mainImageIdx, setMainImageIdx] = useState(0)
-  const fakeArray = ["", "", "", "", "", "", ""]
+
   // Устанавливаем currentPrice. Если опционного нет, тогда без изменений, если есть-меняем на опционный
   // находим меняющуюся опцию, берем value из values и если оно есть берем price
   useEffect(() => {
@@ -213,9 +213,6 @@ export default function productPage({ slug, product: productDb }) {
                     </div>
                   ))
                 : null}
-              {fakeArray.map((item, i) => (
-                <div className={styles.fake_image} key={i}></div>
-              ))}
             </div>
           </div>
 
@@ -275,7 +272,6 @@ export default function productPage({ slug, product: productDb }) {
                     setValues({ ...values, qnt: e.target.value })
                   }
                 />{" "}
-                
                 <i class="fa-solid fa-square-plus fa-2xl" onClick={incQnt}></i>
               </div>
 

@@ -1,3 +1,5 @@
+$image-width:500px;
+
 .links {
   display: flex;
   a {
@@ -37,7 +39,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
+    
   }
   .main_image {
     display: flex;
@@ -55,12 +57,13 @@
 }
 
 .added_images {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
+ 
+  width:100%;
   margin: 10px 0;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(60px,1fr));
   gap: 10px;
+  
   img {
     max-width: 50px;
     max-height: 70px;
@@ -71,6 +74,7 @@
 }
 
 .added_image {
+  justify-self:center;
   width: 60px;
   height: 80px;
   display: flex;
@@ -83,10 +87,7 @@
   }
 }
 
-.fake_image {
-  width: 60px;
-  height: 0px;
-}
+
 .image_active {
   border: 1px solid red;
 }
@@ -218,8 +219,12 @@
     .main_image {
       justify-content: center;
       img {
-        max-width: 500px;
+        max-width: $image-width;
       }
+    }
+    .added_images{
+      max-width:$image-width;
+      margin:10px auto;
     }
     .left {
       align-items: center;

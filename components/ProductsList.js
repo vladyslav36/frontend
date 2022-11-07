@@ -15,11 +15,8 @@ export default function ProductsList({ products = [], isShowAsList }) {
 
   const { currencyShop,currencyRate } = useContext(ProductsContext)  
   const [isShow, setIsShow] = useState(false)
-  const [image, setImage] = useState("")
-  const fakeArray=['','','','','','']
-  const addToCart = () => {
-    console.log("cart")
-  }
+  const [image, setImage] = useState("")  
+  
 
   return (
     <>
@@ -96,9 +93,8 @@ export default function ProductsList({ products = [], isShowAsList }) {
         </div>
       ) : (
         <div className={styles.container}>
-          {products.map((item, i) => (
-            <div className={styles.card_wrapper} key={i}>
-              <Link href={`/product/${item.slug}`}>
+            {products.map((item, i) => (              
+                <Link href={`/product/${item.slug}`} key={i}>
                 <div className={styles.card}>
                   <div className={styles.image_card}>
                     <img
@@ -136,11 +132,9 @@ export default function ProductsList({ products = [], isShowAsList }) {
                   </div>
                 </div>
               </Link>
-            </div>
+            
           ))}
-            {fakeArray.map((item, i) => (
-              <div className={styles.fake_image} key={i}></div>
-            ))}
+           
           {isShow ? <Loupe image={image} setIsShow={setIsShow} /> : null}
         </div>
       )}
