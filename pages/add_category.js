@@ -1,4 +1,4 @@
-import styles from "@/styles/Form.module.css"
+import styles from "@/styles/Form.module.scss"
 import AccessDenied from "@/components/AccessDenied"
 import Layout from "@/components/Layout"
 import Modal from "@/components/Modal"

@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout"
-import styles from "@/styles/OrderUserList.module.css"
+import styles from "@/styles/OrderUserList.module.scss"
 import { API_URL } from "@/config/index"
 import moment from "moment"
 import { useEffect, useState, useContext } from "react"

@@ -1,7 +1,7 @@
+import styles from "@/styles/Information.module.scss"
 import Layout from "@/components/Layout";
 import Links from "@/components/Links";
 import { API_URL, UPOST_IMAGE,NEW_POST_IMAGE, AUTOLUX_IMAGE } from "@/config/index.js";
-import styles from "@/styles/Information.module.css"
 
 export default function DeliveryPage({information}) {
   return (

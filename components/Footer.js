@@ -1,4 +1,4 @@
-import styles from "@/styles/Footer.module.css"
+import styles from "@/styles/Footer.module.scss"
 import { FaPhone,FaSistrix,FaRegClock, FaRegCreditCard } from 'react-icons/fa'
 import Link from "next/link"
 import { PHONE1, PHONE2 } from "../config"

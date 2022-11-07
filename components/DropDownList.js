@@ -1,4 +1,4 @@
-import styles from "@/styles/DropDownList.module.css"
+import styles from "@/styles/DropDownList.module.scss"
 
 
 export default function DropDownList({ isShow=false, itemsList=[], handleClick }) {

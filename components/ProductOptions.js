@@ -1,5 +1,5 @@
+import styles from "@/styles/ProductOptions.module.scss"
 import { getCurrencySymbol } from "utils"
-import styles from "@/styles/ProductOptions.module.css"
 
 export default function ProductOptions({
   options,

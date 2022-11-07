@@ -1,7 +1,7 @@
 
 
 import {   useState } from "react"
-import styles from "@/styles/OptionForm.module.css"
+import styles from "@/styles/OptionForm.module.scss"
 import "react-toastify/dist/ReactToastify.css"
 import { toast, ToastContainer } from "react-toastify"
 import {  FaPlusCircle, FaTimes } from "react-icons/fa"

@@ -1,4 +1,4 @@
-import styles from '@/styles/AccessDenied.module.css'
+import styles from '@/styles/AccessDenied.module.scss'
 import { FaMinusCircle } from "react-icons/fa"
 import Link from "next/link"
 

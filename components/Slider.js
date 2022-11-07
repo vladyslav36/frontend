@@ -1,5 +1,5 @@
+import styles from "@/styles/Slider.module.scss"
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa"
-import styles from "@/styles/Slider.module.css"
 import { API_URL } from "../config"
 import { useState, useEffect } from "react"
 import ReactDom from "react-dom"
@@ -41,33 +41,30 @@ export default function Slider({
 
   const content = (
     <div className={styles.overlay}>
-      <div className={styles.slider}>
-        <div className={styles.container}>
-          {lastNumber ? (
-            <button onClick={prevImage} className={styles.prev_button}>
-              <FaArrowLeft />
-            </button>
-          ) : null}
-          <div className={styles.image}>
-            <img
-              src={`${API_URL}${images[num]}`}
-              style={{ maxHeight: imageHeight }}
-            />
-          </div>
-
-          {lastNumber ? (
-            <button onClick={nextImage} className={styles.next_button}>
-              <FaArrowRight />
-            </button>
-          ) : null}
+      {/* <div className={styles.slider}> */}
+      <div className={styles.container}>
+        {lastNumber ? (
+          <button onClick={prevImage} className={styles.prev_button}>
+            <FaArrowLeft />
+          </button>
+        ) : null}
+        <div className={styles.image}>
+          <img
+            src={`${API_URL}${images[num]}`}
+            style={{ maxHeight: imageHeight }}
+          />
         </div>
 
-        <FaTimes
-          onClick={() => closeSlider(num)}
-          className={styles.times_icon}
-        />
+        {lastNumber ? (
+          <button onClick={nextImage} className={styles.next_button}>
+            <FaArrowRight />
+          </button>
+        ) : null}
       </div>
+
+      <FaTimes onClick={() => closeSlider(num)} className={styles.times_icon} />
     </div>
+    // </div>
   )
 
   if (isBrowser) {

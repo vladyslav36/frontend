@@ -1,5 +1,5 @@
+import styles from "@/styles/Slider.module.scss"
 import { FaTimes } from "react-icons/fa"
-import styles from "@/styles/Slider.module.css"
 import { API_URL, NOIMAGE } from "../config"
 import ReactDom from "react-dom"
 import { useState, useEffect } from "react"

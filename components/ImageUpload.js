@@ -1,4 +1,4 @@
-import styles from "@/styles/Form.module.css"
+import styles from "@/styles/Form.module.scss"
 
 
 export default function ImageUpload({setShowModal,setImage,image}) { 

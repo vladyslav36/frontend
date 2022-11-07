@@ -1,4 +1,4 @@
-import styles from "@/styles/Header.module.css"
+import styles from "@/styles/Header.module.scss"
 import Link from "next/link"
 import { useContext, useRef, useState } from "react"
 import AuthContext from "@/context/AuthContext"

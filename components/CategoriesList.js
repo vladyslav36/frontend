@@ -1,4 +1,4 @@
-import styles from "@/styles/CategoriesList.module.css"
+import styles from "@/styles/CategoriesList.module.scss"
 import Link from "next/link"
 import { API_URL, NOIMAGE } from "@/config/index"
 

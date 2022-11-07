@@ -1,9 +1,4 @@
 
-
-:root{
-  --links-color:#2874a6;
-  --links-hover-color: #1a5276;
-}
 * {
   box-sizing: border-box;
   margin:0px;
@@ -18,10 +13,10 @@ body{
 
 a{
   text-decoration:none;
-  color:var(--links-color) ;
+  color:#2874a6;
 }
 a:hover{
-  color:var(--links-hover-color);
+  color:#1a5276;
   cursor:pointer;
   text-decoration: underline;
 }

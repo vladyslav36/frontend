@@ -1,4 +1,4 @@
-import styles from "@/styles/AccountForm.module.css"
+import styles from "@/styles/AccountForm.module.scss"
 import { useContext, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"

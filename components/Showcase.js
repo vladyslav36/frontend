@@ -1,4 +1,4 @@
-import styles from "@/styles/Showcase.module.css"
+import styles from "@/styles/Showcase.module.scss"
 import { API_URL, NOIMAGE } from "../config"
 import Link from "next/link"
 import { getCurrencySymbol, getPriceForShow } from "utils"
@@ -18,7 +18,7 @@ export default function Showcase({showcaseProducts}) {
   
   return (
     <div className={styles.container}>
-      <>
+      
         {showcaseProducts.length?showcaseProducts.map((product, i) => (
           <Link href={`/product/${product.slug}`} key={i}>
             <div>
@@ -67,7 +67,7 @@ export default function Showcase({showcaseProducts}) {
         {fakeImages.map((item, i) => (
                   <div className={styles.fake_image} key={i}></div>
         ))}
-        </>
+        
     </div>    
       
   )

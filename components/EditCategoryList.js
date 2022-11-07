@@ -1,4 +1,4 @@
-import styles from "@/styles/EditCategory.module.css"
+import styles from "@/styles/EditCategory.module.scss"
 import { getCategoriesTree } from "../utils"
 import { API_URL } from "../config"
 import { ToastContainer, toast } from "react-toastify"

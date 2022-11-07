@@ -1,4 +1,4 @@
-import styles from "@/styles/Category.module.css"
+import styles from "@/styles/Category.module.scss"
 import Layout from "@/components/Layout"
 import { API_URL, NOIMAGE } from "@/config/index"
 import Link from "next/link"

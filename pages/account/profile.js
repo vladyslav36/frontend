@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout"
-import styles from "@/styles/AccountForm.module.css"
+import styles from "@/styles/AccountForm.module.scss"
 import { useState, useEffect, useContext } from "react"
 import { FaUser } from "react-icons/fa"
 import { ToastContainer, toast } from "react-toastify"

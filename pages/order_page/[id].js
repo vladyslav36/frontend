@@ -1,6 +1,5 @@
+import styles from "@/styles/OrderPage.module.scss"
 import Layout from "@/components/Layout"
-import Link from "next/link"
-import styles from "@/styles/OrderPage.module.css"
 import { API_URL } from "@/config/index"
 import moment from "moment"
 import { useContext, useEffect, useState } from "react"

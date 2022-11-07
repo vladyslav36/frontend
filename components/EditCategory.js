@@ -1,4 +1,4 @@
-import styles from "@/styles/Form.module.css"
+import styles from "@/styles/Form.module.scss"
 
 import Modal from "@/components/Modal"
 import ImageUpload from "@/components/ImageUpload"

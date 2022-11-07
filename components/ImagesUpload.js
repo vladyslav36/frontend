@@ -1,4 +1,4 @@
-import styles from "@/styles/Form.module.css"
+import styles from "@/styles/Form.module.scss"
 
 export default function ImagesUpload({ setShowModal, setImages, images,idx }) {
   const handleChange = (e) => {

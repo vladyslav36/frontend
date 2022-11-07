@@ -28,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/vladyslav36/frontend/issues"
   },
-  "homepage": "https://github.com/vladyslav36/frontend#readme"
+  "homepage": "https://github.com/vladyslav36/frontend#readme",
+  "devDependencies": {
+    "sass": "^1.56.0"
+  }
 }

@@ -1,4 +1,4 @@
-import styles from "@/styles/EditProduct.module.css"
+import styles from "@/styles/EditProduct.module.scss"
 import { useRef, useState } from "react"
 import { getCurrencySymbol, getShortDescription } from "utils"
 import { API_URL } from "../config"

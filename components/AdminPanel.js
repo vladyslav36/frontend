@@ -1,4 +1,4 @@
-import styles from "@/styles/AdminPanel.module.css"
+import styles from "@/styles/AdminPanel.module.scss"
 import AuthContext from "@/context/AuthContext"
 import { useContext, useEffect, useState } from "react"
 import Link from "next/link"

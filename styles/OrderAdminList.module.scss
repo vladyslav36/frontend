@@ -1,0 +1,62 @@
+%btn{
+  margin: auto;
+      background-color: inherit;
+      border: none;
+      font-size: 20px;
+      color: steelblue;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+}
+
+
+.container {
+  padding: 0 10px;
+}
+.table {
+  padding: 10px 0;
+  max-height: 400px;
+  overflow: auto;
+  line-height: 1;
+
+  table {
+    border-collapse: collapse;
+    border: 1px solid #888;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  td,
+  th {
+    text-align: center;
+    border: 1px solid #999;
+    padding: 3px 0;
+  }
+
+  th {
+    &:nth-child(1) {
+      width: 30px;
+    }
+    &:nth-child(2) {
+      width: 100px;
+    }
+    &:nth-child(6) {
+      width: 50px;
+    }
+    &:nth-child(7) {
+      width: 50px;
+    }
+  }
+
+  td {
+    &:nth-child(6) button {
+     @extend %btn;
+      color: steelblue;      
+    }
+    &:nth-child(7) button {
+      @extend %btn;
+      color: red;      
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import styles from "@/styles/Modal.module.css"
+import styles from "@/styles/Modal.module.scss"
 import { useState, useEffect } from "react"
 import ReactDom from "react-dom"
 import { FaTimes } from "react-icons/fa"
