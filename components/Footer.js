@@ -33,15 +33,19 @@ export default function Footer() {
           </div>
           <Link href="/contacts/address">
             <a>
-              <FaRegClock />&nbsp; Адрес, режим работы
+              <FaRegClock />
+              &nbsp; Адрес, режим работы
             </a>
           </Link>
           <Link href="/contacts/map">
             <a>
-              <FaSistrix />&nbsp; Мы на карте
+              <FaSistrix />
+              &nbsp; Мы на карте
+             
             </a>
           </Link>
-        </div>        
+          
+        </div>
       </div>
       <div className={styles.bottom}>
         <p>Все права защищены. Кармен &copy; 2021</p>

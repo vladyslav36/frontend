@@ -13,7 +13,7 @@
   display: grid;
   grid-template-areas:
     "logo search nav"
-    "currencies phones cart";
+    "currencies phones cart_wrapper";
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: minmax(90px, 3fr) 2fr;
   column-gap: 10px;
@@ -123,23 +123,39 @@
   grid-area: phones;
   justify-self: center;
 }
-.cart {
-  grid-area: cart;
+.cart_wrapper {
+  grid-area: cart_wrapper;
   justify-self: end;
-  position: relative;
+  width: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-  &:hover {
-    cursor: pointer;
+  .telegram {
+    background-color: #fbfcfc;
+    border-radius: 50%;
+    cursor:pointer;
+    i {
+      color: #2aabee;
+    }
   }
 
-  p {
-    position: absolute;
-    z-index: 50;
-    font-size: 10px;
-    color: #fff;
-    top: 30%;
-    left: 55%;
-    transform: translate(-50%, -50%);
+  .cart {
+    position: relative;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    p {
+      position: absolute;
+      z-index: 50;
+      font-size: 10px;
+      color: #fff;
+      top: 30%;
+      left: 55%;
+      transform: translate(-50%, -50%);
+    }
   }
 }
 
@@ -319,7 +335,7 @@
   }
   .container {
     grid-template-areas:
-      "nav logo logo cart"
+      "nav logo logo cart_wrapper"
       "search search search search"
       "currencies currencies currencies currencies"
       "phones phones phones phones";
@@ -334,8 +350,8 @@
     grid-area: logo;
     justify-self: center;
   }
-  .cart {
-    grid-area: cart;
+  .cart_wrapper {
+    grid-area: cart_wrapper;
   }
   .search {
     grid-area: search;

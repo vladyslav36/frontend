@@ -226,7 +226,7 @@ export default function Header() {
               <li className={isUser ? styles.hide : styles.show}>
                 <a
                   onClick={() => {
-                    elemBurgerMenu.current.classList.remove(styles.show)                    
+                    elemBurgerMenu.current.classList.remove(styles.show)
                     elemDialog.current.showModal()
                   }}
                 >
@@ -246,7 +246,7 @@ export default function Header() {
                 </li>
                 <li
                   onClick={() => {
-                    elemBurgerMenu.current.classList.remove(styles.show)                     
+                    elemBurgerMenu.current.classList.remove(styles.show)
                     setUser({})
                   }}
                 >
@@ -296,15 +296,23 @@ export default function Header() {
             <Link href="tel: +380982086083">{PHONE2}</Link>
           </span>
         </div>
-        <div className={styles.cart} title="Корзина">
-          <Link href="/cart">
-            <a>
-              <i className="fa-solid fa-cart-shopping fa-2x"></i>
-              <p>
-                {cart && getQntInCart(cart) !== 0 ? getQntInCart(cart) : ""}
-              </p>
-            </a>
+        <div className={styles.cart_wrapper} >
+          <Link href="https://t.me/karmeninua" >
+            <div className={styles.telegram} title='Новинки на нашем канале'>
+            <i class="fa-brands fa-telegram fa-2xl"></i>
+          </div>
           </Link>
+          
+          <div className={styles.cart} title="Корзина">
+            <Link href="/cart">
+              <a>
+                <i className="fa-solid fa-cart-shopping fa-2x"></i>
+                <p>
+                  {cart && getQntInCart(cart) !== 0 ? getQntInCart(cart) : ""}
+                </p>
+              </a>
+            </Link>
+          </div>
         </div>
       </div>
       {isShowLoupe ? <Loupe setIsShow={setIsShowLoupe} image={image} /> : null}
