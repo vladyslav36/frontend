@@ -263,7 +263,7 @@ export default function productPage({ slug, product: productDb }) {
             ) : null}
             <div className={styles.counter_cart_wrapper}>
               <div className={styles.counter_wrapper}>
-                <i class="fa-solid fa-square-minus fa-2xl" onClick={decQnt}></i>
+                <i className="fa-solid fa-square-minus fa-2xl" onClick={decQnt}></i>
                 <input
                   type="text"
                   className={styles.counter}
@@ -272,7 +272,7 @@ export default function productPage({ slug, product: productDb }) {
                     setValues({ ...values, qnt: e.target.value })
                   }
                 />{" "}
-                <i class="fa-solid fa-square-plus fa-2xl" onClick={incQnt}></i>
+                <i className="fa-solid fa-square-plus fa-2xl" onClick={incQnt}></i>
               </div>
 
               <div
@@ -280,14 +280,14 @@ export default function productPage({ slug, product: productDb }) {
                 onClick={addedValues}
                 title="Выбрать"
               >
-                <i class="fa-solid fa-circle-down fa-2x"></i>
+                <i className="fa-solid fa-circle-down fa-2x"></i>
               </div>
               <div
                 className={styles.add_cart_icon}
                 onClick={handleCartClick}
                 title="Добавить в корзину"
               >
-                <i class="fa-solid fa-cart-arrow-down fa-2xl"></i>
+                <i className="fa-solid fa-cart-arrow-down fa-2xl"></i>
               </div>
             </div>
 

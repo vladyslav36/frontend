@@ -299,7 +299,7 @@ export default function Header() {
         <div className={styles.cart_wrapper} >
           <Link href="https://t.me/karmeninua" >
             <div className={styles.telegram} title='Новинки на нашем канале'>
-            <i class="fa-brands fa-telegram fa-2xl"></i>
+            <i className="fa-brands fa-telegram fa-2xl"></i>
           </div>
           </Link>
           
