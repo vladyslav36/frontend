@@ -1,7 +1,6 @@
 import Layout from "@/components/Layout"
 import styles from "@/styles/AccountForm.module.scss"
 import { useState, useEffect, useContext } from "react"
-import { FaUser } from "react-icons/fa"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import router from "next/router"
@@ -54,14 +53,14 @@ export default function UserProfile() {
   }
   return (
     <Layout title="User profile">
-      <Navbar />      
+      <Navbar />
       <Links home={true} back={true} />
       {Object.keys(user).length ? (
         <div className={styles.container}>
           <ToastContainer />
           <form className={styles.form} onSubmit={submitHandler}>
-            <h2>
-              <FaUser className={styles.icon} />{" "}
+            <h2>              
+                 <i className="fa-solid fa-user"></i>{" "}             
               {user.isAdmin ? <pre>Admin</pre> : null}
             </h2>
             <div className={styles.input_wrapper}>

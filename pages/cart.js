@@ -2,7 +2,6 @@ import styles from "@/styles/Cart.module.scss"
 import { useContext  } from "react"
 import ProductsContext from "@/context/ProductsContext"
 import Layout from "@/components/Layout"
-import { FaTimes } from "react-icons/fa"
 import { getCurrencySymbol, getQntInCart,getTotalAmount } from "utils"
 import Links from "@/components/Links"
 import router from "next/router"
@@ -35,26 +34,23 @@ export default function Cart() {
         </div>
       </div>
 
-      <div className={styles.table} id='table'>
+      <div className={styles.table} id="table">
         <table>
           <thead>
             <tr>
               <td>Модель</td>
-              {optionList.length ? (
-                optionList.map((item, i) => (
-                  <td key={i}>
-                    { item}
-                  </td>
-                ))
-              ):null}
+              {optionList.length
+                ? optionList.map((item, i) => <td key={i}>{item}</td>)
+                : null}
               <td>Цена</td>
               <td>Кол-во</td>
               <td>
-                <div className={styles.delete_btn}>
-                  <FaTimes
-                    title="Очистить корзину"
-                    onClick={() => setCart([])}
-                  />
+                <div
+                  className={styles.delete_btn}
+                  title="Очистить корзину"
+                  onClick={() => setCart([])}
+                >
+                  <i className="fa-solid fa-xmark"></i>
                 </div>
               </td>
             </tr>
@@ -64,23 +60,24 @@ export default function Cart() {
               cart.map((item, i) => (
                 <tr key={i}>
                   <td>{item.name}</td>
-                  {optionList.length ? optionList.map((option, i) => (
-                    <td key={i}>
-                      {item.options[option]}
-                    </td>
-                  )):null}
+                  {optionList.length
+                    ? optionList.map((option, i) => (
+                        <td key={i}>{item.options[option]}</td>
+                      ))
+                    : null}
                   <td>
                     {item.price}&nbsp;{getCurrencySymbol(item.currencyValue)}
                   </td>
                   <td>{item.qnt}</td>
                   <td>
-                    <div className={styles.delete_btn}>
-                      <FaTimes
-                        title="Удалить строку"
-                        onClick={() =>
-                          setCart(cart.filter((item, idx) => i !== idx))
-                        }
-                      />
+                    <div
+                      className={styles.delete_btn}
+                      title="Удалить строку"
+                      onClick={() =>
+                        setCart(cart.filter((item, idx) => i !== idx))
+                      }
+                    >
+                      <i className="fa-solid fa-xmark"></i>
                     </div>
                   </td>
                 </tr>

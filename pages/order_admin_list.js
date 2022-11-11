@@ -7,7 +7,6 @@ import AuthContext from "@/context/AuthContext"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
-import { FaEye, FaTimes } from "react-icons/fa"
 import {useRouter} from "next/router"
 
 export default function OrderAdminList() {
@@ -83,16 +82,21 @@ export default function OrderAdminList() {
                       <td>{item.delivery.city ? item.delivery.city : null}</td>
                       <td>{item.totalAmount}</td>
                       <td title="Смотреть заказ">
-                      <button onClick={() => openOrder(item)}>
-                        <FaEye className={styles.icon}/>
-                      </button>
-                     
-                    </td>
-                    <td title='Удалить заказ'>
-                       <button onClick={()=>deleteOrder({order:item,idx:i})}>
-                        <FaTimes className={styles.icon}/>
-                      </button>
-                    </td>
+                        <button onClick={() => openOrder(item)}>
+                          <div className={styles.icon}>
+                            <i class="fa-regular fa-eye"></i>
+                          </div>
+                        </button>
+                      </td>
+                      <td title="Удалить заказ">
+                        <button
+                          onClick={() => deleteOrder({ order: item, idx: i })}
+                        >
+                          <div className={styles.icon}>
+                            <i class="fa-solid fa-xmark"></i>
+                          </div>
+                        </button>
+                      </td>
                     </tr>
                   ))
                 : null}

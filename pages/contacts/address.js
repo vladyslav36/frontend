@@ -4,7 +4,7 @@ import Links from "@/components/Links";
 import { API_URL } from "@/config/index.js";
 
 export default function AddressPage({ information }) {
-  console.log(information.workingHours)
+  
   return (
     <Layout title="Адрес и режим работы магазина Кармен">
       <Links home={true} back={true} />

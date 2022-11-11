@@ -6,7 +6,6 @@ import ImageUpload from "@/components/ImageUpload"
 import AuthContext from "@/context/AuthContext"
 import { useContext, useState, useEffect } from "react"
 import { ToastContainer, toast } from "react-toastify"
-import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import { API_URL, NOIMAGE } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
@@ -234,10 +233,10 @@ export default function addCategoryPage({ categories }) {
                         setIsShowList(false)
                       }}
                     >
-                      <FaImage />
+                      <i className="fa-regular fa-image"></i>
                     </button>
                     <button className="btn btn-danger" onClick={deleteImage}>
-                      <FaTimes />
+                      <i className="fa-solid fa-xmark"></i>
                     </button>
                   </div>
                 </div>

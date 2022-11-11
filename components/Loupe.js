@@ -1,5 +1,4 @@
 import styles from "@/styles/Slider.module.scss"
-import { FaTimes } from "react-icons/fa"
 import { API_URL, NOIMAGE } from "../config"
 import ReactDom from "react-dom"
 import { useState, useEffect } from "react"
@@ -14,23 +13,23 @@ export default function Loupe({ image, setIsShow }) {
 
   const content = (
     <div className={styles.overlay}>
-      <div className={styles.slider}>
-        <div className={styles.container}>
-          <div className={styles.image}>
-            <img
-              src={image ? `${API_URL}${image}` : `${NOIMAGE}`}
-              style={{ maxHeight: imageHeight }}
-            />
-          </div>
+      <div className={styles.container}>
+        <div className={styles.image}>
+          <img
+            src={image ? `${API_URL}${image}` : `${NOIMAGE}`}
+            style={{ maxHeight: imageHeight }}
+          />
         </div>
+      </div>
 
-        <FaTimes
-          onClick={(e) => {
-            e.stopPropagation()
-            setIsShow(false)
-          }}
-          className={styles.times_icon}
-        />
+      <div
+        onClick={(e) => {
+          e.stopPropagation()
+          setIsShow(false)
+        }}
+        className={styles.times_icon}
+      >
+        <i className="fa-solid fa-xmark fa-lg"></i>
       </div>
     </div>
   )

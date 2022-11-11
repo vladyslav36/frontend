@@ -3,7 +3,6 @@ import Modal from "@/components/Modal"
 import ImagesUpload from "@/components/ImagesUpload"
 import { useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
-import { FaImage, FaPlus, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import { API_URL } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
@@ -373,13 +372,13 @@ export default function EditProduct({
                         setIsShowList(false)
                       }}
                     >
-                      <FaImage />
+                      <i className="fa-regular fa-image"></i>
                     </button>
                     <button
                       className="btn btn-danger"
                       onClick={() => deleteImage(i)}
                     >
-                      <FaTimes />
+                      <i className="fa-solid fa-xmark"></i>
                     </button>
                   </div>
                 </div>
@@ -393,7 +392,7 @@ export default function EditProduct({
               setIsShowList(false)
             }}
           >
-            <FaPlus />
+            <i className="fa-solid fa-plus"></i>
           </button>
         </div>
       </>

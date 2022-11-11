@@ -6,7 +6,7 @@ export default function Document() {
   return (
     <Html>
       <Head>
-        
+        <link rel="shortcut icon" href="/favicon.ico" />
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap"
           rel="stylesheet"

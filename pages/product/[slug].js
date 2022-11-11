@@ -3,7 +3,6 @@ import Layout from "@/components/Layout"
 import { API_URL, NOIMAGE } from "@/config/index.js"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { FaTimes } from "react-icons/fa"
 import { getCurrencySymbol, getPriceForShow } from "utils"
 import { useContext, useEffect, useRef, useState } from "react"
 import Slider from "@/components/Slider"
@@ -263,7 +262,10 @@ export default function productPage({ slug, product: productDb }) {
             ) : null}
             <div className={styles.counter_cart_wrapper}>
               <div className={styles.counter_wrapper}>
-                <i className="fa-solid fa-square-minus fa-2xl" onClick={decQnt}></i>
+                <i
+                  className="fa-solid fa-square-minus fa-2xl"
+                  onClick={decQnt}
+                ></i>
                 <input
                   type="text"
                   className={styles.counter}
@@ -272,7 +274,10 @@ export default function productPage({ slug, product: productDb }) {
                     setValues({ ...values, qnt: e.target.value })
                   }
                 />{" "}
-                <i className="fa-solid fa-square-plus fa-2xl" onClick={incQnt}></i>
+                <i
+                  className="fa-solid fa-square-plus fa-2xl"
+                  onClick={incQnt}
+                ></i>
               </div>
 
               <div
@@ -308,10 +313,13 @@ export default function productPage({ slug, product: productDb }) {
                     </th>
                     <th className={styles.flex}>
                       <div className={styles.icon_wrapper}>
-                        <FaTimes
+                        <div
                           className={styles.icon}
                           onClick={() => setChosen([])}
-                        />
+                          title="Удалить все выбранные товары"
+                        >
+                          <i className="fa-solid fa-xmark fa-lg"></i>
+                        </div>
                       </div>
                     </th>
                   </tr>
@@ -329,10 +337,9 @@ export default function productPage({ slug, product: productDb }) {
                         <td>{item.price}</td>
                         <td className={styles.flex}>
                           <div className={styles.icon_wrapper}>
-                            <FaTimes
-                              className={styles.icon}
-                              onClick={() => handleDelete(i)}
-                            />
+                            <div className={styles.icon} onClick={() => handleDelete(i)} title='Удалить строку' >
+                              <i className="fa-solid fa-xmark fa-lg"></i>
+                            </div>                            
                           </div>
                         </td>
                       </tr>

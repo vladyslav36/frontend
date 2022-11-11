@@ -7,7 +7,6 @@ import AuthContext from "@/context/AuthContext"
 import { useContext, useState, useEffect } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { FaCheck, FaImage, FaPlus, FaTimes } from "react-icons/fa"
 import { GiCheckMark } from "react-icons/gi"
 import { useRouter } from "next/router"
 import { API_URL } from "@/config/index"
@@ -354,13 +353,13 @@ export default function addProductPage({ categories }) {
                           setIsShowList(false)
                         }}
                       >
-                        <FaImage />
+                        <i className="fa-regular fa-image"></i>
                       </button>
                       <button
                         className="btn btn-danger"
                         onClick={() => deleteImage(i)}
                       >
-                        <FaTimes />
+                        <i className="fa-solid fa-xmark"></i>
                       </button>
                     </div>
                   </div>
@@ -374,7 +373,7 @@ export default function addProductPage({ categories }) {
                 setIsShowList(false)
               }}
             >
-              <FaPlus />
+              <i className="fa-solid fa-plus"></i>
             </button>
           </div>
         </div>

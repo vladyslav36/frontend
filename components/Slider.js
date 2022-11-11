@@ -1,5 +1,4 @@
 import styles from "@/styles/Slider.module.scss"
-import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa"
 import { API_URL } from "../config"
 import { useState, useEffect } from "react"
 import ReactDom from "react-dom"
@@ -45,7 +44,7 @@ export default function Slider({
       <div className={styles.container}>
         {lastNumber ? (
           <button onClick={prevImage} className={styles.prev_button}>
-            <FaArrowLeft />
+            <i className="fa-solid fa-chevron-left"></i>
           </button>
         ) : null}
         <div className={styles.image}>
@@ -57,12 +56,14 @@ export default function Slider({
 
         {lastNumber ? (
           <button onClick={nextImage} className={styles.next_button}>
-            <FaArrowRight />
+            <i className="fa-solid fa-chevron-right"></i>
           </button>
         ) : null}
       </div>
 
-      <FaTimes onClick={() => closeSlider(num)} className={styles.times_icon} />
+      <div onClick={() => closeSlider(num)} className={styles.times_icon}>
+        <i className="fa-solid fa-xmark"></i>
+      </div>
     </div>
     // </div>
   )

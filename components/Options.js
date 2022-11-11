@@ -1,10 +1,8 @@
-
-
 import {   useState } from "react"
 import styles from "@/styles/OptionForm.module.scss"
 import "react-toastify/dist/ReactToastify.css"
 import { toast, ToastContainer } from "react-toastify"
-import {  FaPlusCircle, FaTimes } from "react-icons/fa"
+
 
 
 
@@ -98,125 +96,122 @@ export default function Options({ values, setValues }) {
     setValues({ ...values, options: { ...newOptions } })
   }  
   
-  return (   
-        <div>
-          <ToastContainer />            
-            <div className={styles.content}>
-              <div className={styles.content_left}>
-                <div
-                  className={styles.input}
-                  onFocus={() => {
-                    setActiveOption("")
-                    setIsShow(true)
-                  }}
-                  onBlur={() => setIsShow(false)}
-                  tabIndex={0}
-                >
-                  
+  return (
+    <div>
+      <ToastContainer />
+      <div className={styles.content}>
+        <div className={styles.content_left}>
+          <div
+            className={styles.input}
+            onFocus={() => {
+              setActiveOption("")
+              setIsShow(true)
+            }}
+            onBlur={() => setIsShow(false)}
+            tabIndex={0}
+          ></div>
+          <div className={styles.input}>
+            <label htmlFor="option">Опция</label>
+            <div className={styles.input_button}>
+              <input
+                type="text"
+                id="option"
+                name="option"
+                value={inputValue.option}
+                onChange={handleInputOption}
+                onKeyPress={(e) => handlePress({ e, cb: addOption })}
+                onFocus={() => setActiveOption("")}
+              />
+              <button type="button" onClick={addOption} title="Добавить опцию">
+                <div className={styles.icon_plus}>
+                  <i className="fa-solid fa-circle-plus"></i>
                 </div>
-                <div className={styles.input}>
-                  <label htmlFor="option">Опция</label>
-                  <div className={styles.input_button}>
-                    <input
-                      type="text"
-                      id="option"
-                      name="option"
-                      value={inputValue.option}
-                      onChange={handleInputOption}
-                      onKeyPress={(e) => handlePress({ e, cb: addOption })}
-                      onFocus={() => setActiveOption("")}
-                    />
-                    <button
-                      type="button"
-                      onClick={addOption}
-                      title="Добавить опцию"
-                    >
-                      <FaPlusCircle className={styles.icon_plus} />
-                    </button>
+              </button>
+            </div>
+          </div>
+
+          {Object.keys(values.options).length
+            ? Object.keys(values.options).map((item, i) => (
+                <div key={i} tabIndex={0} onFocus={() => setActiveOption(item)}>
+                  <div className={styles.input}>
+                    <label htmlFor={item}>
+                      {item}
+                      <button
+                        type="button"
+                        title="Удалить опцию"
+                        onClick={() => deleteOption(item)}
+                      >
+                        <div className={styles.icon_delete}>
+                          <i className="fa-solid fa-xmark"></i>
+                        </div>
+                      </button>
+                    </label>
+                    <div className={styles.input_button}>
+                      <input
+                        type="text"
+                        id={item}
+                        name={item}
+                        value={inputValue[item]}
+                        onChange={handleInputValue}
+                        onKeyPress={(e) =>
+                          handlePress({
+                            e,
+                            cb: () =>
+                              addOptionValue({
+                                name: item,
+                                value: inputValue[item],
+                              }),
+                          })
+                        }
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          addOptionValue({
+                            name: item,
+                            value: inputValue[item],
+                          })
+                        }
+                        title="Добавить значение опции"
+                      >
+                        <div className={styles.icon_plus}>
+                          <i className="fa-solid fa-circle-plus"></i>
+                        </div>
+                      </button>
+                    </div>
                   </div>
                 </div>
-
-                {Object.keys(values.options).length
-                  ? Object.keys(values.options).map((item, i) => (
-                      <div
-                        key={i}
-                        tabIndex={0}
-                        onFocus={() => setActiveOption(item)}
-                      >
-                        <div className={styles.input}>
-                          <label htmlFor={item}>
-                            {item}
-                            <button
-                              type="button"
-                              title="Удалить опцию"
-                              onClick={() => deleteOption(item)}
-                            >
-                              <FaTimes className={styles.icon_delete} />
-                            </button>
-                          </label>
-                          <div className={styles.input_button}>
-                            <input
-                              type="text"
-                              id={item}
-                              name={item}
-                              value={inputValue[item]}
-                              onChange={handleInputValue}
-                              onKeyPress={(e) =>
-                                handlePress({
-                                  e,
-                                  cb: () =>
-                                    addOptionValue({
-                                      name: item,
-                                      value: inputValue[item],
-                                    }),
-                                })
-                              }
-                            />
-                            <button
-                              type="button"
-                              onClick={() =>
-                                addOptionValue({
-                                  name: item,
-                                  value: inputValue[item],
-                                })
-                              }
-                              title="Добавить значение опции"
-                            >
-                              <FaPlusCircle className={styles.icon_plus} />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  : null}
-              </div>
-
-              <div className={styles.content_right}>
-                {activeOption ? (
-                  <>
-                    <p>Опция: {activeOption}</p>
-                    <div className={styles.option_list}>
-                      {Object.keys(values.options[activeOption].values).map(
-                        (item, i) => (
-                          <div key={i} className={styles.list_item}>
-                            <div>{item}</div>
-                            <button
-                              type="button"
-                              title="Удалить значение опции"
-                              onClick={() => deleteOptionsValue(item)}
-                            >
-                              <FaTimes className={styles.icon_delete} />
-                            </button>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </>
-                ) : null}
-              </div>
-            </div>          
+              ))
+            : null}
         </div>
-      
+
+        <div className={styles.content_right}>
+          {activeOption ? (
+            <>
+              <p>Опция: {activeOption}</p>
+              <div className={styles.option_list}>
+                {Object.keys(values.options[activeOption].values).map(
+                  (item, i) => (
+                    <div key={i} className={styles.list_item}>
+                      <div>{item}</div>
+                      <button
+                        type="button"
+                        title="Удалить значение опции"
+                        onClick={() => deleteOptionsValue(item)}
+                      >
+                        <div className={styles.icon_delete}>
+                          <i className="fa-solid fa-xmark"></i>
+                        </div>
+                      </button>
+                    </div>
+                  )
+                )}
+              </div>
+            </>
+          ) : null}
+        </div>
+      </div>
+    </div>
   )
 }
 

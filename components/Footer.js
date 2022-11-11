@@ -1,5 +1,4 @@
 import styles from "@/styles/Footer.module.scss"
-import { FaPhone,FaSistrix,FaRegClock, FaRegCreditCard } from 'react-icons/fa'
 import Link from "next/link"
 import { PHONE1, PHONE2 } from "../config"
 
@@ -25,7 +24,7 @@ export default function Footer() {
         <div className={styles.contacts}>
           <h3>Контакты</h3>
           <div className={styles.phones_wrapper}>
-            <FaPhone />
+            <i className="fa-solid fa-phone-flip"></i>
             <div className={styles.phones}>
               <div>{PHONE1}</div>
               <div>{PHONE2}</div>
@@ -33,18 +32,16 @@ export default function Footer() {
           </div>
           <Link href="/contacts/address">
             <a>
-              <FaRegClock />
+              <i className="fa-regular fa-clock"></i>
               &nbsp; Адрес, режим работы
             </a>
           </Link>
           <Link href="/contacts/map">
             <a>
-              <FaSistrix />
+              <i className="fa-solid fa-magnifying-glass"></i>
               &nbsp; Мы на карте
-             
             </a>
           </Link>
-          
         </div>
       </div>
       <div className={styles.bottom}>

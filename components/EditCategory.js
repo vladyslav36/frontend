@@ -5,7 +5,6 @@ import ImageUpload from "@/components/ImageUpload"
 
 import { useState,useEffect } from "react"
 import { ToastContainer, toast } from "react-toastify"
-import { FaImage, FaTimes } from "react-icons/fa"
 import { useRouter } from "next/router"
 import { API_URL, NOIMAGE} from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
@@ -139,10 +138,14 @@ export default function EditCategory({ category,categories,setCategories, setIsS
           <div className={styles.header}>
             <Links home={true} />
             <div className={styles.buttons_flex_wrapper}>
-              <input type='button' value='Отмена' className="btn" onClick={()=>setIsShowCategory(false) }/>
-            <input type="submit" value="Сохранить" className="btn" />
+              <input
+                type="button"
+                value="Отмена"
+                className="btn"
+                onClick={() => setIsShowCategory(false)}
+              />
+              <input type="submit" value="Сохранить" className="btn" />
             </div>
-           
           </div>
 
           <ToastContainer />
@@ -228,10 +231,10 @@ export default function EditCategory({ category,categories,setCategories, setIsS
                   setIsShowList(false)
                 }}
               >
-                <FaImage />
+                <i className="fa-regular fa-image"></i>
               </button>
               <button className="btn btn-danger" onClick={deleteImage}>
-                <FaTimes />
+                <i className="fa-solid fa-xmark"></i>
               </button>
             </div>
           </div>

@@ -6,7 +6,6 @@ import { useEffect, useState, useContext } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
-import { FaEye } from "react-icons/fa"
 import { useRouter } from "next/router"
 import AuthContext from "@/context/AuthContext"
 
@@ -61,7 +60,7 @@ export default function OrderUserList() {
                       <td>{item.totalAmount}</td>
                       <td title="Смотреть заказ">
                         <button onClick={() => openOrder(item)}>
-                          <FaEye className={styles.icon} />
+                          <i className="fa-regular fa-eye"></i>
                         </button>
                       </td>
                     </tr>

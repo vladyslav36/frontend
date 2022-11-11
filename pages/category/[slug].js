@@ -7,8 +7,6 @@ import { useEffect, useState } from "react"
 import { getArrayCategoryTree } from "utils"
 import Navbar from "@/components/Navbar"
 import CategoriesList from "@/components/CategoriesList"
-import { FaList, FaTh } from "react-icons/fa"
-
 import Links from "@/components/Links"
 
 export default function categoryPage({ category, categories }) {
@@ -74,10 +72,10 @@ export default function categoryPage({ category, categories }) {
         {!childrenList.length ? (
           <div className={styles.toggles}>
             <div title="Список" onClick={() => setIsShowAsList(true)}>
-              <FaList />
+              <i className="fa-solid fa-list"></i>
             </div>
             <div title="Плитка" onClick={() => setIsShowAsList(false)}>
-              <FaTh />
+              <i className="fa-solid fa-table-cells"></i>
             </div>
           </div>
         ) : null}
