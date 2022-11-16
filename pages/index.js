@@ -12,6 +12,7 @@ export default function HomePage({ showcaseProducts }) {
       keywords="Колготки, носки, лосины, леггинсы опт, розница"
     >
       <Navbar />
+      
       <AdminPanel />
       <Showcase showcaseProducts={showcaseProducts} />
     </Layout>
