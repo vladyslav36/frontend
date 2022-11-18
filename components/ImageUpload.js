@@ -1,7 +1,7 @@
 import styles from "@/styles/Form.module.scss"
 
 
-export default function ImageUpload({setShowModal,setImage,image}) { 
+export default function ImageUpload({ setShowModal,setImage,image}) { 
 
   const handleChange = (e) => {
     const url = URL.createObjectURL(e.target.files[0])

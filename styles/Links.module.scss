@@ -14,11 +14,11 @@
     align-items: center;
     font-size: 23px;
     padding: 5px;
-    color: #2874a6;
+    color: steelblue;
 
     &:hover {
       cursor: pointer;
-      color: #1a5276;
+      color: darken($color: steelblue, $amount: 10);
     }
   }
 }

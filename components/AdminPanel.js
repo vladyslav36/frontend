@@ -66,6 +66,17 @@ export default function AdminPanel() {
             </ul>
           </div>         
           <div className={styles.container_item}>
+            Каталоги
+            <ul className={styles.dropdown_list}>
+              <Link href="/add_catalog">
+                <li>Добавить</li>
+              </Link>
+              <Link href="/edit_catalog">
+                <li>Редактировать</li>
+              </Link>
+            </ul>
+          </div>         
+          <div className={styles.container_item}>
             Товар
             <ul className={styles.dropdown_list}>
               <Link href="add_product">
