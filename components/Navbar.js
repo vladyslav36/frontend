@@ -62,7 +62,7 @@ export default function Navbar({ categories: categoriesProps }) {
           onClick={() => setIsShowCategories(true)}
           ref={elCategories}
         />
-        <label for="categories" title="Показать категории">
+        <label htmlFor="categories" title="Показать категории">
           <h5>Категории</h5>
         </label>
 
@@ -73,7 +73,7 @@ export default function Navbar({ categories: categoriesProps }) {
           value="catalogs"
           onClick={() => setIsShowCategories(false)}
         />
-        <label for="catalogs" title="Показать каталоги">
+        <label htmlFor="catalogs" title="Показать каталоги">
           <h5>Каталоги</h5>
         </label>
       </div>

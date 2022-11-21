@@ -3,16 +3,22 @@ import styles from "@/styles/Form.module.scss"
 import Modal from "@/components/Modal"
 import ImageUpload from "@/components/ImageUpload"
 
-import { useState,useEffect } from "react"
+import { useState, useEffect } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { useRouter } from "next/router"
-import { API_URL, NOIMAGE} from "@/config/index"
+import { API_URL, NOIMAGE } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import { getCategoriesTree } from "../utils"
 import Links from "@/components/Links"
 import Options from "@/components/Options"
 
-export default function EditCategory({ category,categories,setCategories, setIsShowCategory,token }) { 
+export default function EditCategory({
+  category,
+  categories,
+  setCategories,
+  setIsShowCategory,
+  token,
+}) {
   const [values, setValues] = useState({
     _id: category._id,
     name: category.name,
@@ -101,9 +107,12 @@ export default function EditCategory({ category,categories,setCategories, setIsS
     if (!res.ok) {
       toast.error(data.message)
     } else {
-      setCategories(categories.map(item=>item._id!=data.category._id?item:data.category))
+      setCategories(
+        categories.map((item) =>
+          item._id != data.category._id ? item : data.category
+        )
+      )
       setIsShowCategory(false)
-     
     }
   }
   // input для name & description
@@ -136,16 +145,22 @@ export default function EditCategory({ category,categories,setCategories, setIsS
       <div className={styles.form}>
         <form onSubmit={handleSubmit}>
           <div className={styles.header}>
-            <Links home={true} />
-            <div className={styles.buttons_flex_wrapper}>
-              <input
-                type="button"
-                value="Отмена"
-                className="btn"
+            <Links home={true} back={true} />
+
+            <span>
+              <i
+                className="fa-solid fa-square-xmark fa-2xl"
+                title="Отмена"
+                name="cancel"
                 onClick={() => setIsShowCategory(false)}
-              />
-              <input type="submit" value="Сохранить" className="btn" />
-            </div>
+              ></i>
+              <i
+                className="fa-solid fa-floppy-disk fa-2xl"
+                title="Сохранить"
+                name="save"
+                onClick={handleSubmit}
+              ></i>
+            </span>
           </div>
 
           <ToastContainer />

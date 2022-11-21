@@ -156,12 +156,20 @@ export default function addProductPage({ categories }) {
       {!isAdmin ? (
         <AccessDenied />
       ) : (
-        <div className={styles.container}>
+        <div>
           <div className={styles.form}>
-            <form onSubmit={handleSubmit}>
+            <form>
               <div className={styles.header}>
-                <Links home={true} />
-                <input type="submit" value="Сохранить" className="btn" />
+                <Links home={true} back={true} />
+
+                <span>
+                  <i
+                    className="fa-solid fa-floppy-disk fa-2xl"
+                    title="Сохранить"
+                    name="save"
+                    onClick={handleSubmit}
+                  ></i>
+                </span>
               </div>
 
               <ToastContainer />
@@ -335,46 +343,46 @@ export default function addProductPage({ categories }) {
                 ></textarea>
               </div>
             </form>
-          </div>
-          <h2>Изображения</h2>
-          <div className={styles.images_container}>
-            {images.length
-              ? images.map((item, i) => (
-                  <div className={styles.image_container} key={i}>
-                    <div className={styles.image}>
-                      <img src={item.path} />
+            <h2>Изображения</h2>
+            <div className={styles.images_container}>
+              {images.length
+                ? images.map((item, i) => (
+                    <div className={styles.image_container} key={i}>
+                      <div className={styles.image}>
+                        <img src={item.path} />
+                      </div>
+                      <div className={styles.image_footer}>
+                        <button
+                          className="btn"
+                          onClick={() => {
+                            setImageIdx(i)
+                            setShowModal(true)
+                            setIsShowList(false)
+                          }}
+                        >
+                          <i className="fa-regular fa-image"></i>
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => deleteImage(i)}
+                        >
+                          <i className="fa-solid fa-xmark"></i>
+                        </button>
+                      </div>
                     </div>
-                    <div className={styles.image_footer}>
-                      <button
-                        className="btn"
-                        onClick={() => {
-                          setImageIdx(i)
-                          setShowModal(true)
-                          setIsShowList(false)
-                        }}
-                      >
-                        <i className="fa-regular fa-image"></i>
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => deleteImage(i)}
-                      >
-                        <i className="fa-solid fa-xmark"></i>
-                      </button>
-                    </div>
-                  </div>
-                ))
-              : null}
-            <button
-              className="btn"
-              onClick={() => {
-                setImageIdx(images.length)
-                setShowModal(true)
-                setIsShowList(false)
-              }}
-            >
-              <i className="fa-solid fa-plus"></i>
-            </button>
+                  ))
+                : null}
+              <button
+                className="btn"
+                onClick={() => {
+                  setImageIdx(images.length)
+                  setShowModal(true)
+                  setIsShowList(false)
+                }}
+              >
+                <i className="fa-solid fa-plus"></i>
+              </button>
+            </div>
           </div>
         </div>
       )}

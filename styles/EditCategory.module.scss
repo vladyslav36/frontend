@@ -2,7 +2,10 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding:0 10px;
+  .header{
+    padding:5px 0;
+  }
 }
 .list_wrapper {
   max-height: 700px;

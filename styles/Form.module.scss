@@ -3,25 +3,28 @@
 }
 .form {
   display: block;
-
+  padding: 0 10px;
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    input {
-      width: 100px;
-    }
-
-    .buttons_flex_wrapper {
-      display: flex;
-      color: green;
-      gap: 10px;
-    }
-
-    a {
-      display: flex;
-      align-items: center;
+    padding: 5px 0;
+    span {
+      i[name="cancel"] {
+        color: red;
+        padding: 0 20px;
+        cursor: pointer;
+        &:hover {
+          color: darken($color: red, $amount: 10);
+        }
+      }
+      i[name="save"] {
+        color: steelblue;
+        cursor: pointer;
+        &:hover {
+          color: darken($color: steelblue, $amount: 10);
+        }
+      }
     }
   }
 
@@ -31,7 +34,6 @@
     height: 30px;
     padding: 5px 10px;
     font-size: 14px;
-    
   }
 
   select {
@@ -91,7 +93,6 @@
   grid-template-columns: 1fr 1fr;
   column-gap: 20px;
   row-gap: 10px;
-  margin: 5px 0;
 
   label {
     font-size: 14px;
@@ -116,7 +117,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin: 10px 5px;
+    margin: 10px 0px;
     width: 200px;
   }
 
@@ -138,11 +139,7 @@
   flex-direction: row;
   justify-content: flex-start;
   flex-wrap: wrap;
-  align-items: center;
-
-  & > button {
-    margin: 0 10px;
-  }
+  align-items: center;  
 }
 
 .dropdown_menu {
@@ -268,11 +265,10 @@
   align-items: center;
   gap: 5px;
 
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
-
 
 .custom_checkbox [type="checkbox"]:checked ~ label {
   background-color: #0e6655;
@@ -286,11 +282,10 @@
   border-radius: 5px;
   background-color: #f9e79f;
 
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
-
 
 .custom_radio input[type="checkbox"]:checked ~ label {
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);

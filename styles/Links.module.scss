@@ -1,21 +1,10 @@
 .links {
   display: flex;
-
-  a {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-    font-size: 23px;
-    padding: 5px;
-  }
-
+width:70px;
+justify-content: space-between;
+align-items: center;
+color:steelblue;
   div {
-    display: flex;
-    align-items: center;
-    font-size: 23px;
-    padding: 5px;
-    color: steelblue;
-
     &:hover {
       cursor: pointer;
       color: darken($color: steelblue, $amount: 10);

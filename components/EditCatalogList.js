@@ -1,42 +1,42 @@
 import styles from "@/styles/EditCategory.module.scss"
-import { getCategoriesTree } from "../utils"
+import { getCatalogsTree } from "../utils"
 import { API_URL } from "../config"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
 import { useRef, useState } from "react"
 
-export default function EditCategoryList({
-  categories,
-  setCategory,
-  setIsShowCategory,
-  setCategories,
+export default function EditCatalogList({
+  catalogs,
+  setCatalog,
+  setIsShowCatalog,
+  setCatalogs,
   token,
 }) {
   const [catForDelete, setCatForDelete] = useState({})
 
   const elemModal = useRef()
 
-  const arrayTree = categories.map((item) => {
+  const arrayTree = catalogs.map((item) => {
     return {
       _id: item._id,
-      tree: getCategoriesTree(item, categories),
+      tree: getCatalogsTree(item, catalogs),
       name: item.name,
     }
   })
   arrayTree.sort((a, b) => (a.tree > b.tree ? 1 : -1))
 
-  const handleEditCategory = (id) => {
-    setCategory(categories.find((item) => item._id === id))
-    setIsShowCategory(true)
+  const handleEditCatalog = (id) => {
+    setCatalog(catalogs.find((item) => item._id === id))
+    setIsShowCatalog(true)
   }
 
-  const handleDeleteCategory = async ({ _id }) => {
-    const isChildren = categories.some((item) => item.parentCategoryId === _id)
+  const handleDeleteCatalog = async ({ _id }) => {
+    const isChildren = catalogs.some((item) => item.parentId === _id)
     if (isChildren) {
-      toast.error("Сначала удалите все подкатегории в этой категории")
+      toast.error("Сначала удалите все подкаталоги в этом каталоге")
     }
-    const res = await fetch(`${API_URL}/api/categories/${_id}`, {
+    const res = await fetch(`${API_URL}/api/catalogs/${_id}`, {
       method: "DELETE",
       headers: {
         authorization: `Bearer ${token}`,
@@ -46,7 +46,9 @@ export default function EditCategoryList({
     if (!res.ok) {
       toast.error(data.message)
     } else {
-      setCategories(categories.filter((item) => item._id !== _id))
+      const res = await fetch(`${API_URL}/api/catalogs`)
+      const { catalogs: newCatalogs } = await res.json()
+      setCatalogs(newCatalogs)
     }
   }
 
@@ -56,30 +58,27 @@ export default function EditCategoryList({
   }
   const handle = (rez) => {
     if (rez) {
-      handleDeleteCategory(catForDelete)
+      handleDeleteCatalog(catForDelete)
     }
     setCatForDelete({})
     elemModal.current.close()
   }
-
   return (
     <div>
       <ToastContainer />
-
       <div className={styles.container}>
         <div className={styles.header}>
           <Links back={false} home={true} />
         </div>
-
         <div className={styles.list_wrapper}>
-          {categories.length
+          {catalogs.length
             ? arrayTree.map((item, key) => (
                 <div key={key} className={styles.item}>
                   {item.tree}
                   <div className={styles.buttons}>
                     <button
                       className={styles.edit}
-                      onClick={() => handleEditCategory(item._id)}
+                      onClick={() => handleEditCatalog(item._id)}
                     >
                       <i className="fa-solid fa-pencil"></i>
                     </button>
@@ -98,7 +97,7 @@ export default function EditCategoryList({
       </div>
       <dialog className={styles.dialog} ref={elemModal}>
         <div className={styles.dialog_wrapper}>
-          <p>Удалить категорию {catForDelete.name}?</p>
+          <p>Удалить каталог {catForDelete.name}?</p>
           <div onClick={() => handle(true)}>Да</div>
           <div onClick={() => handle(false)}>Нет</div>
         </div>

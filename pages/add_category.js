@@ -138,9 +138,17 @@ export default function addCategoryPage({ categories }) {
             <div className={styles.form}>
               <form onSubmit={handleSubmit}>
                 <div className={styles.header}>
-                  <Links home={true} />
+                  <Links home={true} back={true} />
 
-                  <input type="submit" value="Сохранить" className="btn" />
+                  <span>
+                    
+                    <i
+                      className="fa-solid fa-floppy-disk fa-2xl"
+                      title="Сохранить"
+                      name="save"
+                      onClick={handleSubmit}
+                    ></i>
+                  </span>
                 </div>
 
                 <ToastContainer />

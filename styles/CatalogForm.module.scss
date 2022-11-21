@@ -6,20 +6,31 @@ $bg_list_color: #fbfcfc;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  i {
-    color: steelblue;
-    cursor: pointer;
-    padding-right: 10px;
-    &:hover {
-      color: darken($color: steelblue, $amount: 10);
+  padding: 5px 10px;
+  span {
+    i[name="cancel"] {
+      color: red;
+      padding: 0 20px;
+      cursor: pointer;
+      &:hover {
+        color: darken($color: red, $amount: 10);
+      }
+    }
+    i[name="save"] {
+      color: steelblue;
+      cursor: pointer;
+      &:hover {
+        color: darken($color: steelblue, $amount: 10);
+      }
     }
   }
 }
+
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(325px, 1fr));
   gap: 15px;
-  padding: 0 10px;
+  padding: 5px 10px;
   .left_side {
     label {
       display: block;
@@ -33,7 +44,18 @@ $bg_list_color: #fbfcfc;
     }
     .input_wrapper {
       position: relative;
-
+      .cancell {
+        i {
+          display: block;
+          height: 100%;
+          position: absolute;
+          color: red;
+          top: 0;
+          right: 0;
+          transform: translate(-50%, 50%);
+          cursor: pointer;
+        }
+      }
       .drop_down_list {
         display: none;
         position: absolute;
@@ -41,6 +63,8 @@ $bg_list_color: #fbfcfc;
         top: 100%;
         left: 0;
         width: 100%;
+        max-height: 480px;
+        overflow: auto;
         border: 1px solid #888;
         border-radius: 5px;
         box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
@@ -71,8 +95,8 @@ $bg_list_color: #fbfcfc;
       justify-content: center;
       align-items: center;
       img {
-        max-width: 268px;
-        max-height: 338px;
+        max-width: 100%;
+        max-height: 100%;
       }
     }
     .buttons {
@@ -93,17 +117,23 @@ $bg_list_color: #fbfcfc;
     }
   }
 }
-.dialog_content{
-  width:100%;
-  height:100%;  
-  display:flex;
+.dialog_content {
+  width: 100%;
+  height: 100%;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap:20px;
-  input{
-    width:80%;
-    border:1px solid #888;
-    padding: 5px;;
+  justify-content: flex-start;
+  gap: 20px;
+  span {
+    padding: 5px;
+    color: red;
+    cursor: pointer;
+    align-self: flex-end;
+  }
+  input {
+    width: 80%;
+    border: 1px solid #888;
+    padding: 5px;
   }
 }

@@ -36,7 +36,7 @@ export const getCategoriesTree = (category, categories) => {
   var result = [category.name]
   const findParent = (category) => {
     const parent = categories.find(
-      (elem) => elem._id === category.parentCategoryId
+      (elem) =>elem._id===category.parentCategoryId
     )
     if (parent) {
       result.push(parent.name)
@@ -45,6 +45,22 @@ export const getCategoriesTree = (category, categories) => {
     return
   }
   findParent(category)
+
+  return result.reverse().join(" ➔ ")
+}
+export const getCatalogsTree = (catalog, catalogs) => {
+  var result = [catalog.name]
+  const findParent = (catalog) => {
+    const parent = catalogs.find(
+      (elem) =>elem._id===catalog.parentId
+    )
+    if (parent) {
+      result.push(parent.name)
+      findParent(parent)
+    }
+    return
+  }
+  findParent(catalog)
 
   return result.reverse().join(" ➔ ")
 }

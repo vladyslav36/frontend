@@ -9,14 +9,27 @@ import "react-toastify/dist/ReactToastify.css"
 import AccessDenied from "@/components/AccessDenied"
 import { getCatalogsTree } from "utils"
 
-export default function addCatalog({ catalogs: dbCatalogs }) {
+export default function EditCatalog({
+  catalog,
+  catalogs,
+  setCatalogs,
+  setIsShowCatalog,
+  token,
+}) {
   const {
-    user: { isAdmin, token },
+    user: { isAdmin },
   } = useContext(AuthContext)
-  const initValues = { name: "", parent: "", parentId: null }
-  const [values, setValues] = useState(initValues)
-  const [image, setImage] = useState({ path: "", file: null })
-  const [catalogs, setCatalogs] = useState(dbCatalogs)
+
+  const [values, setValues] = useState({
+    _id: catalog._id,
+    name: catalog.name,
+    parent: catalog.parent,
+    parentId: catalog.parentId,
+  })
+  const [image, setImage] = useState({
+    path: catalog.image ? `${API_URL}${catalog.image}` : "",
+    file: null,
+  })
 
   const elDialog = useRef()
 
@@ -35,17 +48,25 @@ export default function addCatalog({ catalogs: dbCatalogs }) {
   }
 
   const sendData = async () => {
-    // Проверка на заполнение поля имени категории
+    // Проверка на заполнение поля имени каталога
     const hasEmptyFields = !values.name.trim()
     if (hasEmptyFields) {
-      toast.error("Поле Категория должно быть заполнено")
+      toast.error("Поле Каталог должно быть заполнено")
+      return
+    }
+
+    if (values._id === values.parentId) {
+      toast.error("Каталог не может быть родителем самого себя")
+      setValues({ ...values, parentId: null, parent: "" })
+
       return
     }
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))
+    formData.append('imafeClientPath',image.path)
     formData.append("image", image.file)
     const res = await fetch(`${API_URL}/api/catalogs`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         enctype: "multipart/form-data",
         authorization: `Bearer ${token}`,
@@ -54,29 +75,36 @@ export default function addCatalog({ catalogs: dbCatalogs }) {
     })
 
     if (res.ok) {
-      toast.success("Каталог успешно добавлен")
+      toast.success("Каталог успешно обновлен")
       // обновление каталогов с базы
       const res = await fetch(`${API_URL}/api/catalogs`)
       const { catalogs: newCatalogs } = await res.json()
       setCatalogs(newCatalogs)
-      setValues(initValues)
     } else {
       toast.error("Ошибка при загрузке каталога")
     }
   }
-  console.log(values)
+  console.log(catalogs)
   return (
-    <Layout title="Добавление каталога">
+    <>
       {isAdmin ? (
         <>
           <ToastContainer />
           <div className={styles.header}>
             <Links home={true} back={true} />
-            <span onClick={sendData}>
+            
+            <span>
+              <i
+                className="fa-solid fa-square-xmark fa-2xl"
+                title="Отмена"
+                name="cancel"
+                onClick={() => setIsShowCatalog(false)}
+              ></i>
               <i
                 className="fa-solid fa-floppy-disk fa-2xl"
                 title="Сохранить"
                 name="save"
+                onClick={sendData}
               ></i>
             </span>
           </div>
@@ -168,7 +196,7 @@ export default function addCatalog({ catalogs: dbCatalogs }) {
       ) : (
         <AccessDenied />
       )}
-    </Layout>
+    </>
   )
 }
 
