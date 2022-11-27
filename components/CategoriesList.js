@@ -7,7 +7,7 @@ export default function CategoriesList({ categories = [] }) {
     <div className={styles.content}>
       {categories.length ? (
         categories.map((item, i) => (
-          <Link href={`/category/${item.slug}`} key={i}>
+          <Link href={`/category/${item._id}`} key={i}>
             <div className={styles.item}>
               <div className={styles.image}>
                 <img

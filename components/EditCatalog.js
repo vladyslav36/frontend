@@ -1,13 +1,13 @@
-import Layout from "@/components/Layout"
-import React, { useContext, useRef, useState } from "react"
 import styles from "@/styles/CatalogForm.module.scss"
+import React, { useContext, useRef, useState } from "react"
 import { API_URL, NOIMAGE } from "../config"
 import Links from "@/components/Links"
 import AuthContext from "@/context/AuthContext"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import AccessDenied from "@/components/AccessDenied"
-import { getCatalogsTree } from "utils"
+import {  getListForCatalogsMenu } from "utils"
+import ModalImage from "./ModalImage"
 
 export default function EditCatalog({
   catalog,
@@ -32,10 +32,15 @@ export default function EditCatalog({
   })
 
   const elDialog = useRef()
-
+const listForMenu = getListForCatalogsMenu(catalogs)
   const handleValues = (e) => {
     e.preventDefault()
-    setValues({ ...values, [e.target.name]: e.target.value })
+    if (e.target.name === 'name') {
+      setValues({ ...values, [e.target.name]: e.target.value })
+    } else {
+      toast.warning('Родительский каталог выбирается из выпадающего списка')
+    }
+    
   }
   const handleUploadChange = (e) => {
     const url = URL.createObjectURL(e.target.files[0])
@@ -84,7 +89,7 @@ export default function EditCatalog({
       toast.error("Ошибка при загрузке каталога")
     }
   }
-  console.log(catalogs)
+  
   return (
     <>
       {isAdmin ? (
@@ -128,8 +133,8 @@ export default function EditCatalog({
                     type="text"
                     id="parent"
                     value={values.parent}
-                    name="parentCatalog"
-                    placeholder="Название родителя"
+                    name="parent"
+                    placeholder="Название родителя"   
                     onChange={handleValues}
                   />
                   <div
@@ -141,19 +146,19 @@ export default function EditCatalog({
                     <i className="fa-solid fa-xmark fa-lg"></i>
                   </div>
                   <ul className={styles.drop_down_list}>
-                    {catalogs.length
-                      ? catalogs.map((item) => (
+                    {listForMenu.length
+                      ? listForMenu.map((item) => (
                           <li
-                            key={item._id}
+                            key={item.cat._id}
                             onClick={() => {
                               setValues({
                                 ...values,
-                                parent: item.name,
-                                parentId: item._id,
+                                parent: item.cat.name,
+                                parentId: item.cat._id,
                               })
                             }}
                           >
-                            {getCatalogsTree(item, catalogs)}
+                            {item.tree}
                           </li>
                         ))
                       : null}
@@ -183,15 +188,7 @@ export default function EditCatalog({
             </div>
           </div>
 
-          <dialog ref={elDialog} className={styles.dialog}>
-            <div className={styles.dialog_content}>
-              <span onClick={() => elDialog.current.close()}>
-                <i className="fa-solid fa-xmark fa-xl"></i>
-              </span>
-              <p>Загрузка изображения</p>
-              <input type="file" onChange={handleUploadChange} />
-            </div>
-          </dialog>
+          <ModalImage elDialog={elDialog} handleUploadChange={handleUploadChange} />
         </>
       ) : (
         <AccessDenied />

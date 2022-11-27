@@ -1,32 +1,37 @@
 import styles from "@/styles/Form.module.scss"
 import AccessDenied from "@/components/AccessDenied"
 import Layout from "@/components/Layout"
-import Modal from "@/components/Modal"
-import ImagesUpload from "@/components/ImagesUpload"
 import AuthContext from "@/context/AuthContext"
-import { useContext, useState, useEffect } from "react"
+import { useContext, useState, useEffect, useRef } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { GiCheckMark } from "react-icons/gi"
 import { useRouter } from "next/router"
 import { API_URL } from "@/config/index"
-import { getBrand, getCategoriesTree, stringToPrice } from "../utils"
+import {
+  getBrand,
+  getListForCatalogsMenu,
+  getListForCategoriesMenu,
+  stringToPrice,
+} from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
+import ModalImage from "@/components/ModalImage"
 
-export default function addProductPage({ categories }) {
+export default function addProductPage({ categories, catalogs }) {
   const {
     user: { isAdmin, token },
   } = useContext(AuthContext)
 
   const [values, setValues] = useState({
     name: "",
-    // brand: '',
     brandId: null,
     model: "",
     description: "",
     category: "",
+    catalog: "",
     categoryId: null,
+    catalogId: null,
     options: {},
     isInStock: true,
     price: "",
@@ -36,50 +41,37 @@ export default function addProductPage({ categories }) {
   })
 
   const [images, setImages] = useState([])
-  const [showModal, setShowModal] = useState(false)
-  const [isShowList, setIsShowList] = useState(false)
-  const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
+
+  const listForCategoryMenu = getListForCategoriesMenu(categories)
+  const listForCatalogMenu = getListForCatalogsMenu(catalogs)
 
   const [imageIdx, setImageIdx] = useState(0)
 
+  const elDialog = useRef()
   const router = useRouter()
-  useEffect(() => {
-    const names = categories.map((item) => item.name)
-    const isExist = names.includes(values.category)
-    if (!isExist) {
-      setValues({ ...values, categoryId: null })
-    }
-  }, [values.category])
+ 
 
   useEffect(() => {
-    if (!values.categoryId) setValues({ ...values, options: {} })
+    if (!values.categoryId)
+      setValues({ ...values, options: {}, category: "", brandId: null })
   }, [values.categoryId])
 
-  // Функция возвращает список категорий в соответствии со строкой поиска
-  function getListForMenu(items, value) {
-    const list = items.filter(
-      ({ name }) => name.toLowerCase().indexOf(value.toLowerCase()) >= 0
-    )
-    return list
-  }
+  useEffect(() => {
+    if (!values.catalogId) setValues({ ...values, catalog: "" })
+  }, [values.catalogId])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    // Проверка на заполнение поля имени категории
+    // Проверка на заполнение поля имени и модели товара
     const hasEmptyFields = !values.name.trim() || !values.model.trim()
     if (hasEmptyFields) {
       toast.error("Поле Название и Модель должны быть заполнены")
       return
     }
-    // Проверка на наличие и соответствие категории в категориях
-    if (values.category) {
-      const isValid = categories.some(
-        (item) =>
-          item.name === values.category && item._id === values.categoryId
-      )
-      if (!isValid) {
-        toast.error("Категория должна быть выбрана из списка")
-        return
-      }
+
+    if (!values.category) {
+      toast.error('Поле категория является обязательным')
+      return
     }
 
     // Send data
@@ -113,30 +105,25 @@ export default function addProductPage({ categories }) {
   }
   // input для name & model ...
   const handleChange = (e) => {
-    const { name, value, checked } = e.target
+    const { name, value, checked } = e.target    
     if (name === "isShowcase" || name === "isInStock") {
       setValues({ ...values, [name]: checked })
     } else {
       e.preventDefault()
+      if (name === "catalog") {
+        toast.warning("Каталог выбирается из выпадающего списка")
+        return
+      }
+      if (name === "category") {
+        toast.warning("Категория выбирается из выпадающего списка")
+        return
+      }
       setValues({ ...values, [name]: value })
     }
   }
 
-  // input for category
-  const handleChangeCategory = (e) => {
-    e.preventDefault()
-    const { name, value } = e.target
-
-    setValues({ ...values, [name]: value })
-    setIsShowList(true)
-    setListForMenu(getListForMenu(categories, value))
-  }
-
   const handleListClick = async (category) => {
     const brand = getBrand(category, categories)
-
-    setIsShowList(false)
-
     setValues({
       ...values,
       category: category.name,
@@ -145,12 +132,26 @@ export default function addProductPage({ categories }) {
       options: { ...brand.options },
     })
   }
-
+  const handleUploadChange = (e) => {
+    const url = URL.createObjectURL(e.target.files[0])
+    // что нажато: добавление новой картинки или изменение существующей
+    if (images[imageIdx]) {
+      URL.revokeObjectURL(images[imageIdx].path)
+      setImages(
+        images.map((item, i) =>
+          i === imageIdx ? { path: url, file: e.target.files[0] } : item
+        )
+      )
+    } else {
+      setImages([...images, { path: url, file: e.target.files[0] }])
+    }
+    elDialog.current.close()
+  }
   const deleteImage = (i) => {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-
+  
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
@@ -197,35 +198,69 @@ export default function addProductPage({ categories }) {
 
                 <div>
                   <label htmlFor="category">Категория</label>
-                  <div
-                    className={styles.input_group_menu}
-                    tabIndex={0}
-                    onFocus={() => setIsShowList(true)}
-                    onBlur={() => setIsShowList(false)}
-                  >
+                  <div className={styles.input_group_menu}>
                     <input
                       type="text"
                       id="category"
                       name="category"
                       value={values.category}
-                      onChange={handleChangeCategory}
+                      onChange={handleChange}
                     />
-
-                    <ul
-                      className={
-                        styles.dropdown_menu +
-                        " " +
-                        (isShowList && styles.active)
-                      }
+                    <div
+                      className={styles.cancell}
+                      onClick={() => setValues({ ...values, categoryId: null })}
                     >
-                      {listForMenu && (
+                      <i className="fa-solid fa-xmark fa-lg"></i>
+                    </div>
+
+                    <ul className={styles.dropdown_menu}>
+                      {listForCategoryMenu && (
                         <>
-                          {listForMenu.map((category) => (
+                          {listForCategoryMenu.map((item) => (
                             <li
-                              key={category._id}
-                              onClick={() => handleListClick(category)}
+                              key={item.cat._id}
+                              onClick={() => handleListClick(item.cat)}
                             >
-                              {getCategoriesTree(category, categories)}
+                              {item.tree}
+                            </li>
+                          ))}
+                        </>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="catalog">Каталог</label>
+                  <div className={styles.input_group_menu}>
+                    <input
+                      type="text"
+                      id="catalog"
+                      name="catalog"
+                      value={values.catalog}
+                      onChange={handleChange}
+                    />
+                    <div
+                      className={styles.cancell}
+                      onClick={() => setValues({ ...values, catalogId: null })}
+                    >
+                      <i className="fa-solid fa-xmark fa-lg"></i>
+                    </div>
+
+                    <ul className={styles.dropdown_menu}>
+                      {listForCatalogMenu && (
+                        <>
+                          {listForCatalogMenu.map((item) => (
+                            <li
+                              key={item.cat._id}
+                              onClick={() =>
+                                setValues({
+                                  ...values,
+                                  catalog: item.cat.name,
+                                  catalogId: item.cat._id,
+                                })
+                              }
+                            >
+                              {item.tree}
                             </li>
                           ))}
                         </>
@@ -286,16 +321,6 @@ export default function addProductPage({ categories }) {
 
                 <div className={styles.checkbox_wrapper}>
                   <div className={styles.custom_checkbox}>
-                    <label htmlFor="isShowcase">Показывать на витрине </label>
-
-                    <GiCheckMark
-                      className={
-                        styles.check_icon +
-                        " " +
-                        (values.isShowcase ? styles.visible : "")
-                      }
-                    />
-
                     <input
                       type="checkbox"
                       name="isShowcase"
@@ -303,18 +328,12 @@ export default function addProductPage({ categories }) {
                       onChange={handleChange}
                       checked={values.isShowcase}
                     />
+                    <label htmlFor="isShowcase">Показывать на витрине </label>
+                    
+                    <GiCheckMark className={styles.check_icon} />
                   </div>
 
                   <div className={styles.custom_checkbox}>
-                    <label htmlFor="isInStock">В наличии</label>
-                    <GiCheckMark
-                      className={
-                        styles.check_icon +
-                        " " +
-                        (values.isInStock ? styles.visible : "")
-                      }
-                    />
-
                     <input
                       type="checkbox"
                       name="isInStock"
@@ -322,6 +341,8 @@ export default function addProductPage({ categories }) {
                       onChange={handleChange}
                       checked={values.isInStock}
                     />
+                    <label htmlFor="isInStock">В наличии</label>
+                    <GiCheckMark className={styles.check_icon} />
                   </div>
                 </div>
               </div>
@@ -356,8 +377,7 @@ export default function addProductPage({ categories }) {
                           className="btn"
                           onClick={() => {
                             setImageIdx(i)
-                            setShowModal(true)
-                            setIsShowList(false)
+                            elDialog.current.showModal()
                           }}
                         >
                           <i className="fa-regular fa-image"></i>
@@ -376,8 +396,7 @@ export default function addProductPage({ categories }) {
                 className="btn"
                 onClick={() => {
                   setImageIdx(images.length)
-                  setShowModal(true)
-                  setIsShowList(false)
+                  elDialog.current.showModal()
                 }}
               >
                 <i className="fa-solid fa-plus"></i>
@@ -386,22 +405,17 @@ export default function addProductPage({ categories }) {
           </div>
         </div>
       )}
-      <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <ImagesUpload
-          setShowModal={setShowModal}
-          images={images}
-          setImages={setImages}
-          idx={imageIdx}
-        />
-      </Modal>
+      <ModalImage handleUploadChange={handleUploadChange} elDialog={elDialog} />
     </Layout>
   )
 }
 
 export async function getServerSideProps() {
-  const res = await fetch(`${API_URL}/api/categories`)
-  const { categories } = await res.json()
-  if (!res.ok || !categories) {
+  const res1 = await fetch(`${API_URL}/api/categories`)
+  const res2 = await fetch(`${API_URL}/api/catalogs`)
+  const { categories } = await res1.json()
+  const { catalogs } = await res2.json()
+  if (!res1.ok || !categories || !res2.ok || !catalogs) {
     return {
       notFound: true,
     }
@@ -409,6 +423,7 @@ export async function getServerSideProps() {
   return {
     props: {
       categories,
+      catalogs,
     },
   }
 }

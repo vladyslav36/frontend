@@ -92,7 +92,7 @@ export default function Navbar({ categories: categoriesProps }) {
                         key={category._id}
                         onClick={(e) => {
                           e.stopPropagation()
-                          router.push(`/category/${category.slug}`)
+                          router.push(`/category/${category._id}`)
                         }}
                         onMouseEnter={(e) => getSpace(e)}
                       >
@@ -111,7 +111,7 @@ export default function Navbar({ categories: categoriesProps }) {
                               <li
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  router.push(`/category/${item.slug}`)
+                                  router.push(`/category/${item._id}`)
                                 }}
                                 key={item._id}
                               >
@@ -130,7 +130,7 @@ export default function Navbar({ categories: categoriesProps }) {
             {catalogs.length
               ? catalogs
                   .sort((a, b) => (a.name > b.name ? 1 : -1))
-                  .map((item) => (
+                  .map((item) =>item.parentId===null&& (
                     <li key={item._id} className={styles.category}>
                       {item.name}
                     </li>

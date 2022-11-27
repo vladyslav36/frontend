@@ -60,7 +60,7 @@ export default function categoryPage({ category, categories }) {
               const arrow = i < arr.length - 1 ? <div>&nbsp;➔&nbsp;</div> : null
               return (
                 <div key={i}>
-                  <Link href={`/category/${item.slug}`}>
+                  <Link href={`/category/${item._id}`}>
                     <a>{item.name}</a>
                   </Link>
                   {arrow}
@@ -107,10 +107,10 @@ export default function categoryPage({ category, categories }) {
   )
 }
 
-export async function getServerSideProps({ params: { slug } }) {
+export async function getServerSideProps({ params: { id } }) {
   const res = await fetch(`${API_URL}/api/categories`)
   const { categories } = await res.json()
-  const res2 = await fetch(`${API_URL}/api/categories/slug/${slug}`)
+  const res2 = await fetch(`${API_URL}/api/categories/${id}`)
   const { category } = await res2.json()
   if (!res.ok || !res2.ok) {
     return {

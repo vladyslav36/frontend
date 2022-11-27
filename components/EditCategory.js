@@ -1,16 +1,13 @@
 import styles from "@/styles/Form.module.scss"
-
-import Modal from "@/components/Modal"
-import ImageUpload from "@/components/ImageUpload"
-
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { useRouter } from "next/router"
 import { API_URL, NOIMAGE } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
-import { getCategoriesTree } from "../utils"
 import Links from "@/components/Links"
 import Options from "@/components/Options"
+import { getListForCategoriesMenu } from "../utils"
+import ModalImage from "./ModalImage"
 
 export default function EditCategory({
   category,
@@ -33,30 +30,15 @@ export default function EditCategory({
     file: null,
   })
   const [showModal, setShowModal] = useState(false)
-  const [isShowList, setIsShowList] = useState(false)
-  const [listForMenu, setListForMenu] = useState(getListForMenu(categories, ""))
-
-  useEffect(() => {
-    const names = categories.map((item) => item.name)
-    const isExist = names.includes(values.parentCategory)
-    if (!isExist) {
-      setValues({ ...values, parentCategoryId: null })
-    }
-  }, [values.parentCategory])
+  const elDialog = useRef()
+  const listForMenu = getListForCategoriesMenu(categories)
 
   useEffect(() => {
     if (values.parentCategoryId) setValues({ ...values, options: {} })
   }, [values.parentCategoryId])
 
   const router = useRouter()
-  // Функция возвращает список категорий в соответствии со строкой поиска
-  function getListForMenu(categories, value) {
-    const list = categories.filter(
-      ({ name }) => name.toLowerCase().indexOf(value.toLowerCase()) >= 0
-    )
 
-    return list
-  }
   const handleSubmit = async (e) => {
     e.preventDefault()
     // Проверка на заполнение поля имени категории
@@ -65,17 +47,11 @@ export default function EditCategory({
       toast.error("Поле Категория должно быть заполнено")
       return
     }
-    // Проверка на наличие и соответствие родительской категории в категориях
-    if (values.parentCategory) {
-      const isValid = categories.some(
-        (item) =>
-          item.name === values.parentCategory &&
-          item._id === values.parentCategoryId
-      )
-      if (!isValid) {
-        toast.error("Родительская категория должна быть выбрана из списка")
-        return
-      }
+    if (values._id === values.parentCategoryId) {
+      toast.error("Категория не может быть родителем самой себя")
+      setValues({ ...values, parentId: null, parent: "" })
+
+      return
     }
 
     // Проверка опций
@@ -119,20 +95,21 @@ export default function EditCategory({
   const handleChange = (e) => {
     e.preventDefault()
     const { name, value } = e.target
-    setValues({ ...values, [name]: value })
+    if (name === "name") {
+      setValues({ ...values, [name]: value })
+    } else {
+      toast.warning("Родительская категория выбирается из выпадающего списка")
+    }
   }
-  // input for parentCategory
-  const handleChangeParent = (e) => {
-    e.preventDefault()
-    const { name, value } = e.target
-    setValues({ ...values, [name]: value })
-    setIsShowList(true)
-    setListForMenu(getListForMenu(categories, value))
+
+  const handleUploadChange = (e) => {
+    const url = URL.createObjectURL(e.target.files[0])
+    URL.revokeObjectURL(image.path)
+    setImage({ path: url, file: e.target.files[0] })
   }
 
   const handleListClick = ({ id, name }) => {
     setValues({ ...values, parentCategory: name, parentCategoryId: id })
-    setIsShowList(false)
   }
 
   const deleteImage = () => {
@@ -177,37 +154,40 @@ export default function EditCategory({
             </div>
             <div>
               <label htmlFor="parentCategory">Родительская категория</label>
-              <div
-                className={styles.input_group_menu}
-                tabIndex={0}
-                onFocus={() => setIsShowList(true)}
-                onBlur={() => setIsShowList(false)}
-              >
+              <div className={styles.input_group_menu}>
                 <input
                   type="text"
                   id="parentCategory"
                   name="parentCategory"
                   value={values.parentCategory}
-                  onChange={handleChangeParent}
+                  onChange={handleChange}
                   autoComplete="off"
                 />
-                <ul
-                  className={
-                    styles.dropdown_menu + " " + (isShowList && styles.active)
+                <div
+                  className={styles.cancell}
+                  onClick={() =>
+                    setValues({
+                      ...values,
+                      parentCategory: "",
+                      parentCategoryId: null,
+                    })
                   }
                 >
+                  <i className="fa-solid fa-xmark fa-lg"></i>
+                </div>
+                <ul className={styles.dropdown_menu}>
                   {listForMenu &&
-                    listForMenu.map((category) => (
+                    listForMenu.map((item) => (
                       <li
-                        key={category._id}
+                        key={item.cat._id}
                         onClick={() =>
                           handleListClick({
-                            id: category._id,
-                            name: category.name,
+                            id: item.cat._id,
+                            name: item.cat.name,
                           })
                         }
                       >
-                        {getCategoriesTree(category, categories)}
+                        {item.tree}
                       </li>
                     ))}
                 </ul>
@@ -242,8 +222,7 @@ export default function EditCategory({
               <button
                 className="btn"
                 onClick={() => {
-                  setShowModal(true)
-                  setIsShowList(false)
+                  elDialog.current.showModal()
                 }}
               >
                 <i className="fa-regular fa-image"></i>
@@ -259,13 +238,7 @@ export default function EditCategory({
         ) : null}
       </div>
 
-      <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <ImageUpload
-          setShowModal={setShowModal}
-          setImage={setImage}
-          image={image}
-        />
-      </Modal>
+      <ModalImage elDialog={elDialog} handleUploadChange={handleUploadChange} />
     </div>
   )
 }

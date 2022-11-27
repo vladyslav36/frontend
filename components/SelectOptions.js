@@ -1,4 +1,4 @@
-import styles from "@/styles/Form.module.scss"
+import styles from "@/styles/SelectOptions.module.scss"
 import { stringToPrice } from "utils"
 
 export default function SelectOptions({ values, setValues, toast }) {

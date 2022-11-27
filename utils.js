@@ -36,7 +36,7 @@ export const getCategoriesTree = (category, categories) => {
   var result = [category.name]
   const findParent = (category) => {
     const parent = categories.find(
-      (elem) =>elem._id===category.parentCategoryId
+      (elem) => elem._id === category.parentCategoryId
     )
     if (parent) {
       result.push(parent.name)
@@ -51,9 +51,7 @@ export const getCategoriesTree = (category, categories) => {
 export const getCatalogsTree = (catalog, catalogs) => {
   var result = [catalog.name]
   const findParent = (catalog) => {
-    const parent = catalogs.find(
-      (elem) =>elem._id===catalog.parentId
-    )
+    const parent = catalogs.find((elem) => elem._id === catalog.parentId)
     if (parent) {
       result.push(parent.name)
       findParent(parent)
@@ -153,8 +151,21 @@ export const getTotalAmount = (cart) => {
   }
   return strArr.join(" + ") || "0"
 }
+// Функция возвращает отсортированный list for drop_down_menu формата {cat:category,tree:string tree}
+export const getListForCategoriesMenu = (catArray) => {
+  const list = catArray
+    .map((item) => ({ cat: item, tree: getCategoriesTree(item, catArray) }))
+    .sort((a, b) => (a.tree.toLowerCase() > b.tree.toLowerCase() ? 1 : -1))
+  return list
+}
+export const getListForCatalogsMenu = (catArray) => {
+  const list = catArray
+    .map((item) => ({ cat: item, tree: getCatalogsTree(item, catArray) }))
+    .sort((a, b) => (a.tree.toLowerCase() > b.tree.toLowerCase() ? 1 : -1))
+  return list
+}
 
-export const getMailString = ({ cart, totalAmount, values,count }) => {
+export const getMailString = ({ cart, totalAmount, values, count }) => {
   const {
     name,
     surname,
@@ -178,7 +189,9 @@ export const getMailString = ({ cart, totalAmount, values,count }) => {
   return `
   <div style='font-size:16px;'>
   
-  <div style='margin:auto;width:200px;color:blue'>Заказ № ${count+1} от ${new Date().toLocaleDateString()}</div>
+  <div style='margin:auto;width:200px;color:blue'>Заказ № ${
+    count + 1
+  } от ${new Date().toLocaleDateString()}</div>
     <div >
       <div><em>Получатель:</em>${name} ${surname}</div>
     <div><em>Телефон:</em>${phone}</div>
@@ -201,13 +214,15 @@ export const getMailString = ({ cart, totalAmount, values,count }) => {
           <td>Модель</td>
           ${
             optionList.length
-              ? optionList.map(
-                  (item) => `
+              ? optionList
+                  .map(
+                    (item) => `
                    <td>
                     ${item}
                   </td> `
-                ).join("")
-              : ''
+                  )
+                  .join("")
+              : ""
           }
           <td>Цена</td>
           <td>Кол-во</td>
@@ -219,11 +234,18 @@ export const getMailString = ({ cart, totalAmount, values,count }) => {
           (item) => `
         <tr style='border:1px solid #999;'>
           <td >${item.name}</td>
-        ${optionList.length ? optionList.map((option, i) => `
+        ${
+          optionList.length
+            ? optionList
+                .map(
+                  (option, i) => `
                     <td key={i}>
-                      ${item.options[option]?item.options[option]:''}
+                      ${item.options[option] ? item.options[option] : ""}
                     </td>`
-                  ).join(""):''}
+                )
+                .join("")
+            : ""
+        }
         <td>${item.price}${getCurrencySymbol(item.currencyValue)}</td>
         <td>${item.qnt}</td>
         </tr> 
@@ -238,7 +260,7 @@ export const getMailString = ({ cart, totalAmount, values,count }) => {
 }
 export const addRiple = (e) => {
   const circle = document.createElement("span")
-  circle.classList.add('riple')
+  circle.classList.add("riple")
   const button = e.target
   const x = e.clientX
   const y = e.clientY
