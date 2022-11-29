@@ -44,12 +44,23 @@ export default function Navbar({ categories: categoriesProps }) {
   const getChildren = (category, categories) => {
     return categories.filter((item) => item.parentCategoryId === category._id)
   }
+  const getCatalogsChildren = (catalog, catalogs) => {
+    return catalogs.filter((item) => item.parentId === catalog._id)
+  }
 
   // Вычисление с какой стороны показывать выпадающий список справа или слева
   const getSpace = (e) => {
     const rightSpace = window.innerWidth - e.target.getBoundingClientRect().x
     setIsShowRight(rightSpace < 160 ? true : false)
   }
+// categoriesList список категорий формата {cat:категория-бренд,children:ее первые дети}
+  const categoriesList = categories.filter(item => item.parentCategoryId === null).sort((a,b)=>a.name>b.name?1:-1).map(cat => {
+    return {cat:cat,children:getChildren(cat,categories).sort((a,b)=>a.name>b.name?1:-1)}
+  })
+  const catalogsList = catalogs.filter(item => item.parentId === null).sort((a,b)=>a.name>b.name?1:-1).map(cat => {
+    return {cat:cat,children:getCatalogsChildren(cat,catalogs).sort((a,b)=>a.name>b.name?1:-1)}
+  })
+
 
   return (
     <>
@@ -80,64 +91,82 @@ export default function Navbar({ categories: categoriesProps }) {
 
       <div className={styles.container}>
         {isShowCategories ? (
-          categories.length ? (
+          categoriesList.length ? (
             <ul className={styles.list}>
-              {categories
-                .sort((a, b) => (a.name > b.name ? 1 : -1))
-                .map(
-                  (category) =>
-                    category.parentCategoryId === null && (
-                      <li
-                        className={styles.category}
-                        key={category._id}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          router.push(`/category/${category._id}`)
-                        }}
-                        onMouseEnter={(e) => getSpace(e)}
-                      >
-                        <span>{category.name}</span>
-                        {getChildren(category, categories).length ? (
-                          <ul
-                            className={
-                              styles.drop_down_list +
-                              " " +
-                              (isShowRight
-                                ? styles.right_side
-                                : styles.left_side)
-                            }
-                          >
-                            {getChildren(category, categories).map((item) => (
-                              <li
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  router.push(`/category/${item._id}`)
-                                }}
-                                key={item._id}
-                              >
-                                {item.name}&nbsp;({item.qntProducts})
-                              </li>
-                            ))}
-                          </ul>
-                        ) : null}
-                      </li>
-                    )
-                )}
+              {categoriesList.map((item) => (
+                <li
+                  className={styles.category}
+                  key={item.cat._id}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    router.push(`/category/${item.cat._id}`)
+                  }}
+                  onMouseEnter={(e) => getSpace(e)}
+                >
+                  <span>{item.cat.name}</span>
+                  {item.children.length ? (
+                    <ul
+                      className={
+                        styles.drop_down_list +
+                        " " +
+                        (isShowRight ? styles.right_side : styles.left_side)
+                      }
+                    >
+                      {item.children.map((child) => (
+                        <li
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            router.push(`/category/${child._id}`)
+                          }}
+                          key={child._id}
+                        >
+                          {child.name}&nbsp;({child.qntProducts})
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </li>
+              ))}
             </ul>
           ) : null
-        ) : (
+        ) : catalogsList.length ? (
           <ul className={styles.list}>
-            {catalogs.length
-              ? catalogs
-                  .sort((a, b) => (a.name > b.name ? 1 : -1))
-                  .map((item) =>item.parentId===null&& (
-                    <li key={item._id} className={styles.category}>
-                      {item.name}
-                    </li>
-                  ))
-              : null}
+            {catalogsList.map((item) => (
+              <li
+                className={styles.category}
+                key={item.cat._id}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  router.push(`/catalog/${item.cat._id}`)
+                }}
+                onMouseEnter={(e) => getSpace(e)}
+              >
+                <span>{item.cat.name}</span>
+                {item.children.length ? (
+                  <ul
+                    className={
+                      styles.drop_down_list +
+                      " " +
+                      (isShowRight ? styles.right_side : styles.left_side)
+                    }
+                  >
+                    {item.children.map((child) => (
+                      <li
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          router.push(`/catalog/${child._id}`)
+                        }}
+                        key={child._id}
+                      >
+                        {child.name}&nbsp;({child.qntProducts})
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </li>
+            ))}
           </ul>
-        )}
+        ) : null}
       </div>
     </>
   )
