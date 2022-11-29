@@ -35,9 +35,7 @@ export function getPriceForShow({
 export const getCategoriesTree = (category, categories) => {
   var result = [category.name]
   const findParent = (category) => {
-    const parent = categories.find(
-      (elem) => elem._id === category.parentCategoryId
-    )
+    const parent = categories.find((elem) => elem._id === category.parentId)
     if (parent) {
       result.push(parent.name)
       findParent(parent)
@@ -65,7 +63,7 @@ export const getCatalogsTree = (catalog, catalogs) => {
 export const getBrand = (category, categories) => {
   let result = category
   const findParent = (item) => {
-    const parent = categories.find((elem) => elem._id === item.parentCategoryId)
+    const parent = categories.find((elem) => elem._id === item.parentId)
     if (parent) {
       result = parent
       findParent(parent)
@@ -79,9 +77,7 @@ export const getBrand = (category, categories) => {
 export const getArrayCategoryTree = (category, categories) => {
   var result = [{ name: category.name, slug: category.slug }]
   const findParent = (category) => {
-    const parent = categories.find(
-      (elem) => elem._id === category.parentCategoryId
-    )
+    const parent = categories.find((elem) => elem._id === category.parentId)
     if (parent) {
       result.push({ name: parent.name, slug: parent.slug })
       findParent(parent)

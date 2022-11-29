@@ -19,8 +19,8 @@ export default function EditCategory({
   const [values, setValues] = useState({
     _id: category._id,
     name: category.name,
-    parentCategory: category.parentCategory,
-    parentCategoryId: category.parentCategoryId,
+    parent: category.parent,
+    parentId: category.parentId,
     description: category.description,
     options: category.options,
   })
@@ -34,8 +34,8 @@ export default function EditCategory({
   const listForMenu = getListForCategoriesMenu(categories)
 
   useEffect(() => {
-    if (values.parentCategoryId) setValues({ ...values, options: {} })
-  }, [values.parentCategoryId])
+    if (values.parentId) setValues({ ...values, options: {} })
+  }, [values.parentId])
 
   const router = useRouter()
 
@@ -47,7 +47,7 @@ export default function EditCategory({
       toast.error("Поле Категория должно быть заполнено")
       return
     }
-    if (values._id === values.parentCategoryId) {
+    if (values._id === values.parentId) {
       toast.error("Категория не может быть родителем самой себя")
       setValues({ ...values, parentId: null, parent: "" })
 
@@ -109,7 +109,7 @@ export default function EditCategory({
   }
 
   const handleListClick = ({ id, name }) => {
-    setValues({ ...values, parentCategory: name, parentCategoryId: id })
+    setValues({ ...values, parent: name, parentId: id })
   }
 
   const deleteImage = () => {
@@ -153,13 +153,13 @@ export default function EditCategory({
               />
             </div>
             <div>
-              <label htmlFor="parentCategory">Родительская категория</label>
+              <label htmlFor="parent">Родительская категория</label>
               <div className={styles.input_group_menu}>
                 <input
                   type="text"
-                  id="parentCategory"
-                  name="parentCategory"
-                  value={values.parentCategory}
+                  id="parent"
+                  name="parent"
+                  value={values.parent}
                   onChange={handleChange}
                   autoComplete="off"
                 />
@@ -168,8 +168,8 @@ export default function EditCategory({
                   onClick={() =>
                     setValues({
                       ...values,
-                      parentCategory: "",
-                      parentCategoryId: null,
+                      parent: "",
+                      parentId: null,
                     })
                   }
                 >
@@ -233,7 +233,7 @@ export default function EditCategory({
             </div>
           </div>
         </div>
-        {!values.parentCategory ? (
+        {!values.parent ? (
           <Options values={values} setValues={setValues} />
         ) : null}
       </div>

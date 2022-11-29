@@ -14,16 +14,16 @@ export default function categoryPage({ category, categories }) {
   const [isShowAsList, setIsShowAsList] = useState(true)
 
   const childrenList = category
-    ? categories.filter((item) => item.parentCategoryId === category._id)
+    ? categories.filter((item) => item.parentId === category._id)
     : []
 
   // ld+json for SEO
   const schemaData = {
     "@context": "http://www.schema.org",
-    "@type": "category",    
-    name: category.name,    
+    "@type": "category",
+    name: category.name,
     image: category.image,
-    description: category.description    
+    description: category.description,
   }
 
   useEffect(() => {

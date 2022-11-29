@@ -42,7 +42,7 @@ export default function Navbar({ categories: categoriesProps }) {
   }, [])
 
   const getChildren = (category, categories) => {
-    return categories.filter((item) => item.parentCategoryId === category._id)
+    return categories.filter((item) => item.parentId === category._id)
   }
   const getCatalogsChildren = (catalog, catalogs) => {
     return catalogs.filter((item) => item.parentId === catalog._id)
@@ -53,14 +53,29 @@ export default function Navbar({ categories: categoriesProps }) {
     const rightSpace = window.innerWidth - e.target.getBoundingClientRect().x
     setIsShowRight(rightSpace < 160 ? true : false)
   }
-// categoriesList список категорий формата {cat:категория-бренд,children:ее первые дети}
-  const categoriesList = categories.filter(item => item.parentCategoryId === null).sort((a,b)=>a.name>b.name?1:-1).map(cat => {
-    return {cat:cat,children:getChildren(cat,categories).sort((a,b)=>a.name>b.name?1:-1)}
-  })
-  const catalogsList = catalogs.filter(item => item.parentId === null).sort((a,b)=>a.name>b.name?1:-1).map(cat => {
-    return {cat:cat,children:getCatalogsChildren(cat,catalogs).sort((a,b)=>a.name>b.name?1:-1)}
-  })
-
+  // categoriesList список категорий формата {cat:категория-бренд,children:ее первые дети}
+  const categoriesList = categories
+    .filter((item) => item.parentId === null)
+    .sort((a, b) => (a.name > b.name ? 1 : -1))
+    .map((cat) => {
+      return {
+        cat: cat,
+        children: getChildren(cat, categories).sort((a, b) =>
+          a.name > b.name ? 1 : -1
+        ),
+      }
+    })
+  const catalogsList = catalogs
+    .filter((item) => item.parentId === null)
+    .sort((a, b) => (a.name > b.name ? 1 : -1))
+    .map((cat) => {
+      return {
+        cat: cat,
+        children: getCatalogsChildren(cat, catalogs).sort((a, b) =>
+          a.name > b.name ? 1 : -1
+        ),
+      }
+    })
 
   return (
     <>

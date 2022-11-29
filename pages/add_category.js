@@ -18,8 +18,8 @@ export default function addCategoryPage({ categories }) {
   } = useContext(AuthContext)
   const [values, setValues] = useState({
     name: "",
-    parentCategory: "",
-    parentCategoryId: null,
+    parent: "",
+    parentId: null,
     description: "",
     options: {},
   })
@@ -30,8 +30,8 @@ export default function addCategoryPage({ categories }) {
   const listForMenu = getListForCategoriesMenu(categories)
 
   useEffect(() => {
-    if (values.parentCategoryId) setValues({ ...values, options: {} })
-  }, [values.parentCategoryId])
+    if (values.parentId) setValues({ ...values, options: {} })
+  }, [values.parentId])
 
   const router = useRouter()
 
@@ -92,7 +92,7 @@ export default function addCategoryPage({ categories }) {
   }
 
   const handleListClick = ({ id, name }) => {
-    setValues({ ...values, parentCategory: name, parentCategoryId: id })
+    setValues({ ...values, parent: name, parentId: id })
   }
 
   const deleteImage = () => {
@@ -135,15 +135,13 @@ export default function addCategoryPage({ categories }) {
                     />
                   </div>
                   <div>
-                    <label htmlFor="parentCategory">
-                      Родительская категория
-                    </label>
+                    <label htmlFor="parent">Родительская категория</label>
                     <div className={styles.input_group_menu}>
                       <input
                         type="text"
-                        id="parentCategory"
-                        name="parentCategory"
-                        value={values.parentCategory}
+                        id="parent"
+                        name="parent"
+                        value={values.parent}
                         onChange={handleChange}
                         autoComplete="off"
                       />
@@ -152,8 +150,8 @@ export default function addCategoryPage({ categories }) {
                         onClick={() =>
                           setValues({
                             ...values,
-                            parentCategory: "",
-                            parentCategoryId: null,
+                            parent: "",
+                            parentId: null,
                           })
                         }
                       >
@@ -220,7 +218,7 @@ export default function addCategoryPage({ categories }) {
                   </div>
                 </div>
               </div>
-              {!values.parentCategory ? (
+              {!values.parent ? (
                 <Options values={values} setValues={setValues} />
               ) : null}
             </div>

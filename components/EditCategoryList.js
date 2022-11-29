@@ -32,7 +32,7 @@ export default function EditCategoryList({
   }
 
   const handleDeleteCategory = async ({ _id }) => {
-    const isChildren = categories.some((item) => item.parentCategoryId === _id)
+    const isChildren = categories.some((item) => item.parentId === _id)
     if (isChildren) {
       toast.error("Сначала удалите все подкатегории в этой категории")
     }
