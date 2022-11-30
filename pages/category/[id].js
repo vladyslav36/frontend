@@ -4,7 +4,7 @@ import { API_URL, NOIMAGE } from "@/config/index"
 import Link from "next/link"
 import ProductsList from "@/components/ProductsList"
 import { useEffect, useState } from "react"
-import { getArrayCategoryTree } from "utils"
+import { getArrayCatTree } from "utils"
 import Navbar from "@/components/Navbar"
 import CategoriesList from "@/components/CategoriesList"
 import Links from "@/components/Links"
@@ -56,7 +56,7 @@ export default function categoryPage({ category, categories }) {
         <div className={styles.header_left}>
           <Links home={true} back={true} />
           <div className={styles.crumbs}>
-            {getArrayCategoryTree(category, categories).map((item, i, arr) => {
+            {getArrayCatTree(category, categories).map((item, i, arr) => {
               const arrow = i < arr.length - 1 ? <div>&nbsp;➔&nbsp;</div> : null
               return (
                 <div key={i}>

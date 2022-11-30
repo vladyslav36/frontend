@@ -41,12 +41,10 @@ export default function Navbar({ categories: categoriesProps }) {
     fetcher()
   }, [])
 
-  const getChildren = (category, categories) => {
-    return categories.filter((item) => item.parentId === category._id)
+  const getChildren = (cat, catArray) => {
+    return catArray.filter((item) => item.parentId === cat._id)
   }
-  const getCatalogsChildren = (catalog, catalogs) => {
-    return catalogs.filter((item) => item.parentId === catalog._id)
-  }
+ 
 
   // Вычисление с какой стороны показывать выпадающий список справа или слева
   const getSpace = (e) => {
@@ -54,28 +52,22 @@ export default function Navbar({ categories: categoriesProps }) {
     setIsShowRight(rightSpace < 160 ? true : false)
   }
   // categoriesList список категорий формата {cat:категория-бренд,children:ее первые дети}
-  const categoriesList = categories
-    .filter((item) => item.parentId === null)
-    .sort((a, b) => (a.name > b.name ? 1 : -1))
-    .map((cat) => {
-      return {
-        cat: cat,
-        children: getChildren(cat, categories).sort((a, b) =>
-          a.name > b.name ? 1 : -1
-        ),
-      }
-    })
-  const catalogsList = catalogs
-    .filter((item) => item.parentId === null)
-    .sort((a, b) => (a.name > b.name ? 1 : -1))
-    .map((cat) => {
-      return {
-        cat: cat,
-        children: getCatalogsChildren(cat, catalogs).sort((a, b) =>
-          a.name > b.name ? 1 : -1
-        ),
-      }
-    })
+  const getCatList = (catArray) =>
+    catArray
+      .filter((item) => item.parentId === null)
+      .sort((a, b) => (a.name > b.name ? 1 : -1))
+      .map((cat) => {
+        return {
+          cat: cat,
+          children: getChildren(cat, catArray).sort((a, b) =>
+            a.name > b.name ? 1 : -1
+          ),
+        }
+      })
+    
+  
+  const categoriesList = getCatList(categories)
+  const catalogsList = getCatList(catalogs)
 
   return (
     <>

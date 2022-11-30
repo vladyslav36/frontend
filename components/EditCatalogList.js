@@ -1,5 +1,5 @@
 import styles from "@/styles/EditCategory.module.scss"
-import { getCatalogsTree } from "../utils"
+import { getCatTree } from "../utils"
 import { API_URL } from "../config"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -20,7 +20,7 @@ export default function EditCatalogList({
   const arrayTree = catalogs.map((item) => {
     return {
       _id: item._id,
-      tree: getCatalogsTree(item, catalogs),
+      tree: getCatTree(item, catalogs),
       name: item.name,
     }
   })

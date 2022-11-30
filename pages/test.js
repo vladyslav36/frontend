@@ -1,6 +1,6 @@
 import { API_URL } from "../config"
 
-const getCategoriesTree = (category, categories) => {
+const getCatTree = (category, categories) => {
   var result = [`${category.name}-${category.level}`]
   const findParent = (category) => {
     const parent = categories.find((elem) => elem._id === category.parentId)
@@ -20,7 +20,7 @@ export default function testPage({ categories }) {
       {categories.map((category) => (
         <li key={category._id}>
           {" "}
-          <p>{getCategoriesTree(category, categories)}</p>
+          <p>{getCatTree(category, categories)}</p>
         </li>
       ))}
     </ul>

@@ -32,34 +32,21 @@ export function getPriceForShow({
   return showPrice
 }
 
-export const getCategoriesTree = (category, categories) => {
-  var result = [category.name]
-  const findParent = (category) => {
-    const parent = categories.find((elem) => elem._id === category.parentId)
+export const getCatTree = (cat, catArray) => {
+  var result = [cat.name]
+  const findParent = (cat) => {
+    const parent = catArray.find((elem) => elem._id === cat.parentId)
     if (parent) {
       result.push(parent.name)
       findParent(parent)
     }
     return
   }
-  findParent(category)
+  findParent(cat)
 
   return result.reverse().join(" ➔ ")
 }
-export const getCatalogsTree = (catalog, catalogs) => {
-  var result = [catalog.name]
-  const findParent = (catalog) => {
-    const parent = catalogs.find((elem) => elem._id === catalog.parentId)
-    if (parent) {
-      result.push(parent.name)
-      findParent(parent)
-    }
-    return
-  }
-  findParent(catalog)
 
-  return result.reverse().join(" ➔ ")
-}
 export const getBrand = (category, categories) => {
   let result = category
   const findParent = (item) => {
@@ -74,17 +61,17 @@ export const getBrand = (category, categories) => {
 
   return result
 }
-export const getArrayCategoryTree = (category, categories) => {
-  var result = [{ name: category.name, slug: category.slug }]
-  const findParent = (category) => {
-    const parent = categories.find((elem) => elem._id === category.parentId)
+export const getArrayCatTree = (cat, catArray) => {
+  var result = [cat]
+  const findParent = (cat) => {
+    const parent = catArray.find((elem) => elem._id === cat.parentId)
     if (parent) {
-      result.push({ name: parent.name, slug: parent.slug })
+      result.push(parent)
       findParent(parent)
     }
     return
   }
-  findParent(category)
+  findParent(cat)
 
   return result.reverse()
 }
@@ -93,7 +80,7 @@ export const getAllCategoriesTree = (categories) => {
   return Object.assign(
     {},
     ...categories.map((category) => ({
-      [category._id]: getArrayCategoryTree(category, categories),
+      [category._id]: getArrayCatTree(category, categories),
     }))
   )
 }
@@ -150,13 +137,13 @@ export const getTotalAmount = (cart) => {
 // Функция возвращает отсортированный list for drop_down_menu формата {cat:category,tree:string tree}
 export const getListForCategoriesMenu = (catArray) => {
   const list = catArray
-    .map((item) => ({ cat: item, tree: getCategoriesTree(item, catArray) }))
+    .map((item) => ({ cat: item, tree: getCatTree(item, catArray) }))
     .sort((a, b) => (a.tree.toLowerCase() > b.tree.toLowerCase() ? 1 : -1))
   return list
 }
 export const getListForCatalogsMenu = (catArray) => {
   const list = catArray
-    .map((item) => ({ cat: item, tree: getCatalogsTree(item, catArray) }))
+    .map((item) => ({ cat: item, tree: getCatTree(item, catArray) }))
     .sort((a, b) => (a.tree.toLowerCase() > b.tree.toLowerCase() ? 1 : -1))
   return list
 }
