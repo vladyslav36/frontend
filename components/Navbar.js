@@ -1,20 +1,18 @@
 import styles from "@/styles/Navbar.module.scss"
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import { API_URL } from "../config"
+import ProductsContext from "@/context/ProductsContext"
 
-export default function Navbar({ categories: categoriesProps }) {
+export default function Navbar({ categories: categoriesProps, catalogs: catalogsProps }) {
+
+  const { catToggle, setCatToggle } = useContext(ProductsContext)  
   const router = useRouter()
-  const [isShowRight, setIsShowRight] = useState(false)
-  const [isShowCategories, setIsShowCategories] = useState(true)
+  const [isShowRight, setIsShowRight] = useState(false)  
   const [categories, setCategories] = useState([])
-  const [catalogs, setCatalogs] = useState([])
-  const elCategories = useRef()
+  const [catalogs, setCatalogs] = useState([]) 
 
-  useEffect(() => {
-    elCategories.current.checked = true
-  }, [])
-
+  
   useEffect(() => {
     const fetcher = async () => {
       const res = await fetch(`${API_URL}/api/categories`)
@@ -38,14 +36,18 @@ export default function Navbar({ categories: categoriesProps }) {
         setCatalogs(catalogs)
       }
     }
-    fetcher()
+    if (catalogsProps) {
+      setCatalogs(catalogsProps)
+    } else {
+      fetcher()
+    }
   }, [])
 
   const getChildren = (cat, catArray) => {
     return catArray.filter((item) => item.parentId === cat._id)
   }
+  
  
-
   // Вычисление с какой стороны показывать выпадающий список справа или слева
   const getSpace = (e) => {
     const rightSpace = window.innerWidth - e.target.getBoundingClientRect().x
@@ -77,8 +79,8 @@ export default function Navbar({ categories: categoriesProps }) {
           type="radio"
           name="radio_buttons"
           value="categories"
-          onClick={() => setIsShowCategories(true)}
-          ref={elCategories}
+          checked={catToggle==='categories'}
+          onChange={(e)=>setCatToggle(e.target.value) }
         />
         <label htmlFor="categories" title="Показать категории">
           <h5>Категории</h5>
@@ -89,7 +91,8 @@ export default function Navbar({ categories: categoriesProps }) {
           type="radio"
           name="radio_buttons"
           value="catalogs"
-          onClick={() => setIsShowCategories(false)}
+        checked={catToggle==='catalogs'}
+          onChange={(e)=>setCatToggle(e.target.value)}
         />
         <label htmlFor="catalogs" title="Показать каталоги">
           <h5>Каталоги</h5>
@@ -97,7 +100,7 @@ export default function Navbar({ categories: categoriesProps }) {
       </div>
 
       <div className={styles.container}>
-        {isShowCategories ? (
+        {catToggle==='categories' ? (
           categoriesList.length ? (
             <ul className={styles.list}>
               {categoriesList.map((item) => (

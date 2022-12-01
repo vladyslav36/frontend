@@ -8,11 +8,13 @@ import { getArrayCatTree } from "utils"
 import Navbar from "@/components/Navbar"
 import Links from "@/components/Links"
 import CatalogsList from "@/components/CatalogsList"
+import { useRouter } from "next/router"
 
 export default function catalogPage({ catalog, catalogs }) {
   const [productList, setProductList] = useState([])
   const [isShowAsList, setIsShowAsList] = useState(true)
-
+  
+  
   const childrenList = catalog
     ? catalogs.filter((item) => item.parentId === catalog._id)
     : []

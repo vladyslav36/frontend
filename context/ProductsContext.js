@@ -3,10 +3,13 @@ import { API_URL } from "../config"
 
 const ProductsContext = createContext()
 
-export const ProductsProvider = ({ children }) => {
+
+
+export const ProductsProvider =  ({ children }) => {
   const [currencyShop, setCurrencyShop] = useState("UAH")
   const [currencyRate, setCurrencyRate] = useState({})
   const [cart, setCart] = useState([])
+  const [catToggle,setCatToggle]=useState('categories')
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cart"))
@@ -22,7 +25,8 @@ export const ProductsProvider = ({ children }) => {
       setCurrencyRate(currencyRate || {})
     }
     fetchRate()
-  },[])
+  }, [])
+  
   return (
     <ProductsContext.Provider
       value={{
@@ -32,6 +36,8 @@ export const ProductsProvider = ({ children }) => {
         setCurrencyRate,
         cart,
         setCart,
+        catToggle,
+        setCatToggle
       }}
     >
       {children}
