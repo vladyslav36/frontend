@@ -43,7 +43,7 @@ export default function ProductOptions({
                       </span>
                     </p>
                   ) : (
-                    value
+                      <p>{value}</p> 
                   )}
                 </div>
               ) : null

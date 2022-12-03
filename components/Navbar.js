@@ -113,7 +113,7 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
                   }}
                   onMouseEnter={(e) => getSpace(e)}
                 >
-                  <span>{item.cat.name}</span>
+                  <p>{item.cat.name}</p>
                   {item.children.length ? (
                     <ul
                       className={
