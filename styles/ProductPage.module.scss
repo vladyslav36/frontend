@@ -17,7 +17,7 @@ $image-width:500px;
 
 .container {
   padding: 0 10px;
-  width:100%;
+  
 }
 .header {
   display: flex;
@@ -43,6 +43,7 @@ $image-width:500px;
     
   }
   .main_image {
+    width:100%;
     display: flex;
     align-items: center;
     justify-content: flex-start;

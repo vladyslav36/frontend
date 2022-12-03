@@ -373,10 +373,10 @@ export default function productPage({ slug, product: productDb }) {
           </div>
         </div>
         {product.description ? (
-          <>
+          <div>
             <h4>Описание</h4>
             <p>{product.description}</p>
-          </>
+          </div>
         ) : null}
 
         {sliderValues.isShow && (
