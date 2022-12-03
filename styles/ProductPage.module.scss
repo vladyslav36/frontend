@@ -1,4 +1,4 @@
-$image-width:500px;
+$image-width: 500px;
 
 .links {
   display: flex;
@@ -20,6 +20,7 @@ $image-width:500px;
   
 }
 .header {
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -32,18 +33,18 @@ $image-width:500px;
 }
 
 .content {
+  
   display: grid;
-  grid-template-columns: 2fr 4fr;  
+  grid-template-columns: 2fr 4fr;
   column-gap: 15px;
   .left {
-    width:100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    
   }
   .main_image {
-    width:100%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -59,13 +60,12 @@ $image-width:500px;
 }
 
 .added_images {
- 
-  width:100%;
+  width: 100%;
   margin: 10px 0;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(60px,1fr));
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
   gap: 10px;
-  
+
   img {
     max-width: 50px;
     max-height: 70px;
@@ -76,7 +76,7 @@ $image-width:500px;
 }
 
 .added_image {
-  justify-self:center;
+  justify-self: center;
   width: 60px;
   height: 80px;
   display: flex;
@@ -89,39 +89,36 @@ $image-width:500px;
   }
 }
 
-
 .image_active {
   border: 1px solid red;
 }
 
-.center_header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  h5 {
-    background-color: #f8c471;
-    border-radius: 7px;
-    padding: 2px 5px;
-  }
-  & > div p {
-    padding: 0 5px;
-  }
-  & > div div {
-    display: flex;
-    align-items: center;
-    padding: 2px 0;
-  }
-}
-
-.price {
-  display: flex;
-  column-gap: 5px;
-  font-size: 27px;
-  font-weight: 600;
-  color: #424949;
-}
-
 .center {
+  .center_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h5 {
+      background-color: #f8c471;
+      border-radius: 7px;
+      padding: 2px 5px;
+    }
+    & > div p {
+      padding: 0 5px;
+    }
+    & > div div {
+      display: flex;
+      align-items: center;
+      padding: 2px 0;
+    }
+    .price {
+      display: flex;
+      column-gap: 5px;
+      font-size: 27px;
+      font-weight: 600;
+      color: #424949;
+    }
+  }
   .counter_cart_wrapper {
     display: flex;
     justify-content: space-between;
@@ -166,6 +163,7 @@ $image-width:500px;
 }
 
 .table {
+  width:100%;
   padding-right: 5px;
   overflow-x: auto;
   table {
@@ -224,9 +222,9 @@ $image-width:500px;
         max-width: $image-width;
       }
     }
-    .added_images{
-      max-width:$image-width;
-      margin:10px auto;
+    .added_images {
+      max-width: $image-width;
+      margin: 10px auto;
     }
     .left {
       align-items: center;
