@@ -17,10 +17,10 @@ $image-width: 500px;
 
 .container {
   padding: 0 10px;
-  
+  width:100%;
 }
 .header {
-  
+  width:100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -162,8 +162,7 @@ $image-width: 500px;
   }
 }
 
-.table {
-  width:100%;
+.table {  
   padding-right: 5px;
   overflow-x: auto;
   table {
