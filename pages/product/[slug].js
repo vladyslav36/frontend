@@ -181,7 +181,7 @@ export default function productPage({ slug, product: productDb }) {
       <ToastContainer />
       <div className={styles.container}>
         <div className={styles.content}>
-          <div className={styles.left}>
+          {/* <div className={styles.left}>
             <div className={styles.main_image}>
               <img
                 src={
@@ -214,7 +214,7 @@ export default function productPage({ slug, product: productDb }) {
                   ))
                 : null}
             </div>
-          </div>
+          </div> */}
 
           <div className={styles.center}>
             <div className={styles.center_header}>
@@ -372,12 +372,12 @@ export default function productPage({ slug, product: productDb }) {
             </div>
           </div>
         </div>
-        {/* {product.description ? (
+        {product.description ? (
           <div>
             <h4>Описание</h4>
             <p>{product.description}</p>
           </div>
-        ) : null} */}
+        ) : null}
 
         {sliderValues.isShow && (
           <Slider
