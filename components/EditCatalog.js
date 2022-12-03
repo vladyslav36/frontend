@@ -68,7 +68,7 @@ const listForMenu = getListForCatalogsMenu(catalogs)
     }
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))
-    formData.append('imafeClientPath',image.path)
+    formData.append('imageClientPath',image.path)
     formData.append("image", image.file)
     const res = await fetch(`${API_URL}/api/catalogs`, {
       method: "PUT",

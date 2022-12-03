@@ -74,6 +74,11 @@ export default function addProductPage({ categories, catalogs }) {
       return
     }
 
+    if (values.categoryId === values.brandId) {
+      toast.error('Товар должен находиться хотя бы в одной подкатегории')
+      return
+    }
+
     // Send data
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))

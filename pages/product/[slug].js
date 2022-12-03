@@ -164,6 +164,7 @@ export default function productPage({ slug, product: productDb }) {
     description: product.description,
     price: product.price + " " + product.currencyValue,
   }
+  console.log(product)
   return (
     <Layout
       title={Object.keys(product).length ? product.name : ""}
@@ -220,11 +221,15 @@ export default function productPage({ slug, product: productDb }) {
               <div>
                 <div>
                   <h5>Бренд:</h5>
-                  <p>{product.brandId.name}</p>
+                  <p>{product.brandId?product.brandId.name:''}</p>
                 </div>
                 <div>
                   <h5>Категория:</h5>
-                  <p>{product.categoryId.name}</p>
+                  <p>{product.categoryId?product.categoryId.name:''}</p>
+                </div>
+                <div>
+                  <h5>Каталог:</h5>
+                  <p>{product.catalogId?product.catalogId.name:''}</p>
                 </div>
                 <div>
                   <h5>Модель:</h5>
