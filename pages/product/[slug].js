@@ -216,7 +216,7 @@ export default function productPage({ slug, product: productDb }) {
             </div> */}
           </div>
 
-          {/* <div className={styles.center}>
+          <div className={styles.center}>
             <div className={styles.center_header}>
               <div>
                 <div>
@@ -370,7 +370,7 @@ export default function productPage({ slug, product: productDb }) {
                 </tfoot>
               </table>
             </div>
-          </div> */}
+          </div>
 
         </div>
         {product.description ? (
