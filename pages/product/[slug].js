@@ -372,12 +372,12 @@ export default function productPage({ slug, product: productDb }) {
             </div>
           </div>
         </div>
-        {product.description ? (
+        {/* {product.description ? (
           <div>
             <h4>Описание</h4>
             <p>{product.description}</p>
           </div>
-        ) : null}
+        ) : null} */}
 
         {sliderValues.isShow && (
           <Slider

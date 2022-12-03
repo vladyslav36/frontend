@@ -33,8 +33,7 @@ $image-width:500px;
 
 .content {
   display: grid;
-  grid-template-columns: 2fr 4fr;
-  width: 100%;
+  grid-template-columns: 2fr 4fr;  
   column-gap: 15px;
   .left {
     display: flex;
