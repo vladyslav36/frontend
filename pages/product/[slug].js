@@ -180,7 +180,7 @@ export default function productPage({ slug, product: productDb }) {
       </div>
       <ToastContainer />
       <div className={styles.container}>
-        <div className={styles.content}>
+        {/* <div className={styles.content}>
           <div className={styles.left}>
             <div className={styles.main_image}>
               <img
@@ -371,7 +371,7 @@ export default function productPage({ slug, product: productDb }) {
               </table>
             </div>
           </div>
-        </div>
+        </div> */}
         {product.description ? (
           <div>
             <h4>Описание</h4>
