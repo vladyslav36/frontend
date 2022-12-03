@@ -195,7 +195,7 @@ export default function productPage({ slug, product: productDb }) {
               />
             </div>
 
-            {/* <div className={styles.added_images}>
+            <div className={styles.added_images}>
               {product.imagesSm.length
                 ? product.imagesSm.map((item, i) => (
                     <div
@@ -213,7 +213,7 @@ export default function productPage({ slug, product: productDb }) {
                     </div>
                   ))
                 : null}
-            </div> */}
+            </div>
           </div>
 
           <div className={styles.center}>
