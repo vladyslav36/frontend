@@ -36,6 +36,7 @@ $image-width:500px;
   grid-template-columns: 2fr 4fr;  
   column-gap: 15px;
   .left {
+    width:100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

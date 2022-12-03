@@ -181,7 +181,7 @@ export default function productPage({ slug, product: productDb }) {
       <ToastContainer />
       <div className={styles.container}>
         <div className={styles.content}>
-          {/* <div className={styles.left}>
+          <div className={styles.left}>
             <div className={styles.main_image}>
               <img
                 src={
@@ -214,7 +214,7 @@ export default function productPage({ slug, product: productDb }) {
                   ))
                 : null}
             </div>
-          </div> */}
+          </div>
 
           <div className={styles.center}>
             <div className={styles.center_header}>
