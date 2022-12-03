@@ -35,16 +35,13 @@ $image-width: 500px;
   display: grid;
   grid-template-columns: 2fr 4fr;
   column-gap: 15px;
-  .left {
-    // width: 100%;
+  .left {    
     display: flex;
-    flex-direction: column;
-    // justify-content: flex-start;
-    .added_images {
-      width: 100%;
+    flex-direction: column;    
+    .added_images {      
       padding: 10px 0;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(60px,1fr));
       gap: 10px;
 
       .added_image {
