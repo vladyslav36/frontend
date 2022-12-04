@@ -87,8 +87,7 @@ export default function catalogPage({ catalog, catalogs }) {
         <div className={styles.left_content}>
           <div className={styles.image}>
             <img
-              src={catalog.image ? `${API_URL}${catalog.image}` : `${NOIMAGE}`}
-              alt="No image"
+              src={catalog.image ? `${API_URL}${catalog.image}` : `${NOIMAGE}`}              
             />
           </div>
           <div className={styles.name}>

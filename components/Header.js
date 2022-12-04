@@ -102,7 +102,7 @@ export default function Header() {
                             ? `${API_URL}${item.imagesSm[0]}`
                             : `${NOIMAGE}`
                         }
-                        alt="No image"
+                        
                         onClick={(e) => {
                           e.stopPropagation()
                           setIsShowLoupe(true)

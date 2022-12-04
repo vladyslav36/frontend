@@ -25,7 +25,7 @@ export default function Showcase({ showcaseProducts }) {
                           ? `${API_URL}${product.imagesMd[0]}`
                           : `${NOIMAGE}`
                       }
-                      alt="No image"
+                      
                       onClick={(e) => {
                         e.stopPropagation()
                         setIsShow(true)

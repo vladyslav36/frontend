@@ -11,8 +11,7 @@ export default function CatalogsList({ catalogs = [] }) {
             <div className={styles.item}>
               <div className={styles.image}>
                 <img
-                  src={item.image ? `${API_URL}${item.image}` : `${NOIMAGE}`}
-                  alt="No image"
+                  src={item.image ? `${API_URL}${item.image}` : `${NOIMAGE}`}                  
                 />
               </div>
               <div className={styles.item_name}>

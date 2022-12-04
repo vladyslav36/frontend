@@ -46,10 +46,12 @@ const listForMenu = getListForCatalogsMenu(catalogs)
     const url = URL.createObjectURL(e.target.files[0])
     URL.revokeObjectURL(image.path)
     setImage({ path: url, file: e.target.files[0] })
+    elDialog.current.close()
   }
   const deleteImage = () => {
     URL.revokeObjectURL(image.path)
     setImage({ path: "", file: null })
+
   }
 
   const sendData = async () => {
@@ -171,7 +173,7 @@ const listForMenu = getListForCatalogsMenu(catalogs)
                 {image.path ? (
                   <img src={image.path} />
                 ) : (
-                  <img src={NOIMAGE} alt="No image" />
+                  <img src={NOIMAGE} />
                 )}
               </div>
               <div className={styles.buttons}>

@@ -283,7 +283,7 @@ export default function EditProductList({
                               ? `${API_URL}${item.imagesSm[0]}`
                               : `/noimage.png`
                           }
-                          alt="no image"
+                          
                         />
                       </td>
                       <td>{item.name}</td>

@@ -47,7 +47,6 @@ export default function categoryPage({ category, categories }) {
       title={`Категория ${Object.keys(category).length ? category.name : ""}`}
       description={Object.keys(category).length ? category.description : ""}
     >
-     
       <Navbar categories={categories} />
       <script
         type="application/ld+json"
@@ -89,7 +88,6 @@ export default function categoryPage({ category, categories }) {
               src={
                 category.image ? `${API_URL}${category.image}` : `${NOIMAGE}`
               }
-              alt="No image"
             />
           </div>
           <div className={styles.name}>

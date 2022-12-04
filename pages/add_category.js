@@ -89,6 +89,7 @@ export default function addCategoryPage({ categories }) {
     const url = URL.createObjectURL(e.target.files[0])
     URL.revokeObjectURL(image.path)
     setImage({ path: url, file: e.target.files[0] })
+    elDialog.current.close()
   }
 
   const handleListClick = ({ id, name }) => {
@@ -200,7 +201,7 @@ export default function addCategoryPage({ categories }) {
                     </div>
                   ) : (
                     <div className={styles.image}>
-                      <img src={`${NOIMAGE}`} alt="No Image" />
+                      <img src={`${NOIMAGE}`}/>
                     </div>
                   )}
                   <div className={styles.image_footer}>

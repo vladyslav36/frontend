@@ -45,7 +45,7 @@ export default function ProductsList({ products = [], isShowAsList }) {
                                   ? `${API_URL}${item.imagesSm[0]}`
                                   : `${NOIMAGE}`
                               }
-                              alt={"no image"}
+                              
                               onClick={(e) => {
                                 e.stopPropagation()
                                 setIsShow(true)
@@ -103,7 +103,7 @@ export default function ProductsList({ products = [], isShowAsList }) {
                           ? `${API_URL}${item.imagesMd[0]}`
                           : `${NOIMAGE}`
                       }
-                      alt="No image"
+                      
                       onClick={(e) => {
                         e.stopPropagation()
                         setIsShow(true)
