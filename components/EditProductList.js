@@ -158,13 +158,7 @@ export default function EditProductList({
             <label htmlFor="model">Артикул</label>
 
             <div
-              className={styles.input_group}
-              // tabIndex={0}
-              // onFocus={async () => {
-              //   setIsShowList({ ...isShowList, model: true })
-              //   await listNamesFetcher("model", "")
-              // }}
-              // onBlur={() => setIsShowList({ ...isShowList, model: false })}
+              className={styles.input_group}              
             >
               <input
                 type="text"
@@ -192,13 +186,7 @@ export default function EditProductList({
           <div>
             <label htmlFor="category">Категория</label>
             <div
-              className={styles.input_group}
-              // tabIndex={0}
-              // onFocus={async () => {
-              //   setIsShowList({ ...isShowList, category: true })
-              //   await listNamesFetcher("category", "")
-              // }}
-              // onBlur={() => setIsShowList({ ...isShowList, category: false })}
+              className={styles.input_group}             
             >
               <input
                 type="text"
@@ -228,13 +216,7 @@ export default function EditProductList({
           <div>
             <label htmlFor="brand">Бренд</label>
             <div
-              className={styles.input_group}
-              // tabIndex={0}
-              // onFocus={async () => {
-              //   setIsShowList({ ...isShowList, brand: true })
-              //   await listNamesFetcher("brand", "")
-              // }}
-              // onBlur={() => setIsShowList({ ...isShowList, brand: false })}
+              className={styles.input_group}              
             >
               <input
                 type="text"
