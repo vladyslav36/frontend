@@ -1,20 +1,18 @@
 import styles from "@/styles/EditProduct.module.scss"
-import { useRef, useState } from "react"
+import {  useRef, useState } from "react"
 import { getCurrencySymbol, getShortDescription } from "utils"
 import { API_URL } from "../config"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useRouter } from "next/router"
 import Links from "@/components/Links"
-import DropDownListItems from "./DropDownListItems"
-
 
 export default function EditProductList({
   prodList,
   setProdList,
   setIsShowProduct,
   setProduct,
-  token  
+  token,
 }) {
   const router = useRouter()
 
@@ -24,12 +22,7 @@ export default function EditProductList({
     category: { name: "", id: "" },
     brand: { name: "", id: "" },
   })
-  const [isShowList, setIsShowList] = useState({
-    name: false,
-    model: false,
-    brand: false,
-    category: false,
-  })
+
   const [listNames, setListNames] = useState({
     name: [],
     model: [],
@@ -38,10 +31,9 @@ export default function EditProductList({
   })
 
   const [delayTimer, setDelayTimer] = useState()
- 
   const [prodForDelete, setProdForDelete] = useState({})
   const elemModal = useRef()
-  
+
   const listNamesFetcher = async (name, value) => {
     const res = await fetch(`${API_URL}/api/search/list_names/${name}`, {
       method: "POST",
@@ -72,10 +64,15 @@ export default function EditProductList({
     if (!res.ok) {
       toast.error(data.message)
     } else {
-      setProdList(prodList.filter((item) => item._id!==_id))
-      
+      setProdList(prodList.filter((item) => item._id !== _id))
     }
   }
+
+  const handleHover = async (e) => {
+    const { name, value } = e.target
+    await listNamesFetcher(name, value)
+  }
+
   const handleChange = (e) => {
     e.preventDefault()
     const { name, value } = e.target
@@ -84,10 +81,10 @@ export default function EditProductList({
     setDelayTimer(
       setTimeout(async () => {
         await listNamesFetcher(name, value)
-      }, 1000)
+      }, 500)
     )
   }
-  const handleListClick = async ({ item, name }) => {
+  const handleListClick = ({ item, name }) => {
     setValues({ ...values, [name]: item })
   }
   const submitHandler = async (e) => {
@@ -115,7 +112,6 @@ export default function EditProductList({
   const handleModal = (item) => {
     elemModal.current.showModal()
     setProdForDelete(item)
-    
   }
   const handle = (rez) => {
     if (rez) {
@@ -127,52 +123,48 @@ export default function EditProductList({
 
   return (
     <div>
-      <ToastContainer />      
+      <ToastContainer />
       <div className={styles.container}>
         <Links home={true} back={false} />
         <form onSubmit={submitHandler} className={styles.form}>
           <div>
             <label htmlFor="name">Модель</label>
-
-            <div
-              className={styles.input_group}
-              tabIndex={0}
-              onFocus={async () => {
-                setIsShowList({ ...isShowList, name: true })
-                await listNamesFetcher("name", "")
-              }}
-              onBlur={() => setIsShowList({ ...isShowList, name: false })}
-            >
+            <div className={styles.input_group}>
               <input
                 type="text"
                 id="name"
                 name="name"
                 value={values.name.name}
                 onChange={handleChange}
+                onMouseOver={handleHover}
                 autoComplete="off"
               />
-
-              <DropDownListItems
-                isShow={isShowList.name}
-                itemsList={listNames.name}
-                handleClick={(item) => {
-                  handleListClick({ item, name: "name" })
-                  setIsShowList({ ...isShowList, name: false })
-                }}
-              />
+              {listNames.name.length ? (
+                <ul className={styles.drop_down_list}>
+                  {listNames.name.map((item, i) => (
+                    <li
+                      key={i}
+                      onClick={() => handleListClick({ item, name: "name" })}
+                    >
+                      {item.name}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           </div>
+
           <div>
             <label htmlFor="model">Артикул</label>
 
             <div
               className={styles.input_group}
-              tabIndex={0}
-              onFocus={async () => {
-                setIsShowList({ ...isShowList, model: true })
-                await listNamesFetcher("model", "")
-              }}
-              onBlur={() => setIsShowList({ ...isShowList, model: false })}
+              // tabIndex={0}
+              // onFocus={async () => {
+              //   setIsShowList({ ...isShowList, model: true })
+              //   await listNamesFetcher("model", "")
+              // }}
+              // onBlur={() => setIsShowList({ ...isShowList, model: false })}
             >
               <input
                 type="text"
@@ -180,29 +172,33 @@ export default function EditProductList({
                 name="model"
                 value={values.model.name}
                 onChange={handleChange}
+                onMouseOver={handleHover}
                 autoComplete="off"
               />
-
-              <DropDownListItems
-                isShow={isShowList.model}
-                itemsList={listNames.model}
-                handleClick={(item) => {
-                  handleListClick({ item, name: "model" })
-                  setIsShowList({ ...isShowList, model: false })
-                }}
-              />
+              {listNames.model.length ? (
+                <ul className={styles.drop_down_list}>
+                  {listNames.model.map((item, i) => (
+                    <li
+                      key={i}
+                      onClick={() => handleListClick({ item, name: "model" })}
+                    >
+                      {item.name}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           </div>
           <div>
             <label htmlFor="category">Категория</label>
             <div
               className={styles.input_group}
-              tabIndex={0}
-              onFocus={async () => {
-                setIsShowList({ ...isShowList, category: true })
-                await listNamesFetcher("category", "")
-              }}
-              onBlur={() => setIsShowList({ ...isShowList, category: false })}
+              // tabIndex={0}
+              // onFocus={async () => {
+              //   setIsShowList({ ...isShowList, category: true })
+              //   await listNamesFetcher("category", "")
+              // }}
+              // onBlur={() => setIsShowList({ ...isShowList, category: false })}
             >
               <input
                 type="text"
@@ -210,29 +206,35 @@ export default function EditProductList({
                 name="category"
                 value={values.category.name}
                 onChange={handleChange}
+                onMouseOver={handleHover}
                 autoComplete="off"
               />
-
-              <DropDownListItems
-                isShow={isShowList.category}
-                itemsList={listNames.category}
-                handleClick={(item) => {
-                  handleListClick({ item, name: "category" })
-                  setIsShowList({ ...isShowList, category: false })
-                }}
-              />
+              {listNames.category.length ? (
+                <ul className={styles.drop_down_list}>
+                  {listNames.category.map((item, i) => (
+                    <li
+                      key={i}
+                      onClick={() =>
+                        handleListClick({ item, name: "category" })
+                      }
+                    >
+                      {item.name}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           </div>
           <div>
             <label htmlFor="brand">Бренд</label>
             <div
               className={styles.input_group}
-              tabIndex={0}
-              onFocus={async () => {
-                setIsShowList({ ...isShowList, brand: true })
-                await listNamesFetcher("brand", "")
-              }}
-              onBlur={() => setIsShowList({ ...isShowList, brand: false })}
+              // tabIndex={0}
+              // onFocus={async () => {
+              //   setIsShowList({ ...isShowList, brand: true })
+              //   await listNamesFetcher("brand", "")
+              // }}
+              // onBlur={() => setIsShowList({ ...isShowList, brand: false })}
             >
               <input
                 type="text"
@@ -240,21 +242,25 @@ export default function EditProductList({
                 name="brand"
                 value={values.brand.name}
                 onChange={handleChange}
+                onMouseOver={handleHover}
                 autoComplete="off"
               />
-
-              <DropDownListItems
-                isShow={isShowList.brand}
-                itemsList={listNames.brand}
-                handleClick={(item) => {
-                  handleListClick({ item, name: "brand" })
-                  setIsShowList({ ...isShowList, brand: false })
-                }}
-              />
+              {listNames.brand.length ? (
+                <ul className={styles.drop_down_list}>
+                  {listNames.brand.map((item, i) => (
+                    <li
+                      key={i}
+                      onClick={() => handleListClick({ item, name: "brand" })}
+                    >
+                      {item.name}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           </div>
           <div className={styles.button_wrapper}>
-            <div>&nbsp;</div>            
+            <div>&nbsp;</div>
             <button type="submit" className={styles.button}>
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
@@ -283,7 +289,6 @@ export default function EditProductList({
                               ? `${API_URL}${item.imagesSm[0]}`
                               : `/noimage.png`
                           }
-                          
                         />
                       </td>
                       <td>{item.name}</td>
@@ -306,8 +311,8 @@ export default function EditProductList({
                           </button>
                           <div>
                             <button
-                              className={styles.delete}                             
-                            onClick={()=>handleModal(item)}
+                              className={styles.delete}
+                              onClick={() => handleModal(item)}
                             >
                               <i className="fa-solid fa-xmark fa-xl"></i>
                             </button>
