@@ -160,9 +160,10 @@
       top: 100%;
       left: 0;
       font-size: 15px;
-      background: #f8f9f9;
+      background:    #f8f9f9
+ ;
       width: 100%;
-      padding: 5px;
+      // padding: 5px;
       border: 1px solid #999;
       border-radius: 5px;
       display: none;
@@ -171,8 +172,14 @@
 
       li {
         cursor: pointer;
-        margin: 2px 0;
+        padding: 5px 10px;
+        border:1px solid   #e5e7e9 ;
+        border-collapse: collapse;
         list-style: none;
+        
+        &:hover{
+          background-color: darken($color:  #f8f9f9, $amount: 7);
+        }
       }
     }
     &:hover > .drop_down_list {
