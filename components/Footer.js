@@ -9,16 +9,16 @@ export default function Footer() {
         <div className={styles.information}>
           <h3>Информация</h3>
           <Link href="/informations/about">
-            <a>О нас</a>
+            <p>О нас</p>
           </Link>
           <Link href="/informations/conditions">
-            <a>Условия сотрудничества</a>
+            <p>Условия сотрудничества</p>
           </Link>
           <Link href="/informations/productReturn">
-            <a>Возврат товара</a>
+            <p>Возврат товара</p>
           </Link>
           <Link href="/informations/delivery">
-            <a>Доставка заказов</a>
+            <p>Доставка заказов</p>
           </Link>
         </div>
         <div className={styles.contacts}>
@@ -31,16 +31,16 @@ export default function Footer() {
             </div>
           </div>
           <Link href="/contacts/address">
-            <a>
+            <div>
               <i className="fa-regular fa-clock"></i>
               &nbsp; Адрес, режим работы
-            </a>
+            </div>
           </Link>
           <Link href="/contacts/map">
-            <a>
+            <div>
               <i className="fa-solid fa-magnifying-glass"></i>
               &nbsp; Мы на карте
-            </a>
+            </div>
           </Link>
         </div>
       </div>

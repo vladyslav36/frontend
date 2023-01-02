@@ -84,7 +84,7 @@ export default function Register({ close, setLogRegMode }) {
         <input type="submit" className="btn" value="Зарегистрироваться" />
         <div className={styles.bottom}>
           <p>Уже зарегистрированы?</p>
-          <a onClick={() => setLogRegMode(true)}>Войти</a>
+          <p onClick={() => setLogRegMode(true)}>Войти</p>
         </div>
       </form>
     </div>

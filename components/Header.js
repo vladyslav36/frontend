@@ -9,9 +9,11 @@ import Loupe from "./Loupe"
 import { toast } from "react-toastify"
 import Login from "./Login"
 import Register from "./Register"
+import { useRouter } from "next/router"
 
 export default function Header() {
   const { setUser, user } = useContext(AuthContext)
+  const router=useRouter()
   const { currencyShop, setCurrencyShop, cart, currencyRate } =
     useContext(ProductsContext)
   const [delayTimer, setDelayTimer] = useState(new Date())
@@ -44,10 +46,6 @@ export default function Header() {
         setProducts(products)
       }, 1000)
     )
-  }
-
-  const handleClick = (name) => {
-    setIsShowList(false)
   }
 
   const toggleMainUserMenu = () => {
@@ -92,44 +90,41 @@ export default function Header() {
             <ul
               className={styles.search_list + " " + (isShowList && styles.show)}
             >
-              {products.map((item, i) => (
-                <Link href={`/product/${item.slug}`} key={i}>
-                  <li onClick={() => handleClick(item.name)}>
-                    <div className={styles.left_wrapper}>
-                      <img
-                        src={
-                          item.imagesSm[0]
-                            ? `${API_URL}${item.imagesSm[0]}`
-                            : `${NOIMAGE}`
-                        }
-                        
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setIsShowLoupe(true)
-                          setImage(item.images[0])
-                        }}
-                      />
-                      <div>
-                        {item.model ? <p>Артикул:{item.model}</p> : null}
-                        <p>Модель:{item.name}</p>
-                      </div>
+              {products.map((item, i) => (              
+                <li onClick={() => router.push(`/product/${item.slug}`)} key={i}> 
+                  <div className={styles.left_wrapper}>
+                    <img
+                      src={
+                        item.imagesSm[0]
+                          ? `${API_URL}${item.imagesSm[0]}`
+                          : `${NOIMAGE}`
+                      }
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setIsShowLoupe(true)
+                        setImage(item.images[0])
+                      }}
+                    />
+                    <div>
+                      {item.model ? <p>Артикул:{item.model}</p> : null}
+                      <p>Модель:{item.name}</p>
                     </div>
+                  </div>
 
-                    <div className={styles.right_wrapper}>
-                      {Object.keys(currencyRate).length ? (
-                        <p>
-                          {getPriceForShow({
-                            currencyShop,
-                            currencyRate,
-                            currencyValue: item.currencyValue,
-                            price: item.price,
-                          })}
-                          &nbsp;{getCurrencySymbol(currencyShop)}
-                        </p>
-                      ) : null}
-                    </div>
-                  </li>
-                </Link>
+                  <div className={styles.right_wrapper}>
+                    {Object.keys(currencyRate).length ? (
+                      <p>
+                        {getPriceForShow({
+                          currencyShop,
+                          currencyRate,
+                          currencyValue: item.currencyValue,
+                          price: item.price,
+                        })}
+                        &nbsp;{getCurrencySymbol(currencyShop)}
+                      </p>
+                    ) : null}
+                  </div>
+                </li>              
               ))}
               <li>
                 <p>Показаны результаты поиска первых 10 товаров</p>{" "}
@@ -140,30 +135,32 @@ export default function Header() {
         <div className={styles.nav}>
           <ul className={styles.main_menu}>
             <li>
-              <Link href="/">Главная</Link>
+              <Link href="/">
+                <span>Главная</span>
+              </Link>
             </li>
             <li>
               <Link href="/contacts/address">
-                <a>Контакты</a>
+                <span>Контакты</span>
               </Link>
             </li>
             <li>
               <Link href="/contacts/map">
-                <a>
+                <div>
                   <i className="fa-sharp fa-solid fa-location-dot fa-sm"></i>
-                  &nbsp;Карта
-                </a>
+                  &nbsp;<span>Карта</span>
+                </div>
               </Link>
             </li>
             <li className={isUser ? styles.hide : styles.show}>
-              <a
+              <div
                 onClick={() => {
                   elemMainUserMenu.current.classList.remove(styles.show)
                   elemDialog.current.showModal()
                 }}
               >
-                Войти
-              </a>
+                <span>Войти</span>
+              </div>
             </li>
             <li>
               <div
@@ -172,10 +169,10 @@ export default function Header() {
                 }
               >
                 <Link href="#">
-                  <a onClick={toggleMainUserMenu}>
+                  <div onClick={toggleMainUserMenu}>
                     {" "}
                     <i className="fa-solid fa-user"></i>
-                  </a>
+                  </div>
                 </Link>
                 <ul className={styles.main_user_menu} ref={elemMainUserMenu}>
                   <li>
@@ -184,12 +181,12 @@ export default function Header() {
                   </li>
                   <li>
                     <Link href={`/order_user_list/${user._id}`}>
-                      <a>Мои заказы</a>
+                      <p>Мои заказы</p>
                     </Link>
                   </li>
                   <li>
                     <Link href="/account/profile">
-                      <a>Профиль</a>
+                      <p>Профиль</p>
                     </Link>
                   </li>
                   <li onClick={() => setUser({})}>Выйти</li>
@@ -210,38 +207,38 @@ export default function Header() {
               </li>
               <li>
                 <Link href="/">
-                  <a>Главная</a>
+                  <p>Главная</p>
                 </Link>
               </li>
               <li>
                 <Link href="/contacts/address">
-                  <a>Контакты</a>
+                  <p>Контакты</p>
                 </Link>
               </li>
               <li>
                 <Link href="/contacts/map">
-                  <a>На карте</a>
+                  <p>На карте</p>
                 </Link>
               </li>
               <li className={isUser ? styles.hide : styles.show}>
-                <a
+                <div
                   onClick={() => {
                     elemBurgerMenu.current.classList.remove(styles.show)
                     elemDialog.current.showModal()
                   }}
                 >
-                  Войти
-                </a>
+                  <p>Войти</p>
+                </div>
               </li>
               <div className={isUser ? styles.show : styles.hide}>
                 <li>
                   <Link href={`/order_user_list/${user._id}`}>
-                    <a>Мои заказы</a>
+                    <p>Мои заказы</p>
                   </Link>
                 </li>
                 <li>
                   <Link href="/account/profile">
-                    <a>Профиль</a>
+                    <p>Профиль</p>
                   </Link>
                 </li>
                 <li
@@ -272,9 +269,9 @@ export default function Header() {
             </span>
           </div>
           <div className={styles.rates}>
-            <p>
+            <div>
               <i className="fa-solid fa-arrows-rotate"></i>
-            </p>
+            </div>
             <p>
               USD:{" "}
               {Object.keys(currencyRate).length
@@ -296,21 +293,21 @@ export default function Header() {
             <Link href="tel: +380982086083">{PHONE2}</Link>
           </span>
         </div>
-        <div className={styles.cart_wrapper} >
-          <Link href="https://t.me/karmeninua" >
-            <div className={styles.telegram} title='Новинки на нашем канале'>
-            <i className="fa-brands fa-telegram fa-2xl"></i>
-          </div>
+        <div className={styles.cart_wrapper}>
+          <Link href="https://t.me/karmeninua">
+            <div className={styles.telegram} title="Новинки на нашем канале">
+              <i className="fa-brands fa-telegram fa-2xl"></i>
+            </div>
           </Link>
-          
+
           <div className={styles.cart} title="Корзина">
             <Link href="/cart">
-              <a>
+              <div>
                 <i className="fa-solid fa-cart-shopping fa-2x"></i>
                 <p>
                   {cart && getQntInCart(cart) !== 0 ? getQntInCart(cart) : ""}
                 </p>
-              </a>
+              </div>
             </Link>
           </div>
         </div>

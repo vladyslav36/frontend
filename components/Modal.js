@@ -16,9 +16,9 @@ export default function Modal({ show, onClose, children, title }) {
     <div className={styles.overlay}>
       <div className={styles.modal}>
         <div className={styles.header}>
-          <a href="#" onClick={handleClose}>
+          <div  onClick={handleClose}>
             <i className="fa-solid fa-xmark"></i>
-          </a>
+          </div>
         </div>
         {title && <div>{title}</div>}
         <div className={styles.body}>{children}</div>

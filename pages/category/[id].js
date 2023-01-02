@@ -61,7 +61,7 @@ export default function categoryPage({ category, categories }) {
               return (
                 <div key={i}>
                   <Link href={`/category/${item._id}`}>
-                    <a>{item.name}</a>
+                    <p>{item.name}</p>
                   </Link>
                   {arrow}
                 </div>

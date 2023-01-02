@@ -63,7 +63,7 @@ export default function catalogPage({ catalog, catalogs }) {
               return (
                 <div key={i}>
                   <Link href={`/catalog/${item._id}`}>
-                    <a>{item.name}</a>
+                    <p>{item.name}</p>
                   </Link>
                   {arrow}
                 </div>

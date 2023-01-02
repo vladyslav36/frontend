@@ -60,7 +60,7 @@ export default function Login({ close, setLogRegMode }) {
         <input type="submit" className="btn" value="Войти" />
         <div className={styles.bottom}>
           <p>Не зарегистрированы?</p>
-          <a onClick={() => setLogRegMode(false)}>Регистрация</a>
+          <p onClick={() => setLogRegMode(false)}>Регистрация</p> 
         </div>
         
       </form>

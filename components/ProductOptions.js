@@ -29,7 +29,7 @@ export default function ProductOptions({
                   onClick={() => handleClick({ option, value })}
                 >
                   {options[option].values[value].price ? (
-                    <p>
+                    <div>
                       {value} /{" "}
                       <span
                         className={
@@ -41,7 +41,7 @@ export default function ProductOptions({
                         {options[option].values[value].price}{" "}
                         {getCurrencySymbol(currencyValue)}
                       </span>
-                    </p>
+                    </div>
                   ) : (
                       <p>{value}</p> 
                   )}

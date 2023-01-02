@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "js-file-downloader": "^1.1.24",
-    "moment": "^2.29.3",
-    "next": "12.1.5",
-    "react": "18.1.0",
-    "react-dom": "18.1.0",
-    "react-icons": "^4.3.1",
-    "react-toastify": "^8.2.0"
+    "moment": "^2.29.4",
+    "next": "13.1.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.7.1",
+    "react-toastify": "^9.1.1"
   },
   "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
   "main": "index.js",
@@ -30,6 +30,6 @@
   },
   "homepage": "https://github.com/vladyslav36/frontend#readme",
   "devDependencies": {
-    "sass": "^1.56.0"
+    "sass": "^1.57.1"
   }
 }

@@ -122,14 +122,14 @@ export default function AdminPanel() {
           </div>
          
           <Link href="order_admin_list">
-            <a className={styles.single_link}>
+            <div className={styles.single_link}>
               <div className={styles.container_item}>Заказы</div>
-            </a>
+            </div>
           </Link>
           <Link href="edit_information">
-            <a className={styles.single_link}>
+            <div className={styles.single_link}>
               <div className={styles.container_item}>Информация</div>
-            </a>
+            </div>
           </Link>
         </div>
       ) : null}
