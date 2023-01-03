@@ -1,4 +1,3 @@
-import Link from "next/link"
 import styles from "@/styles/ProductList.module.scss"
 import { API_URL, NOIMAGE } from "@/config/index"
 import { getCurrencySymbol, getPriceForShow, getShortDescription } from "utils"

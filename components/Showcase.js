@@ -1,22 +1,21 @@
 import styles from "@/styles/Showcase.module.scss"
 import { API_URL, NOIMAGE } from "../config"
-import Link from "next/link"
 import { getCurrencySymbol, getPriceForShow } from "utils"
 import ProductsContext from "@/context/ProductsContext"
 import { useContext, useState } from "react"
 import Loupe from "./Loupe"
+import { useRouter } from "next/router"
 
 export default function Showcase({ showcaseProducts }) {
   const { currencyShop, currencyRate } = useContext(ProductsContext)
   const [image, setImage] = useState("")
   const [isShow, setIsShow] = useState(false)
-
+const router=useRouter()
   return (
     <div className={styles.container}>
       {showcaseProducts.length
-        ? showcaseProducts.map((product, i) => (
-            <Link href={`/product/${product.slug}`} key={i}>
-              <div>
+        ? showcaseProducts.map((product, i) => (            
+          <div onClick={() => router.push(`/product/${product.slug}`)} key={i}>
                 <div className={styles.item}>
                   <div className={styles.header}>
                     <img
@@ -52,8 +51,7 @@ export default function Showcase({ showcaseProducts }) {
                   </div>
                 </div>
                 {isShow ? <Loupe image={image} setIsShow={setIsShow} /> : null}
-              </div>
-            </Link>
+              </div>            
           ))
         : null}
     </div>
