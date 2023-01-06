@@ -98,7 +98,7 @@ export default function EditCategoryList({
       </div>
       <dialog className={styles.dialog} ref={elemModal}>
         <div className={styles.dialog_wrapper}>
-          <div>Удалить категорию {catForDelete.name}?</div>
+          <p>Удалить категорию {catForDelete.name}?</p>
           <div onClick={() => handle(true)}>Да</div>
           <div onClick={() => handle(false)}>Нет</div>
         </div>

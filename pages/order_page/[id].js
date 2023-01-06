@@ -4,8 +4,6 @@ import { API_URL } from "@/config/index"
 import moment from "moment"
 import { useContext, useEffect, useState } from "react"
 import AuthContext from "@/context/AuthContext"
-import { toast, ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
 import { useRouter } from "next/router"
 import { getCurrencySymbol } from "utils"
@@ -38,8 +36,7 @@ export default function orderPage() {
   moment.locale("ru")
 
   return (
-    <Layout title="Страница заказа">
-      <ToastContainer />
+    <Layout title="Страница заказа">      
       <div className={styles.container}>
         <Links home={true} back={true} />
         {Object.keys(order).length ? (

@@ -9,7 +9,7 @@ export default function ProductReturnPage({ information }) {
       <Links home={true} back={true} />
       <div className={styles.container}>
         <h1>Возврат товара</h1> 
-      <pre>{information.productReturn}</pre>
+      <p>{information.productReturn}</p>
       </div>
       
     </Layout>

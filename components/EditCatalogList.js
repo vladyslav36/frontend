@@ -97,7 +97,7 @@ export default function EditCatalogList({
       </div>
       <dialog className={styles.dialog} ref={elemModal}>
         <div className={styles.dialog_wrapper}>
-          <div>Удалить каталог {catForDelete.name}?</div>
+          <p>Удалить каталог {catForDelete.name}?</p>
           <div onClick={() => handle(true)}>Да</div>
           <div onClick={() => handle(false)}>Нет</div>
         </div>

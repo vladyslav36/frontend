@@ -50,10 +50,10 @@ const router=useRouter()
                     ) : null}
                   </div>
                 </div>
-                {isShow ? <Loupe image={image} setIsShow={setIsShow} /> : null}
               </div>            
           ))
-        : null}
+          : null}
+          {isShow ? <Loupe image={image} setIsShow={setIsShow} /> : null}
     </div>
   )
 }

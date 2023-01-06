@@ -3,8 +3,6 @@ import styles from "@/styles/OrderUserList.module.scss"
 import { API_URL } from "@/config/index"
 import moment from "moment"
 import { useEffect, useState, useContext } from "react"
-import { toast, ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
 import { useRouter } from "next/router"
 import AuthContext from "@/context/AuthContext"
@@ -38,7 +36,7 @@ export default function OrderUserList() {
 
   return (
     <Layout title="Список заказов">
-      <ToastContainer />
+      
       <div className={styles.container}>
         <Links home={true} back={true} />
         <div className={styles.table}>
