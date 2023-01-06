@@ -6,8 +6,8 @@ import { API_URL } from "@/config/index.js";
 export default function ConditionsPage({information}) {
   return (
     <Layout title='Условия сотрудничества' description='Условия сотрудничечтва с магазином Кармен'>
-      <Links home={true} back={true} />
       <div className={styles.container}>
+      <Links home={true} back={true} />
         <h1>Условия сотрудничества</h1> 
       <div>{ information.conditions}</div>
       </div>

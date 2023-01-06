@@ -7,8 +7,8 @@ import { API_URL } from '@/config/index.js'
 export default function AboutPage({information}) {
   return (
     <Layout title='О нас' description='Информация о магазине Кармен'>
-      <Links home={true} back={true} />
       <div className={styles.container}>
+      <Links home={true} back={true} />
         <h2>О нас</h2>
       <div>{information.aboutUs }</div>
       </div>

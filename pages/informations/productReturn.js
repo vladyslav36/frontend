@@ -6,8 +6,8 @@ import { API_URL } from "@/config/index.js";
 export default function ProductReturnPage({ information }) {
   return (
     <Layout title="Возврат товара">
-      <Links home={true} back={true} />
       <div className={styles.container}>
+      <Links home={true} back={true} />
         <h1>Возврат товара</h1> 
       <p>{information.productReturn}</p>
       </div>

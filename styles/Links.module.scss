@@ -1,9 +1,9 @@
 .links {
   display: flex;
-min-width:70px;
-justify-content: space-between;
-align-items: center;
-color:steelblue;
+  width: 70px;
+  justify-content: space-between;
+  align-items: center;
+  color: steelblue;
   div {
     &:hover {
       cursor: pointer;

@@ -9,8 +9,8 @@ export default function DeliveryPage({information}) {
       title="Доставка заказов"
       description="Способы доставки заказов покупателям магазина Кармен"
     >
-      <Links home={true} back={true} />
       <div className={styles.container}>
+      <Links home={true} back={true} />
         <h1>Доставка заказов</h1>
         <div>
           {information.delivery}
