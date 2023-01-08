@@ -102,7 +102,7 @@ export default function categoryPage({ category, categories }) {
               {category.price ? (
                 <Link href={`${API_URL}${category.price}`} target="_blank">
                   <div>
-                    <p>
+                    <p className={styles.icon_price}>
                       <i className="fa-regular fa-file-excel fa-xl"></i>
                     </p>
                     <p>Прайс</p>
@@ -112,7 +112,7 @@ export default function categoryPage({ category, categories }) {
               {category.catalog ? (
                 <Link href={`${API_URL}${category.catalog}`} target="_blank">
                   <div>
-                    <p>                      
+                    <p className={styles.icon_catalog}>                      
                       <i className="fa-solid fa-file-pdf fa-xl"></i>
                     </p>
                     <p>Каталог</p>
