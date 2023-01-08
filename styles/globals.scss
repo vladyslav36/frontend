@@ -10,16 +10,10 @@ body{
   font-family:'Robotto',sans-serif;
   line-height:1.5;  
 }
-
 a{
-  text-decoration:none;
-  color:#2874a6;
+  all:unset;
 }
-a:hover{
-  color:#1a5276;
-  cursor:pointer;
-  text-decoration: underline;
-}
+
 
 .btn{
   border:none;

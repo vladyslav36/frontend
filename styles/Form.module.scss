@@ -81,7 +81,31 @@
     display: block;
   }
 }
-
+.image_header{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  &>div{
+    display:flex;
+    gap:25px;
+    &>div{
+      display:flex;
+      gap:10px;
+      align-items: center;
+      
+       i{
+        cursor:pointer;
+        padding:0 2px;
+       &:nth-child(1){
+        color:steelblue;
+       } 
+       &:nth-child(2){
+        color:red;
+       }
+      }
+    }
+  }
+}
 .image {
   width: 200px;
   height: 250px;
@@ -89,10 +113,11 @@
   justify-content: center;
   align-items: center;
   border: 1px solid #b2babb;
+  padding:5px;
 
   img {
-    max-width: 198px;
-    max-height: 248px;
+    max-width: 100%;
+    max-height: 100%;
   }
 
   &_container {

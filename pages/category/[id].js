@@ -8,10 +8,12 @@ import { getArrayCatTree } from "utils"
 import Navbar from "@/components/Navbar"
 import CategoriesList from "@/components/CategoriesList"
 import Links from "@/components/Links"
+import { useRouter } from "next/router"
 
 export default function categoryPage({ category, categories }) {
   const [productList, setProductList] = useState([])
   const [isShowAsList, setIsShowAsList] = useState(true)
+  const router = useRouter()
 
   const childrenList = category
     ? categories.filter((item) => item.parentId === category._id)
@@ -82,18 +84,45 @@ export default function categoryPage({ category, categories }) {
       </div>
 
       <div className={styles.container}>
-        <div className={styles.left_content}>
-          <div className={styles.image}>
-            <img
-              src={
-                category.image ? `${API_URL}${category.image}` : `${NOIMAGE}`
-              }
-            />
+        <div>
+          <div className={styles.left_content_header}>
+            <div className={styles.image}>
+              <img
+                src={
+                  category.image ? `${API_URL}${category.image}` : `${NOIMAGE}`
+                }
+              />
+            </div>
+            <div className={styles.name}>
+              <p>{category.name}</p>
+            </div>
           </div>
-          <div className={styles.name}>
-            <p>{category.name}</p>
-          </div>
+          {category.price || category.catalog ? (
+            <div className={styles.left_content_footer}>
+              {category.price ? (
+                <Link href={`${API_URL}${category.price}`} target="_blank">
+                  <div>
+                    <p>
+                      <i className="fa-regular fa-file-excel fa-xl"></i>
+                    </p>
+                    <p>Прайс</p>
+                  </div>
+                </Link>
+              ) : null}
+              {category.catalog ? (
+                <Link href={`${API_URL}${category.catalog}`} target="_blank">
+                  <div>
+                    <p>                      
+                      <i className="fa-solid fa-file-pdf fa-xl"></i>
+                    </p>
+                    <p>Каталог</p>
+                  </div>
+                </Link>
+              ) : null}
+            </div>
+          ) : null}
         </div>
+
         <div className={styles.right_content}>
           {childrenList.length ? (
             <CategoriesList categories={childrenList} />

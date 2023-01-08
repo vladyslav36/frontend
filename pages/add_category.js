@@ -11,6 +11,8 @@ import Links from "@/components/Links"
 import Options from "@/components/Options"
 import { getListForCategoriesMenu } from "../utils"
 import ModalImage from "@/components/ModalImage"
+import ModalPrice from "@/components/ModalPrice"
+import ModalCatalog from "@/components/ModalCatalog"
 
 export default function addCategoryPage({ categories }) {
   const {
@@ -25,8 +27,11 @@ export default function addCategoryPage({ categories }) {
   })
 
   const [image, setImage] = useState({ path: "", file: null })
+  const [price, setPrice] = useState({ path: "", file: null })
+  const [catalog, setCatalog] = useState({ path: "", file: null })
   const elDialog = useRef()
-
+  const elDialogPrice = useRef()
+  const elDialogCatalog = useRef()
   const listForMenu = getListForCategoriesMenu(categories)
 
   useEffect(() => {
@@ -59,6 +64,8 @@ export default function addCategoryPage({ categories }) {
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))
     formData.append("image", image.file)
+    formData.append("price", price.file)
+    formData.append("catalog", catalog.file)
     const res = await fetch(`${API_URL}/api/categories`, {
       method: "POST",
       headers: {
@@ -91,7 +98,14 @@ export default function addCategoryPage({ categories }) {
     setImage({ path: url, file: e.target.files[0] })
     elDialog.current.close()
   }
-
+  const handleUploadPrice = (e) => {
+    setPrice({ path: "/", file: e.target.files[0] })
+    elDialogPrice.current.close()
+  }
+  const handleUploadCatalog = (e) => {
+    setCatalog({ path: "/", file: e.target.files[0] })
+    elDialogCatalog.current.close()
+  }
   const handleListClick = ({ id, name }) => {
     setValues({ ...values, parent: name, parentId: id })
   }
@@ -192,8 +206,45 @@ export default function addCategoryPage({ categories }) {
                 </div>
               </form>
               <div>
-                <p>Изображение категории</p>
+                <div className={styles.image_header}>
+                  <p>Изображение категории</p>
+                  {values.parentId === null ? (
+                    <div>
+                      <div>
+                        <i
+                          className="fa-solid fa-download fa-xl"
+                          onClick={() => {
+                            elDialogPrice.current.showModal()
+                          }}
+                        ></i>
+                        {price.path ? (
+                          <i
+                            className="fa-solid fa-xmark fa-xl"
+                            onClick={() => setPrice({ path: "", file: null })}
+                          ></i>
+                        ) : null}
 
+                        <p>Прайс</p>
+                      </div>
+                      <div>
+                        <i
+                          className="fa-solid fa-download fa-xl"
+                          onClick={() => {
+                            elDialogCatalog.current.showModal()
+                          }}
+                        ></i>
+                        {catalog.path ? (
+                          <i
+                            className="fa-solid fa-xmark fa-xl"
+                            onClick={() => setCatalog({ path: "", file: null })}
+                          ></i>
+                        ) : null}
+
+                        <p>Каталог</p>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
                 <div className={styles.image_container}>
                   {image.path ? (
                     <div className={styles.image}>
@@ -201,7 +252,7 @@ export default function addCategoryPage({ categories }) {
                     </div>
                   ) : (
                     <div className={styles.image}>
-                      <img src={`${NOIMAGE}`}/>
+                      <img src={`${NOIMAGE}`} />
                     </div>
                   )}
                   <div className={styles.image_footer}>
@@ -228,6 +279,14 @@ export default function addCategoryPage({ categories }) {
         <ModalImage
           elDialog={elDialog}
           handleUploadChange={handleUploadChange}
+        />
+        <ModalPrice
+          elDialogPrice={elDialogPrice}
+          handleUploadPrice={handleUploadPrice}
+        />
+        <ModalCatalog
+          elDialogCatalog={elDialogCatalog}
+          handleUploadCatalog={handleUploadCatalog}
         />
       </Layout>
     </div>

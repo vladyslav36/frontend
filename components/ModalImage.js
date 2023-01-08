@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '@/styles/ModalImage.module.scss'
+import styles from '@/styles/ModalFile.module.scss'
 
 
 export default function ModalImage({handleUploadChange,elDialog}) {

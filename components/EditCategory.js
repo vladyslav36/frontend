@@ -8,6 +8,9 @@ import Links from "@/components/Links"
 import Options from "@/components/Options"
 import { getListForCategoriesMenu } from "../utils"
 import ModalImage from "./ModalImage"
+import ModalPrice from "./ModalPrice"
+import ModalCatalog from "./ModalCatalog"
+
 
 export default function EditCategory({
   category,
@@ -29,8 +32,18 @@ export default function EditCategory({
     path: category.image ? `${API_URL}${category.image}` : "",
     file: null,
   })
-  const [showModal, setShowModal] = useState(false)
+  const [price, setPrice] = useState({
+    path: category.price ? `${API_URL}${category.price}` : "",
+    file: null
+  })
+  const [catalog, setCatalog] = useState({
+    path: category.catalog ? `${API_URL}${category.catalog}` : "",
+    file: null,
+  })
+  
   const elDialog = useRef()
+  const elDialogPrice=useRef()
+  const elDialogCatalog=useRef()
   const listForMenu = getListForCategoriesMenu(categories)
 
   useEffect(() => {
@@ -69,7 +82,11 @@ export default function EditCategory({
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))
     formData.append("imageClientPath", image.path)
+    formData.append("priceClientPath", price.path)
+    formData.append("catalogClientPath", catalog.path)
     formData.append("image", image.file)
+    formData.append("price", price.file)
+    formData.append("catalog", catalog.file)
     const res = await fetch(`${API_URL}/api/categories`, {
       method: "PUT",
       headers: {
@@ -108,7 +125,16 @@ export default function EditCategory({
     setImage({ path: url, file: e.target.files[0] })
     elDialog.current.close()
   }
-
+  const handleUploadPrice = (e) => {
+    
+    setPrice({ path: '/', file: e.target.files[0] })
+    elDialogPrice.current.close()
+}
+  const handleUploadCatalog = (e) => {
+    
+    setCatalog({ path: "/", file: e.target.files[0] })
+    elDialogCatalog.current.close()
+}
   const handleListClick = ({ id, name }) => {
     setValues({ ...values, parent: name, parentId: id })
   }
@@ -124,7 +150,6 @@ export default function EditCategory({
         <form onSubmit={handleSubmit}>
           <div className={styles.header}>
             <Links home={true} back={true} />
-
             <span>
               <i
                 className="fa-solid fa-square-xmark fa-2xl"
@@ -206,8 +231,35 @@ export default function EditCategory({
             ></textarea>
           </div>
         </form>
+
         <div>
-          <p>Изображение категории</p>
+          <div className={styles.image_header}>
+            <p>Изображение категории</p>
+            {category.parentId === null ? (
+              <div>
+                <div>
+                  <i className="fa-solid fa-download fa-xl" onClick={() => {
+                    elDialogPrice.current.showModal()
+                  }}></i>
+                  {price.path ? (
+                   <i className="fa-solid fa-xmark fa-xl" onClick={()=>setPrice({path:'',file:null})}></i>
+                  ):null}
+                 
+                  <p>Прайс</p>
+                </div>
+                <div>
+                  <i className="fa-solid fa-download fa-xl" onClick={() => {
+                    elDialogCatalog.current.showModal()
+                  }}></i>
+                  {catalog.path ? (
+                  <i className="fa-solid fa-xmark fa-xl" onClick={()=>setCatalog({path:'',file:null})}></i>
+                  ):null}
+                  
+                  <p>Каталог</p>
+                </div>
+              </div>
+            ) : null}
+          </div>
 
           <div className={styles.image_container}>
             {image.path ? (
@@ -234,12 +286,21 @@ export default function EditCategory({
             </div>
           </div>
         </div>
+
         {!values.parent ? (
           <Options values={values} setValues={setValues} />
         ) : null}
       </div>
 
       <ModalImage elDialog={elDialog} handleUploadChange={handleUploadChange} />
+      <ModalPrice
+        elDialogPrice={elDialogPrice}
+        handleUploadPrice={handleUploadPrice}
+      />
+      <ModalCatalog
+        elDialogCatalog={elDialogCatalog}
+        handleUploadCatalog={handleUploadCatalog}
+      />
     </div>
   )
 }

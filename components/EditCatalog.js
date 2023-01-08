@@ -6,7 +6,7 @@ import AuthContext from "@/context/AuthContext"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import AccessDenied from "@/components/AccessDenied"
-import {  getListForCatalogsMenu } from "utils"
+import { getListForCatalogsMenu } from "utils"
 import ModalImage from "./ModalImage"
 
 export default function EditCatalog({
@@ -16,10 +16,6 @@ export default function EditCatalog({
   setIsShowCatalog,
   token,
 }) {
-  const {
-    user: { isAdmin },
-  } = useContext(AuthContext)
-
   const [values, setValues] = useState({
     _id: catalog._id,
     name: catalog.name,
@@ -32,15 +28,14 @@ export default function EditCatalog({
   })
 
   const elDialog = useRef()
-const listForMenu = getListForCatalogsMenu(catalogs)
+  const listForMenu = getListForCatalogsMenu(catalogs)
   const handleValues = (e) => {
     e.preventDefault()
-    if (e.target.name === 'name') {
+    if (e.target.name === "name") {
       setValues({ ...values, [e.target.name]: e.target.value })
     } else {
-      toast.warning('Родительский каталог выбирается из выпадающего списка')
+      toast.warning("Родительский каталог выбирается из выпадающего списка")
     }
-    
   }
   const handleUploadChange = (e) => {
     const url = URL.createObjectURL(e.target.files[0])
@@ -51,7 +46,6 @@ const listForMenu = getListForCatalogsMenu(catalogs)
   const deleteImage = () => {
     URL.revokeObjectURL(image.path)
     setImage({ path: "", file: null })
-
   }
 
   const sendData = async () => {
@@ -70,7 +64,7 @@ const listForMenu = getListForCatalogsMenu(catalogs)
     }
     const formData = new FormData()
     formData.append("values", JSON.stringify(values))
-    formData.append('imageClientPath',image.path)
+    formData.append("imageClientPath", image.path)
     formData.append("image", image.file)
     const res = await fetch(`${API_URL}/api/catalogs`, {
       method: "PUT",
@@ -91,125 +85,101 @@ const listForMenu = getListForCatalogsMenu(catalogs)
       toast.error("Ошибка при загрузке каталога")
     }
   }
-  
+
   return (
     <>
-      {isAdmin ? (
-        <>
-          <ToastContainer />
-          <div className={styles.header}>
-            <Links home={true} back={true} />
-            
-            <span>
-              <i
-                className="fa-solid fa-square-xmark fa-2xl"
-                title="Отмена"
-                name="cancel"
-                onClick={() => setIsShowCatalog(false)}
-              ></i>
-              <i
-                className="fa-solid fa-floppy-disk fa-2xl"
-                title="Сохранить"
-                name="save"
-                onClick={sendData}
-              ></i>
+      <ToastContainer />
+      <div className={styles.header}>
+        <Links home={true} back={true} />
+
+        <span>
+          <i
+            className="fa-solid fa-square-xmark fa-2xl"
+            title="Отмена"
+            name="cancel"
+            onClick={() => setIsShowCatalog(false)}
+          ></i>
+          <i
+            className="fa-solid fa-floppy-disk fa-2xl"
+            title="Сохранить"
+            name="save"
+            onClick={sendData}
+          ></i>
+        </span>
+      </div>
+      <div className={styles.container}>
+        <div className={styles.left_side}>
+          <div>
+            <label htmlFor="name">Каталог</label>
+            <input
+              type="text"
+              id="name"
+              value={values.name}
+              name="name"
+              placeholder="Название каталога"
+              onChange={handleValues}
+            />
+          </div>
+          <div>
+            <label htmlFor="parent">Родительский каталог</label>
+            <div className={styles.input_wrapper}>
+              <input
+                type="text"
+                id="parent"
+                value={values.parent}
+                name="parent"
+                placeholder="Название родителя"
+                onChange={handleValues}
+              />
+              <div
+                className={styles.cancell}
+                onClick={() =>
+                  setValues({ ...values, parent: "", parentId: null })
+                }
+              >
+                <i className="fa-solid fa-xmark fa-lg"></i>
+              </div>
+              <ul className={styles.drop_down_list}>
+                {listForMenu.length
+                  ? listForMenu.map((item) => (
+                      <li
+                        key={item.cat._id}
+                        onClick={() => {
+                          setValues({
+                            ...values,
+                            parent: item.cat.name,
+                            parentId: item.cat._id,
+                          })
+                        }}
+                      >
+                        {item.tree}
+                      </li>
+                    ))
+                  : null}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className={styles.image_side}>
+          <div className={styles.image}>
+            {image.path ? <img src={image.path} /> : <img src={NOIMAGE} />}
+          </div>
+          <div className={styles.buttons}>
+            <span
+              title="Загрузить"
+              onClick={() => elDialog.current.showModal()}
+            >
+              <i className="fa-solid fa-cloud-arrow-down fa-2xl"></i>
+            </span>
+            <span title="Удалить" onClick={deleteImage}>
+              <i className="fa-solid fa-square-xmark fa-2xl"></i>
             </span>
           </div>
-          <div className={styles.container}>
-            <div className={styles.left_side}>
-              <div>
-                <label htmlFor="name">Каталог</label>
-                <input
-                  type="text"
-                  id="name"
-                  value={values.name}
-                  name="name"
-                  placeholder="Название каталога"
-                  onChange={handleValues}
-                />
-              </div>
-              <div>
-                <label htmlFor="parent">Родительский каталог</label>
-                <div className={styles.input_wrapper}>
-                  <input
-                    type="text"
-                    id="parent"
-                    value={values.parent}
-                    name="parent"
-                    placeholder="Название родителя"   
-                    onChange={handleValues}
-                  />
-                  <div
-                    className={styles.cancell}
-                    onClick={() =>
-                      setValues({ ...values, parent: "", parentId: null })
-                    }
-                  >
-                    <i className="fa-solid fa-xmark fa-lg"></i>
-                  </div>
-                  <ul className={styles.drop_down_list}>
-                    {listForMenu.length
-                      ? listForMenu.map((item) => (
-                          <li
-                            key={item.cat._id}
-                            onClick={() => {
-                              setValues({
-                                ...values,
-                                parent: item.cat.name,
-                                parentId: item.cat._id,
-                              })
-                            }}
-                          >
-                            {item.tree}
-                          </li>
-                        ))
-                      : null}
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className={styles.image_side}>
-              <div className={styles.image}>
-                {image.path ? (
-                  <img src={image.path} />
-                ) : (
-                  <img src={NOIMAGE} />
-                )}
-              </div>
-              <div className={styles.buttons}>
-                <span
-                  title="Загрузить"
-                  onClick={() => elDialog.current.showModal()}
-                >
-                  <i className="fa-solid fa-cloud-arrow-down fa-2xl"></i>
-                </span>
-                <span title="Удалить" onClick={deleteImage}>
-                  <i className="fa-solid fa-square-xmark fa-2xl"></i>
-                </span>
-              </div>
-            </div>
-          </div>
+        </div>
+      </div>
 
-          <ModalImage elDialog={elDialog} handleUploadChange={handleUploadChange} />
-        </>
-      ) : (
-        <AccessDenied />
-      )}
+      <ModalImage elDialog={elDialog} handleUploadChange={handleUploadChange} />
     </>
   )
 }
 
-export async function getServerSideProps() {
-  const res = await fetch(`${API_URL}/api/catalogs`)
-  const { catalogs } = await res.json()
-  if (!res || !catalogs) {
-    return {
-      notFound: true,
-    }
-  }
-  return {
-    props: {
-      catalogs,
-    },
-  }
-}
