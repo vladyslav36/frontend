@@ -10,5 +10,6 @@ export default function AccessDenied() {
       <h1>У вас нет прав для просмотра этой страницы</h1>
       <Link href="/">Вернуться на главную</Link>
     </div>
+    
   )
 }
