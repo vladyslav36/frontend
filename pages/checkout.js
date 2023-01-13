@@ -58,18 +58,15 @@ export default function Checkout() {
     const { count }=await res1.json()
     const mailString=getMailString({cart,totalAmount,values,count})
     localStorage.setItem("checkout", JSON.stringify(values))
-    const res = await fetch(`${API_URL}/api/cart/mail`, {
-      method:'POST',
-      headers: {
-        'Content-Type':'application/json',
-      },
-      body:JSON.stringify({mailString})
-    })
-    // if (res.ok) {
-    //   toast.success("Заказ успешно отправлен")
-    // } else {
-    //   toast.error("Ошибка при отправке заказа")
-    // }
+
+    // const res = await fetch(`${API_URL}/api/cart/mail`, {
+    //   method:'POST',
+    //   headers: {
+    //     'Content-Type':'application/json',
+    //   },
+    //   body:JSON.stringify({mailString})
+    // })
+  
     
       const res2 = await fetch(`${API_URL}/api/order`, {
       method: 'POST',
@@ -85,12 +82,8 @@ export default function Checkout() {
         userId:Object.keys(user).length?user._id:null
       })
       })
-      //  if (res2.ok) {
-      //    toast.success("Заказ успешно сохранен")
-      //  } else {
-      //    toast.error("Ошибка при сохранении заказа")
-      //  }
-    if (res.ok && res2.ok) {
+     
+    if ( res2.ok) {
       toast.success('Заказ обработан успешно')
       setCart([])
       setDisable(true)
