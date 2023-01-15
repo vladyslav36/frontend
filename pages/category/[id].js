@@ -16,7 +16,7 @@ export default function categoryPage({ category, categories }) {
   const router = useRouter()
 
   const childrenList = category
-    ? categories.filter((item) => item.parentId === category._id)
+    ? categories.filter((item) => item.parentId === category._id).sort((a,b)=>a.name>b.name?1:-1)
     : []
 
   // ld+json for SEO
@@ -37,7 +37,7 @@ export default function categoryPage({ category, categories }) {
           `${API_URL}/api/products/category/${category._id}`
         )
         const { products } = await res.json()
-        setProductList(products)
+        setProductList(products.sort((a,b)=>a.name>b.name?1:-1))
       }
 
       fetchProduct()
