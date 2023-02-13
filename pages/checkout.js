@@ -25,12 +25,20 @@ export default function Checkout() {
   })
   const [disable,setDisable]=useState(false)
 
-  useEffect(() => {    
-       const data = localStorage.getItem("checkout")
-      if (data) setValues(JSON.parse(data))   
-  }, [])
+  useEffect(() => {  
+    if (Object.keys(user).length) {
+      const { name, surname, phone, city, carrier, branch }=user.delivery
+      setValues({...values,name,surname,phone,city,carrier,branch})
+    } else {
+      const data = localStorage.getItem("checkout")
+       if (data) setValues(JSON.parse(data)) 
+    }
+       
+       
+  }, [user])
+  
   const handleChange = (e) => {
-    const { name, value, checked } = e.target
+    const { name, value } = e.target
     if (name === "delMethod") {
       setValues({
         ...values,

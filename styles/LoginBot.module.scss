@@ -1,0 +1,63 @@
+$viber-color: #7360f2;
+$telegram-color: #2aabee;
+
+.container {
+  position: relative;
+  padding: 10px 20px;
+  .cancell {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: red;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  h1 {
+    text-align: center;
+  }
+  .icons {
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 200px;
+    a:nth-child(1) {
+      color: $viber-color;
+    }
+    a:nth-child(2) {
+      color: $telegram-color;
+    }
+
+    i {
+      cursor: pointer;
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+  .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+      text-align: center;
+      width: 200px;
+      border-radius: 20px;
+      padding: 5px;
+      font-size: 20px;
+      background-color: lightblue;
+      padding: 10px 0;
+      box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+      &:hover {
+        cursor: pointer;
+      }
+      &:active {
+        transform: scale(0.98);
+        background-color: darken($color: lightblue, $amount: 5);
+      }
+    }
+  }
+}

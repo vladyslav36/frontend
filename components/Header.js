@@ -10,6 +10,7 @@ import { toast } from "react-toastify"
 import Login from "./Login"
 import Register from "./Register"
 import { useRouter } from "next/router"
+import LoginBot from "./LoginBot"
 
 export default function Header() {
   const { setUser, user } = useContext(AuthContext)
@@ -177,7 +178,7 @@ export default function Header() {
                 <ul className={styles.main_user_menu} ref={elemMainUserMenu}>
                   <li>
                     <i className="fa-solid fa-user"></i>&nbsp;
-                    <span>{user.email}</span>
+                    <span>{user.userName}</span>
                   </li>
                   <li>
                     <Link href={`/order_user_list/${user._id}`}>
@@ -185,7 +186,7 @@ export default function Header() {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/account/profile">
+                    <Link href="/user_profile">
                       <p>Профиль</p>
                     </Link>
                   </li>
@@ -237,7 +238,7 @@ export default function Header() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/account/profile">
+                  <Link href="/user_profile">
                     <p>Профиль</p>
                   </Link>
                 </li>
@@ -313,7 +314,7 @@ export default function Header() {
         </div>
       </div>
       {isShowLoupe ? <Loupe setIsShow={setIsShowLoupe} image={image} /> : null}
-      <dialog className={styles.dialog} ref={elemDialog}>
+      {/* <dialog className={styles.dialog} ref={elemDialog}>
         {logRegMode ? (
           <Login
             close={() => elemDialog.current.close()}
@@ -322,6 +323,9 @@ export default function Header() {
         ) : (
           <Register close={close} setLogRegMode={setLogRegMode} />
         )}
+      </dialog> */}
+      <dialog className={styles.dialog} ref={elemDialog}>
+        <LoginBot elemDialog={elemDialog } />
       </dialog>
     </div>
   )
