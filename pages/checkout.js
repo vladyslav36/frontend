@@ -10,8 +10,8 @@ import { getMailString, getQntInCart, getTotalAmount } from "utils"
 import { API_URL } from "../config"
 
 export default function Checkout() {
-  const { cart,setCart } = useContext(ProductsContext)
-  const { user }=useContext(AuthContext)
+  const { cart, setCart } = useContext(ProductsContext)
+  const { user } = useContext(AuthContext)
   const [values, setValues] = useState({
     name: "",
     surname: "",
@@ -19,38 +19,33 @@ export default function Checkout() {
     city: "",
     carrier: "",
     branch: "",
-    pickup: true,   
+    pickup: true,
     prepaid: true,
-    
   })
-  const [disable,setDisable]=useState(false)
+  const [disable, setDisable] = useState(false)
 
-  useEffect(() => {  
+  useEffect(() => {
     if (Object.keys(user).length) {
-      const { name, surname, phone, city, carrier, branch }=user.delivery
-      setValues({...values,name,surname,phone,city,carrier,branch})
+      const { name, surname, phone, city, carrier, branch } = user.delivery
+      setValues({ ...values, name, surname, phone, city, carrier, branch })
     } else {
       const data = localStorage.getItem("checkout")
-       if (data) setValues(JSON.parse(data)) 
+      if (data) setValues(JSON.parse(data))
     }
-       
-       
   }, [user])
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target
     if (name === "delMethod") {
       setValues({
         ...values,
-        ["pickup"]: value === "pickup"
-        
+        ["pickup"]: value === "pickup",
       })
     } else {
       if (name === "payment") {
         setValues({
           ...values,
-          ["prepaid"]: value === "prepaid"
-          
+          ["prepaid"]: value === "prepaid",
         })
       } else {
         e.preventDefault()
@@ -61,52 +56,44 @@ export default function Checkout() {
 
   const handleSendOrder = async () => {
     const totalAmount = getTotalAmount(cart)
-    const totalQnt = getQntInCart(cart)
-    const res1 = await fetch(`${API_URL}/api/order/count`)
-    const { count }=await res1.json()
-    const mailString=getMailString({cart,totalAmount,values,count})
-    localStorage.setItem("checkout", JSON.stringify(values))
+    const totalQnt = getQntInCart(cart)   
 
-    // const res = await fetch(`${API_URL}/api/cart/mail`, {
-    //   method:'POST',
-    //   headers: {
-    //     'Content-Type':'application/json',
-    //   },
-    //   body:JSON.stringify({mailString})
-    // })
-  
-    
-      const res2 = await fetch(`${API_URL}/api/order`, {
-      method: 'POST',
+    localStorage.setItem("checkout", JSON.stringify(values))   
+
+    const res = await fetch(`${API_URL}/api/order`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'        
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         orderItems: cart,
         delivery: values,
         totalQnt,
         totalAmount,
-        count:count+1,
-        userId:Object.keys(user).length?user._id:null
-      })
-      })
-     
-    if ( res2.ok) {
-      toast.success('Заказ обработан успешно')
+        userId: Object.keys(user).length ? user._id : null,
+      }),
+    })
+    const data=await res.json()
+    if (res.ok) {
+      toast.success("Заказ обработан успешно")
       setCart([])
       setDisable(true)
     } else {
-      toast.error('Ошибка при обработке заказа')
-     }
+      toast.error(data.message)
+    }
   }
-  
+
   return (
     <Layout title="Оформление заказа">
-      <ToastContainer/>
+      <ToastContainer />
       <div className={styles.container}>
         <div className={styles.header}>
           <Links home={true} back={true} />
-          <button className={styles.button} onClick={handleSendOrder} disabled={disable}>
+          <button
+            className={styles.button}
+            onClick={handleSendOrder}
+            disabled={disable}
+          >
             Отправить заказ
           </button>
         </div>
@@ -229,7 +216,6 @@ export default function Checkout() {
         </div>
       </div>
       {/* test */}
-      
     </Layout>
   )
 }

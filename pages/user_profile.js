@@ -8,6 +8,7 @@ import { API_URL } from "@/config/index.js"
 import Links from "@/components/Links"
 import Navbar from "@/components/Navbar"
 import AuthContext from "@/context/AuthContext"
+import AccessDenied from "@/components/AccessDenied"
 
 
 
@@ -44,7 +45,7 @@ export default function userProfile() {
       body:JSON.stringify({delivery,userPhone})
     })
     const newUser = await res.json()
-    console.log('newUser'+newUser)
+    
     if (!res.ok) {
       toast.error(newUser.message)
       return
@@ -166,8 +167,8 @@ export default function userProfile() {
             <input type="submit" className="btn" value="Сохранить" />
           </form>
         </div>
-      ) : (
-        <h2 className={styles.no_profile}>Нет профиля для отображения</h2>
+      ) : (        
+          <AccessDenied/>
       )}
     </Layout>
   )

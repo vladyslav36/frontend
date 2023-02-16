@@ -36,6 +36,8 @@ export default function LoginBot({ elemDialog }) {
     setUser(user)   
     elemDialog.current.close()
   }
+
+  
   console.log(user)
   return (
     <div className={styles.container}>
@@ -56,6 +58,7 @@ export default function LoginBot({ elemDialog }) {
           <div
             title="Авторизация через Viber"
             onClick={() => setAuthMethod("Viber")}
+            
           >
             <i className="fa-brands fa-viber fa-4x"></i>
           </div>
