@@ -2,9 +2,10 @@ import styles from "@/styles/LoginBot.module.scss"
 import { v4 as uuid } from "uuid"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { io } from "socket.io-client"
 
 import React, { useContext, useEffect, useState } from "react"
-import { API_URL, API_URL_BOT } from "../config"
+import { API_URL } from "../config"
 import Link from "next/link"
 import AuthContext from "@/context/AuthContext"
 
@@ -12,13 +13,20 @@ export default function LoginBot({ elemDialog }) {
   const [authKey, setAuthKey] = useState("")
   const [authMethod, setAuthMethod] = useState("")
   const { setUser, user } = useContext(AuthContext)
+  const [arg, setArg] = useState()
+  const socket = io(API_URL, { transports: ["websocket"] })
 
   useEffect(() => {
     setAuthKey(uuid().replace(/-/gi, ""))
-  }, [])
+  },[user])
 
-  const login = async () => {
-    const res = await fetch(`${API_URL_BOT}/api/user/login`, {
+  socket.on("authkey", (arg) => {       
+    setArg(arg)   
+  })
+
+  useEffect(() => {
+    const login = async () => {
+    const res = await fetch(`${API_URL}/api/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,11 +41,19 @@ export default function LoginBot({ elemDialog }) {
       return
     }
 
-    setUser(user)   
+    setUser(user)
     elemDialog.current.close()
-  }
-
+    }
+    // если то что пришло с сервера через socketio совпадает с ключем который отправил браузер по deepLink
+    // тогда делаем логин и получаем обратно user с токеном
+     if (arg === authKey) {
+      login()
+    }
+  }, [arg])
   
+  
+  
+
   console.log(user)
   return (
     <div className={styles.container}>
@@ -58,7 +74,6 @@ export default function LoginBot({ elemDialog }) {
           <div
             title="Авторизация через Viber"
             onClick={() => setAuthMethod("Viber")}
-            
           >
             <i className="fa-brands fa-viber fa-4x"></i>
           </div>
@@ -76,8 +91,8 @@ export default function LoginBot({ elemDialog }) {
         </Link>
       </div>
 
-      <div className={styles.btn} onClick={login}>
-        <p>Войти</p>
+      <div className={styles.warn}>
+        <p>Для авторизации необходимо наличие аккаунта в Viber или Telegram</p>
       </div>
     </div>
   )
