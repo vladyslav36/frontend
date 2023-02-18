@@ -128,7 +128,7 @@
   justify-self: end;
   width: 80px;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   
   .cart {
@@ -152,7 +152,7 @@
 
 .nav {
   grid-area: nav;
-  justify-self: end;
+  justify-self: flex-end;
 }
 
 .main_menu {
@@ -246,10 +246,10 @@
 }
 
 .logo {
-  justify-self: start;
+  justify-self: flex-start;
 }
 .currencies {
-  justify-self: start;
+  justify-self: flex-start;
   display: flex;
   column-gap: 10px;
 
