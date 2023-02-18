@@ -6,7 +6,7 @@ import ProductsContext from "@/context/ProductsContext"
 import { useContext, useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { getMailString, getQntInCart, getTotalAmount } from "utils"
+import { getQntInCart, getTotalAmount } from "utils"
 import { API_URL } from "../config"
 
 export default function Checkout() {

@@ -7,8 +7,6 @@ import { getCurrencySymbol, getPriceForShow, getQntInCart } from "utils"
 import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import Loupe from "./Loupe"
 import { toast } from "react-toastify"
-import Login from "./Login"
-import Register from "./Register"
 import { useRouter } from "next/router"
 import LoginBot from "./LoginBot"
 
@@ -25,8 +23,7 @@ export default function Header() {
   const [products, setProducts] = useState([])
   const elemMainUserMenu = useRef()
   const elemBurgerMenu = useRef()
-  const elemDialog = useRef()
-  const [logRegMode, setLogRegMode] = useState(true)
+  const elemDialog = useRef()  
   const isUser = Object.keys(user).length === 0 ? false : true
 
   const handleChange = (e) => {
@@ -57,10 +54,7 @@ export default function Header() {
     elemBurgerMenu.current.classList.toggle(styles.show)
   }
 
-  const close = () => {
-    elemDialog.current.close()
-    setLogRegMode(true)
-  }
+  
 
   return (
     <div className={styles.header}>
@@ -295,12 +289,6 @@ export default function Header() {
           </span>
         </div>
         <div className={styles.cart_wrapper}>
-          <Link href="https://t.me/karmeninua">
-            <div className={styles.telegram} title="Новинки на нашем канале">
-              <i className="fa-brands fa-telegram fa-2xl"></i>
-            </div>
-          </Link>
-
           <div className={styles.cart} title="Корзина">
             <Link href="/cart">
               <div>
@@ -313,17 +301,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-      {isShowLoupe ? <Loupe setIsShow={setIsShowLoupe} image={image} /> : null}
-      {/* <dialog className={styles.dialog} ref={elemDialog}>
-        {logRegMode ? (
-          <Login
-            close={() => elemDialog.current.close()}
-            setLogRegMode={setLogRegMode}
-          />
-        ) : (
-          <Register close={close} setLogRegMode={setLogRegMode} />
-        )}
-      </dialog> */}
+      {isShowLoupe ? <Loupe setIsShow={setIsShowLoupe} image={image} /> : null}      
       <dialog className={styles.dialog} ref={elemDialog}>
         <LoginBot elemDialog={elemDialog } />
       </dialog>

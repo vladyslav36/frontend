@@ -128,18 +128,9 @@
   justify-self: end;
   width: 80px;
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
-
-  .telegram {
-    background-color: #fbfcfc;
-    border-radius: 50%;
-    cursor:pointer;
-    i {
-      color: #2aabee;
-    }
-  }
-
+  
   .cart {
     position: relative;
 
