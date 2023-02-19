@@ -198,7 +198,7 @@ export default function Header() {
             <ul className={styles.burger_menu} ref={elemBurgerMenu}>
               <li className={isUser ? styles.show : styles.hide}>
                 <i className="fa-solid fa-user"></i>&nbsp;
-                <span>{user.email}</span>
+                <span>{user.userName}</span>
               </li>
               <li>
                 <Link href="/">
