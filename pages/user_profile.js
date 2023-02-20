@@ -61,7 +61,7 @@ export default function userProfile() {
     setDelivery({ ...delivery, [name]: value })
   }
   
-  console.log(user)
+  
   return (
     <Layout title="User profile">
       <Navbar />
