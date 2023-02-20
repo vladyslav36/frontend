@@ -33,4 +33,4 @@ yarn-error.log*
 # vercel
 .vercel
 
-/config/index.js
+./config/index.js
