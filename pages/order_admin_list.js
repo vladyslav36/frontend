@@ -84,7 +84,7 @@ export default function OrderAdminList() {
                       <td title="Смотреть заказ">
                         <button onClick={() => openOrder(item)}>
                           <div className={styles.icon}>
-                            <i class="fa-regular fa-eye"></i>
+                            <i className="fa-regular fa-eye"></i>
                           </div>
                         </button>
                       </td>
@@ -93,7 +93,7 @@ export default function OrderAdminList() {
                           onClick={() => deleteOrder({ order: item, idx: i })}
                         >
                           <div className={styles.icon}>
-                            <i class="fa-solid fa-xmark"></i>
+                            <i className="fa-solid fa-xmark"></i>
                           </div>
                         </button>
                       </td>

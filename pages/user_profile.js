@@ -90,7 +90,10 @@ export default function userProfile() {
                 maxLength="12"
                 id="userPhone"
                 name="userPhone"
-                onChange={(e) => setUserPhone(e.target.value)}
+                onChange={(e) => {                 
+                  setUserPhone(e.target.value)
+                }
+                }
               />
             </div>
 

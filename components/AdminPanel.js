@@ -26,6 +26,9 @@ export default function AdminPanel() {
   const handleChange = (e) => {
     e.preventDefault()
     const { name, value } = e.target
+    if (isNaN(value)) {
+      return
+    }
     setValues({ ...values, [name]: value })
   }
   const handleSubmit = async (e) => {
