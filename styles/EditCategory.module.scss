@@ -1,0 +1,121 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding:0 10px;
+  .header{
+    padding:5px 0;
+  }
+}
+.list_wrapper {
+  max-height: 700px;
+  overflow: auto;
+}
+.item {
+  padding: 5px;
+  font-size: 15px;
+  background-color: #d7dbdd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:nth-child(2n) {
+    background-color: #e5e7e9;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.edit {
+  margin: 0 5px;
+  border: none;
+  font-size: 1rem;
+  padding: 5px;
+  color: steelblue;
+  background-color: inherit;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.delete {
+  margin: 0 5px;
+  border: none;
+  font-size: 1rem;
+  padding: 5px;
+  color: red;
+  background-color: inherit;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.linkButton {
+  border: none;
+  font-size: 1rem;
+  color: #3498db;
+  padding: 5px 0;
+  text-align: left;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.dialog {
+  margin: auto;
+  width: 320px;
+  height: 170px;
+  background-color: #fdfefe;
+  border: #888;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(3px);
+  }
+
+  &_wrapper {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 100px 70px;
+
+    & p {
+      grid-column: 1/3;
+      grid-row: 1/2;
+      letter-spacing: 1px;
+      justify-self: center;
+      align-self: center;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    div {
+      justify-self: center;
+      align-self: center;
+      font-size: 18px;
+      color: #fff;
+      padding: 5px 20px;
+      border-radius: 5px;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:nth-child(2) {
+        background-color: red;
+      }
+
+      &:nth-child(3) {
+        background-color: green;
+      }
+    }
+  }
+}

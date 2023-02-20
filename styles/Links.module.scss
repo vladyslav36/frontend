@@ -1,0 +1,13 @@
+.links {
+  display: flex;
+  width: 70px;
+  justify-content: space-between;
+  align-items: center;
+  color: steelblue;
+  div {
+    &:hover {
+      cursor: pointer;
+      color: darken($color: steelblue, $amount: 10);
+    }
+  }
+}

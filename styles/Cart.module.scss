@@ -1,0 +1,85 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.checkout {
+  display: flex;
+  align-items: center;
+
+  button {
+    font-size: 14px;
+    color: #fff;
+    padding: 3px 10px;
+    background-color: #196f3d;
+    border: 1px solid #888;
+    border-radius: 5px;
+    letter-spacing: 1px;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #1e8449;
+    }
+  }
+}
+
+.table {
+  padding: 5px 10px;
+  font-size: 14px;
+
+  table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+
+    tr {
+      border: 1px solid #888;
+    }
+
+    thead {
+      text-align: center;
+    }
+
+    td {
+      width: 100%;
+    }
+
+    .hide_col {
+      visibility: hidden;
+      width: 0;
+    }
+
+    tbody {
+      text-align: center;
+    }
+  }
+  &_bottom {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px;
+  }
+}
+
+.delete_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: red;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.15);
+  }
+}
+
+@media (max-width: 768px) {
+  .table table thead td:nth-child(1) {
+    width: 70px;
+  }
+  .table table thead td:nth-child(4) {
+    width: 70px;
+  }
+}

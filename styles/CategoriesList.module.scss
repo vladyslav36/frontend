@@ -1,0 +1,45 @@
+.content {
+  padding: 0 10px;
+  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.item {
+  justify-self: center;
+  color: #000;
+  width: 260px;
+  height: 90px;
+  border: 1px solid #999;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  line-height: 1.1;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #f8f9f9;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &_name {
+    display: flex;
+  }
+}
+
+.image {
+  border: 1px solid #888;
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+
+  img {
+    max-width: 50px;
+    max-height: 70px;
+  }
+}

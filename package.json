@@ -1,0 +1,37 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "prod_start": "next start -p 80"
+  },
+  "dependencies": {
+    "js-file-downloader": "^1.1.24",
+    "moment": "^2.29.4",
+    "next": "13.1.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.7.1",
+    "react-toastify": "^9.1.1",
+    "socket.io-client": "^4.6.0",
+    "uuid": "^9.0.0"
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vladyslav36/frontend.git"
+  },
+  "author": "vladyslav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vladyslav36/frontend/issues"
+  },
+  "homepage": "https://github.com/vladyslav36/frontend#readme",
+  "devDependencies": {
+    "sass": "^1.57.1"
+  }
+}
