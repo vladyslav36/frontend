@@ -20,8 +20,7 @@ export default function LoginBot({ elemDialog }) {
     setAuthKey(uuid().replace(/-/gi, ""))
   },[user])
 
-  socket.on("authkey", (arg) => {   
-    
+  socket.on("authkey", (arg) => {       
     setArg(arg)   
   })
 
