@@ -3,7 +3,7 @@ import styles from "@/styles/AccountForm.module.scss"
 import { useState, useEffect, useContext } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import router from "next/router"
+import  { useRouter } from "next/router"
 import { API_URL } from "@/config/index.js"
 import Links from "@/components/Links"
 import Navbar from "@/components/Navbar"
@@ -13,7 +13,7 @@ import AccessDenied from "@/components/AccessDenied"
 
 
 export default function userProfile() {
-  
+  const router=useRouter()
   const { user, setUser } = useContext(AuthContext)
   const [userPhone, setUserPhone] = useState("")
   const [delivery, setDelivery] = useState({
@@ -51,6 +51,7 @@ export default function userProfile() {
       return
     }
     setUser(newUser)
+    router.back()
   }
   const handleDelivery = (e) => {
     e.preventDefault()

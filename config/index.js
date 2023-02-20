@@ -7,3 +7,10 @@ export const UPOST_IMAGE='/delivery_logos/upost.png'
 export const NEW_POST_IMAGE='/delivery_logos/new_post.png'
 export const AUTOLUX_IMAGE = '/delivery_logos/autolux.png'
 
+// production
+// export const VIBER_BOT_URI='karmen_shop_bot'
+// export const TELEGRAM_BOT_URI = 'karmen_shop_bot'
+
+// development
+export const VIBER_BOT_URI='karmenshop'
+export const TELEGRAM_BOT_URI='karmenshop_bot'

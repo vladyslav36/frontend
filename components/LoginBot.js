@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css"
 import { io } from "socket.io-client"
 
 import React, { useContext, useEffect, useState } from "react"
-import { API_URL } from "../config"
+import { API_URL, TELEGRAM_BOT_URI, VIBER_BOT_URI } from "../config"
 import Link from "next/link"
 import AuthContext from "@/context/AuthContext"
 
@@ -20,7 +20,8 @@ export default function LoginBot({ elemDialog }) {
     setAuthKey(uuid().replace(/-/gi, ""))
   },[user])
 
-  socket.on("authkey", (arg) => {       
+  socket.on("authkey", (arg) => {   
+    
     setArg(arg)   
   })
 
@@ -54,7 +55,7 @@ export default function LoginBot({ elemDialog }) {
   
   
 
-  console.log(user)
+  
   return (
     <div className={styles.container}>
       <ToastContainer />
@@ -68,7 +69,7 @@ export default function LoginBot({ elemDialog }) {
       <h1>Авторизация</h1>
       <div className={styles.icons}>
         <Link
-          href={`viber://pa?chatURI=karmenshop&context=${authKey}`}
+          href={`viber://pa?chatURI=${VIBER_BOT_URI}&context=${authKey}`}
           target="_blank"
         >
           <div
@@ -79,7 +80,7 @@ export default function LoginBot({ elemDialog }) {
           </div>
         </Link>
         <Link
-          href={`https://t.me/karmenshop_bot?start=${authKey}`}
+          href={`https://t.me/${TELEGRAM_BOT_URI}?start=${authKey}`}
           target="_blank"
         >
           <div
