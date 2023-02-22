@@ -81,8 +81,8 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
           type="radio"
           name="radio_buttons"
           value="categories"
-          checked={catToggle==='categories'}
-          onChange={(e)=>setCatToggle(e.target.value) }
+          checked={catToggle === "categories"}
+          onChange={(e) => setCatToggle(e.target.value)}
         />
         <label htmlFor="categories" title="Показать категории">
           <h5>Категории</h5>
@@ -93,8 +93,8 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
           type="radio"
           name="radio_buttons"
           value="catalogs"
-        checked={catToggle==='catalogs'}
-          onChange={(e)=>setCatToggle(e.target.value)}
+          checked={catToggle === "catalogs"}
+          onChange={(e) => setCatToggle(e.target.value)}
         />
         <label htmlFor="catalogs" title="Показать каталоги">
           <h5>Каталоги</h5>
@@ -102,7 +102,7 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
       </div>
 
       <div className={styles.container}>
-        {catToggle==='categories' ? (
+        {catToggle === "categories" ? (
           categoriesList.length ? (
             <ul className={styles.list}>
               {categoriesList.map((item) => (
@@ -137,9 +137,9 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
                       ))}
                     </ul>
                   ) : null}
-                </li>                
+                </li>
               ))}
-              {fakeArray.map(item => (
+              {fakeArray.map((item) => (
                 <li className={styles.fakeItem}></li>
               ))}
             </ul>
@@ -179,6 +179,9 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
                   </ul>
                 ) : null}
               </li>
+            ))}
+            {fakeArray.map((item) => (
+              <li className={styles.fakeItem}></li>
             ))}
           </ul>
         ) : null}
