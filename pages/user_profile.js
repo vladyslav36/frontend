@@ -3,49 +3,50 @@ import styles from "@/styles/AccountForm.module.scss"
 import { useState, useEffect, useContext } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import  { useRouter } from "next/router"
+import { useRouter } from "next/router"
 import { API_URL } from "@/config/index.js"
 import Links from "@/components/Links"
 import Navbar from "@/components/Navbar"
 import AuthContext from "@/context/AuthContext"
 import AccessDenied from "@/components/AccessDenied"
-
-
+import { formatingPhone } from "utils"
 
 export default function userProfile() {
-  const router=useRouter()
+  const router = useRouter()
   const { user, setUser } = useContext(AuthContext)
   const [userPhone, setUserPhone] = useState("")
   const [delivery, setDelivery] = useState({
     name: "",
     surname: "",
-    phone: '',
+    phone: "",
     city: "",
     carrier: "",
     branch: "",
   })
-  
+
   useEffect(() => {
     if (Object.keys(user).length) {
       setUserPhone(user.phone)
-      const { name, surname, phone, carrier, branch,city } = user.delivery
+      const { name, surname, phone, carrier, branch, city } = user.delivery
 
-      setDelivery({ ...delivery, name, surname, phone, carrier, branch,city })
+      setDelivery({ ...delivery, name, surname, phone, carrier, branch, city })
     }
   }, [user])
+
+
   const submitHandler = async (e) => {
     e.preventDefault()
-    
+
     const res = await fetch(`${API_URL}/api/user`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${user.token}`
+        "Content-Type": "application/json",
+        authorization: `Bearer ${user.token}`,
       },
-      body:JSON.stringify({delivery,userPhone})
+      body: JSON.stringify({ delivery, userPhone }),
     })
     const newUser = await res.json()
-    
+
     if (!res.ok) {
       toast.error(newUser.message)
       return
@@ -57,11 +58,9 @@ export default function userProfile() {
     e.preventDefault()
     const { name, value } = e.target
 
-
     setDelivery({ ...delivery, [name]: value })
   }
-  
-  
+
   return (
     <Layout title="User profile">
       <Navbar />
@@ -87,13 +86,12 @@ export default function userProfile() {
               <input
                 type="text"
                 value={userPhone}
-                maxLength="12"
+                maxLength="15"
                 id="userPhone"
                 name="userPhone"
-                onChange={(e) => {                 
-                  setUserPhone(e.target.value)
-                }
-                }
+                onChange={(e) => {                  
+                  setUserPhone(formatingPhone(e.target.value))
+                }}
               />
             </div>
 
@@ -124,14 +122,13 @@ export default function userProfile() {
             </div>
             <div className={styles.input_wrapper}>
               <label htmlFor="phone">Телефон</label>
-              <input
-                type="text"  
-                
+              <input                
+                type="text"
                 value={delivery.phone}
-                                maxLength="12"
+                maxLength="15"
                 id="phone"
                 name="phone"
-                onChange={handleDelivery}
+                onChange={(e)=>setDelivery({ ...delivery, 'phone': formatingPhone(e.target.value) })}
               />
             </div>
             <div className={styles.input_wrapper}>
@@ -171,8 +168,8 @@ export default function userProfile() {
             <input type="submit" className="btn" value="Сохранить" />
           </form>
         </div>
-      ) : (        
-          <AccessDenied/>
+      ) : (
+        <AccessDenied />
       )}
     </Layout>
   )

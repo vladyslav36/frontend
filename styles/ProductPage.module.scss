@@ -116,6 +116,7 @@ $image-width: 500px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height:40px;
     .counter_wrapper {
       width: 150px;
       display: flex;
@@ -128,16 +129,41 @@ $image-width: 500px;
         text-align: center;
         height: 30px;
       }
-      i {
+      
+        
+        i {        
         color: #0e6655;
-        cursor: pointer;
+        cursor: pointer;        
       }
+      
+      
     }
     .choose_button {
       color: #0e6655;
       cursor: pointer;
       &:active {
         transform: scale(0.98);
+      }
+    }
+
+    .cart_button{
+      font-size:13px;
+      display:flex;
+      align-items: center; 
+      justify-content: center;     
+      padding:8px 35px;
+      border:none;
+      border-radius:10px;
+      background-color: #0e6655;
+      color:#FDFEFE;
+      cursor:pointer;
+      &:active{        
+        background-color: darken($color: #0e6655, $amount: 5);
+      }
+      
+      &.disable{
+        opacity: 0.5;
+        cursor:auto;
       }
     }
   }

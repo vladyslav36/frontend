@@ -33,8 +33,8 @@ export default function productPage({ slug, product: productDb }) {
     )
   )
 
-  const inputQnt = useRef()
-  const [chosen, setChosen] = useState([])
+  
+  
   const [sliderValues, setSliderValues] = useState({
     isShow: false,
     idx: 0,
@@ -43,6 +43,8 @@ export default function productPage({ slug, product: productDb }) {
   const [currentPrice, setCurrentPrice] = useState(product.price)
 
   const [mainImageIdx, setMainImageIdx] = useState(0)
+
+  const [cartBtnDisable, setCartBtnDisable] = useState(true)
 
   // Устанавливаем currentPrice. Если опционного нет, тогда без изменений, если есть-меняем на опционный
   // находим меняющуюся опцию, берем value из values и если оно есть берем price
@@ -57,56 +59,40 @@ export default function productPage({ slug, product: productDb }) {
     }
   }, [values])
 
-  const getTotalQnt = () => {
-    return chosen.reduce((acc, item) => acc + +item.qnt, 0)
-  }
-
-  const getTotalAmount = () => {
-    const result = chosen.reduce(
-      (acc, item) => Math.round((acc + item.price * item.qnt) * 100) / 100,
-      0
-    )
-    return result.toFixed(2)
+  useEffect(() => {
+    const options = Object.keys(values)
+    const isActive = options.every((item) => values[item])
+    if (isActive) {
+      setCartBtnDisable(false)
+    } else {
+      setCartBtnDisable(true)
+    }
+  }, [values])
+ 
+  const handleQnt = (e) => {
+    const number = +e.target.value
+    if (number === 0) {
+      setValues({ ...values, qnt: "" })
+      return
+    }
+    if (
+      !isNaN(number) &&
+      number > 0 &&
+      number < 999 &&
+      Number.isInteger(number)
+    ) {
+      setValues({ ...values, qnt: "" + number })
+    } else {
+      return
+    }
   }
 
   const handleCartClick = () => {
-    setCart([...cart, ...chosen])
-    setChosen([])
-  }
-
-  const addedValues = (e) => {
-    e.preventDefault()
+    if (cartBtnDisable) return
     const options = Object.keys(product.options)
-    let error = false
-    if (options.length) {
-      options.forEach((name) => {
-        if (!values[name]) {
-          toast.error(`Поле ${name} должно быть заполнено`)
-          error = true
-          return
-        }
-      })
-    }
-    if (error) return
-    if (!values.qnt) {
-      toast.error("Поле Количество должно быть заполнено")
-      return
-    }
-    if (+values.qnt <= 0 || +values.qnt > 999) {
-      toast.error("Количество должно быть больше нуля и меньше 1000")
-      setValues({ ...values, qnt: "" })
-      inputQnt.current.focus()
-      return
-    }
-    if (!Number.isInteger(+values.qnt)) {
-      toast.error("Количество должно быть целым числом")
-      setValues({ ...values, qnt: "" })
-      inputQnt.current.focus()
-      return
-    }
-
-    setChosen([
-      ...chosen,
+    
+    setCart([
+      ...cart,
       {
         name: product.name,
         options: options.length
@@ -121,22 +107,30 @@ export default function productPage({ slug, product: productDb }) {
       },
     ])
     clearValues()
+    
   }
 
-  const decQnt = () => {
-    if (Number.isInteger(+values.qnt) && +values.qnt > 0) {
-      setValues({ ...values, qnt: "" + (+values.qnt - 1) })
+    const decQnt = () => {
+    const number = +values.qnt - 1
+    if (number > 0) {
+      setValues({ ...values, qnt: "" + number })
     } else {
-      toast.warning("Количество должно быть целым числом больше нуля")
+      if (number === 0) {
+        setValues({ ...values, qnt: "" })
+      } else {
+        return
+      }
     }
   }
   const incQnt = () => {
-    if (Number.isInteger(+values.qnt) && +values.qnt >= 0) {
-      setValues({ ...values, qnt: "" + (+values.qnt + 1) })
+    const number = +values.qnt + 1
+    if (number <1000) {
+      setValues({ ...values, qnt: "" + number })
     } else {
-      toast.warning("Количество должно быть целым числом больше нуля")
+      return
     }
   }
+
   const clearValues = () => {
     setValues(
       Object.assign(
@@ -149,9 +143,7 @@ export default function productPage({ slug, product: productDb }) {
     )
   }
 
-  const handleDelete = (num) => {
-    setChosen(chosen.filter((item, i) => i !== num))
-  }
+ 
   // ld+json for SEO
   const schemaData = {
     "@context": "http://www.schema.org",
@@ -221,15 +213,15 @@ export default function productPage({ slug, product: productDb }) {
               <div>
                 <div>
                   <h5>Бренд:</h5>
-                  <p>{product.brandId?product.brandId.name:''}</p>
+                  <p>{product.brandId ? product.brandId.name : ""}</p>
                 </div>
                 <div>
                   <h5>Категория:</h5>
-                  <p>{product.categoryId?product.categoryId.name:''}</p>
+                  <p>{product.categoryId ? product.categoryId.name : ""}</p>
                 </div>
                 <div>
                   <h5>Каталог:</h5>
-                  <p>{product.catalogId?product.catalogId.name:''}</p>
+                  <p>{product.catalogId ? product.catalogId.name : ""}</p>
                 </div>
                 <div>
                   <h5>Модель:</h5>
@@ -268,6 +260,7 @@ export default function productPage({ slug, product: productDb }) {
             <div className={styles.counter_cart_wrapper}>
               <div className={styles.counter_wrapper}>
                 <i
+                  style={{ lineHeight: "0" }}
                   className="fa-solid fa-square-minus fa-2xl"
                   onClick={decQnt}
                 ></i>
@@ -275,103 +268,29 @@ export default function productPage({ slug, product: productDb }) {
                   type="text"
                   className={styles.counter}
                   value={values.qnt}
-                  onChange={(e) =>
-                    setValues({ ...values, qnt: e.target.value })
-                  }
+                  onChange={handleQnt}
                 />{" "}
                 <i
+                  style={{ lineHeight: "0" }}
                   className="fa-solid fa-square-plus fa-2xl"
                   onClick={incQnt}
                 ></i>
               </div>
 
-              <div
-                className={styles.choose_button}
-                onClick={addedValues}
-                title="Выбрать"
+             
+              <div onClick={handleCartClick}
+                className={
+                  styles.cart_button +
+                  " " +
+                  (cartBtnDisable ? styles.disable : "")
+                } 
               >
-                <i className="fa-solid fa-circle-down fa-2x"></i>
-              </div>
-              <div
-                className={styles.add_cart_icon}
-                onClick={handleCartClick}
-                title="Добавить в корзину"
-              >
-                <i className="fa-solid fa-cart-arrow-down fa-2xl"></i>
+                <p>В корзину</p>
               </div>
             </div>
+       
 
-            <div className={styles.table}>
-              <table>
-                <caption>Выбрано товаров</caption>
-                <thead>
-                  <tr>
-                    {Object.keys(product.options).length
-                      ? Object.keys(product.options).map((item, i) => (
-                          <th key={i}>{item}</th>
-                        ))
-                      : null}
-
-                    <th>Кол-во</th>
-                    <th>
-                      Цена&nbsp;{getCurrencySymbol(product.currencyValue)}
-                    </th>
-                    <th className={styles.flex}>
-                      <div className={styles.icon_wrapper}>
-                        <div
-                          className={styles.icon}
-                          onClick={() => setChosen([])}
-                          title="Удалить все выбранные товары"
-                        >
-                          <i className="fa-solid fa-xmark fa-lg"></i>
-                        </div>
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {chosen.length ? (
-                    chosen.map((item, i) => (
-                      <tr key={i}>
-                        {Object.keys(product.options).length
-                          ? Object.keys(product.options).map((opt, i) => (
-                              <td key={i}>{item.options[opt]}</td>
-                            ))
-                          : null}
-                        <td>{item.qnt}</td>
-                        <td>{item.price}</td>
-                        <td className={styles.flex}>
-                          <div className={styles.icon_wrapper}>
-                            <div className={styles.icon} onClick={() => handleDelete(i)} title='Удалить строку' >
-                              <i className="fa-solid fa-xmark fa-lg"></i>
-                            </div>                            
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td>&nbsp;</td>
-                    </tr>
-                  )}
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colSpan="6">
-                      <div className={styles.footer_wrapper}>
-                        <p>Всего товаров {getTotalQnt()}</p>
-                        <p>
-                          На сумму {getTotalAmount()}&nbsp;
-                          {getCurrencySymbol(product.currencyValue)}
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
           </div>
-
         </div>
         {product.description ? (
           <div>

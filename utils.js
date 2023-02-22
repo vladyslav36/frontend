@@ -148,6 +148,37 @@ export const getListForCatalogsMenu = (catArray) => {
   return list
 }
 
+export const formatingPhone = (number) => {
+   const digit = number.replace(/[^\d]/g, "")
+   const numberLength = digit.length
+   let rez = ""
+   if (!numberLength) {
+     rez = digit
+   } else {
+     if (numberLength < 4) {
+       rez = digit.slice(0, 3)
+     } else {
+       if (numberLength < 7) {
+         rez = `(${digit.slice(0, 3)}) ${digit.slice(3, 6)}`
+       } else {
+         if (numberLength < 9) {
+           rez = `(${digit.slice(0, 3)}) ${digit.slice(3, 6)}-${digit.slice(
+             6,
+             8
+           )}`
+         } else {
+           if (numberLength >= 9) {
+             rez = `(${digit.slice(0, 3)}) ${digit.slice(3, 6)}-${digit.slice(
+               6,
+               8
+             )}-${digit.slice(8, 10)}`
+           }
+         }
+       }
+     }
+   }
+   return rez
+}
 
 export const addRiple = (e) => {
   const circle = document.createElement("span")
