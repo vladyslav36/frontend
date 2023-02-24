@@ -16,7 +16,9 @@ export default function categoryPage({ category, categories }) {
   const router = useRouter()
 
   const childrenList = category
-    ? categories.filter((item) => item.parentId === category._id).sort((a,b)=>a.name>b.name?1:-1)
+    ? categories
+        .filter((item) => item.parentId === category._id)
+        .sort((a, b) => (a.name > b.name ? 1 : -1))
     : []
 
   // ld+json for SEO
@@ -37,7 +39,7 @@ export default function categoryPage({ category, categories }) {
           `${API_URL}/api/products/category/${category._id}`
         )
         const { products } = await res.json()
-        setProductList(products.sort((a,b)=>a.name>b.name?1:-1))
+        setProductList(products.sort((a, b) => (a.name > b.name ? 1 : -1)))
       }
 
       fetchProduct()
@@ -112,7 +114,7 @@ export default function categoryPage({ category, categories }) {
               {category.catalog ? (
                 <Link href={`${API_URL}${category.catalog}`} target="_blank">
                   <div>
-                    <p className={styles.icon_catalog}>                      
+                    <p className={styles.icon_catalog}>
                       <i className="fa-solid fa-file-pdf fa-xl"></i>
                     </p>
                     <p>Каталог</p>
