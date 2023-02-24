@@ -105,10 +105,11 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
         {catToggle === "categories" ? (
           categoriesList.length ? (
             <ul className={styles.list}>
-              {categoriesList.map((item) => (
+              {categoriesList.map((item,i) => (
                 <li
+                  
                   className={styles.category}
-                  key={item.cat._id}
+                  key={i}
                   onClick={(e) => {
                     e.stopPropagation()
                     router.push(`/category/${item.cat._id}`)
@@ -124,13 +125,14 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
                         (isShowRight ? styles.right_side : styles.left_side)
                       }
                     >
-                      {item.children.map((child) => (
+                      {item.children.map((child,i) => (
                         <li
+                          
                           onClick={(e) => {
                             e.stopPropagation()
                             router.push(`/category/${child._id}`)
                           }}
-                          key={child._id}
+                          key={i}
                         >
                           {child.name}&nbsp;({child.qntProducts})
                         </li>
@@ -139,17 +141,17 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
                   ) : null}
                 </li>
               ))}
-              {fakeArray.map((item) => (
-                <li className={styles.fakeItem}></li>
+              {fakeArray.map((item,i) => (
+                <li className={styles.fakeItem} key={i}></li>
               ))}
             </ul>
           ) : null
         ) : catalogsList.length ? (
           <ul className={styles.list}>
-            {catalogsList.map((item) => (
+            {catalogsList.map((item,i) => (
               <li
                 className={styles.category}
-                key={item.cat._id}
+                key={i}
                 onClick={(e) => {
                   e.stopPropagation()
                   router.push(`/catalog/${item.cat._id}`)
@@ -165,13 +167,13 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
                       (isShowRight ? styles.right_side : styles.left_side)
                     }
                   >
-                    {item.children.map((child) => (
+                    {item.children.map((child,i) => (
                       <li
                         onClick={(e) => {
                           e.stopPropagation()
                           router.push(`/catalog/${child._id}`)
                         }}
-                        key={child._id}
+                        key={i}
                       >
                         {child.name}&nbsp;({child.qntProducts})
                       </li>
@@ -180,8 +182,8 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
                 ) : null}
               </li>
             ))}
-            {fakeArray.map((item) => (
-              <li className={styles.fakeItem}></li>
+            {fakeArray.map((item,i) => (
+              <li className={styles.fakeItem} key={i}></li>
             ))}
           </ul>
         ) : null}

@@ -45,7 +45,7 @@
   margin: 0 0 5px 0;
   background: linear-gradient(180deg, #d6eaf8, #d4e6f1);
   color: #000;
-  padding:10px;
+  padding: 10px;
   border-radius: 5px;
   font-size: 15px;
   line-height: 1.1;
@@ -54,10 +54,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;    
-    .fakeItem{
-      height:0px;
-      width:50px;
+    flex-wrap: wrap;
+    .fakeItem {
+      height: 0px;
+      width: 50px;
     }
   }
 }

@@ -260,7 +260,7 @@ export default function productPage({ slug, product: productDb }) {
             <div className={styles.counter_cart_wrapper}>
               <div className={styles.counter_wrapper}>
                 <i
-                  style={{ lineHeight: "0" }}
+                  
                   className="fa-solid fa-square-minus fa-2xl"
                   onClick={decQnt}
                 ></i>
@@ -271,7 +271,7 @@ export default function productPage({ slug, product: productDb }) {
                   onChange={handleQnt}
                 />{" "}
                 <i
-                  style={{ lineHeight: "0" }}
+                  
                   className="fa-solid fa-square-plus fa-2xl"
                   onClick={incQnt}
                 ></i>

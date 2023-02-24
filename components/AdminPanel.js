@@ -82,10 +82,10 @@ export default function AdminPanel() {
           <div className={styles.container_item}>
             Товар
             <ul className={styles.dropdown_list}>
-              <Link href="add_product">
+              <Link href="/add_product">
                 <li>Добавить</li>
               </Link>
-              <Link href="edit_product">
+              <Link href="/edit_product">
                 <li>Редактировать</li>
               </Link>
             </ul>
@@ -124,12 +124,18 @@ export default function AdminPanel() {
             </form>
           </div>
          
-          <Link href="order_admin_list">
+          <Link href="/order_admin_list">
             <div className={styles.single_link}>
               <div className={styles.container_item}>Заказы</div>
             </div>
           </Link>
-          <Link href="edit_information">
+          <Link href="/users_list">
+            <div className={styles.single_link}>
+              <div className={styles.container_item}>Пользователи</div>
+            </div>
+          </Link>
+
+          <Link href="/edit_information">
             <div className={styles.single_link}>
               <div className={styles.container_item}>Информация</div>
             </div>
