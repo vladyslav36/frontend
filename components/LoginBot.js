@@ -14,15 +14,22 @@ export default function LoginBot({ elemDialog }) {
   const [authMethod, setAuthMethod] = useState("")
   const { setUser, user } = useContext(AuthContext)
   const [arg, setArg] = useState()
-  const socket = io(API_URL, { transports: ["websocket"] })
+  
 
+  useEffect(() => {
+    const socket = io(API_URL, { transports: ["websocket"] })
+    socket.on("authkey", (arg) => {       
+    setArg(arg)   
+  })
+      return () => {
+        socket.disconnect()
+      }
+  },[])
   useEffect(() => {
     setAuthKey(uuid().replace(/-/gi, ""))
   },[user])
 
-  socket.on("authkey", (arg) => {       
-    setArg(arg)   
-  })
+  
 
   useEffect(() => {
     const login = async () => {
