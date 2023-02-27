@@ -14,8 +14,8 @@ export default function Navbar({
   const [categories, setCategories] = useState([])
   const [catalogs, setCatalogs] = useState([])
 
-  // const fakeArray = Array(20)
-  // fakeArray.fill("")
+  const fakeArray = Array(20)
+  fakeArray.fill("")
 
   useEffect(() => {
     const fetcher = async () => {
@@ -141,9 +141,9 @@ export default function Navbar({
                   ) : null}
                 </div>
               ))}
-              {/* {fakeArray.map((item, i) => (
+              {fakeArray.map((item, i) => (
                 <div className={styles.fakeItem} key={i}></div>
-              ))} */}
+              ))}
             </div>
           ) : null
         ) : catalogsList.length ? (

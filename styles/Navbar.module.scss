@@ -51,15 +51,16 @@
   line-height: 1.1;
   .list {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
     .fakeItem {
       height: 0px;
-      width: 50px;
+      width: 130px;
     }
     .category_wrapper {
-      position: relative;      
+      position: relative;  
+      width:130px;    
       &:hover {
         cursor: pointer;
 
@@ -71,7 +72,9 @@
       }
 
       .category {
+        
         display: flex;
+        justify-content: center;
         color:#fff;
         background-color: #21618C;
         flex-wrap: nowrap;
@@ -79,6 +82,7 @@
         margin: 5px;
         border: 1px solid #546e7a;
         border-radius: 2px;
+        overflow:hidden;
         box-shadow: 1px 1px 1px rgba(131, 145, 146, 0.5);
 
         &:hover {
