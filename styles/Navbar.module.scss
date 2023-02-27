@@ -56,11 +56,11 @@
     flex-wrap: wrap;
     .fakeItem {
       height: 0px;
-      width: 130px;
+      width: 110px;
     }
     .category_wrapper {
       position: relative;  
-      width:130px;    
+      width:110px;    
       &:hover {
         cursor: pointer;
 
@@ -78,7 +78,7 @@
         color:#fff;
         background-color: #21618C;
         flex-wrap: nowrap;
-        padding: 5px 10px;
+        padding: 5px;
         margin: 5px;
         border: 1px solid #546e7a;
         border-radius: 2px;
