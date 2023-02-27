@@ -72,7 +72,8 @@
 
       .category {
         display: flex;
-        
+        color:#fff;
+        background-color: #21618C;
         flex-wrap: nowrap;
         padding: 5px 10px;
         margin: 5px;
@@ -82,6 +83,7 @@
 
         &:hover {
           background-color: lightblue;
+          color:#333;
         }
         &:active {
           box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.2);
