@@ -17,8 +17,8 @@ const getCatTree = (category, categories) => {
 export default function testPage({ categories }) {
   return (
     <ul>
-      {categories.map((category) => (
-        <li key={category._id}>
+      {categories.map((category,i) => (
+        <li key={i}>
           {" "}
           <p>{getCatTree(category, categories)}</p>
         </li>

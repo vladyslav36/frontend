@@ -121,9 +121,9 @@ const listForMenu=getListForCatalogsMenu(catalogs)
                   </div>
                   <ul className={styles.drop_down_list}>
                     {listForMenu.length
-                      ? listForMenu.map((item) => (
+                      ? listForMenu.map((item,i) => (
                           <li
-                            key={item.cat._id}
+                            key={i}
                             onClick={() => {
                               setValues({
                                 ...values,

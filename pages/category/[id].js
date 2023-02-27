@@ -147,6 +147,7 @@ export async function getServerSideProps({ params: { id } }) {
       notFound: true,
     }
   }
+ 
   return {
     props: {
       categories,

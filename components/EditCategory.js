@@ -203,9 +203,9 @@ export default function EditCategory({
                 </div>
                 <ul className={styles.dropdown_menu}>
                   {listForMenu &&
-                    listForMenu.map((item) => (
+                    listForMenu.map((item,i) => (
                       <li
-                        key={item.cat._id}
+                        key={i}
                         onClick={() =>
                           handleListClick({
                             id: item.cat._id,

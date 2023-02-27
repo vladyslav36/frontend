@@ -62,8 +62,8 @@ export default function usersList() {
               </thead>
               <tbody>
                 {users.length ? (
-                  users.map((item, key) => (
-                    <tr key={key}>
+                  users.map((item, i) => (
+                    <tr key={i}>
                       <td>{item.userName}</td>
                       <td>{item.phone}</td>
                       <td>{item.delivery.name}</td>

@@ -236,9 +236,9 @@ export default function EditProduct({
                 <ul className={styles.dropdown_menu}>
                   {listForCategoryMenu && (
                     <>
-                      {listForCategoryMenu.map((item) => (
+                      {listForCategoryMenu.map((item,i) => (
                         <li
-                          key={item.cat._id}
+                          key={i}
                           onClick={() => handleListClick(item.cat)}
                         >
                           {item.tree}
@@ -269,9 +269,9 @@ export default function EditProduct({
                 <ul className={styles.dropdown_menu}>
                   {listForCatalogMenu && (
                     <>
-                      {listForCatalogMenu.map((item) => (
+                      {listForCatalogMenu.map((item,i) => (
                         <li
-                          key={item.cat._id}
+                          key={i}
                           onClick={() =>
                             setValues({
                               ...values,

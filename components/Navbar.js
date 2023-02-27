@@ -4,10 +4,7 @@ import { useRouter } from "next/router"
 import { API_URL } from "../config"
 import ProductsContext from "@/context/ProductsContext"
 
-export default function Navbar({
-  categories: categoriesProps,
-  catalogs: catalogsProps,
-}) {
+export default function Navbar() {
   const { catToggle, setCatToggle } = useContext(ProductsContext)
   const router = useRouter()
   const [isShowRight, setIsShowRight] = useState(false)
@@ -25,11 +22,8 @@ export default function Navbar({
         setCategories(categories)
       }
     }
-    if (categoriesProps) {
-      setCategories(categoriesProps)
-    } else {
-      fetcher()
-    }
+
+    fetcher()
   }, [])
 
   useEffect(() => {
@@ -40,11 +34,8 @@ export default function Navbar({
         setCatalogs(catalogs)
       }
     }
-    if (catalogsProps) {
-      setCatalogs(catalogsProps)
-    } else {
-      fetcher()
-    }
+
+    fetcher()
   }, [])
 
   const getChildren = (cat, catArray) => {
@@ -106,10 +97,9 @@ export default function Navbar({
           categoriesList.length ? (
             <div className={styles.list}>
               {categoriesList.map((item, i) => (
-                <div className={styles.category_wrapper}>
+                <div className={styles.category_wrapper} key={i}>
                   <div
                     className={styles.category}
-                    key={i}
                     onClick={(e) => {
                       e.stopPropagation()
                       router.push(`/category/${item.cat._id}`)
@@ -149,10 +139,9 @@ export default function Navbar({
         ) : catalogsList.length ? (
           <div className={styles.list}>
             {catalogsList.map((item, i) => (
-              <div className={styles.category_wrapper}>
+              <div className={styles.category_wrapper} key={i}>
                 <div
                   className={styles.category}
-                  key={i}
                   onClick={(e) => {
                     e.stopPropagation()
                     router.push(`/catalog/${item.cat._id}`)
