@@ -4,17 +4,19 @@ import { useRouter } from "next/router"
 import { API_URL } from "../config"
 import ProductsContext from "@/context/ProductsContext"
 
-export default function Navbar({ categories: categoriesProps, catalogs: catalogsProps }) {
-
-  const { catToggle, setCatToggle } = useContext(ProductsContext)  
+export default function Navbar({
+  categories: categoriesProps,
+  catalogs: catalogsProps,
+}) {
+  const { catToggle, setCatToggle } = useContext(ProductsContext)
   const router = useRouter()
-  const [isShowRight, setIsShowRight] = useState(false)  
+  const [isShowRight, setIsShowRight] = useState(false)
   const [categories, setCategories] = useState([])
-  const [catalogs, setCatalogs] = useState([]) 
+  const [catalogs, setCatalogs] = useState([])
 
-  const fakeArray=Array(20)
-  fakeArray.fill('')
-  
+  const fakeArray = Array(20)
+  fakeArray.fill("")
+
   useEffect(() => {
     const fetcher = async () => {
       const res = await fetch(`${API_URL}/api/categories`)
@@ -48,8 +50,7 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
   const getChildren = (cat, catArray) => {
     return catArray.filter((item) => item.parentId === cat._id)
   }
-  
- 
+
   // Вычисление с какой стороны показывать выпадающий список справа или слева
   const getSpace = (e) => {
     const rightSpace = window.innerWidth - e.target.getBoundingClientRect().x
@@ -68,8 +69,7 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
           ),
         }
       })
-    
-  
+
   const categoriesList = getCatList(categories)
   const catalogsList = getCatList(catalogs)
 
@@ -104,30 +104,30 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
       <div className={styles.container}>
         {catToggle === "categories" ? (
           categoriesList.length ? (
-            <ul className={styles.list}>
-              {categoriesList.map((item,i) => (
-                <li
-                  
-                  className={styles.category}
-                  key={i}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    router.push(`/category/${item.cat._id}`)
-                  }}
-                  onMouseEnter={(e) => getSpace(e)}
-                >
-                  <p>{item.cat.name}</p>
+            <div className={styles.list}>
+              {categoriesList.map((item, i) => (
+                <div className={styles.category_wrapper}>
+                  <div
+                    className={styles.category}
+                    key={i}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      router.push(`/category/${item.cat._id}`)
+                    }}
+                    onMouseEnter={(e) => getSpace(e)}
+                  >
+                    <p>{item.cat.name}</p>
+                  </div>
                   {item.children.length ? (
-                    <ul
+                    <div
                       className={
                         styles.drop_down_list +
                         " " +
                         (isShowRight ? styles.right_side : styles.left_side)
                       }
                     >
-                      {item.children.map((child,i) => (
-                        <li
-                          
+                      {item.children.map((child, i) => (
+                        <div
                           onClick={(e) => {
                             e.stopPropagation()
                             router.push(`/category/${child._id}`)
@@ -135,40 +135,42 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
                           key={i}
                         >
                           {child.name}&nbsp;({child.qntProducts})
-                        </li>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   ) : null}
-                </li>
+                </div>
               ))}
-              {fakeArray.map((item,i) => (
-                <li className={styles.fakeItem} key={i}></li>
+              {fakeArray.map((item, i) => (
+                <div className={styles.fakeItem} key={i}></div>
               ))}
-            </ul>
+            </div>
           ) : null
         ) : catalogsList.length ? (
-          <ul className={styles.list}>
-            {catalogsList.map((item,i) => (
-              <li
-                className={styles.category}
-                key={i}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  router.push(`/catalog/${item.cat._id}`)
-                }}
-                onMouseEnter={(e) => getSpace(e)}
-              >
-                <span>{item.cat.name}</span>
+          <div className={styles.list}>
+            {catalogsList.map((item, i) => (
+              <div className={styles.category_wrapper}>
+                <div
+                  className={styles.category}
+                  key={i}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    router.push(`/catalog/${item.cat._id}`)
+                  }}
+                  onMouseEnter={(e) => getSpace(e)}
+                >
+                  <p>{item.cat.name}</p>
+                </div>
                 {item.children.length ? (
-                  <ul
+                  <div
                     className={
                       styles.drop_down_list +
                       " " +
                       (isShowRight ? styles.right_side : styles.left_side)
                     }
                   >
-                    {item.children.map((child,i) => (
-                      <li
+                    {item.children.map((child, i) => (
+                      <div
                         onClick={(e) => {
                           e.stopPropagation()
                           router.push(`/catalog/${child._id}`)
@@ -176,16 +178,16 @@ export default function Navbar({ categories: categoriesProps, catalogs: catalogs
                         key={i}
                       >
                         {child.name}&nbsp;({child.qntProducts})
-                      </li>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 ) : null}
-              </li>
+              </div>
             ))}
-            {fakeArray.map((item,i) => (
-              <li className={styles.fakeItem} key={i}></li>
+            {fakeArray.map((item, i) => (
+              <div className={styles.fakeItem} key={i}></div>
             ))}
-          </ul>
+          </div>
         ) : null}
       </div>
     </>
