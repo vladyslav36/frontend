@@ -51,7 +51,7 @@
   line-height: 1.1;
   .list {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
     .fakeItem {
@@ -59,7 +59,7 @@
       width: 50px;
     }
     .category_wrapper {
-      position: relative;
+      position: relative;      
       &:hover {
         cursor: pointer;
 
@@ -72,6 +72,7 @@
 
       .category {
         display: flex;
+        
         flex-wrap: nowrap;
         padding: 5px 10px;
         margin: 5px;
@@ -101,6 +102,7 @@
         color: #000;
         border: 1px solid #ccd1d1;
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+       
 
         &.right_side {
           right: 0;
@@ -109,7 +111,7 @@
           left: 0;
         }
         div {
-          padding: 3px 10px;
+          padding: 5px 10px;
           &:nth-child(2n-1) {
             background-color: darken($color: #fbfcfc, $amount: 5);
           }
