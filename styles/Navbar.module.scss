@@ -112,3 +112,8 @@
     }
   }
 }
+@media(max-width:586px){
+ .category:hover .drop_down_list{
+  display:none;
+ }
+}
