@@ -6,7 +6,7 @@ import ProductsContext from "@/context/ProductsContext"
 import { useContext, useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { getQntInCart, getTotalAmount } from "utils"
+import { formatingPhone, getQntInCart, getTotalAmount } from "utils"
 import { API_URL } from "../config"
 
 export default function Checkout() {
@@ -124,8 +124,9 @@ export default function Checkout() {
               type="text"
               id="phone"
               name="phone"
+              maxLength='15'
               value={values.phone}
-              onChange={handleChange}
+              onChange={(e)=>setValues({...values,'phone':formatingPhone(e.target.value)})}
             />
           </div>
           <div className={styles.input}>

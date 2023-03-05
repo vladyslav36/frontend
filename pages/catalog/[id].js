@@ -46,7 +46,7 @@ export default function catalogPage({ catalog, catalogs }) {
 
   return (
     <Layout
-      title={`Категория ${Object.keys(catalog).length ? catalog.name : ""}`}
+      title={`Каталог ${Object.keys(catalog).length ? catalog.name : ""}`}
       description={Object.keys(catalog).length ? catalog.description : ""}
     >
       <Navbar catalogs={catalogs} />
