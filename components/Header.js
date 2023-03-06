@@ -8,7 +8,7 @@ import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import Loupe from "./Loupe"
 import { toast } from "react-toastify"
 import { useRouter } from "next/router"
-import LoginBot from "./LoginBot"
+
 
 export default function Header() {
   const { setUser, user } = useContext(AuthContext)
@@ -23,7 +23,7 @@ export default function Header() {
   const [products, setProducts] = useState([])
   const elemMainUserMenu = useRef()
   const elemBurgerMenu = useRef()
-  const elemDialog = useRef()  
+  
   const isUser = Object.keys(user).length === 0 ? false : true
 
   const handleChange = (e) => {
@@ -151,7 +151,8 @@ export default function Header() {
               <div
                 onClick={() => {
                   elemMainUserMenu.current.classList.remove(styles.show)
-                  elemDialog.current.showModal()
+                 
+                  router.push('/login')
                 }}
               >
                 <span>Войти</span>
@@ -219,7 +220,8 @@ export default function Header() {
                 <div
                   onClick={() => {
                     elemBurgerMenu.current.classList.remove(styles.show)
-                    elemDialog.current.showModal()
+                    
+                    router.push('/login')
                   }}
                 >
                   <p>Войти</p>
@@ -302,9 +304,7 @@ export default function Header() {
         </div>
       </div>
       {isShowLoupe ? <Loupe setIsShow={setIsShowLoupe} image={image} /> : null}      
-      <dialog className={styles.dialog} ref={elemDialog}>
-        <LoginBot elemDialog={elemDialog } />
-      </dialog>
+     
     </div>
   )
 }
