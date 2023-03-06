@@ -4,12 +4,12 @@ import ProductsContext from "@/context/ProductsContext"
 import Layout from "@/components/Layout"
 import { getCurrencySymbol, getQntInCart,getTotalAmount } from "utils"
 import Links from "@/components/Links"
-import router from "next/router"
+import {useRouter} from "next/router"
 
 
 export default function Cart() {
   const { cart, setCart } = useContext(ProductsContext)  
-
+const router=useRouter()
   // optionList собирает все возможные опции из корзины  
   const optionList = cart.length ? (cart.reduce((acc, item) => {
     const itemOptions = Object.keys(item.options)
