@@ -22,8 +22,6 @@ export default function OrderUserList() {
     }
     if (Object.keys(user).length) {
       fetchOrdersById()
-    } else {
-      router.push("/404")
     }
   }, [user])
   const router = useRouter()
@@ -36,37 +34,40 @@ export default function OrderUserList() {
 
   return (
     <Layout title="Список заказов">
-      
       <div className={styles.container}>
         <Links home={true} back={true} />
-        <div className={styles.table}>
-          <table>
-            <thead>
-              <tr>
-                <th>№</th>
-                <th>Дата</th>
-                <th>Общая сумма</th>
-                <th>&nbsp;</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.length
-                ? orders.map((item, i) => (
-                    <tr key={i}>
-                      <td>{item.count}</td>
-                      <td>{moment(Date.parse(item.createdAt)).format("L")}</td>
-                      <td>{item.totalAmount}</td>
-                      <td title="Смотреть заказ">
-                        <button onClick={() => openOrder(item)}>
-                          <i className="fa-regular fa-eye"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                : null}
-            </tbody>
-          </table>
-        </div>
+        {Object.keys(user).length ? (
+          <div className={styles.table}>
+            <table>
+              <thead>
+                <tr>
+                  <th>№</th>
+                  <th>Дата</th>
+                  <th>Общая сумма</th>
+                  <th>&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.length
+                  ? orders.map((item, i) => (
+                      <tr key={i}>
+                        <td>{item.count}</td>
+                        <td>
+                          {moment(Date.parse(item.createdAt)).format("L")}
+                        </td>
+                        <td>{item.totalAmount}</td>
+                        <td title="Смотреть заказ">
+                          <button onClick={() => openOrder(item)}>
+                            <i className="fa-regular fa-eye"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  : null}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
       </div>
     </Layout>
   )

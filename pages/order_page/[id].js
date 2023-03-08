@@ -29,8 +29,6 @@ export default function orderPage() {
     }
     if (Object.keys(user).length) {
       fetchOrderById(id)
-    } else {
-      router.push("/404")
     }
   }, [user])
   moment.locale("ru")
@@ -39,7 +37,7 @@ export default function orderPage() {
     <Layout title="Страница заказа">      
       <div className={styles.container}>
         <Links home={true} back={true} />
-        {Object.keys(order).length ? (
+        {Object.keys(order).length&&Object.keys(user).length ? (
           <div className={styles.container}>
             <h4>
               Заказ № {order.count} от{" "}
