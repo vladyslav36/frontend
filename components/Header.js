@@ -27,7 +27,7 @@ export default function Header() {
 
   const handleChange = (e) => {
     e.preventDefault()
-    const string = e.target.value
+    const string = e.target.value.replace(/[^A-Za-zА-Яа-я 0-9]/g,'')
     setSearchString(string)
     clearTimeout(delayTimer)
     setDelayTimer(
@@ -73,6 +73,7 @@ export default function Header() {
             type="text"
             value={searchString}
             onChange={handleChange}
+            maxLength='40'
             title="Поиск по модели или артикулу"
           />
           <p>
