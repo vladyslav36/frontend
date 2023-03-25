@@ -104,6 +104,7 @@ export default function Checkout() {
               type="text"
               id="name"
               name="name"
+              maxLength="20"
               value={values.name}
               onChange={handleChange}
             />
@@ -114,6 +115,7 @@ export default function Checkout() {
               type="text"
               id="surname"
               name="surname"
+              maxLength="20"
               value={values.surname}
               onChange={handleChange}
             />
@@ -124,9 +126,11 @@ export default function Checkout() {
               type="text"
               id="phone"
               name="phone"
-              maxLength='15'
+              maxLength="15"
               value={values.phone}
-              onChange={(e)=>setValues({...values,'phone':formatingPhone(e.target.value)})}
+              onChange={(e) =>
+                setValues({ ...values, phone: formatingPhone(e.target.value) })
+              }
             />
           </div>
           <div className={styles.input}>
@@ -163,6 +167,7 @@ export default function Checkout() {
                 <input
                   type="text"
                   name="city"
+                  maxLength="20"
                   value={values.city}
                   onChange={handleChange}
                 />
@@ -172,6 +177,7 @@ export default function Checkout() {
                 <input
                   type="text"
                   name="carrier"
+                  maxLength="20"
                   value={values.carrier}
                   onChange={handleChange}
                 />
@@ -181,6 +187,7 @@ export default function Checkout() {
                 <input
                   type="text"
                   name="branch"
+                  maxLength="20"
                   value={values.branch}
                   onChange={handleChange}
                 />
