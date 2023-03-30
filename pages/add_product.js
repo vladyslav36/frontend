@@ -41,7 +41,7 @@ export default function addProductPage({ categories, catalogs }) {
   })
 
   const [images, setImages] = useState([])
-
+  const [brand, setBrand] = useState({})
   const listForCategoryMenu = getListForCategoriesMenu(categories)
   const listForCatalogMenu = getListForCatalogsMenu(catalogs)
 
@@ -50,15 +50,18 @@ export default function addProductPage({ categories, catalogs }) {
   const elDialog = useRef()
   const router = useRouter()
  
+ 
 
-  useEffect(() => {
-    if (!values.categoryId)
-      setValues({ ...values, options: {}, category: "", brandId: null })
-  }, [values.categoryId])
 
-  useEffect(() => {
-    if (!values.catalogId) setValues({ ...values, catalog: "" })
-  }, [values.catalogId])
+  const resetCategory = () => {
+    setValues({ ...values, category: '', categoryId: null, brandId: null, options: {} })
+    setBrand({})
+}
+  
+  const resetCatalog = () => {
+  setValues({...values,catalog:'',catalogId:null})
+}
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -70,12 +73,12 @@ export default function addProductPage({ categories, catalogs }) {
     }
 
     if (!values.category) {
-      toast.error('Поле категория является обязательным')
+      toast.error("Поле категория является обязательным")
       return
     }
 
     if (values.categoryId === values.brandId) {
-      toast.error('Товар должен находиться хотя бы в одной подкатегории')
+      toast.error("Товар должен находиться хотя бы в одной подкатегории")
       return
     }
 
@@ -110,7 +113,7 @@ export default function addProductPage({ categories, catalogs }) {
   }
   // input для name & model ...
   const handleChange = (e) => {
-    const { name, value, checked } = e.target    
+    const { name, value, checked } = e.target
     if (name === "isShowcase" || name === "isInStock") {
       setValues({ ...values, [name]: checked })
     } else {
@@ -128,13 +131,14 @@ export default function addProductPage({ categories, catalogs }) {
   }
 
   const handleListClick = async (category) => {
-    const brand = getBrand(category, categories)
+    const brand=getBrand(category, categories)
+    setBrand(brand)
     setValues({
       ...values,
       category: category.name,
       categoryId: category._id,
       brandId: brand._id,
-      options: { ...brand.options },
+      options: Object.assign({}, ...Object.keys(brand.options).map(option=>({[option]:[]}))),
     })
   }
   const handleUploadChange = (e) => {
@@ -156,7 +160,7 @@ export default function addProductPage({ categories, catalogs }) {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-  
+
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
@@ -213,7 +217,7 @@ export default function addProductPage({ categories, catalogs }) {
                     />
                     <div
                       className={styles.cancell}
-                      onClick={() => setValues({ ...values, categoryId: null })}
+                      onClick={resetCategory}
                     >
                       <i className="fa-solid fa-xmark fa-lg"></i>
                     </div>
@@ -221,7 +225,7 @@ export default function addProductPage({ categories, catalogs }) {
                     <ul className={styles.dropdown_menu}>
                       {listForCategoryMenu && (
                         <>
-                          {listForCategoryMenu.map((item,i) => (
+                          {listForCategoryMenu.map((item, i) => (
                             <li
                               key={i}
                               onClick={() => handleListClick(item.cat)}
@@ -246,7 +250,7 @@ export default function addProductPage({ categories, catalogs }) {
                     />
                     <div
                       className={styles.cancell}
-                      onClick={() => setValues({ ...values, catalogId: null })}
+                      onClick={resetCatalog}
                     >
                       <i className="fa-solid fa-xmark fa-lg"></i>
                     </div>
@@ -254,7 +258,7 @@ export default function addProductPage({ categories, catalogs }) {
                     <ul className={styles.dropdown_menu}>
                       {listForCatalogMenu && (
                         <>
-                          {listForCatalogMenu.map((item,i) => (
+                          {listForCatalogMenu.map((item, i) => (
                             <li
                               key={i}
                               onClick={() =>
@@ -334,7 +338,7 @@ export default function addProductPage({ categories, catalogs }) {
                       checked={values.isShowcase}
                     />
                     <label htmlFor="isShowcase">Показывать на витрине </label>
-                    
+
                     <GiCheckMark className={styles.check_icon} />
                   </div>
 
@@ -351,10 +355,11 @@ export default function addProductPage({ categories, catalogs }) {
                   </div>
                 </div>
               </div>
-              {Object.keys(values.options).length ? (
+              {Object.keys(brand).length&&Object.keys(brand.options).length ? (
                 <SelectOptions
                   values={values}
-                  setValues={setValues}
+                    setValues={setValues}
+                    brand={brand}
                   toast={toast}
                 />
               ) : null}

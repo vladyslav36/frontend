@@ -1,13 +1,22 @@
 import styles from "@/styles/SelectOptions.module.scss"
+import { useEffect, useState } from "react"
 import { stringToPrice } from "utils"
 
-export default function SelectOptions({ values, setValues, toast }) {
+export default function SelectOptions({ values, setValues, brand, toast }) {
+  const [changedPriceOption, setChangedPriceOption] = useState("")
+
+
   const handleChangePrice = ({ name, option, e }) => {
     e.preventDefault()
-
-    const newValues = { ...values }
-    newValues.options[name].values[option].price = e.target.value
-    setValues(newValues)
+    setValues({
+      ...values,
+      options: {
+        ...values.options,
+        [name]: values.options[name].map((value) =>
+          value.value === option ? { ...value, price: e.target.value } : value
+        ),
+      },
+    })
   }
   const formatPrice = ({ name, option, e }) => {
     const { price, error } = stringToPrice(e.target.value)
@@ -15,42 +24,67 @@ export default function SelectOptions({ values, setValues, toast }) {
       toast.error("Прайс должен быть числом")
       return
     }
-    const newValues = { ...values }
-    newValues.options[name].values[option].price = price
-    setValues(newValues)
+    setValues({
+      ...values,
+      options: {
+        ...values.options,
+        [name]: values.options[name].map((value) =>
+          value.value === option ? { ...value, price } : value
+        ),
+      },
+    })
   }
 
   const handleCheckbox = ({ name, option, checked, id }) => {
-    const newValues = { ...values }
-    newValues.options[name].values[option].checked = checked
-    setValues(newValues)
+    if (checked) {
+      // add option to values.options[name]
+      setValues({
+        ...values,
+        options: {
+          ...values.options,
+          [name]: [
+            ...values.options[name],
+            { value: option, price: values.price, isChanged:false },
+          ],
+        },
+      })
+    } else {
+      // remove option from values.options[name]
+      setValues({
+        ...values,
+        options: {
+          ...values.options,
+          [name]: values.options[name].filter((item) => item.value !== option),
+        },
+      })
+    }
   }
   // toggle делает так что checkbox ведет себя так что может быть нажата только одна кнопка или ни одной
   const toggleCheck = (e) => {
     const option = e.target.value
+    const name = e.target.name
     const checked = e.target.checked
-
     if (checked) {
-      const restOptions = Object.keys(values.options).filter(
-        (item) => item !== option
-      )
-      const newValues = { ...values }
-      newValues.options[option].isChangePrice = checked
-      restOptions.forEach(
-        (item) => (newValues.options[item].isChangePrice = false)
-      )
-      setValues(newValues)
+      setChangedPriceOption(name)
     } else {
-      const newValues = { ...values }
-      newValues.options[option].isChangePrice = checked
-      setValues(newValues)
+      setChangedPriceOption("")
+      setValues({
+        ...values,
+        options: {
+          ...values.options,
+          [name]: values.options[name].map((value) => ({
+            value: value.value,
+            price: values.price,
+          })),
+        },
+      })
     }
   }
-
+  console.log(values.options)
   return (
     <div className={styles.options_container}>
-      {Object.keys(values.options).length
-        ? Object.keys(values.options).map((item, i) => (
+      {Object.keys(brand.options).length
+        ? Object.keys(brand.options).map((item, i) => (
             <div key={i}>
               <div className={styles.header_options}>
                 <h3>{item}</h3>
@@ -58,68 +92,70 @@ export default function SelectOptions({ values, setValues, toast }) {
                   <input
                     type="checkbox"
                     id={item}
-                    name="changePrice"
+                    name={item}
                     value={item}
                     onChange={toggleCheck}
-                    checked={values.options[item].isChangePrice}
+                    checked={item === changedPriceOption ? true : false}
                   />
                   <label htmlFor={item}>Менять прайс</label>
                 </div>
               </div>
 
               <div className={styles.flex_block}>
-                {Object.keys(values.options[item].values)
-                  .sort()
-                  .map((optionValue, i) => (
-                    <div key={i} className={styles.custom_checkbox}>
-                      <input
-                        type="checkbox"
-                        id={`${item}${optionValue}`}
-                        name={item}
-                        value={optionValue}
-                        onChange={(e) =>
-                          handleCheckbox({
-                            name: item,
-                            option: e.target.value,
-                            checked: e.target.checked,
-                            id: e.target.id,
-                          })
-                        }
-                        checked={
-                          values.options[item].values[optionValue].checked
-                        }
-                      />
-                      <label htmlFor={`${item}${optionValue}`} tabIndex={0}>
-                        {optionValue}
+                {brand.options[item].sort().map((optionValue, i) => (
+                  <div key={i} className={styles.custom_checkbox}>
+                    <input
+                      type="checkbox"
+                      id={`${item}${optionValue}`}
+                      name={item}
+                      value={optionValue}
+                      onChange={(e) =>
+                        handleCheckbox({
+                          name: item,
+                          option: optionValue,
+                          checked: e.target.checked,
+                          id: e.target.id,
+                        })
+                      }
+                      checked={values.options[item].some(
+                        (val) => val.value === optionValue
+                      )}
+                    />
+                    <label htmlFor={`${item}${optionValue}`} tabIndex={0}>
+                      {optionValue}
 
-                        {values.options[item].isChangePrice &&
-                          values.options[item].values[optionValue].checked && (
-                            <div className={styles.option_price}>
-                              <input
-                                type="text"
-                                value={
-                                  values.options[item].values[optionValue].price
-                                }
-                                onChange={(e) =>
-                                  handleChangePrice({
-                                    name: item,
-                                    option: optionValue,
-                                    e,
-                                  })
-                                }
-                                onBlur={(e) => {
-                                  formatPrice({
-                                    name: item,
-                                    option: optionValue,
-                                    e,
-                                  })
-                                }}
-                              />
-                            </div>
-                          )}
-                      </label>
-                    </div>
-                  ))}
+                      {item === changedPriceOption &&
+                      values.options[item].some(
+                        (val) => val.value === optionValue
+                      ) ? (
+                        <div className={styles.option_price}>
+                          <input
+                            type="text"
+                            value={
+                              values.options[item].find(
+                                (val) => val.value === optionValue
+                              ).price
+                            }
+                            onChange={(e) =>
+                              handleChangePrice({
+                                name: item,
+                                option: optionValue,
+                                e,
+                              })
+                            }
+                            onBlur={(e) => {
+                              formatPrice({
+                                name: item,
+                                option: optionValue,
+                                e,
+                              })
+                            }}
+                          />
+                        </div>
+                      ) : null}
+                    </label>
+                  </div>
+                ))}
               </div>
             </div>
           ))

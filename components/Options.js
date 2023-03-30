@@ -17,9 +17,6 @@ export default function Options({ values, setValues }) {
   // example options.color.values.red.price
   const [activeOption, setActiveOption] = useState("")
   // activeOption-опция, значения которой надо показывать
-  const [isShow, setIsShow] = useState(false)
-  // dropdown list for categories
-
  
   const handleInputOption = async (e) => {
     e.preventDefault()
@@ -51,7 +48,7 @@ export default function Options({ values, setValues }) {
     const isRepeat = keys.find((item) => item === inputValue.option)
     if (!isRepeat) {
       setInputValue({ ...inputValue, [inputValue.option]: "", option: "" })
-      setValues({...values,options:{...values.options, [inputValue.option]: { values: {}, isChangePrice: false }}       
+      setValues({...values,options:{...values.options, [inputValue.option]: []}       
       })
       setActiveOption("")
     } else {
@@ -65,12 +62,8 @@ export default function Options({ values, setValues }) {
       return
     }
     const elem = document.getElementById(name)
-    elem.focus()
-    const newOptions = { ...values.options }
-    newOptions[name].values[value] = { price: "", checked: false }
-
-    setValues({...values,options:newOptions})
-
+    elem.focus()    
+    setValues({...values,options:{...values.options,[name]:[...values.options[name],value]}})
     setInputValue({ ...inputValue, [name]: "" })
   }
 
@@ -81,19 +74,15 @@ export default function Options({ values, setValues }) {
     }
   }
 
-  const deleteOptionsValue = (value) => {
-    const newOptions = { ...values.options }
-    delete newOptions[activeOption].values[value]
-    setValues({ ...values, options: { ...newOptions }})
+  const deleteOptionsValue = (i) => {   
+    setValues({ ...values, options: { ...values.options,[activeOption]: values.options[activeOption].filter((item, j) => i !== j) } })
   }
   const deleteOption = (name) => {
-    const newInputValue = { ...inputValue }
-    delete newInputValue[name]
-    const newOptions = { ...values.options }
-    delete newOptions[name]
+    const { [name]: deletedField, ...newInputValue } = inputValue
+    const { [name]: deletedField2, ...newOptions }=values.options    
     setActiveOption("")
-    setInputValue({ ...newInputValue })
-    setValues({ ...values, options: { ...newOptions } })
+    setInputValue(newInputValue)
+    setValues({ ...values, options: newOptions })
   }  
   
   return (
@@ -104,10 +93,8 @@ export default function Options({ values, setValues }) {
           <div
             className={styles.input}
             onFocus={() => {
-              setActiveOption("")
-              setIsShow(true)
-            }}
-            onBlur={() => setIsShow(false)}
+              setActiveOption("")              
+            }}            
             tabIndex={0}
           ></div>
           <div className={styles.input}>
@@ -119,7 +106,7 @@ export default function Options({ values, setValues }) {
                 name="option"
                 value={inputValue.option}
                 onChange={handleInputOption}
-                onKeyPress={(e) => handlePress({ e, cb: addOption })}
+                onKeyDown={(e) => handlePress({ e, cb: addOption })}
                 onFocus={() => setActiveOption("")}
               />
               <button type="button" onClick={addOption} title="Добавить опцию">
@@ -153,7 +140,7 @@ export default function Options({ values, setValues }) {
                         name={item}
                         value={inputValue[item]}
                         onChange={handleInputValue}
-                        onKeyPress={(e) =>
+                        onKeyDown={(e) =>
                           handlePress({
                             e,
                             cb: () =>
@@ -190,14 +177,14 @@ export default function Options({ values, setValues }) {
             <>
               <p>Опция: {activeOption}</p>
               <div className={styles.option_list}>
-                {Object.keys(values.options[activeOption].values).map(
+                {values.options[activeOption].map(
                   (item, i) => (
                     <div key={i} className={styles.list_item}>
                       <div>{item}</div>
                       <button
                         type="button"
                         title="Удалить значение опции"
-                        onClick={() => deleteOptionsValue(item)}
+                        onClick={() => deleteOptionsValue(i)}
                       >
                         <div className={styles.icon_delete}>
                           <i className="fa-solid fa-xmark"></i>
