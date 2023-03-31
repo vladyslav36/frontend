@@ -5,16 +5,47 @@ import { stringToPrice } from "utils"
 export default function SelectOptions({ values, setValues, brand, toast }) {
   const [changedPriceOption, setChangedPriceOption] = useState("")
 
+  useEffect(() => {
+    if (Object.keys(values.options).length) {
+      
+      
+      // при изменении общей цены меняем цену на всех values.options если isChanged=false
+      setValues({
+        ...values,
+        options: Object.assign(
+          {},
+          ...Object.keys(values.options).map((option) => ({
+            [option]: Object.assign(
+              {},
+              ...Object.keys(values.options[option]).map((value) => ({
+                [value]: {
+                  ...values.options[option][value],
+                  price: values.options[option][value].isChanged?values.options[option][value].price: values.price,
+                },
+              }))
+            ),
+          }))
+        ),
+      })
+    }    
+    
+  }, [values.price])
 
   const handleChangePrice = ({ name, option, e }) => {
     e.preventDefault()
+    const newPrice = e.target.value
     setValues({
       ...values,
       options: {
         ...values.options,
-        [name]: values.options[name].map((value) =>
-          value.value === option ? { ...value, price: e.target.value } : value
-        ),
+        [name]: {
+          ...values.options[name],
+          [option]: {
+            ...values.options[name][option],
+            price: newPrice,
+            isChanged: values.price !== newPrice ? true : false,
+          },
+        },
       },
     })
   }
@@ -28,9 +59,14 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
       ...values,
       options: {
         ...values.options,
-        [name]: values.options[name].map((value) =>
-          value.value === option ? { ...value, price } : value
-        ),
+        [name]: {
+          ...values.options[name],
+          [option]: {
+            ...values.options[name][option],
+            price,
+            isChanged: price === values.price ? false : true,
+          },
+        },
       },
     })
   }
@@ -42,19 +78,24 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
         ...values,
         options: {
           ...values.options,
-          [name]: [
+          [name]: {
             ...values.options[name],
-            { value: option, price: values.price, isChanged:false },
-          ],
+            [option]: {
+              price: values.price,
+              isChanged: false,
+              barcode: "",
+            },
+          },
         },
       })
     } else {
       // remove option from values.options[name]
+      const { [option]: deletedOption, ...newValues } = values.options[name]
       setValues({
         ...values,
         options: {
           ...values.options,
-          [name]: values.options[name].filter((item) => item.value !== option),
+          [name]: newValues,
         },
       })
     }
@@ -68,19 +109,26 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
       setChangedPriceOption(name)
     } else {
       setChangedPriceOption("")
+
       setValues({
         ...values,
         options: {
           ...values.options,
-          [name]: values.options[name].map((value) => ({
-            value: value.value,
-            price: values.price,
-          })),
+          [name]: Object.assign(
+            {},
+            ...Object.keys(values.options[name]).map((value) => ({
+              [value]: {
+                ...values.options[name][value],
+                price: values.price,
+                isChanged: false,
+              },
+            }))
+          ),
         },
       })
     }
   }
-  console.log(values.options)
+ 
   return (
     <div className={styles.options_container}>
       {Object.keys(brand.options).length
@@ -117,25 +165,17 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
                           id: e.target.id,
                         })
                       }
-                      checked={values.options[item].some(
-                        (val) => val.value === optionValue
-                      )}
+                      checked={optionValue in values.options[item]}
                     />
                     <label htmlFor={`${item}${optionValue}`} tabIndex={0}>
                       {optionValue}
 
                       {item === changedPriceOption &&
-                      values.options[item].some(
-                        (val) => val.value === optionValue
-                      ) ? (
+                      values.options[item][optionValue] ? (
                         <div className={styles.option_price}>
                           <input
                             type="text"
-                            value={
-                              values.options[item].find(
-                                (val) => val.value === optionValue
-                              ).price
-                            }
+                            value={values.options[item][optionValue].price}
                             onChange={(e) =>
                               handleChangePrice({
                                 name: item,

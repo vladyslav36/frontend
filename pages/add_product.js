@@ -138,7 +138,7 @@ export default function addProductPage({ categories, catalogs }) {
       category: category.name,
       categoryId: category._id,
       brandId: brand._id,
-      options: Object.assign({}, ...Object.keys(brand.options).map(option=>({[option]:[]}))),
+      options: Object.assign({}, ...Object.keys(brand.options).map(option => ({ [option]: {} }))),
     })
   }
   const handleUploadChange = (e) => {
