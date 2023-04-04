@@ -128,8 +128,7 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
       })
     }
   }
-  console.log(values.options)
-  console.log(brand.options)
+  
   return (
     <div className={styles.options_container}>
       {Object.keys(brand.options).length
