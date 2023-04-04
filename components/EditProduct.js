@@ -24,9 +24,9 @@ export default function EditProduct({
   setIsShowProduct,
   token,
 }) {
-  const brandOptions = categories.find(
+  const brand = categories.find(
     (item) => idToString(item._id) === idToString(product.brandId)
-  ).options
+  )
   const categoryName = categories.find(
     (item) => idToString(item._id) === idToString(product.categoryId)
   ).name
@@ -46,9 +46,7 @@ export default function EditProduct({
     catalog: catalogName,
     categoryId: product.categoryId,
     catalogId: product.catalogId,
-    options: Object.keys(product.options).length
-      ? product.options
-      : brandOptions,
+    options: product.options,
     isInStock: product.isInStock,
     price: product.price,
     retailPrice: product.retailPrice,
@@ -170,7 +168,7 @@ export default function EditProduct({
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-
+console.log(values.options)
   return (
     <>
       <div className={styles.form}>
@@ -378,6 +376,7 @@ export default function EditProduct({
             <SelectOptions
               values={values}
               setValues={setValues}
+              brand={brand}
               toast={toast}
             />
           ) : null}

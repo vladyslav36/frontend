@@ -11,19 +11,19 @@ import ProductsContext from "@/context/ProductsContext"
 import Links from "@/components/Links"
 import ProductOptions from "@/components/ProductOptions"
 
-export default function productPage({ slug, product: productDb }) {
+export default function productPage({  product: productDb }) {
   const { currencyShop } = useContext(ProductsContext)
   const { cart, setCart, currencyRate } = useContext(ProductsContext)
 
   const product = { ...productDb }
 
   // Удаляем опции в товаре которые в нем не используются
-  Object.keys(product.options).forEach((option) => {
-    const isCheck = Object.keys(product.options[option].values).some(
-      (item) => product.options[option].values[item].checked
-    )
-    if (!isCheck) delete product.options[option]
-  })
+  Object.keys(product.options).forEach(option => {
+    if (!Object.keys(product.options[option]).length) {
+      delete product.options[option]
+    }
+  })    
+  
 
   const [values, setValues] = useState(
     Object.assign(
@@ -295,7 +295,7 @@ export default function productPage({ slug, product: productDb }) {
         {product.description ? (
           <div>
             <h4>Описание</h4>
-            <p>{product.description}</p>
+            <p className={styles.description}>{product.description}</p>
           </div>
         ) : null}
 
@@ -322,8 +322,7 @@ export async function getServerSideProps({ params: { slug } }) {
   }
   return {
     props: {
-      product,
-      slug,
+      product      
     },
   }
 }

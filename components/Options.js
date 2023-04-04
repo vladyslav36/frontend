@@ -84,7 +84,7 @@ export default function Options({ values, setValues }) {
     setInputValue(newInputValue)
     setValues({ ...values, options: newOptions })
   }  
-  
+
   return (
     <div>
       <ToastContainer />

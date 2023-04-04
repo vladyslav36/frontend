@@ -53,7 +53,7 @@ export default function addCategoryPage({ categories }) {
 
     let error = false
     Object.keys(values.options).forEach((option) => {
-      if (!Object.keys(values.options[option].values).length) {
+      if (!Object.keys(values.options[option]).length) {
         toast.warning("Опция введена без значений")
         error = true
       }

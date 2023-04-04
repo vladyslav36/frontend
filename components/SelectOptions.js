@@ -128,7 +128,8 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
       })
     }
   }
- 
+  console.log(values.options)
+  console.log(brand.options)
   return (
     <div className={styles.options_container}>
       {Object.keys(brand.options).length
@@ -165,7 +166,7 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
                           id: e.target.id,
                         })
                       }
-                      checked={optionValue in values.options[item]}
+                      checked={values.options[item].hasOwnProperty(optionValue)}
                     />
                     <label htmlFor={`${item}${optionValue}`} tabIndex={0}>
                       {optionValue}

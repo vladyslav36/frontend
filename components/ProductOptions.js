@@ -10,15 +10,16 @@ export default function ProductOptions({
   const handleClick = ({ option, value }) => {
     setValues({ ...values, [option]: value })
   }
-
+ 
   return (
     <div className={styles.options_container}>
       {Object.keys(options).map((option, i) => (
         <div key={i}>
           <div className={styles.option}>{option}</div>
           <div className={styles.options_wrapper}>
-            {Object.keys(options[option].values).sort().map((value, i) =>
-              options[option].values[value].checked ? (
+            {Object.keys(options[option])
+              .sort()
+              .map((value, i) => (
                 <div
                   key={i}
                   className={
@@ -28,26 +29,23 @@ export default function ProductOptions({
                   }
                   onClick={() => handleClick({ option, value })}
                 >
-                  {options[option].values[value].price ? (
-                    <div>
-                      {value} /{" "}
-                      <span
-                        className={
-                          styles.option_price +
-                          " " +
-                          (values[option] === value ? styles.active_price : "")
-                        }
-                      >
-                        {options[option].values[value].price}{" "}
-                        {getCurrencySymbol(currencyValue)}
-                      </span>
-                    </div>
-                  ) : (
-                      <p>{value}</p> 
-                  )}
+                  <div>
+                    {value} /{" "}
+                    <span
+                      className={
+                        (options[option][value].isChanged
+                          ? styles.option_price
+                          : styles.price) +
+                        " " +
+                        (values[option] === value ? styles.active_price : "")
+                      }
+                    >
+                      {options[option][value].price}{" "}
+                      {getCurrencySymbol(currencyValue)}
+                    </span>
+                  </div>
                 </div>
-              ) : null
-            )}
+              ))}
           </div>
         </div>
       ))}
