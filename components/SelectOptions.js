@@ -7,8 +7,6 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
 
   useEffect(() => {
     if (Object.keys(values.options).length) {
-      
-      
       // при изменении общей цены меняем цену на всех values.options если isChanged=false
       setValues({
         ...values,
@@ -20,15 +18,16 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
               ...Object.keys(values.options[option]).map((value) => ({
                 [value]: {
                   ...values.options[option][value],
-                  price: values.options[option][value].isChanged?values.options[option][value].price: values.price,
+                  price: values.options[option][value].isChanged
+                    ? values.options[option][value].price
+                    : values.price,
                 },
               }))
             ),
           }))
         ),
       })
-    }    
-    
+    }
   }, [values.price])
 
   const handleChangePrice = ({ name, option, e }) => {
@@ -82,8 +81,7 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
             ...values.options[name],
             [option]: {
               price: values.price,
-              isChanged: false,
-              barcode: "",
+              isChanged: false              
             },
           },
         },
@@ -128,7 +126,7 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
       })
     }
   }
-  
+
   return (
     <div className={styles.options_container}>
       {Object.keys(brand.options).length
