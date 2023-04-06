@@ -2,6 +2,7 @@ import {   useState } from "react"
 import styles from "@/styles/OptionForm.module.scss"
 import "react-toastify/dist/ReactToastify.css"
 import { toast, ToastContainer } from "react-toastify"
+import { sortObjFields } from "utils"
 
 
 
@@ -48,7 +49,7 @@ export default function Options({ values, setValues }) {
     const isRepeat = keys.find((item) => item === inputValue.option)
     if (!isRepeat) {
       setInputValue({ ...inputValue, [inputValue.option]: "", option: "" })
-      setValues({...values,options:{...values.options, [inputValue.option]: []}       
+       setValues({...values,options:sortObjFields({ ...values.options, [inputValue.option]: [] } )  
       })
       setActiveOption("")
     } else {
@@ -63,7 +64,7 @@ export default function Options({ values, setValues }) {
     }
     const elem = document.getElementById(name)
     elem.focus()    
-    setValues({...values,options:{...values.options,[name]:[...values.options[name],value]}})
+    setValues({...values,options:{...values.options,[name]:[...values.options[name],value].sort()}})
     setInputValue({ ...inputValue, [name]: "" })
   }
 

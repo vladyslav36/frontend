@@ -198,3 +198,6 @@ export const addRiple = (e) => {
     circle.remove()
   }, 1000)
 }
+
+export const sortObjFields = (obj) =>Object.assign({}, ...Object.keys(obj).sort().map(key=>({[key]:obj[key]})))
+  
