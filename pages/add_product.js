@@ -17,6 +17,7 @@ import {
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 import ModalImage from "@/components/ModalImage"
+import BcOptions from "@/components/BcOptions"
 
 export default function addProductPage({ categories, catalogs }) {
   const {
@@ -33,6 +34,7 @@ export default function addProductPage({ categories, catalogs }) {
     categoryId: null,
     catalogId: null,
     options: {},
+    barcods: {},
     isInStock: true,
     price: "",
     retailPrice: "",
@@ -44,6 +46,7 @@ export default function addProductPage({ categories, catalogs }) {
   const [brand, setBrand] = useState({})
   const listForCategoryMenu = getListForCategoriesMenu(categories)
   const listForCatalogMenu = getListForCatalogsMenu(catalogs)
+  const [hasBarcods,setHasBarcods]=useState(true)
 
   const [imageIdx, setImageIdx] = useState(0)
 
@@ -218,7 +221,7 @@ export default function addProductPage({ categories, catalogs }) {
                     <div
                       className={styles.cancell}
                       onClick={resetCategory}
-                    >
+                      >                       
                       <i className="fa-solid fa-xmark fa-lg"></i>
                     </div>
 
@@ -362,7 +365,13 @@ export default function addProductPage({ categories, catalogs }) {
                     brand={brand}
                   toast={toast}
                 />
-              ) : null}
+                ) : null}
+                
+                {hasBarcods ? (
+                  <BcOptions values={values} setValues={setValues} />
+                ): (
+                    null
+                )}
               <div>
                 <label htmlFor="description">Описание</label>
                 <textarea

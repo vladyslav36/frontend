@@ -1,0 +1,47 @@
+.container{
+  padding:10px 0; 
+
+  .check_wrapper{
+  position:relative;
+  input{
+    position:absolute;
+    top:0;
+    left:0;
+    width:0;
+    height:0;
+    &:checked ~ .icon{
+    display:inline;
+  }
+  }
+  .icon{
+    display:none;
+    color:green;
+    vertical-align: middle;
+    margin:0 5px;
+  }
+  
+  label{
+    border:1px solid green;
+    padding:5px 10px;
+    border-radius:5px;
+    font-size: 16px;;
+    &:hover{
+      cursor:pointer;      
+    }
+  }
+}
+  .flex_list{
+    padding: 10px 0;;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;;
+    .flex_item{
+      border:1px solid green;
+      padding:3px 10px;
+      border-radius:5px;
+    }
+  }
+}
+

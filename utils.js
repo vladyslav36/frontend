@@ -149,35 +149,35 @@ export const getListForCatalogsMenu = (catArray) => {
 }
 
 export const formatingPhone = (number) => {
-   const digit = number.replace(/[^\d]/g, "")
-   const numberLength = digit.length
-   let rez = ""
-   if (!numberLength) {
-     rez = digit
-   } else {
-     if (numberLength < 4) {
-       rez = digit.slice(0, 3)
-     } else {
-       if (numberLength < 7) {
-         rez = `(${digit.slice(0, 3)}) ${digit.slice(3, 6)}`
-       } else {
-         if (numberLength < 9) {
-           rez = `(${digit.slice(0, 3)}) ${digit.slice(3, 6)}-${digit.slice(
-             6,
-             8
-           )}`
-         } else {
-           if (numberLength >= 9) {
-             rez = `(${digit.slice(0, 3)}) ${digit.slice(3, 6)}-${digit.slice(
-               6,
-               8
-             )}-${digit.slice(8, 10)}`
-           }
-         }
-       }
-     }
-   }
-   return rez
+  const digit = number.replace(/[^\d]/g, "")
+  const numberLength = digit.length
+  let rez = ""
+  if (!numberLength) {
+    rez = digit
+  } else {
+    if (numberLength < 4) {
+      rez = digit.slice(0, 3)
+    } else {
+      if (numberLength < 7) {
+        rez = `(${digit.slice(0, 3)}) ${digit.slice(3, 6)}`
+      } else {
+        if (numberLength < 9) {
+          rez = `(${digit.slice(0, 3)}) ${digit.slice(3, 6)}-${digit.slice(
+            6,
+            8
+          )}`
+        } else {
+          if (numberLength >= 9) {
+            rez = `(${digit.slice(0, 3)}) ${digit.slice(3, 6)}-${digit.slice(
+              6,
+              8
+            )}-${digit.slice(8, 10)}`
+          }
+        }
+      }
+    }
+  }
+  return rez
 }
 
 export const addRiple = (e) => {
@@ -199,5 +199,32 @@ export const addRiple = (e) => {
   }, 1000)
 }
 
-export const sortObjFields = (obj) =>Object.assign({}, ...Object.keys(obj).sort().map(key=>({[key]:obj[key]})))
-  
+export const sortObjFields = (obj) =>
+  Object.assign(
+    {},
+    ...Object.keys(obj)
+      .sort()
+      .map((key) => ({ [key]: obj[key] }))
+  )
+
+export const optionsToBarcods = (input = {}) => {
+  // Отфильтровываем только те поля в которых есть значения
+  const activeInput = Object.keys(input)
+    .filter((item) => Object.keys(input[item]).length)
+    .reduce((acc, item) => ({ ...acc, [item]:input[item] }), {})
+  // Массив ключей
+  const orderArr = Object.keys(activeInput)
+  let output = {}
+  // Организовываем матрешку начиная с последнего элемента
+  if (orderArr.length) {
+    for (let i = 1; i <= orderArr.length; i++) {
+      output = {
+        ...Object.keys(activeInput[orderArr[orderArr.length - i]])
+          .map((value) => ({ [value]: i === 1 ? "" : output }))
+          .reduce((acc, item) => ({ ...acc, ...item }), {}),
+      }
+    }
+  }
+
+  return output
+}

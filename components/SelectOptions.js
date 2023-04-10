@@ -4,6 +4,7 @@ import { stringToPrice } from "utils"
 
 export default function SelectOptions({ values, setValues, brand, toast }) {
   const [changedPriceOption, setChangedPriceOption] = useState("")
+  
 
   useEffect(() => {
     if (Object.keys(values.options).length) {
