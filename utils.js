@@ -211,7 +211,7 @@ export const optionsToBarcods = (input = {}) => {
   // Отфильтровываем только те поля в которых есть значения
   const activeInput = Object.keys(input)
     .filter((item) => Object.keys(input[item]).length)
-    .reduce((acc, item) => ({ ...acc, [item]:input[item] }), {})
+    .reduce((acc, item) => ({ ...acc, [item]: input[item] }), {})
   // Массив ключей
   const orderArr = Object.keys(activeInput)
   let output = {}
@@ -220,11 +220,27 @@ export const optionsToBarcods = (input = {}) => {
     for (let i = 1; i <= orderArr.length; i++) {
       output = {
         ...Object.keys(activeInput[orderArr[orderArr.length - i]])
-          .map((value) => ({ [value]: i === 1 ? "" : output }))
+          .sort()
+          .map((value) => ({ [value]: i === 1 ? "" : { ...output } }))
           .reduce((acc, item) => ({ ...acc, ...item }), {}),
       }
     }
   }
 
   return output
+}
+
+export const copyBarcods = (existBc, newBc) => {
+  const checker = (existObj, newObj) =>
+    Object.keys(newObj).forEach((item) => {
+      if (!existObj.hasOwnProperty(item)) return
+      if (typeof newObj[item] === "object") {
+        checker(existObj[item], newObj[item])
+      } else {
+        newObj[item] = existObj[item]
+      }
+    })
+
+  checker(existBc, newBc)
+  return newBc
 }

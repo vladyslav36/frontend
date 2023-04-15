@@ -10,7 +10,13 @@ import { getListForCategoriesMenu } from "../utils"
 import ModalImage from "./ModalImage"
 import ModalPrice from "./ModalPrice"
 import ModalCatalog from "./ModalCatalog"
-
+import {
+  FaCloudDownloadAlt,
+  FaImage,
+  FaSave,
+  FaTimes,
+  FaWindowClose,
+} from "react-icons/fa"
 
 export default function EditCategory({
   category,
@@ -34,16 +40,16 @@ export default function EditCategory({
   })
   const [price, setPrice] = useState({
     path: category.price ? `${API_URL}${category.price}` : "",
-    file: null
+    file: null,
   })
   const [catalog, setCatalog] = useState({
     path: category.catalog ? `${API_URL}${category.catalog}` : "",
     file: null,
   })
-  
+
   const elDialog = useRef()
-  const elDialogPrice=useRef()
-  const elDialogCatalog=useRef()
+  const elDialogPrice = useRef()
+  const elDialogCatalog = useRef()
   const listForMenu = getListForCategoriesMenu(categories)
 
   useEffect(() => {
@@ -126,15 +132,13 @@ export default function EditCategory({
     elDialog.current.close()
   }
   const handleUploadPrice = (e) => {
-    
-    setPrice({ path: '/', file: e.target.files[0] })
+    setPrice({ path: "/", file: e.target.files[0] })
     elDialogPrice.current.close()
-}
+  }
   const handleUploadCatalog = (e) => {
-    
     setCatalog({ path: "/", file: e.target.files[0] })
     elDialogCatalog.current.close()
-}
+  }
   const handleListClick = ({ id, name }) => {
     setValues({ ...values, parent: name, parentId: id })
   }
@@ -150,20 +154,21 @@ export default function EditCategory({
         <form onSubmit={handleSubmit}>
           <div className={styles.header}>
             <Links home={true} back={true} />
-            <span>
-              <i
-                className="fa-solid fa-square-xmark fa-2xl"
+
+            <div className={styles.right_icons}>
+              <FaWindowClose
+                className={styles.icon}
                 title="Отмена"
                 name="cancel"
                 onClick={() => setIsShowCategory(false)}
-              ></i>
-              <i
-                className="fa-solid fa-floppy-disk fa-2xl"
+              />
+              <FaSave
+                className={styles.icon}
                 title="Сохранить"
                 name="save"
                 onClick={handleSubmit}
-              ></i>
-            </span>
+              />
+            </div>
           </div>
 
           <ToastContainer />
@@ -199,11 +204,11 @@ export default function EditCategory({
                     })
                   }
                 >
-                  <i className="fa-solid fa-xmark fa-lg"></i>
+                  <FaTimes />
                 </div>
                 <ul className={styles.dropdown_menu}>
                   {listForMenu &&
-                    listForMenu.map((item,i) => (
+                    listForMenu.map((item, i) => (
                       <li
                         key={i}
                         onClick={() =>
@@ -238,23 +243,37 @@ export default function EditCategory({
             {category.parentId === null ? (
               <div>
                 <div>
-                  <i className="fa-solid fa-download fa-xl" onClick={() => {
-                    elDialogPrice.current.showModal()
-                  }}></i>
+                  <FaCloudDownloadAlt
+                    onClick={() => {
+                      elDialogPrice.current.showModal()
+                    }}
+                    title="Загрузить прайс"
+                  />
+
                   {price.path ? (
-                   <i className="fa-solid fa-xmark fa-xl" onClick={()=>setPrice({path:'',file:null})}></i>
-                  ):null}
-                 
+                    <FaWindowClose
+                      onClick={() => setPrice({ path: "", file: null })}
+                      title="Удалить прайс"
+                    />
+                  ) : null}
+
                   <p>Прайс</p>
                 </div>
                 <div>
-                  <i className="fa-solid fa-download fa-xl" onClick={() => {
-                    elDialogCatalog.current.showModal()
-                  }}></i>
+                  <FaCloudDownloadAlt
+                    onClick={() => {
+                      elDialogCatalog.current.showModal()
+                    }}
+                    title="Загрузить каталог"
+                  />
+
                   {catalog.path ? (
-                  <i className="fa-solid fa-xmark fa-xl" onClick={()=>setCatalog({path:'',file:null})}></i>
-                  ):null}
-                  
+                    <FaWindowClose
+                      onClick={() => setCatalog({ path: "", file: null })}
+                      title="Удалить каталог"
+                    />
+                  ) : null}
+
                   <p>Каталог</p>
                 </div>
               </div>
@@ -272,17 +291,18 @@ export default function EditCategory({
               </div>
             )}
             <div className={styles.image_footer}>
-              <button
-                className="btn"
+              <FaImage
                 onClick={() => {
                   elDialog.current.showModal()
                 }}
-              >
-                <i className="fa-regular fa-image"></i>
-              </button>
-              <button className="btn btn-danger" onClick={deleteImage}>
-                <i className="fa-solid fa-xmark"></i>
-              </button>
+                name="save"
+                title="Сохранить"
+              />
+              <FaWindowClose
+                onClick={deleteImage}
+                name="delete"
+                title="Удалить"
+              />
             </div>
           </div>
         </div>

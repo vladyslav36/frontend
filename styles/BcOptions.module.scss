@@ -1,8 +1,13 @@
+@import './btn_colors';
+
 .container{
   padding:10px 0; 
 
   .check_wrapper{
   position:relative;
+  display:flex;
+  align-items: center;
+  justify-content: flex-start;
   input{
     position:absolute;
     top:0;
@@ -26,7 +31,19 @@
     border-radius:5px;
     font-size: 16px;;
     &:hover{
-      cursor:pointer;      
+      cursor:pointer;  
+      background-color: #FBFCFC;    
+    }
+  }
+  .crumbs{
+    color:#5B2C6F;
+    font-size:15px;
+    display:flex;
+    align-items: center;
+    
+    &>div{
+      display:flex;
+      align-items: center;      
     }
   }
 }
@@ -34,13 +51,34 @@
     padding: 10px 0;;
     display:flex;
     flex-wrap: wrap;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     gap: 10px;;
     .flex_item{
       border:1px solid green;
       padding:3px 10px;
       border-radius:5px;
+      cursor:pointer;
+      &:hover{
+        background-color: #FBFCFC;
+      }
+    }
+    .icon{
+      font-size:30px;
+      &[name='back']{
+        color:$btn_link_color;
+      }
+      &[name='save']{
+        color:$btn_save_color;
+      }
+      
+    }
+    input{
+      width:180px;
+      height:38px;
+      letter-spacing: 2px;
+      text-align: center;
+      font-size: 16px;      
     }
   }
 }

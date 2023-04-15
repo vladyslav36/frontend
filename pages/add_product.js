@@ -46,7 +46,7 @@ export default function addProductPage({ categories, catalogs }) {
   const [brand, setBrand] = useState({})
   const listForCategoryMenu = getListForCategoriesMenu(categories)
   const listForCatalogMenu = getListForCatalogsMenu(catalogs)
-  const [hasBarcods,setHasBarcods]=useState(true)
+  
 
   const [imageIdx, setImageIdx] = useState(0)
 
@@ -365,13 +365,8 @@ export default function addProductPage({ categories, catalogs }) {
                     brand={brand}
                   toast={toast}
                 />
-                ) : null}
-                
-                {hasBarcods ? (
-                  <BcOptions values={values} setValues={setValues} />
-                ): (
-                    null
-                )}
+                ) : null}               
+                  <BcOptions values={values} setValues={setValues} />              
               <div>
                 <label htmlFor="description">Описание</label>
                 <textarea

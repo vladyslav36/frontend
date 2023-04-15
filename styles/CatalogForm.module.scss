@@ -1,5 +1,3 @@
-
-
 $bg_list_color: #fbfcfc;
 
 .header {
@@ -7,16 +5,19 @@ $bg_list_color: #fbfcfc;
   justify-content: space-between;
   align-items: center;
   padding: 5px 10px;
-  span {
-    i[name="cancel"] {
+  .right_icons {
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    column-gap: 10px;
+    .icon[name="cancel"] {
       color: red;
-      padding: 0 20px;
       cursor: pointer;
       &:hover {
         color: darken($color: red, $amount: 10);
       }
     }
-    i[name="save"] {
+    .icon[name="save"] {
       color: steelblue;
       cursor: pointer;
       &:hover {
@@ -45,15 +46,14 @@ $bg_list_color: #fbfcfc;
     .input_wrapper {
       position: relative;
       .cancell {
-        i {
-          display: block;
-          height: 100%;
-          position: absolute;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0 5px;
+        cursor: pointer;
+        svg {
           color: red;
-          top: 0;
-          right: 0;
-          transform: translate(-50%, 50%);
-          cursor: pointer;
+          vertical-align: middle;
         }
       }
       .drop_down_list {
@@ -105,14 +105,15 @@ $bg_list_color: #fbfcfc;
       align-items: center;
       justify-content: center;
       column-gap: 100px;
-      span {
+      .icon[name="download"] {
+        font-size: 35px;
+        color: steelblue;
         cursor: pointer;
-        &:first-child {
-          color: steelblue;
-        }
-        &:last-child {
-          color: red;
-        }
+      }
+      .icon[name="delete"] {
+        font-size: 30px;
+        color: red;
+        cursor: pointer;
       }
     }
   }

@@ -1,3 +1,5 @@
+@import "./btn_colors";
+
 .container {
   padding: 0 10px;
 }
@@ -9,16 +11,19 @@
     justify-content: space-between;
     align-items: center;
     padding: 5px 0;
-    span {
-      i[name="cancel"] {
+    .right_icons {
+      display: flex;
+      align-items: center;
+      font-size: 28px;
+      column-gap: 10px;
+      .icon[name="cancel"] {
         color: red;
-        padding: 0 20px;
         cursor: pointer;
         &:hover {
           color: darken($color: red, $amount: 10);
         }
       }
-      i[name="save"] {
+      .icon[name="save"] {
         color: steelblue;
         cursor: pointer;
         &:hover {
@@ -45,8 +50,6 @@
     background-color: inherit;
     border: 1px solid #333;
   }
-
-  
 
   .input_price {
     display: flex;
@@ -81,27 +84,30 @@
     display: block;
   }
 }
-.image_header{
-  display:flex;
+.image_header {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  &>div{
-    display:flex;
-    gap:25px;
-    &>div{
-      display:flex;
-      gap:10px;
+  & > div {
+    display: flex;
+    gap: 25px;
+    & > div {
+      display: flex;
+      gap: 10px;
       align-items: center;
-      
-       i{
-        cursor:pointer;
-        padding:0 2px;
-       &:nth-child(1){
-        color:steelblue;
-       } 
-       &:nth-child(2){
-        color:red;
-       }
+
+      svg {
+        cursor: pointer;
+        padding: 0 2px;
+
+        &:nth-child(1) {
+          color: steelblue;
+          font-size: 35px;
+        }
+        &:nth-child(2) {
+          color: red;
+          font-size: 30px;
+        }
       }
     }
   }
@@ -113,7 +119,7 @@
   justify-content: center;
   align-items: center;
   border: 1px solid #b2babb;
-  padding:5px;
+  padding: 5px;
 
   img {
     max-width: 100%;
@@ -134,9 +140,17 @@
     width: 100%;
     margin: 5px 0;
 
-    button {
-      margin-top: 5px;
+    svg {
+      // margin-top: 5px;
       display: flex;
+      font-size: 30px;
+      cursor: pointer;
+      &[name="delete"] {
+        color: red;
+      }
+      &[name="save"] {
+        color: steelblue;
+      }
     }
   }
 }
@@ -182,15 +196,15 @@
 .input_group_menu {
   position: relative;
   .cancell {
-    i {
+    font-size: 20px;
+    position: absolute;
+    color: red;
+    top: 50%;
+    right: 0;
+    cursor: pointer;
+    svg {
       display: block;
-      height: 100%;
-      position: absolute;
-      color: red;
-      top: 0;
-      right: 0;
-      transform: translate(-50%, 50%);
-      cursor: pointer;
+      transform: translate(-50%, -50%);
     }
   }
   &:hover .dropdown_menu {
@@ -267,7 +281,6 @@
     }
   }
 }
-
 
 @media (max-width: 768px) {
   .grid {

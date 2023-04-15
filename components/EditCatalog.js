@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css"
 import AccessDenied from "@/components/AccessDenied"
 import { getListForCatalogsMenu } from "utils"
 import ModalImage from "./ModalImage"
+import { FaCloudDownloadAlt, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
 
 export default function EditCatalog({
   catalog,
@@ -92,20 +93,20 @@ export default function EditCatalog({
       <div className={styles.header}>
         <Links home={true} back={true} />
 
-        <span>
-          <i
-            className="fa-solid fa-square-xmark fa-2xl"
+        <div className={styles.right_icons}>
+          <FaWindowClose
+            className={styles.icon}
             title="Отмена"
             name="cancel"
             onClick={() => setIsShowCatalog(false)}
-          ></i>
-          <i
-            className="fa-solid fa-floppy-disk fa-2xl"
+          />
+          <FaSave
+            className={styles.icon}
             title="Сохранить"
             name="save"
             onClick={sendData}
-          ></i>
-        </span>
+          />
+        </div>
       </div>
       <div className={styles.container}>
         <div className={styles.left_side}>
@@ -137,11 +138,11 @@ export default function EditCatalog({
                   setValues({ ...values, parent: "", parentId: null })
                 }
               >
-                <i className="fa-solid fa-xmark fa-lg"></i>
+                <FaTimes  />
               </div>
               <ul className={styles.drop_down_list}>
                 {listForMenu.length
-                  ? listForMenu.map((item,i) => (
+                  ? listForMenu.map((item, i) => (
                       <li
                         key={i}
                         onClick={() => {
@@ -164,16 +165,20 @@ export default function EditCatalog({
           <div className={styles.image}>
             {image.path ? <img src={image.path} /> : <img src={NOIMAGE} />}
           </div>
-          <div className={styles.buttons}>
-            <span
-              title="Загрузить"
-              onClick={() => elDialog.current.showModal()}
-            >
-              <i className="fa-solid fa-cloud-arrow-down fa-2xl"></i>
-            </span>
-            <span title="Удалить" onClick={deleteImage}>
-              <i className="fa-solid fa-square-xmark fa-2xl"></i>
-            </span>
+          <div className={styles.buttons}>             
+              <FaCloudDownloadAlt
+                className={styles.icon}
+                name="download"
+                title="Загрузить"
+                onClick={() => elDialog.current.showModal()}
+              />            
+              <FaWindowClose
+                className={styles.icon}
+                name="delete"
+                title="Удалить"
+                onClick={deleteImage}
+              />
+          
           </div>
         </div>
       </div>
@@ -182,4 +187,3 @@ export default function EditCatalog({
     </>
   )
 }
-
