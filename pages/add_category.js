@@ -13,6 +13,7 @@ import { getListForCategoriesMenu } from "../utils"
 import ModalImage from "@/components/ModalImage"
 import ModalPrice from "@/components/ModalPrice"
 import ModalCatalog from "@/components/ModalCatalog"
+import { FaCloudDownloadAlt, FaImage, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
 
 export default function addCategoryPage({ categories }) {
   const {
@@ -127,14 +128,14 @@ export default function addCategoryPage({ categories }) {
                 <div className={styles.header}>
                   <Links home={true} back={true} />
 
-                  <span>
-                    <i
-                      className="fa-solid fa-floppy-disk fa-2xl"
+                  <div className={styles.right_icons}>
+                    <FaSave
+                      className={styles.icon}
                       title="Сохранить"
                       name="save"
                       onClick={handleSubmit}
-                    ></i>
-                  </span>
+                    />
+                  </div>
                 </div>
 
                 <ToastContainer />
@@ -160,8 +161,7 @@ export default function addCategoryPage({ categories }) {
                         onChange={handleChange}
                         autoComplete="off"
                       />
-                      <div
-                        className={styles.cancell}
+                      <FaTimes
                         onClick={() =>
                           setValues({
                             ...values,
@@ -169,13 +169,11 @@ export default function addCategoryPage({ categories }) {
                             parentId: null,
                           })
                         }
-                      >
-                        <i className="fa-solid fa-xmark fa-lg"></i>
-                      </div>
+                      />
                       <ul className={styles.dropdown_menu}>
                         {listForMenu && (
                           <>
-                            {listForMenu.map((item,i) => (
+                            {listForMenu.map((item, i) => (
                               <li
                                 key={i}
                                 onClick={() =>
@@ -211,33 +209,35 @@ export default function addCategoryPage({ categories }) {
                   {values.parentId === null ? (
                     <div>
                       <div>
-                        <i
-                          className="fa-solid fa-download fa-xl"
+                        <FaCloudDownloadAlt
                           onClick={() => {
                             elDialogPrice.current.showModal()
                           }}
-                        ></i>
+                          title="Загрузить прайс"
+                        />
+
                         {price.path ? (
-                          <i
-                            className="fa-solid fa-xmark fa-xl"
+                          <FaWindowClose
                             onClick={() => setPrice({ path: "", file: null })}
-                          ></i>
+                            title="Удалить прайс"
+                          />
                         ) : null}
 
                         <p>Прайс</p>
                       </div>
                       <div>
-                        <i
-                          className="fa-solid fa-download fa-xl"
+                        <FaCloudDownloadAlt
                           onClick={() => {
                             elDialogCatalog.current.showModal()
                           }}
-                        ></i>
+                          title="Загрузить каталог"
+                        />
+
                         {catalog.path ? (
-                          <i
-                            className="fa-solid fa-xmark fa-xl"
+                          <FaWindowClose
                             onClick={() => setCatalog({ path: "", file: null })}
-                          ></i>
+                            title="Удалить каталог"
+                          />
                         ) : null}
 
                         <p>Каталог</p>
@@ -256,17 +256,18 @@ export default function addCategoryPage({ categories }) {
                     </div>
                   )}
                   <div className={styles.image_footer}>
-                    <button
-                      className="btn"
+                    <FaImage
                       onClick={() => {
                         elDialog.current.showModal()
                       }}
-                    >
-                      <i className="fa-regular fa-image"></i>
-                    </button>
-                    <button className="btn btn-danger" onClick={deleteImage}>
-                      <i className="fa-solid fa-xmark"></i>
-                    </button>
+                      name="save"
+                      title="Сохранить"
+                    />
+                    <FaWindowClose
+                      onClick={deleteImage}
+                      name="delete"
+                      title="Удалить"
+                    />
                   </div>
                 </div>
               </div>

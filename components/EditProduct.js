@@ -14,6 +14,7 @@ import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 import { GiCheckMark } from "react-icons/gi"
 import ModalImage from "./ModalImage"
+import { FaCloudDownloadAlt, FaPlusSquare, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
 
 export default function EditProduct({
   setProdList,
@@ -24,26 +25,27 @@ export default function EditProduct({
   setIsShowProduct,
   token,
 }) {
-  const brand = categories.find(
+  const [brand,setBrand]=useState(categories.find(
     (item) => idToString(item._id) === idToString(product.brandId)
-  )
-  const categoryName = categories.find(
+  ))
+  const [categoryName,setCategoryName]=useState(categories.find(
     (item) => idToString(item._id) === idToString(product.categoryId)
-  ).name
-  const catalogName = product.catalogId
+  ).name)
+
+  const [catalogName,setCatalogName]=useState(product.catalogId
     ? catalogs.find(
         (item) => idToString(item._id) === idToString(product.catalogId)
       ).name
-    : ""
+    : "")
+  
+  
 
   const [values, setValues] = useState({
     _id: product._id,
     name: product.name,
     brandId: product.brandId,
     model: product.model,
-    description: product.description,
-    category: categoryName,
-    catalog: catalogName,
+    description: product.description,   
     categoryId: product.categoryId,
     catalogId: product.catalogId,
     options: product.options,
@@ -67,12 +69,15 @@ export default function EditProduct({
   const elDialog = useRef()
 
   useEffect(() => {
-    if (!values.categoryId)
-      setValues({ ...values, options: {}, category: "", brandId: null })
+    if (!values.categoryId) {
+      setValues({ ...values, options: {}, brandId: null })
+      setCategoryName('')
+    }
+      
   }, [values.categoryId])
 
   useEffect(() => {
-    if (!values.catalogId) setValues({ ...values, catalog: "" })
+    if (!values.catalogId) setCatalogName('')
   }, [values.catalogId])
 
   const handleSubmit = async (e) => {
@@ -140,12 +145,16 @@ export default function EditProduct({
 
   const handleListClick = async (category) => {
     const brand = getBrand(category, categories)
+    setBrand({ ...brand })
+    setCategoryName(category.name)
     setValues({
-      ...values,
-      category: category.name,
+      ...values,      
       categoryId: category._id,
       brandId: brand._id,
-      options: { ...brand.options },
+      options: Object.assign(
+        {},
+        ...Object.keys(brand.options).map((option) => ({ [option]: {} }))
+      ),
     })
   }
 
@@ -168,28 +177,27 @@ export default function EditProduct({
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-console.log(values.options)
+
   return (
     <>
       <div className={styles.form}>
         <form>
           <div className={styles.header}>
             <Links home={true} back={true} />
-
-            <span>
-              <i
-                className="fa-solid fa-square-xmark fa-2xl"
+            <div className={styles.right_icons}>
+              <FaWindowClose
+                className={styles.icon}
                 title="Отмена"
                 name="cancel"
                 onClick={() => setIsShowProduct(false)}
-              ></i>
-              <i
-                className="fa-solid fa-floppy-disk fa-2xl"
+              />
+              <FaSave
+                className={styles.icon}
                 title="Сохранить"
                 name="save"
                 onClick={handleSubmit}
-              ></i>
-            </span>
+              />
+            </div>
           </div>
 
           <ToastContainer />
@@ -222,23 +230,21 @@ console.log(values.options)
                   type="text"
                   id="category"
                   name="category"
-                  value={values.category}
+                  value={categoryName}
                   onChange={handleChange}
                 />
                 <div
                   className={styles.cancell}
                   onClick={() => setValues({ ...values, categoryId: null })}
                 >
-                  <i className="fa-solid fa-xmark fa-lg"></i>
+                  <FaTimes />
                 </div>
+
                 <ul className={styles.dropdown_menu}>
                   {listForCategoryMenu && (
                     <>
-                      {listForCategoryMenu.map((item,i) => (
-                        <li
-                          key={i}
-                          onClick={() => handleListClick(item.cat)}
-                        >
+                      {listForCategoryMenu.map((item, i) => (
+                        <li key={i} onClick={() => handleListClick(item.cat)}>
                           {item.tree}
                         </li>
                       ))}
@@ -254,28 +260,30 @@ console.log(values.options)
                   type="text"
                   id="catalog"
                   name="catalog"
-                  value={values.catalog}
+                  value={catalogName}
                   onChange={handleChange}
                 />
                 <div
                   className={styles.cancell}
                   onClick={() => setValues({ ...values, catalogId: null })}
                 >
-                  <i className="fa-solid fa-xmark fa-lg"></i>
+                  <FaTimes />
                 </div>
 
                 <ul className={styles.dropdown_menu}>
                   {listForCatalogMenu && (
                     <>
-                      {listForCatalogMenu.map((item,i) => (
+                      {listForCatalogMenu.map((item, i) => (
                         <li
                           key={i}
-                          onClick={() =>
+                          onClick={() =>{
                             setValues({
-                              ...values,
-                              catalog: item.cat.name,
+                              ...values,                              
                               catalogId: item.cat._id,
                             })
+                            setCatalogName(item.cat.name)
+                          }                          
+
                           }
                         >
                           {item.tree}
@@ -338,7 +346,7 @@ console.log(values.options)
 
             <div className={styles.checkbox_wrapper}>
               <div className={styles.custom_checkbox}>
-                 <input
+                <input
                   type="checkbox"
                   name="isShowcase"
                   id="isShowcase"
@@ -346,12 +354,7 @@ console.log(values.options)
                   checked={values.isShowcase}
                 />
                 <label htmlFor="isShowcase">Показывать на витрине</label>
-                <GiCheckMark
-                  className={
-                    styles.check_icon 
-                  }
-                />
-               
+                <GiCheckMark className={styles.check_icon} />
               </div>
 
               <div className={styles.custom_checkbox}>
@@ -363,12 +366,7 @@ console.log(values.options)
                   checked={values.isInStock}
                 />
                 <label htmlFor="isInStock">В наличии</label>
-                <GiCheckMark
-                  className={
-                    styles.check_icon 
-                  }
-                />
-                
+                <GiCheckMark className={styles.check_icon} />
               </div>
             </div>
           </div>
@@ -401,34 +399,30 @@ console.log(values.options)
                     <img src={item.path} />
                   </div>
                   <div className={styles.image_footer}>
-                    <button
-                      className="btn"
+                    <FaCloudDownloadAlt
+                      className={styles.icon}
+                      name="download"
+                      title="Загрузить"
                       onClick={() => {
                         setImageIdx(i)
                         elDialog.current.showModal()
                       }}
-                    >
-                      <i className="fa-regular fa-image"></i>
-                    </button>
-                    <button
-                      className="btn btn-danger"
+                    />
+                    <FaWindowClose
+                      className={styles.icon}
+                      name="delete"
+                      title="Удалить"
                       onClick={() => deleteImage(i)}
-                    >
-                      <i className="fa-solid fa-xmark"></i>
-                    </button>
+                    />
                   </div>
                 </div>
               ))
-            : null}
-          <button
-            className="btn"
+            : null}         
+          < FaPlusSquare className={styles.plus_icon}
             onClick={() => {
               setImageIdx(images.length)
-              elDialog.current.showModal()
-            }}
-          >
-            <i className="fa-solid fa-plus"></i>
-          </button>
+            elDialog.current.showModal()            
+            }}/>         
         </div>
       </div>
       <ModalImage handleUploadChange={handleUploadChange} elDialog={elDialog} />

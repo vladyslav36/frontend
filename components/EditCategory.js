@@ -193,19 +193,15 @@ export default function EditCategory({
                   value={values.parent}
                   onChange={handleChange}
                   autoComplete="off"
-                />
-                <div
-                  className={styles.cancell}
-                  onClick={() =>
+                />               
+                  <FaTimes  onClick={() =>
                     setValues({
                       ...values,
                       parent: "",
                       parentId: null,
                     })
-                  }
-                >
-                  <FaTimes />
-                </div>
+                  }/>
+               
                 <ul className={styles.dropdown_menu}>
                   {listForMenu &&
                     listForMenu.map((item, i) => (

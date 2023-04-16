@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
 import { useRef, useState } from "react"
+import { FaPencilAlt, FaTimes } from "react-icons/fa"
 
 export default function EditCatalogList({
   catalogs,
@@ -76,19 +77,16 @@ export default function EditCatalogList({
                 <div key={key} className={styles.item}>
                   {item.tree}
                   <div className={styles.buttons}>
-                    <button
+                    <FaPencilAlt
                       className={styles.edit}
                       onClick={() => handleEditCatalog(item._id)}
-                    >
-                      <i className="fa-solid fa-pencil"></i>
-                    </button>
-
-                    <button
+                      title="Редактировать"
+                    />
+                    <FaTimes
                       className={styles.delete}
                       onClick={() => handleModal(item)}
-                    >
-                      <i className="fa-solid fa-xmark fa-lg"></i>
-                    </button>
+                      title="Удалить"
+                    />                  
                   </div>
                 </div>
               ))

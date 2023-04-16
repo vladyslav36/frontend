@@ -12,7 +12,7 @@
       table-layout: fixed;
       width: 100%;
       border-collapse: collapse;
-
+      font-size: 15px;
       thead {
         th {
           &:nth-child(1) {
@@ -102,7 +102,7 @@
   .edit {
     color: #2874a6;
     display: flex;
-
+    font-size: 20px;
     &:hover {
       cursor: pointer;
     }
@@ -112,16 +112,13 @@
     display: flex;
     border: none;
     color: red;
-
+    font-size: 25px;
     &:hover {
       cursor: pointer;
     }
   }
 }
 
-.icon {
-  font-size: 1.5rem;
-}
 .linkButton {
   border: none;
   font-size: 1rem;
@@ -160,7 +157,7 @@
       top: 100%;
       left: 0;
       font-size: 15px;
-      background:    #f8f9f9;
+      background: #f8f9f9;
       width: 100%;
       // padding: 5px;
       border: 1px solid #999;
@@ -172,12 +169,12 @@
       li {
         cursor: pointer;
         padding: 5px 10px;
-        border:1px solid   #e5e7e9 ;
+        border: 1px solid #e5e7e9;
         border-collapse: collapse;
         list-style: none;
-        
-        &:hover{
-          background-color: darken($color:  #f8f9f9, $amount: 7);
+
+        &:hover {
+          background-color: darken($color: #f8f9f9, $amount: 7);
         }
       }
     }

@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css"
 import AccessDenied from "@/components/AccessDenied"
 import { getListForCatalogsMenu } from "utils"
 import ModalImage from "@/components/ModalImage"
+import { FaCloudDownloadAlt, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
 
 export default function addCatalog({ catalogs: dbCatalogs }) {
   const {
@@ -78,13 +79,14 @@ const listForMenu=getListForCatalogsMenu(catalogs)
           <ToastContainer />
           <div className={styles.header}>
             <Links home={true} back={true} />
-            <span onClick={sendData}>
-              <i
-                className="fa-solid fa-floppy-disk fa-2xl"
+            <div className={styles.right_icons}>
+              <FaSave
+                className={styles.icon}
                 title="Сохранить"
                 name="save"
-              ></i>
-            </span>
+                onClick={sendData}
+              />
+            </div>
           </div>
           <div className={styles.container}>
             <div className={styles.left_side}>
@@ -117,11 +119,11 @@ const listForMenu=getListForCatalogsMenu(catalogs)
                       setValues({ ...values, parent: "", parentId: null })
                     }
                   >
-                    <i className="fa-solid fa-xmark fa-lg"></i>
+                    <FaTimes />
                   </div>
                   <ul className={styles.drop_down_list}>
                     {listForMenu.length
-                      ? listForMenu.map((item,i) => (
+                      ? listForMenu.map((item, i) => (
                           <li
                             key={i}
                             onClick={() => {
@@ -142,28 +144,29 @@ const listForMenu=getListForCatalogsMenu(catalogs)
             </div>
             <div className={styles.image_side}>
               <div className={styles.image}>
-                {image.path ? (
-                  <img src={image.path} />
-                ) : (
-                  <img src={NOIMAGE} />
-                )}
+                {image.path ? <img src={image.path} /> : <img src={NOIMAGE} />}
               </div>
               <div className={styles.buttons}>
-                <span
+                <FaCloudDownloadAlt
+                  className={styles.icon}
+                  name="download"
                   title="Загрузить"
                   onClick={() => elDialog.current.showModal()}
-                >
-                  <i className="fa-solid fa-cloud-arrow-down fa-2xl"></i>
-                </span>
-                <span title="Удалить" onClick={deleteImage}>
-                  <i className="fa-solid fa-square-xmark fa-2xl"></i>
-                </span>
+                />
+                <FaWindowClose
+                  className={styles.icon}
+                  name="delete"
+                  title="Удалить"
+                  onClick={deleteImage}
+                />
               </div>
             </div>
           </div>
 
-          
-          <ModalImage elDialog={elDialog} handleUploadChange={handleUploadChange}/>
+          <ModalImage
+            elDialog={elDialog}
+            handleUploadChange={handleUploadChange}
+          />
         </>
       ) : (
         <AccessDenied />

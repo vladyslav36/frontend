@@ -148,7 +148,7 @@
       &[name="delete"] {
         color: red;
       }
-      &[name="save"] {
+      &[name="save"],&[name='download'] {
         color: steelblue;
       }
     }
@@ -162,6 +162,11 @@
   flex-wrap: wrap;
   align-items: center;
   column-gap: 10px;
+  .plus_icon{
+    color:steelblue;
+    font-size:30px;
+    cursor:pointer;
+  }
 }
 
 .dropdown_menu {
@@ -195,18 +200,17 @@
 
 .input_group_menu {
   position: relative;
-  .cancell {
+  svg {
+    display: block;
+    transform: translate(-50%, -50%);
     font-size: 20px;
     position: absolute;
     color: red;
     top: 50%;
     right: 0;
     cursor: pointer;
-    svg {
-      display: block;
-      transform: translate(-50%, -50%);
-    }
   }
+
   &:hover .dropdown_menu {
     display: block;
   }

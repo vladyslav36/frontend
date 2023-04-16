@@ -4,8 +4,8 @@ import { getCurrencySymbol, getShortDescription } from "utils"
 import { API_URL } from "../config"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { useRouter } from "next/router"
 import Links from "@/components/Links"
+import { FaPencilAlt, FaSearch, FaTimes } from "react-icons/fa"
 
 export default function EditProductList({
   prodList,
@@ -14,7 +14,7 @@ export default function EditProductList({
   setProduct,
   token,
 }) {
-  const router = useRouter()
+  
 
   const [values, setValues] = useState({
     name: { name: "", id: "" },
@@ -244,7 +244,7 @@ export default function EditProductList({
           <div className={styles.button_wrapper}>
             <div>&nbsp;</div>
             <button type="submit" className={styles.button}>
-              <i className="fa-solid fa-magnifying-glass"></i>
+              <FaSearch />
             </button>
           </div>
         </form>
@@ -289,14 +289,14 @@ export default function EditProductList({
                               setIsShowProduct(true)
                             }}
                           >
-                            <i className="fa-solid fa-pencil fa-lg"></i>
+                            <FaPencilAlt />
                           </button>
                           <div>
                             <button
                               className={styles.delete}
                               onClick={() => handleModal(item)}
                             >
-                              <i className="fa-solid fa-xmark fa-xl"></i>
+                              <FaTimes />
                             </button>
                           </div>
                         </div>

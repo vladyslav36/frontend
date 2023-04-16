@@ -18,6 +18,7 @@ import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 import ModalImage from "@/components/ModalImage"
 import BcOptions from "@/components/BcOptions"
+import { FaCloudDownloadAlt, FaPlusSquare, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
 
 export default function addProductPage({ categories, catalogs }) {
   const {
@@ -175,14 +176,14 @@ export default function addProductPage({ categories, catalogs }) {
               <div className={styles.header}>
                 <Links home={true} back={true} />
 
-                <span>
-                  <i
-                    className="fa-solid fa-floppy-disk fa-2xl"
+                <div className={styles.right_icons}>
+                  <FaSave
+                    className={styles.icon}
                     title="Сохранить"
                     name="save"
                     onClick={handleSubmit}
-                  ></i>
-                </span>
+                  />
+                </div>
               </div>
 
               <ToastContainer />
@@ -218,11 +219,8 @@ export default function addProductPage({ categories, catalogs }) {
                       value={values.category}
                       onChange={handleChange}
                     />
-                    <div
-                      className={styles.cancell}
-                      onClick={resetCategory}
-                      >                       
-                      <i className="fa-solid fa-xmark fa-lg"></i>
+                    <div className={styles.cancell} onClick={resetCategory}>
+                      <FaTimes />
                     </div>
 
                     <ul className={styles.dropdown_menu}>
@@ -251,11 +249,8 @@ export default function addProductPage({ categories, catalogs }) {
                       value={values.catalog}
                       onChange={handleChange}
                     />
-                    <div
-                      className={styles.cancell}
-                      onClick={resetCatalog}
-                    >
-                      <i className="fa-solid fa-xmark fa-lg"></i>
+                    <div className={styles.cancell} onClick={resetCatalog}>
+                      <FaTimes />
                     </div>
 
                     <ul className={styles.dropdown_menu}>
@@ -358,15 +353,16 @@ export default function addProductPage({ categories, catalogs }) {
                   </div>
                 </div>
               </div>
-              {Object.keys(brand).length&&Object.keys(brand.options).length ? (
+              {Object.keys(brand).length &&
+              Object.keys(brand.options).length ? (
                 <SelectOptions
                   values={values}
-                    setValues={setValues}
-                    brand={brand}
+                  setValues={setValues}
+                  brand={brand}
                   toast={toast}
                 />
-                ) : null}               
-                  <BcOptions values={values} setValues={setValues} />              
+              ) : null}
+              <BcOptions values={values} setValues={setValues} />
               <div>
                 <label htmlFor="description">Описание</label>
                 <textarea
@@ -387,34 +383,32 @@ export default function addProductPage({ categories, catalogs }) {
                         <img src={item.path} />
                       </div>
                       <div className={styles.image_footer}>
-                        <button
-                          className="btn"
+                        <FaCloudDownloadAlt
+                          className={styles.icon}
+                          name="download"
+                          title="Загрузить"
                           onClick={() => {
                             setImageIdx(i)
                             elDialog.current.showModal()
                           }}
-                        >
-                          <i className="fa-regular fa-image"></i>
-                        </button>
-                        <button
-                          className="btn btn-danger"
+                        />
+                        <FaWindowClose
+                          className={styles.icon}
+                          name="delete"
+                          title="Удалить"
                           onClick={() => deleteImage(i)}
-                        >
-                          <i className="fa-solid fa-xmark"></i>
-                        </button>
+                        />                      
                       </div>
                     </div>
                   ))
                 : null}
-              <button
-                className="btn"
+              <FaPlusSquare
+                className={styles.plus_icon}
                 onClick={() => {
                   setImageIdx(images.length)
                   elDialog.current.showModal()
                 }}
-              >
-                <i className="fa-solid fa-plus"></i>
-              </button>
+              />
             </div>
           </div>
         </div>

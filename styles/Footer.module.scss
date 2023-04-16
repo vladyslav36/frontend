@@ -49,6 +49,11 @@
   &>div,&>a{
     text-align: left;
   }
+  a{
+    svg{
+      vertical-align: middle;
+    }
+  }
 }
 .phones_wrapper {
   display: flex;

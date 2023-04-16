@@ -1,24 +1,24 @@
-import {   useState } from "react"
+import { useState } from "react"
 import styles from "@/styles/OptionForm.module.scss"
 import "react-toastify/dist/ReactToastify.css"
 import { toast, ToastContainer } from "react-toastify"
 import { sortObjFields } from "utils"
+import { FaPlusCircle, FaTimes } from "react-icons/fa"
 
-
-
-
-
-export default function Options({ values, setValues }) {  
-  
-  const initialOptions = Object.assign({}, ...Object.keys(values.options).map(option => ({ [option]: '' })))  
-  const [inputValue, setInputValue] = useState({    
-    option: "", ...initialOptions
+export default function Options({ values, setValues }) {
+  const initialOptions = Object.assign(
+    {},
+    ...Object.keys(values.options).map((option) => ({ [option]: "" }))
+  )
+  const [inputValue, setInputValue] = useState({
+    option: "",
+    ...initialOptions,
   })
-  
+
   // example options.color.values.red.price
   const [activeOption, setActiveOption] = useState("")
   // activeOption-опция, значения которой надо показывать
- 
+
   const handleInputOption = async (e) => {
     e.preventDefault()
 
@@ -30,8 +30,8 @@ export default function Options({ values, setValues }) {
     e.preventDefault()
 
     const { name, value } = e.target
-    
-    setInputValue({ ...inputValue, [name]:value })
+
+    setInputValue({ ...inputValue, [name]: value })
   }
 
   const addOption = () => {
@@ -49,7 +49,9 @@ export default function Options({ values, setValues }) {
     const isRepeat = keys.find((item) => item === inputValue.option)
     if (!isRepeat) {
       setInputValue({ ...inputValue, [inputValue.option]: "", option: "" })
-       setValues({...values,options:sortObjFields({ ...values.options, [inputValue.option]: [] } )  
+      setValues({
+        ...values,
+        options: sortObjFields({ ...values.options, [inputValue.option]: [] }),
       })
       setActiveOption("")
     } else {
@@ -63,8 +65,14 @@ export default function Options({ values, setValues }) {
       return
     }
     const elem = document.getElementById(name)
-    elem.focus()    
-    setValues({...values,options:{...values.options,[name]:[...values.options[name],value].sort()}})
+    elem.focus()
+    setValues({
+      ...values,
+      options: {
+        ...values.options,
+        [name]: [...values.options[name], value].sort(),
+      },
+    })
     setInputValue({ ...inputValue, [name]: "" })
   }
 
@@ -75,27 +83,35 @@ export default function Options({ values, setValues }) {
     }
   }
 
-  const deleteOptionsValue = (i) => {   
-    setValues({ ...values, options: { ...values.options,[activeOption]: values.options[activeOption].filter((item, j) => i !== j) } })
+  const deleteOptionsValue = (i) => {
+    setValues({
+      ...values,
+      options: {
+        ...values.options,
+        [activeOption]: values.options[activeOption].filter(
+          (item, j) => i !== j
+        ),
+      },
+    })
   }
   const deleteOption = (name) => {
     const { [name]: deletedField, ...newInputValue } = inputValue
-    const { [name]: deletedField2, ...newOptions }=values.options    
+    const { [name]: deletedField2, ...newOptions } = values.options
     setActiveOption("")
     setInputValue(newInputValue)
     setValues({ ...values, options: newOptions })
-  }  
+  }
 
   return (
     <div>
       <ToastContainer />
       <div className={styles.content}>
-        <div className={styles.content_left}>
+        <div>
           <div
             className={styles.input}
             onFocus={() => {
-              setActiveOption("")              
-            }}            
+              setActiveOption("")
+            }}
             tabIndex={0}
           ></div>
           <div className={styles.input}>
@@ -110,11 +126,11 @@ export default function Options({ values, setValues }) {
                 onKeyDown={(e) => handlePress({ e, cb: addOption })}
                 onFocus={() => setActiveOption("")}
               />
-              <button type="button" onClick={addOption} title="Добавить опцию">
-                <div className={styles.icon_plus}>
-                  <i className="fa-solid fa-circle-plus"></i>
-                </div>
-              </button>
+              <FaPlusCircle
+                className={styles.icon_plus}
+                onClick={addOption}
+                title="Добавить опцию"
+              />
             </div>
           </div>
 
@@ -124,15 +140,11 @@ export default function Options({ values, setValues }) {
                   <div className={styles.input}>
                     <label htmlFor={item}>
                       {item}
-                      <button
-                        type="button"
+                      <FaTimes
+                        className={styles.icon_delete}
                         title="Удалить опцию"
                         onClick={() => deleteOption(item)}
-                      >
-                        <div className={styles.icon_delete}>
-                          <i className="fa-solid fa-xmark"></i>
-                        </div>
-                      </button>
+                      />
                     </label>
                     <div className={styles.input_button}>
                       <input
@@ -152,8 +164,8 @@ export default function Options({ values, setValues }) {
                           })
                         }
                       />
-                      <button
-                        type="button"
+                      <FaPlusCircle
+                        className={styles.icon_plus}
                         onClick={() =>
                           addOptionValue({
                             name: item,
@@ -161,11 +173,7 @@ export default function Options({ values, setValues }) {
                           })
                         }
                         title="Добавить значение опции"
-                      >
-                        <div className={styles.icon_plus}>
-                          <i className="fa-solid fa-circle-plus"></i>
-                        </div>
-                      </button>
+                      />
                     </div>
                   </div>
                 </div>
@@ -173,27 +181,18 @@ export default function Options({ values, setValues }) {
             : null}
         </div>
 
-        <div className={styles.content_right}>
+        <div>
           {activeOption ? (
             <>
               <p>Опция: {activeOption}</p>
               <div className={styles.option_list}>
-                {values.options[activeOption].map(
-                  (item, i) => (
-                    <div key={i} className={styles.list_item}>
-                      <div>{item}</div>
-                      <button
-                        type="button"
-                        title="Удалить значение опции"
-                        onClick={() => deleteOptionsValue(i)}
-                      >
-                        <div className={styles.icon_delete}>
-                          <i className="fa-solid fa-xmark"></i>
-                        </div>
-                      </button>
-                    </div>
-                  )
-                )}
+                {values.options[activeOption].map((item, i) => (
+                  <div key={i} className={styles.list_item}>
+                    <div>{item}</div>                   
+                      <FaTimes className={styles.icon_delete}  title="Удалить значение опции"
+                      onClick={() => deleteOptionsValue(i)}/>                   
+                  </div>
+                ))}
               </div>
             </>
           ) : null}
@@ -202,5 +201,3 @@ export default function Options({ values, setValues }) {
     </div>
   )
 }
-
-

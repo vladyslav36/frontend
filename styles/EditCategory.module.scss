@@ -2,9 +2,9 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding:0 10px;
-  .header{
-    padding:5px 0;
+  padding: 0 10px;
+  .header {
+    padding: 5px 0;
   }
 }
 .list_wrapper {
@@ -27,34 +27,21 @@
 .buttons {
   display: flex;
   align-items: center;
-}
-
-.edit {
-  margin: 0 5px;
-  border: none;
-  font-size: 1rem;
-  padding: 5px;
-  color: steelblue;
-  background-color: inherit;
-
-  &:hover {
+  svg {
+    margin: 0 5px;
+    border: none;
+    font-size: 30px;
+    padding: 5px;   
+    background-color: inherit;
     cursor: pointer;
   }
-}
-
-.delete {
-  margin: 0 5px;
-  border: none;
-  font-size: 1rem;
-  padding: 5px;
-  color: red;
-  background-color: inherit;
-
-  &:hover {
-    cursor: pointer;
+  .edit {
+    color: steelblue;
+  }
+  .delete {
+    color: red;
   }
 }
-
 .linkButton {
   border: none;
   font-size: 1rem;
