@@ -123,6 +123,7 @@ $image-width: 500px;
       justify-content: center;
       align-items: center;
       column-gap: 10px;
+
       .counter {
         width: 80px;
         font-size: 18px;
@@ -131,8 +132,9 @@ $image-width: 500px;
       }
       
         
-        i {        
+        svg {        
         color: #0e6655;
+        font-size:30px;
         cursor: pointer;  
                   
       }

@@ -10,9 +10,13 @@
   gap: 20px;
   span {
     padding: 5px;
+    
     color: red;
     cursor: pointer;
     align-self: flex-end;
+    svg{
+      font-size:25px;
+    }
   }
   input {
     width: 80%;

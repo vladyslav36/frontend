@@ -8,7 +8,8 @@ import { getArrayCatTree } from "utils"
 import Navbar from "@/components/Navbar"
 import Links from "@/components/Links"
 import CatalogsList from "@/components/CatalogsList"
-import { useRouter } from "next/router"
+import { FaBorderAll, FaList } from "react-icons/fa"
+
 
 export default function catalogPage({ catalog, catalogs }) {
   const [productList, setProductList] = useState([])
@@ -74,10 +75,10 @@ export default function catalogPage({ catalog, catalogs }) {
         {!childrenList.length ? (
           <div className={styles.toggles}>
             <div title="Список" onClick={() => setIsShowAsList(true)}>
-              <i className="fa-solid fa-list"></i>
+              <FaList />
             </div>
             <div title="Плитка" onClick={() => setIsShowAsList(false)}>
-              <i className="fa-solid fa-table-cells"></i>
+              <FaBorderAll />
             </div>
           </div>
         ) : null}

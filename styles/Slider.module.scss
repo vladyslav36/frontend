@@ -24,6 +24,7 @@
     .prev_button {
       position: absolute;
       top: 50vh;
+      transform:translateY(-50%);
       left: 5px;
       font-size: 25px;
       display: flex;
@@ -35,7 +36,8 @@
     .next_button {
       position: absolute;
       top: 50vh;
-      right: 5px;
+      transform:translateY(-50%);
+      right: 10px;
       font-size: 25px;
       display: flex;
       color: #fff;
@@ -47,9 +49,9 @@
   .times_icon {
     color: #fff;
     position: absolute;
-    top: 2px;
-    right: 15px;
-    font-size: 25px;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
     cursor: pointer;
   }
 }

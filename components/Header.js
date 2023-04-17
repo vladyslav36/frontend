@@ -8,6 +8,8 @@ import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import Loupe from "./Loupe"
 import { toast } from "react-toastify"
 import { useRouter } from "next/router"
+import { FaBars, FaMapMarkerAlt, FaPhone, FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"
+import { MdOutlineCurrencyExchange } from 'react-icons/Md'
 
 export default function Header() {
   const { setUser, user } = useContext(AuthContext)
@@ -77,7 +79,7 @@ export default function Header() {
             title="Поиск по модели или артикулу"
           />
           <p>
-            <i className="fa-sharp fa-solid fa-magnifying-glass"></i>
+           <FaSearch />
           </p>
           {products.length ? (
             <ul
@@ -143,7 +145,7 @@ export default function Header() {
             <li>
               <Link href="/contacts/map">
                 <div>
-                  <i className="fa-sharp fa-solid fa-location-dot fa-sm"></i>
+                 <FaMapMarkerAlt />
                   &nbsp;<span>Карта</span>
                 </div>
               </Link>
@@ -167,12 +169,12 @@ export default function Header() {
               >
                 <div onClick={toggleMainUserMenu}>
                   {" "}
-                  <i className="fa-solid fa-user"></i>
+                  <FaUser />
                 </div>
 
                 <ul className={styles.main_user_menu} ref={elemMainUserMenu}>
                   <li>
-                    <i className="fa-solid fa-user"></i>&nbsp;
+                   <FaUser />&nbsp;
                     <span>{user.userName}</span>
                   </li>
                   <li>
@@ -193,12 +195,12 @@ export default function Header() {
 
           <div className={styles.burger}>
             <div onClick={toggleBurgerMenu}>
-              <i className="fa-solid fa-bars fa-2xl"></i>
+             <FaBars />
             </div>
 
             <ul className={styles.burger_menu} ref={elemBurgerMenu}>
               <li className={isUser ? styles.show : styles.hide}>
-                <i className="fa-solid fa-user"></i>&nbsp;
+                <FaUser />&nbsp;
                 <span>{user.userName}</span>
               </li>
               <li>
@@ -266,10 +268,8 @@ export default function Header() {
               </select>
             </span>
           </div>
-          <div className={styles.rates}>
-            <div>
-              <i className="fa-solid fa-arrows-rotate"></i>
-            </div>
+          <div className={styles.rates}>            
+              <MdOutlineCurrencyExchange />           
             <p>
               USD:{" "}
               {Object.keys(currencyRate).length
@@ -284,8 +284,8 @@ export default function Header() {
         </div>
         <div className={styles.phones}>
           <span>
-            <i className="fa-solid fa-phone fa-ml"></i>
-          </span>
+             <FaPhone />
+          </span>         
           <span>
             <Link href="tel: +380509501671">{PHONE1}</Link>
             <Link href="tel: +380982086083">{PHONE2}</Link>
@@ -295,7 +295,7 @@ export default function Header() {
           <div className={styles.cart} title="Корзина">
             <Link href="/cart">
               <div>
-                <i className="fa-solid fa-cart-shopping fa-2x"></i>
+                <FaShoppingCart />
                 <p>
                   {cart && getQntInCart(cart) !== 0 ? getQntInCart(cart) : ""}
                 </p>

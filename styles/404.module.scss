@@ -1,8 +1,13 @@
-.error{
-  text-align:center;
+.error {
+  text-align: center;
   margin: 100px 0 200px;
-  h1{
-  font-size:50px;
-}
-}
 
+  svg {
+    font-size: 75px;
+    color: red;
+  }
+  a{
+    color:steelblue;
+    cursor:pointer;
+  }
+}

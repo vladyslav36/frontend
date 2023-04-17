@@ -32,6 +32,7 @@
     text-align: center;
     border: 1px solid #999;
     padding: 3px 0;
+   
   }
 
   th {
@@ -50,13 +51,15 @@
   }
 
   td {
-    &:nth-child(6) button {
-     @extend %btn;
-      color: steelblue;      
-    }
-    &:nth-child(7) button {
-      @extend %btn;
-      color: red;      
-    }
+     svg{
+      vertical-align: middle;
+      &[name='look']{
+        color:steelblue;
+      }
+      &[name='delete']{
+        color:red;
+      }
+     }   
+    
   }
 }

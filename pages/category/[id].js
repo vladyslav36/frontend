@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar"
 import CategoriesList from "@/components/CategoriesList"
 import Links from "@/components/Links"
 import { useRouter } from "next/router"
+import { FaBorderAll, FaFileExcel, FaFilePdf, FaList } from "react-icons/fa"
 
 export default function categoryPage({ category, categories }) {
   const [productList, setProductList] = useState([])
@@ -76,10 +77,10 @@ export default function categoryPage({ category, categories }) {
         {!childrenList.length ? (
           <div className={styles.toggles}>
             <div title="Список" onClick={() => setIsShowAsList(true)}>
-              <i className="fa-solid fa-list"></i>
+              <FaList />
             </div>
             <div title="Плитка" onClick={() => setIsShowAsList(false)}>
-              <i className="fa-solid fa-table-cells"></i>
+             <FaBorderAll />
             </div>
           </div>
         ) : null}
@@ -105,7 +106,7 @@ export default function categoryPage({ category, categories }) {
                 <Link href={`${API_URL}${category.price}`} target="_blank">
                   <div>
                     <p className={styles.icon_price}>
-                      <i className="fa-regular fa-file-excel fa-xl"></i>
+                     <FaFileExcel />
                     </p>
                     <p>Прайс</p>
                   </div>
@@ -115,7 +116,7 @@ export default function categoryPage({ category, categories }) {
                 <Link href={`${API_URL}${category.catalog}`} target="_blank">
                   <div>
                     <p className={styles.icon_catalog}>
-                      <i className="fa-solid fa-file-pdf fa-xl"></i>
+                      <FaFilePdf />
                     </p>
                     <p>Каталог</p>
                   </div>

@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar"
 import AuthContext from "@/context/AuthContext"
 import AccessDenied from "@/components/AccessDenied"
 import { formatingPhone } from "utils"
+import { FaUser } from "react-icons/fa"
 
 export default function userProfile() {
   const router = useRouter()
@@ -71,7 +72,7 @@ export default function userProfile() {
           <form className={styles.form} onSubmit={submitHandler}>
             <h2>
               <p>
-                <i className="fa-solid fa-user"></i>{" "}
+                <FaUser />
                 <span>{user.userName}</span>
               </p>
 

@@ -2,6 +2,7 @@ import styles from "@/styles/Slider.module.scss"
 import { API_URL, NOIMAGE } from "../config"
 import ReactDom from "react-dom"
 import { useState, useEffect } from "react"
+import { FaTimes } from "react-icons/fa"
 
 export default function Loupe({ image, setIsShow }) {
   const imageHeight = window.innerHeight * 0.95
@@ -23,13 +24,13 @@ export default function Loupe({ image, setIsShow }) {
       </div>
 
       <div
-        onClick={(e) => {
+       onClick={(e) => {
           e.stopPropagation()
           setIsShow(false)
         }}
         className={styles.times_icon}
       >
-        <i className="fa-solid fa-xmark fa-lg"></i>
+        <FaTimes  />
       </div>
     </div>
   )

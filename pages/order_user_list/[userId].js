@@ -6,6 +6,7 @@ import { useEffect, useState, useContext } from "react"
 import Links from "@/components/Links"
 import { useRouter } from "next/router"
 import AuthContext from "@/context/AuthContext"
+import { FaEye } from "react-icons/fa"
 
 export default function OrderUserList() {
   const { user } = useContext(AuthContext)
@@ -58,7 +59,7 @@ export default function OrderUserList() {
                         <td>{item.totalAmount}</td>
                         <td title="Смотреть заказ">
                           <button onClick={() => openOrder(item)}>
-                            <i className="fa-regular fa-eye"></i>
+                           <FaEye />
                           </button>
                         </td>
                       </tr>

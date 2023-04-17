@@ -2,6 +2,7 @@ import styles from "@/styles/Slider.module.scss"
 import { API_URL } from "../config"
 import { useState, useEffect } from "react"
 import ReactDom from "react-dom"
+import { FaChevronCircleLeft, FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa"
 
 export default function Slider({
   images,
@@ -39,13 +40,10 @@ export default function Slider({
   const imageHeight = window.innerHeight * 0.95
 
   const content = (
-    <div className={styles.overlay}>
-      {/* <div className={styles.slider}> */}
+    <div className={styles.overlay}>      
       <div className={styles.container}>
-        {lastNumber ? (
-          <button onClick={prevImage} className={styles.prev_button}>
-            <i className="fa-solid fa-chevron-left"></i>
-          </button>
+        {lastNumber ? (         
+            <FaChevronLeft onClick={prevImage} className={styles.prev_button}/>         
         ) : null}
         <div className={styles.image}>
           <img
@@ -54,18 +52,12 @@ export default function Slider({
           />
         </div>
 
-        {lastNumber ? (
-          <button onClick={nextImage} className={styles.next_button}>
-            <i className="fa-solid fa-chevron-right"></i>
-          </button>
+        {lastNumber ? (          
+            <FaChevronRight onClick={nextImage} className={styles.next_button}/>          
         ) : null}
-      </div>
-
-      <div onClick={() => closeSlider(num)} className={styles.times_icon}>
-        <i className="fa-solid fa-xmark"></i>
-      </div>
-    </div>
-    // </div>
+      </div>    
+        <FaTimes onClick={() => closeSlider(num)} className={styles.times_icon}/>      
+    </div>    
   )
 
   if (isBrowser) {

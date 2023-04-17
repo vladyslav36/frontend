@@ -5,6 +5,7 @@ import Layout from "@/components/Layout"
 import { getCurrencySymbol, getQntInCart,getTotalAmount } from "utils"
 import Links from "@/components/Links"
 import {useRouter} from "next/router"
+import { FaTimes } from "react-icons/fa"
 
 
 export default function Cart() {
@@ -45,13 +46,11 @@ const router=useRouter()
               <td>Цена</td>
               <td>Кол-во</td>
               <td>
-                <div
-                  className={styles.delete_btn}
+               
+                  <FaTimes  className={styles.delete_btn}
                   title="Очистить корзину"
-                  onClick={() => setCart([])}
-                >
-                  <i className="fa-solid fa-xmark"></i>
-                </div>
+                  onClick={() => setCart([])}/>
+              
               </td>
             </tr>
           </thead>
@@ -69,16 +68,12 @@ const router=useRouter()
                     {item.price}&nbsp;{getCurrencySymbol(item.currencyValue)}
                   </td>
                   <td>{item.qnt}</td>
-                  <td>
-                    <div
-                      className={styles.delete_btn}
+                  <td>                   
+                      <FaTimes  className={styles.delete_btn}
                       title="Удалить строку"
                       onClick={() =>
                         setCart(cart.filter((item, idx) => i !== idx))
-                      }
-                    >
-                      <i className="fa-solid fa-xmark"></i>
-                    </div>
+                      }/>                   
                   </td>
                 </tr>
               ))

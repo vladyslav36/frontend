@@ -89,9 +89,17 @@
 
     .icon_price {
       color: #1d6f42;
+      svg{
+        font-size:30px;
+        vertical-align: middle;
+      }
     }
     .icon_catalog {
       color: #f40f02;
+       svg{
+        font-size:30px;
+        vertical-align: middle;
+      }
     }
   }
 }

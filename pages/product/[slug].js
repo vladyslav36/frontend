@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar"
 import ProductsContext from "@/context/ProductsContext"
 import Links from "@/components/Links"
 import ProductOptions from "@/components/ProductOptions"
+import { FaMinusSquare, FaPlusSquare } from "react-icons/fa"
 
 export default function productPage({  product: productDb }) {
   const { currencyShop } = useContext(ProductsContext)
@@ -259,22 +260,16 @@ export default function productPage({  product: productDb }) {
             ) : null}
             <div className={styles.counter_cart_wrapper}>
               <div className={styles.counter_wrapper}>
-                <i
-                  
-                  className="fa-solid fa-square-minus fa-2xl"
-                  onClick={decQnt}
-                ></i>
+                <FaMinusSquare onClick={decQnt}/>
+               
                 <input
                   type="text"
                   className={styles.counter}
                   value={values.qnt}
                   onChange={handleQnt}
                 />{" "}
-                <i
-                  
-                  className="fa-solid fa-square-plus fa-2xl"
-                  onClick={incQnt}
-                ></i>
+                <FaPlusSquare onClick={incQnt}/>
+                
               </div>
 
              

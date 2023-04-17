@@ -9,6 +9,7 @@ import { API_URL, TELEGRAM_BOT_URI, VIBER_BOT_URI } from "../config"
 import Link from "next/link"
 import AuthContext from "@/context/AuthContext"
 import Layout from "@/components/Layout"
+import { FaTelegram, FaTimes, FaViber } from "react-icons/fa"
 
 export default function loginPage() {
   const [authKey, setAuthKey] = useState("")
@@ -67,7 +68,7 @@ export default function loginPage() {
             onClick={() => router.back()}
             title="Закрыть"
           >
-            <i className="fa-solid fa-xmark fa-xl"></i>
+            <FaTimes />
           </div>
           <h1>Авторизация</h1>
           <div className={styles.icons}>
@@ -75,23 +76,19 @@ export default function loginPage() {
               href={`viber://pa?chatURI=${VIBER_BOT_URI}&context=${authKey}`}
               target="_blank"
             >
-              <div
-                title="Авторизация через Viber"
-                onClick={() => setAuthMethod("Viber")}
-              >
-                <i className="fa-brands fa-viber fa-4x"></i>
-              </div>
+             
+               <FaViber title="Авторизация через Viber"
+                onClick={() => setAuthMethod("Viber")} name='viber'/>
+             
             </Link>
             <Link
               href={`https://t.me/${TELEGRAM_BOT_URI}?start=${authKey}`}
               target="_blank"
             >
-              <div
-                title="Авторизация через Telegram"
-                onClick={() => setAuthMethod("Telegram")}
-              >
-                <i className="fa-brands fa-telegram fa-4x"></i>
-              </div>
+             
+                <FaTelegram title="Авторизация через Telegram"
+                onClick={() => setAuthMethod("Telegram")} name='telegram'/>
+              
             </Link>
           </div>
 

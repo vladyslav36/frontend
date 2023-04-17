@@ -45,7 +45,9 @@
   grid-area: search;
   justify-self: center;
   position: relative;
-
+  svg {
+    vertical-align: middle;
+  }
   input {
     width: 400px;
     height: 30px;
@@ -130,10 +132,10 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  
+
   .cart {
     position: relative;
-
+font-size: 35px;;
     &:hover {
       cursor: pointer;
     }
@@ -161,7 +163,9 @@
   column-gap: 20px;
   font-size: 17px;
   cursor: pointer;
-
+svg{
+  vertical-align: middle;
+}
   li:hover {
     text-decoration: underline;
   }
@@ -205,9 +209,11 @@
   justify-content: flex-end;
   cursor: pointer;
   position: relative;
+  font-size:30px;
 }
 
 .burger_menu {
+  font-size: 17px;;
   display: none;
   position: absolute;
   overflow: hidden;
@@ -263,12 +269,15 @@
 .rates {
   display: flex;
   column-gap: 5px;
+  align-items: center;
 }
 
 .phones {
   display: flex;
   align-items: center;
   column-gap: 10px;
+  
+  
 
   span:nth-child(2) {
     display: flex;
