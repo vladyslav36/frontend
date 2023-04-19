@@ -8,8 +8,8 @@ import { API_URL, NOIMAGE, PHONE1, PHONE2 } from "../config"
 import Loupe from "./Loupe"
 import { toast } from "react-toastify"
 import { useRouter } from "next/router"
-import { FaBars, FaMapMarkerAlt, FaPhone, FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"
-import { MdOutlineCurrencyExchange } from 'react-icons/Md'
+import { FaBars, FaMapMarkerAlt, FaPhone, FaSearch, FaShoppingCart, FaSyncAlt, FaUser } from "react-icons/fa"
+
 
 export default function Header() {
   const { setUser, user } = useContext(AuthContext)
@@ -75,11 +75,11 @@ export default function Header() {
             type="text"
             value={searchString}
             onChange={handleChange}
-            maxLength='40'
+            maxLength="40"
             title="Поиск по модели или артикулу"
           />
           <p>
-           <FaSearch />
+            <FaSearch />
           </p>
           {products.length ? (
             <ul
@@ -145,7 +145,7 @@ export default function Header() {
             <li>
               <Link href="/contacts/map">
                 <div>
-                 <FaMapMarkerAlt />
+                  <FaMapMarkerAlt />
                   &nbsp;<span>Карта</span>
                 </div>
               </Link>
@@ -174,7 +174,8 @@ export default function Header() {
 
                 <ul className={styles.main_user_menu} ref={elemMainUserMenu}>
                   <li>
-                   <FaUser />&nbsp;
+                    <FaUser />
+                    &nbsp;
                     <span>{user.userName}</span>
                   </li>
                   <li>
@@ -195,12 +196,13 @@ export default function Header() {
 
           <div className={styles.burger}>
             <div onClick={toggleBurgerMenu}>
-             <FaBars />
+              <FaBars />
             </div>
 
             <ul className={styles.burger_menu} ref={elemBurgerMenu}>
               <li className={isUser ? styles.show : styles.hide}>
-                <FaUser />&nbsp;
+                <FaUser />
+                &nbsp;
                 <span>{user.userName}</span>
               </li>
               <li>
@@ -268,8 +270,8 @@ export default function Header() {
               </select>
             </span>
           </div>
-          <div className={styles.rates}>            
-              <MdOutlineCurrencyExchange />           
+          <div className={styles.rates}>
+            <FaSyncAlt />
             <p>
               USD:{" "}
               {Object.keys(currencyRate).length
@@ -284,8 +286,8 @@ export default function Header() {
         </div>
         <div className={styles.phones}>
           <span>
-             <FaPhone />
-          </span>         
+            <FaPhone />
+          </span>
           <span>
             <Link href="tel: +380509501671">{PHONE1}</Link>
             <Link href="tel: +380982086083">{PHONE2}</Link>
