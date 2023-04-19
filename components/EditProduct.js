@@ -15,6 +15,8 @@ import Links from "@/components/Links"
 import { GiCheckMark } from "react-icons/gi"
 import ModalImage from "./ModalImage"
 import { FaCloudDownloadAlt, FaPlusSquare, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
+import BcOptions from "./BcOptions"
+import BcAlong from "./BcAlong"
 
 export default function EditProduct({
   setProdList,
@@ -49,6 +51,8 @@ export default function EditProduct({
     categoryId: product.categoryId,
     catalogId: product.catalogId,
     options: product.options,
+    barcods: product.barcods,
+    barcode:product.barcode,
     isInStock: product.isInStock,
     price: product.price,
     retailPrice: product.retailPrice,
@@ -64,9 +68,19 @@ export default function EditProduct({
 
   const listForCategoryMenu = getListForCategoriesMenu(categories)
   const listForCatalogMenu = getListForCatalogsMenu(catalogs)
-
+const [isBcWithOptions, setIsBcWithOptions] = useState(false)
   const [imageIdx, setImageIdx] = useState(0)
   const elDialog = useRef()
+
+   useEffect(() => {
+     const rez = Object.keys(values.options).length
+       ? Object.keys(values.options).some(
+           (option) => Object.keys(values.options[option]).length
+         )
+       : false
+
+     setIsBcWithOptions(rez)
+   }, [values.options])
 
   useEffect(() => {
     if (!values.categoryId) {
@@ -86,6 +100,16 @@ export default function EditProduct({
     const hasEmptyFields = !values.name.trim() || !values.model.trim()
     if (hasEmptyFields) {
       toast.error("Поле Название и Модель должны быть заполнены")
+      return
+    }
+
+    if (!categoryName) {
+      toast.error("Поле категория является обязательным")
+      return
+    }
+
+    if (values.categoryId === values.brandId) {
+      toast.error("Товар должен находиться хотя бы в одной подкатегории")
       return
     }
 
@@ -276,15 +300,13 @@ export default function EditProduct({
                       {listForCatalogMenu.map((item, i) => (
                         <li
                           key={i}
-                          onClick={() =>{
+                          onClick={() => {
                             setValues({
-                              ...values,                              
+                              ...values,
                               catalogId: item.cat._id,
                             })
                             setCatalogName(item.cat.name)
-                          }                          
-
-                          }
+                          }}
                         >
                           {item.tree}
                         </li>
@@ -378,6 +400,11 @@ export default function EditProduct({
               toast={toast}
             />
           ) : null}
+          {isBcWithOptions ? (
+            <BcOptions values={values} setValues={setValues} />
+          ) : (
+            <BcAlong values={values} setValues={setValues} />
+          )}
           <div>
             <label htmlFor="description">Описание</label>
             <textarea
@@ -417,12 +444,14 @@ export default function EditProduct({
                   </div>
                 </div>
               ))
-            : null}         
-          < FaPlusSquare className={styles.plus_icon}
+            : null}
+          <FaPlusSquare
+            className={styles.plus_icon}
             onClick={() => {
               setImageIdx(images.length)
-            elDialog.current.showModal()            
-            }}/>         
+              elDialog.current.showModal()
+            }}
+          />
         </div>
       </div>
       <ModalImage handleUploadChange={handleUploadChange} elDialog={elDialog} />

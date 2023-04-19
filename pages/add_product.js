@@ -18,7 +18,14 @@ import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 import ModalImage from "@/components/ModalImage"
 import BcOptions from "@/components/BcOptions"
-import { FaCloudDownloadAlt, FaPlusSquare, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
+import {
+  FaCloudDownloadAlt,
+  FaPlusSquare,
+  FaSave,
+  FaTimes,
+  FaWindowClose,
+} from "react-icons/fa"
+import BcAlong from "@/components/BcAlong"
 
 export default function addProductPage({ categories, catalogs }) {
   const {
@@ -30,12 +37,11 @@ export default function addProductPage({ categories, catalogs }) {
     brandId: null,
     model: "",
     description: "",
-    category: "",
-    catalog: "",
     categoryId: null,
     catalogId: null,
     options: {},
     barcods: {},
+    barcode: "",
     isInStock: true,
     price: "",
     retailPrice: "",
@@ -47,25 +53,35 @@ export default function addProductPage({ categories, catalogs }) {
   const [brand, setBrand] = useState({})
   const listForCategoryMenu = getListForCategoriesMenu(categories)
   const listForCatalogMenu = getListForCatalogsMenu(catalogs)
-  
+  const [catalogName, setCatalogName] = useState("")
+  const [categoryName, setCategoryName] = useState("")
+  const [isBcWithOptions, setIsBcWithOptions] = useState(false)
 
   const [imageIdx, setImageIdx] = useState(0)
 
   const elDialog = useRef()
   const router = useRouter()
- 
- 
 
+  useEffect(() => {
+    const rez = Object.keys(values.options).length
+      ? Object.keys(values.options).some(
+          (option) => Object.keys(values.options[option]).length
+        )
+      : false
+   
+    setIsBcWithOptions(rez)
+  }, [values.options])
 
   const resetCategory = () => {
-    setValues({ ...values, category: '', categoryId: null, brandId: null, options: {} })
+    setCategoryName("")
+    setValues({ ...values, categoryId: null, brandId: null, options: {} })
     setBrand({})
-}
-  
+  }
+
   const resetCatalog = () => {
-  setValues({...values,catalog:'',catalogId:null})
-}
- 
+    setCatalogName("")
+    setValues({ ...values, catalogId: null })
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -76,7 +92,7 @@ export default function addProductPage({ categories, catalogs }) {
       return
     }
 
-    if (!values.category) {
+    if (!categoryName) {
       toast.error("Поле категория является обязательным")
       return
     }
@@ -135,14 +151,17 @@ export default function addProductPage({ categories, catalogs }) {
   }
 
   const handleListClick = async (category) => {
-    const brand=getBrand(category, categories)
+    const brand = getBrand(category, categories)
     setBrand(brand)
+    setCategoryName(category.name)
     setValues({
       ...values,
-      category: category.name,
       categoryId: category._id,
       brandId: brand._id,
-      options: Object.assign({}, ...Object.keys(brand.options).map(option => ({ [option]: {} }))),
+      options: Object.assign(
+        {},
+        ...Object.keys(brand.options).map((option) => ({ [option]: {} }))
+      ),
     })
   }
   const handleUploadChange = (e) => {
@@ -216,7 +235,7 @@ export default function addProductPage({ categories, catalogs }) {
                       type="text"
                       id="category"
                       name="category"
-                      value={values.category}
+                      value={categoryName}
                       onChange={handleChange}
                     />
                     <div className={styles.cancell} onClick={resetCategory}>
@@ -246,7 +265,7 @@ export default function addProductPage({ categories, catalogs }) {
                       type="text"
                       id="catalog"
                       name="catalog"
-                      value={values.catalog}
+                      value={catalogName}
                       onChange={handleChange}
                     />
                     <div className={styles.cancell} onClick={resetCatalog}>
@@ -259,13 +278,14 @@ export default function addProductPage({ categories, catalogs }) {
                           {listForCatalogMenu.map((item, i) => (
                             <li
                               key={i}
-                              onClick={() =>
+                              onClick={() => {
                                 setValues({
                                   ...values,
                                   catalog: item.cat.name,
                                   catalogId: item.cat._id,
                                 })
-                              }
+                                setCatalogName(item.cat.name)
+                              }}
                             >
                               {item.tree}
                             </li>
@@ -362,7 +382,12 @@ export default function addProductPage({ categories, catalogs }) {
                   toast={toast}
                 />
               ) : null}
-              <BcOptions values={values} setValues={setValues} />
+              {isBcWithOptions ? (
+                <BcOptions values={values} setValues={setValues} />
+              ) : (
+                <BcAlong values={values} setValues={setValues} />
+              )}
+
               <div>
                 <label htmlFor="description">Описание</label>
                 <textarea
@@ -397,7 +422,7 @@ export default function addProductPage({ categories, catalogs }) {
                           name="delete"
                           title="Удалить"
                           onClick={() => deleteImage(i)}
-                        />                      
+                        />
                       </div>
                     </div>
                   ))

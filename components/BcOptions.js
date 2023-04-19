@@ -3,8 +3,8 @@ import styles from "@/styles/BcOptions.module.scss"
 import { copyBarcods, optionsToBarcods } from "utils"
 import { GiCheckMark } from "react-icons/gi"
 import { FaArrowAltCircleLeft, FaLongArrowAltRight, FaSave } from "react-icons/fa"
-import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { toast,ToastContainer } from "react-toastify"
 
 export default function BcOptions({ values, setValues }) {
   const [hasBarcods, setHasBarcods] = useState(false)
@@ -47,9 +47,9 @@ export default function BcOptions({ values, setValues }) {
   }
 
   const handleSave = () => {
-    // if (inputValue.length !== 13) {
-    //   toast.error('Количество цифр должно быть равно 13')
-    // }
+    if (inputValue.length !== 13) {
+      toast.error('Количество цифр должно быть равно 13')
+    }
     const barcods = { ...values.barcods }
     let lastObj = crumbsArr.slice(0, -1).reduce((acc, item) => acc[item], barcods)  
     const lastKey = crumbsArr[crumbsArr.length - 1]    
@@ -64,9 +64,10 @@ export default function BcOptions({ values, setValues }) {
     setInputValue(value)
   }
   
-  console.log(crumbsArr)
+  
   return (
     <div className={styles.container}>
+      <ToastContainer />
       <div className={styles.check_wrapper}>
         <input
           type="checkbox"
