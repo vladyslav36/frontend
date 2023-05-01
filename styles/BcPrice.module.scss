@@ -2,10 +2,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .save_icon {
-    font-size: 30px;
-    color: steelblue;
-    cursor:pointer;
+  .header_right {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+
+    & [name="save_icon"] {
+      font-size: 30px;
+      color: steelblue;
+      cursor: pointer;
+    }
+    & [name="delete_icon"] {
+      font-size: 30px;
+      color: red;
+      cursor: pointer;
+    }
   }
 }
 
@@ -23,6 +34,17 @@
     label {
       display: block;
       padding: 5px;
+      .input_wrapper {
+        position: relative;
+        svg {
+          position: absolute;
+          top: 50%;
+          right: -20px;
+          transform: translate(50%, -50%);
+          font-size: 20px;
+          color: red;
+        }
+      }
       input {
         padding: 0 5px;
         display: block;
