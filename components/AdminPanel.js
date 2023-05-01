@@ -140,6 +140,11 @@ export default function AdminPanel() {
               <div className={styles.container_item}>Информация</div>
             </div>
           </Link>
+          <Link href="/bc_price">
+            <div className={styles.single_link}>
+              <div className={styles.container_item}>Штрихкод</div>
+            </div>
+          </Link>
         </div>
       ) : null}
     </div>

@@ -140,14 +140,7 @@ const [isBcWithOptions, setIsBcWithOptions] = useState(false)
       setIsShowProduct(false)
     }
   }
-  const formatPrice = ({ name, value }) => {
-    let { price, error } = stringToPrice(value)
-    if (error) {
-      price = ""
-      toast.error("Прайс должен быть числом")
-    }
-    setValues({ ...values, [name]: price })
-  }
+ 
   // input для name & model ...
   const handleChange = (e) => {
     const { name, value, checked } = e.target
@@ -329,10 +322,15 @@ const [isBcWithOptions, setIsBcWithOptions] = useState(false)
                     id="price"
                     name="price"
                     value={values.price}
-                    onChange={handleChange}
-                    onBlur={(e) =>
-                      formatPrice({ name: "price", value: e.target.value })
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        price: e.target.value
+                          .replace(/[^\d.,]+/g, "")
+                          .replace(",", "."),
+                      })
                     }
+                    onBlur={(e) => setValues({ ...values, price: stringToPrice(e.target.value) })}
                   />
                 </div>
                 <div tabIndex={0}>
@@ -341,13 +339,15 @@ const [isBcWithOptions, setIsBcWithOptions] = useState(false)
                     id="retailPrice"
                     name="retailPrice"
                     value={values.retailPrice}
-                    onChange={handleChange}
-                    onBlur={(e) =>
-                      formatPrice({
-                        name: "retailPrice",
-                        value: e.target.value,
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        retailPrice: e.target.value
+                          .replace(/[^\d.,]+/g, "")
+                          .replace(",", "."),
                       })
                     }
+                    onBlur={(e) =>setValues({...values,retailPrice:stringToPrice(e.target.value)})}
                   />
                 </div>
                 <div>

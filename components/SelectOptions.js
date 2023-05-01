@@ -4,7 +4,6 @@ import { stringToPrice } from "utils"
 
 export default function SelectOptions({ values, setValues, brand, toast }) {
   const [changedPriceOption, setChangedPriceOption] = useState("")
-  
 
   useEffect(() => {
     if (Object.keys(values.options).length) {
@@ -33,7 +32,7 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
 
   const handleChangePrice = ({ name, option, e }) => {
     e.preventDefault()
-    const newPrice = e.target.value
+    const newPrice = e.target.value.replace(/[^\d.,]+/g, "").replace(",", ".")
     setValues({
       ...values,
       options: {
@@ -50,11 +49,8 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
     })
   }
   const formatPrice = ({ name, option, e }) => {
-    const { price, error } = stringToPrice(e.target.value)
-    if (error) {
-      toast.error("Прайс должен быть числом")
-      return
-    }
+    const  price = stringToPrice(e.target.value)
+    
     setValues({
       ...values,
       options: {
@@ -82,7 +78,7 @@ export default function SelectOptions({ values, setValues, brand, toast }) {
             ...values.options[name],
             [option]: {
               price: values.price,
-              isChanged: false              
+              isChanged: false,
             },
           },
         },

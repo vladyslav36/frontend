@@ -123,14 +123,7 @@ export default function addProductPage({ categories, catalogs }) {
     }
   }
 
-  const formatPrice = ({ name, value }) => {
-    let { price, error } = stringToPrice(value)
-    if (error) {
-      price = ""
-      toast.error("Прайс должен быть числом")
-    }
-    setValues({ ...values, [name]: price })
-  }
+ 
   // input для name & model ...
   const handleChange = (e) => {
     const { name, value, checked } = e.target
@@ -309,9 +302,19 @@ export default function addProductPage({ categories, catalogs }) {
                         id="price"
                         name="price"
                         value={values.price}
-                        onChange={handleChange}
+                        onChange={(e) =>
+                          setValues({
+                            ...values,
+                            price: e.target.value
+                              .replace(/[^\d.,]+/g, "")
+                              .replace(",", "."),
+                          })
+                        }
                         onBlur={(e) =>
-                          formatPrice({ name: "price", value: e.target.value })
+                          setValues({
+                            ...values,
+                            price: stringToPrice(e.target.value),
+                          })
                         }
                       />
                     </div>
@@ -321,11 +324,18 @@ export default function addProductPage({ categories, catalogs }) {
                         id="retailPrice"
                         name="retailPrice"
                         value={values.retailPrice}
-                        onChange={handleChange}
+                        onChange={(e) =>
+                          setValues({
+                            ...values,
+                            retailPrice: e.target.value
+                              .replace(/[^\d.,]+/g, "")
+                              .replace(",", "."),
+                          })
+                        }
                         onBlur={(e) =>
-                          formatPrice({
-                            name: "retailPrice",
-                            value: e.target.value,
+                          setValues({
+                            ...values,
+                            retailPrice: stringToPrice(e.target.value),
                           })
                         }
                       />

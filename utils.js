@@ -100,14 +100,14 @@ export const getShortDescription = (description, length) => {
     : description
 }
 
+
+
 export const stringToPrice = (string) => {
-  if (!isNaN(+string)) {
-    const priceNum = Math.abs(+string).toFixed(2)
-    return { price: "" + priceNum == 0 ? "" : priceNum, error: false }
-  } else {
-    return { price: string, error: true }
-  }
-}
+  const priceNum =parseFloat(string.replace(/[^\d.,]+/g, "").replace(",", "."))||0
+  
+   return priceNum == 0 ? "" : priceNum.toFixed(2)
+  
+ }
 
 export const getQntInCart = (cart) =>
   cart.reduce((acc, item) => acc + +item.qnt, 0)
