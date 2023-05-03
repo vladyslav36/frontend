@@ -50,17 +50,18 @@ export default function productPage({  product: productDb }) {
   // Устанавливаем currentPrice. Если опционного нет, тогда без изменений, если есть-меняем на опционный
   // находим меняющуюся опцию, берем value из values и если оно есть берем price
   useEffect(() => {
-    const option = Object.keys(product.options).find(
-      (item) => product.options[item].isChangePrice
-    )
-    if (option) {
-      const value = values[option]
-      const price = value ? product.options[option].values[value].price : ""
-      setCurrentPrice(price || product.price)
-    }
+    const { qnt, ...chosenOptions } = values
+    let rezPrice=product.price
+   Object.keys(chosenOptions).forEach(option => {
+     const value = chosenOptions[option]
+     if (!value) return
+     const { price, isChanged } = product.options[option][value]
+     if (isChanged) rezPrice=price      
+    })
+   setCurrentPrice(rezPrice)
   }, [values])
 
-  useEffect(() => {
+  useEffect(() => {    
     const options = Object.keys(values)
     const isActive = options.every((item) => values[item])
     if (isActive) {
@@ -157,7 +158,7 @@ export default function productPage({  product: productDb }) {
     description: product.description,
     price: product.price + " " + product.currencyValue,
   }
-  
+  console.log(currentPrice)
   return (
     <Layout
       title={Object.keys(product).length ? product.name : ""}

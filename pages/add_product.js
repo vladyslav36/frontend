@@ -393,9 +393,9 @@ export default function addProductPage({ categories, catalogs }) {
                 />
               ) : null}
               {isBcWithOptions ? (
-                <BcOptions values={values} setValues={setValues} />
+                  <BcOptions values={values} setValues={setValues} token={token } />
               ) : (
-                <BcAlong values={values} setValues={setValues} />
+                    <BcAlong values={values} setValues={setValues} token={ token} />
               )}
 
               <div>

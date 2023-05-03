@@ -4,10 +4,15 @@ import "react-toastify/dist/ReactToastify.css"
 import { toast, ToastContainer } from "react-toastify"
 import { GiCheckMark } from 'react-icons/gi'
 import { FaSave } from 'react-icons/fa'
+import { stringToPrice } from 'utils'
+import { API_URL } from '../config'
 
-export default function BcAlong({values,setValues}) {
-  const [hasBarcods, setHasBarcods] = useState(false)
-  const [inputValue, setInputValue] = useState(values.barcode)
+export default function BcAlong({values,setValues,token}) {
+  const [hasBarcods, setHasBarcods] = useState(false)  
+  const [inputValues, setInputValues] = useState({
+    barcode: values.barcode,
+    price:''
+  })
 
   // если values.barcods присутствует, то values.barcode очищается
   useEffect(() => {
@@ -20,24 +25,63 @@ export default function BcAlong({values,setValues}) {
    
   },[values.options])
   // --------------------------------------------------------------
+
+  useEffect(() => {
+    const getPriceByBarcode = async () => {
+      const res = await fetch(`${API_URL}/api/barcode/${inputValues.barcode}`)
+      if (!res.ok) {
+        const { message } = await res.json()
+        toast.error(`Ошибка при загрузке цены. ${message}`)
+        return
+      }
+      const { price } = await res.json()
+      setInputValues({ ...inputValues, price })
+    }
+    if (inputValues.barcode.length === 13) {
+      getPriceByBarcode()
+    }
+  }, [inputValues.barcode])
+
    const handleCheck = (e) => {
      const checked = e.target.checked
      setHasBarcods(checked)
   }
   
-  const handleSave = () => {
-     if (inputValue.length !== 13) {
+  const handleSave = async () => {
+     if (inputValues.barcode.length !== 13) {
        toast.error("Количество цифр должно быть равно 13")
+       return
     }
-    setValues({ ...values, barcode: inputValue })
-    setInputValue('')
+
+     if (inputValues.price) {
+     const res= await fetch(`${API_URL}/api/barcode/${inputValues.barcode}`, {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      method: "POST",
+      body: JSON.stringify({ price: inputValues.price }),
+      })
+      if (!res.ok) {
+        toast.error('Прайс не сохранен')
+      }
+    }
+
+    setValues({ ...values, barcode: inputValues.barcode })
+    setInputValues({price:'',barcode:''})
   }
-  const handleChange = (e) => {
+  const handleChangeBc = (e) => {
      e.preventDefault()
      const value = e.target.value.replace(/[^0-9]/gi, "")
 
-     setInputValue(value)
+     setInputValues({...inputValues,barcode:value})
   }
+
+   const handleChangePrice = (e) => {
+     e.preventDefault()
+     const value = e.target.value.replace(/[^\d.,]/gi, "").replace(",", ".")
+     setInputValues({ ...inputValues, price: value })
+   }
  
   return (
     <div className={styles.container}>
@@ -54,21 +98,31 @@ export default function BcAlong({values,setValues}) {
       </div>
 
       <div className={styles.flex_list}>
-       
         {hasBarcods ? (
           <>
             <input
               type="text"
-              onChange={handleChange}
-              value={inputValue}
+              onChange={handleChangeBc}
+              value={inputValues.barcode}
               maxLength="13"
+              placeholder="Штрихкод"
+            />
+            <input
+              type="text"
+              value={inputValues.price}
+              placeholder="Цена"
+              onChange={handleChangePrice}
+              onBlur={(e) =>
+                setInputValues({
+                  ...inputValues,
+                  price: stringToPrice(e.target.value),
+                })
+              }
             />
 
             <FaSave name="save" className={styles.icon} onClick={handleSave} />
           </>
-        ) : (
-          null
-        )}
+        ) : null}
       </div>
     </div>
   )

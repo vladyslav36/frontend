@@ -194,7 +194,7 @@ const [isBcWithOptions, setIsBcWithOptions] = useState(false)
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-
+console.log(values)
   return (
     <>
       <div className={styles.form}>
@@ -401,9 +401,9 @@ const [isBcWithOptions, setIsBcWithOptions] = useState(false)
             />
           ) : null}
           {isBcWithOptions ? (
-            <BcOptions values={values} setValues={setValues} />
+            <BcOptions values={values} setValues={setValues} token={token} />
           ) : (
-            <BcAlong values={values} setValues={setValues} />
+              <BcAlong values={values} setValues={setValues} token={token} />
           )}
           <div>
             <label htmlFor="description">Описание</label>
