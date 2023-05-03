@@ -47,8 +47,9 @@ export default function productPage({  product: productDb }) {
 
   const [cartBtnDisable, setCartBtnDisable] = useState(true)
 
-  // Устанавливаем currentPrice. Если опционного нет, тогда без изменений, если есть-меняем на опционный
-  // находим меняющуюся опцию, берем value из values и если оно есть берем price
+  // Устанавливаем currentPrice. Сначала выделяем объект выбранных опций. 
+  // Потом по его ключам в product.options добираемся до прайса.Если стоит 
+  // флаг isChanged то результирующий прайс равен опционному
   useEffect(() => {
     const { qnt, ...chosenOptions } = values
     let rezPrice=product.price
