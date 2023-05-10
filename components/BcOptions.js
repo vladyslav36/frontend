@@ -3,7 +3,9 @@ import styles from "@/styles/BcOptions.module.scss"
 import { copyBarcods, optionsToBarcods, stringToPrice } from "utils"
 import { GiCheckMark } from "react-icons/gi"
 import {
+  FaAngleDoubleUp,
   FaArrowAltCircleLeft,
+  FaChevronCircleUp,
   FaLongArrowAltRight,
   FaSave,
 } from "react-icons/fa"
@@ -114,6 +116,10 @@ export default function BcOptions({ values, setValues,token }) {
     setInputValues({ ...inputValues, price: value })
   }
 
+  const handleExportPrices = () => {
+    console.log('export')
+  }
+
   return (
     <div className={styles.container}>
       <ToastContainer />
@@ -140,7 +146,14 @@ export default function BcOptions({ values, setValues,token }) {
             </div>
           ))}
         </div>
+     
+        <FaChevronCircleUp className={styles.export_button} title='Экспорт прайсов в опции' onClick={handleExportPrices } />
+       
+       
+        
+        
       </div>
+      
       {hasBarcods &&
       (Object.keys(currentBarcods).length ||
         typeof currentBarcods === "string") ? (

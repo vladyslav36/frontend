@@ -27,7 +27,7 @@ import {
 } from "react-icons/fa"
 import BcAlong from "@/components/BcAlong"
 
-export default function addProductPage({ categories, catalogs }) {
+export default function addProductPage({ categories, catalogs,barcods }) {
   const {
     user: { isAdmin, token },
   } = useContext(AuthContext)
@@ -176,7 +176,7 @@ export default function addProductPage({ categories, catalogs }) {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-
+console.log(barcods)
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
@@ -454,11 +454,13 @@ export default function addProductPage({ categories, catalogs }) {
 }
 
 export async function getServerSideProps() {
+
   const res1 = await fetch(`${API_URL}/api/categories`)
   const res2 = await fetch(`${API_URL}/api/catalogs`)
-  const { categories } = await res1.json()
-  const { catalogs } = await res2.json()
-  if (!res1.ok || !categories || !res2.ok || !catalogs) {
+  const res3 = await fetch(`${API_URL}/api/barcode`)
+  const [{ categories }, { catalogs }, { barcods }] = await Promise.all([res1.json(), res2.json(), res3.json()]) 
+
+  if (!res1.ok || !categories || !res2.ok || !catalogs||!res3.ok||!barcods ) {
     return {
       notFound: true,
     }
@@ -467,6 +469,7 @@ export async function getServerSideProps() {
     props: {
       categories,
       catalogs,
+      barcods
     },
   }
 }

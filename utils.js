@@ -244,3 +244,144 @@ export const copyBarcods = (existBc, newBc) => {
   checker(existBc, newBc)
   return newBc
 }
+
+
+export const bcPricesToOptions = (barcods, options) => {
+  // ф-я сравнения объектов по их содержимому
+  const compareObj = (obj1, obj2) => {
+    if (obj1 === obj2) {
+      return true
+    }
+
+    if (typeof obj1 !== typeof obj2) {
+      return false
+    }
+
+    if (
+      typeof obj1 !== "object" ||
+      typeof obj2 !== "object" ||
+      obj1 === null ||
+      obj2 === null
+    ) {
+      return obj1 === obj2
+    }
+
+    const keys1 = Object.keys(obj1)
+    const keys2 = Object.keys(obj2)
+    if (keys1.length !== keys2.length) {
+      return false
+    }
+
+    for (let prop of keys1) {
+      if (!compareObj(obj1[prop], obj2[prop])) {
+        return false
+      }
+    }
+    return true
+  }
+
+  // ф-я находит изменяющуюся опцию
+  const searchOption = (barcods, options) => {
+    const option = []
+    const levels = []
+    let level = 0
+    const searchLevel = (bc) => {
+      const firstKey = Object.keys(bc)[0]
+      const isEqual = Object.keys(bc).every((item) =>
+        compareObj(bc[firstKey], bc[item])
+      )
+      if (!isEqual) {
+        const changedOption = Object.keys(options)[level]
+        if (!option.includes(changedOption)) option.push(changedOption)
+        if (!levels.includes(level)) levels.push(level)
+      }
+      if (typeof bc[firstKey] === "string") {
+        return
+      }
+      level++
+      for (let key in bc) {
+        searchLevel(bc[key])
+      }
+      level--
+    }
+    searchLevel(barcods)
+    return { option, levels }
+  }
+
+  // создание объекта прайсов для изменяющегося объекта опции по первому элементу
+  // т.к.предполагается что остальные опции не меняются
+  const searchPrices = (bc) => {
+    return Object.keys(bc)
+      .map((item) => {
+        if (typeof bc[item] === "string") {
+          return { [item]: bc[item] }
+        } else {
+          const getDeepPrice = (bcObj) => {
+            const firstKey = Object.keys(bcObj)[0]
+            if (typeof bcObj[firstKey] === "string") {
+              return bcObj[firstKey]
+            } else {
+              return getDeepPrice(bcObj[firstKey])
+            }
+          }
+          const price = getDeepPrice(bc[item])
+          return { [item]: price }
+        }
+      })
+      .reduce((acc, value) => ({ ...acc, ...value }), {})
+  }
+
+  // ф-я формирует объект прайсов если известен уровень погружения измененного прайса
+  const getPricesByLevel = (barcods, targetLevel) => {
+    let level = 0
+
+    const deepToBc = (bc) => {
+      if (level === targetLevel) {
+        return searchPrices(bc)
+      } else {
+        const firstKey = Object.keys(bc)[0]
+        level++
+        return deepToBc(bc[firstKey])
+      }
+    }
+
+    return deepToBc(barcods)
+  }
+
+  const changedOption = searchOption(barcods, options)
+  if (changedOption.option.length > 1) {
+    return { newOptions: {}, error: true }
+  }
+
+  let totalPrice = ""
+  let pricesObj = {}
+  // если измененных опций нет
+  if (changedOption.option.length === 0) {
+    totalPrice = Object.values(searchPrices(barcods))[0]
+  } else {
+    pricesObj = getPricesByLevel(barcods, changedOption.levels[0])
+    totalPrice = Object.values(pricesObj).sort((a, b) => a - b)[0]
+  }
+
+  const newOptions = Object.assign(
+    {},
+    ...Object.keys(options).map((option) => ({
+      [option]: Object.assign(
+        {},
+        ...Object.keys(options[option]).map((value) => {
+          if (
+            changedOption.option.length != 0 &&
+            option === changedOption.option[0]
+          ) {
+            return totalPrice === pricesObj[value]
+              ? { [value]: { price: pricesObj[value], isChanged: false } }
+              : { [value]: { price: pricesObj[value], isChanged: true } }
+          } else {
+            return { [value]: { price: totalPrice, isChanged: false } }
+          }
+        })
+      ),
+    }))
+  )
+  return { newOptions, error: false }
+}
