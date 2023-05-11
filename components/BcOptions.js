@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react"
 import styles from "@/styles/BcOptions.module.scss"
-import { copyBarcods, optionsToBarcods, stringToPrice } from "utils"
+import {
+  bcPricesToOptions,
+  copyBarcods,
+  optionsToBarcods,
+  stringToPrice,
+} from "utils"
 import { GiCheckMark } from "react-icons/gi"
 import {
   FaAngleDoubleUp,
@@ -13,7 +18,8 @@ import "react-toastify/dist/ReactToastify.css"
 import { toast, ToastContainer } from "react-toastify"
 import { API_URL } from "../config"
 
-export default function BcOptions({ values, setValues,token }) {
+
+export default function BcOptions({ values, setValues, token, setChangedPriceOption }) {
   const [hasBarcods, setHasBarcods] = useState(false)
   const [crumbsArr, setCrumbsArr] = useState([])
   const [currentBarcods, setCurrentBarcods] = useState({ ...values.barcods })
@@ -22,6 +28,8 @@ export default function BcOptions({ values, setValues,token }) {
     barcode: "",
     price: "",
   })
+
+  const [bcPrice, setBcPrice] = useState({})
 
   useEffect(() => {
     const barcods = optionsToBarcods(values.options)
@@ -39,29 +47,42 @@ export default function BcOptions({ values, setValues,token }) {
       setInputValues({ ...inputValues, barcode })
       setShowInput(true)
     } else {
-      setInputValues({ barcode: '', price: '' })
+      setInputValues({ barcode: "", price: "" })
       setShowInput(false)
     }
     setCurrentBarcods(barcode)
-      
   }, [crumbsArr])
 
   useEffect(() => {
     const getPriceByBarcode = async () => {
       const res = await fetch(`${API_URL}/api/barcode/${inputValues.barcode}`)
       if (!res.ok) {
-        const { message }=await res.json()
-        toast.error(`Ошибка при загрузке цены. ${message}`)      
+        const { message } = await res.json()
+        toast.error(`Ошибка при загрузке цены. ${message}`)
         return
       }
       const { price } = await res.json()
-      setInputValues({...inputValues,price})
+      setInputValues({ ...inputValues, price })
     }
     if (inputValues.barcode.length === 13) {
       getPriceByBarcode()
     }
   }, [inputValues.barcode])
-  
+
+  useEffect(() => {
+    const fetchBarcods = async () => {
+      const res = await fetch(`${API_URL}/api/barcode`)
+      if (!res.ok) {
+        const { message } = await res.json()
+        toast.error(message)
+        return
+      }
+      const { bcPrice } = await res.json()
+      setBcPrice(bcPrice)
+    }
+    fetchBarcods()
+  }, [values.barcods])
+
   const handleCheck = (e) => {
     const checked = e.target.checked
     setHasBarcods(checked)
@@ -87,19 +108,19 @@ export default function BcOptions({ values, setValues,token }) {
     const lastKey = crumbsArr[crumbsArr.length - 1]
     lastObj[lastKey] = inputValues.barcode
     if (inputValues.price) {
-     const res= await fetch(`${API_URL}/api/barcode/${inputValues.barcode}`, {
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-      method: "POST",
-      body: JSON.stringify({ price: inputValues.price }),
+      const res = await fetch(`${API_URL}/api/barcode/${inputValues.barcode}`, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        method: "POST",
+        body: JSON.stringify({ price: inputValues.price }),
       })
       if (!res.ok) {
-        toast.error('Прайс не сохранен')
+        toast.error("Прайс не сохранен")
       }
     }
-    
+
     setValues({ ...values, barcods })
     setInputValues({ price: "", barcode: "" })
   }
@@ -117,9 +138,22 @@ export default function BcOptions({ values, setValues,token }) {
   }
 
   const handleExportPrices = () => {
-    console.log('export')
+    console.log(values.barcods, values.options)
+    const { newOptions, error, totalPrice,changedOption } = bcPricesToOptions({
+      // передача КОПИИ barcods является ОБЯЗАТЕЛЬНОЙ
+      barcods: JSON.parse(JSON.stringify(values.barcods)),
+      options: values.options,
+      bcPrice,
+    })
+    console.log(newOptions, error, totalPrice)
+    if (!error) {
+      setValues({ ...values, options: newOptions, price: totalPrice })
+      setChangedPriceOption(changedOption)
+    } else {
+      toast.error("Обнаружено более 1 меняющейся опции")
+    }
   }
-
+  console.log(values.options)
   return (
     <div className={styles.container}>
       <ToastContainer />
@@ -146,14 +180,14 @@ export default function BcOptions({ values, setValues,token }) {
             </div>
           ))}
         </div>
-     
-        <FaChevronCircleUp className={styles.export_button} title='Экспорт прайсов в опции' onClick={handleExportPrices } />
-       
-       
-        
-        
+
+        <FaChevronCircleUp
+          className={styles.export_button}
+          title="Экспорт прайсов в опции"
+          onClick={handleExportPrices}
+        />
       </div>
-      
+
       {hasBarcods &&
       (Object.keys(currentBarcods).length ||
         typeof currentBarcods === "string") ? (

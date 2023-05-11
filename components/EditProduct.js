@@ -25,34 +25,42 @@ export default function EditProduct({
   catalogs,
   product,
   setIsShowProduct,
+  bcPrice,
   token,
 }) {
-  const [brand,setBrand]=useState(categories.find(
-    (item) => idToString(item._id) === idToString(product.brandId)
-  ))
-  const [categoryName,setCategoryName]=useState(categories.find(
-    (item) => idToString(item._id) === idToString(product.categoryId)
-  ).name)
+  // Ф-я стоит здесь так как используется в двух компонентах
+  const [changedPriceOption, setChangedPriceOption] = useState("")
+  
+  const [brand, setBrand] = useState(
+    categories.find(
+      (item) => idToString(item._id) === idToString(product.brandId)
+    )
+  )
+  const [categoryName, setCategoryName] = useState(
+    categories.find(
+      (item) => idToString(item._id) === idToString(product.categoryId)
+    ).name
+  )
 
-  const [catalogName,setCatalogName]=useState(product.catalogId
-    ? catalogs.find(
-        (item) => idToString(item._id) === idToString(product.catalogId)
-      ).name
-    : "")
-  
-  
+  const [catalogName, setCatalogName] = useState(
+    product.catalogId
+      ? catalogs.find(
+          (item) => idToString(item._id) === idToString(product.catalogId)
+        ).name
+      : ""
+  )
 
   const [values, setValues] = useState({
     _id: product._id,
     name: product.name,
     brandId: product.brandId,
     model: product.model,
-    description: product.description,   
+    description: product.description,
     categoryId: product.categoryId,
     catalogId: product.catalogId,
     options: product.options,
     barcods: product.barcods,
-    barcode:product.barcode,
+    barcode: product.barcode,
     isInStock: product.isInStock,
     price: product.price,
     retailPrice: product.retailPrice,
@@ -68,30 +76,29 @@ export default function EditProduct({
 
   const listForCategoryMenu = getListForCategoriesMenu(categories)
   const listForCatalogMenu = getListForCatalogsMenu(catalogs)
-const [isBcWithOptions, setIsBcWithOptions] = useState(false)
+  const [isBcWithOptions, setIsBcWithOptions] = useState(false)
   const [imageIdx, setImageIdx] = useState(0)
   const elDialog = useRef()
 
-   useEffect(() => {
-     const rez = Object.keys(values.options).length
-       ? Object.keys(values.options).some(
-           (option) => Object.keys(values.options[option]).length
-         )
-       : false
+  useEffect(() => {
+    const rez = Object.keys(values.options).length
+      ? Object.keys(values.options).some(
+          (option) => Object.keys(values.options[option]).length
+        )
+      : false
 
-     setIsBcWithOptions(rez)
-   }, [values.options])
+    setIsBcWithOptions(rez)
+  }, [values.options])
 
   useEffect(() => {
     if (!values.categoryId) {
       setValues({ ...values, options: {}, brandId: null })
-      setCategoryName('')
+      setCategoryName("")
     }
-      
   }, [values.categoryId])
 
   useEffect(() => {
-    if (!values.catalogId) setCatalogName('')
+    if (!values.catalogId) setCatalogName("")
   }, [values.catalogId])
 
   const handleSubmit = async (e) => {
@@ -140,7 +147,7 @@ const [isBcWithOptions, setIsBcWithOptions] = useState(false)
       setIsShowProduct(false)
     }
   }
- 
+
   // input для name & model ...
   const handleChange = (e) => {
     const { name, value, checked } = e.target
@@ -165,7 +172,7 @@ const [isBcWithOptions, setIsBcWithOptions] = useState(false)
     setBrand({ ...brand })
     setCategoryName(category.name)
     setValues({
-      ...values,      
+      ...values,
       categoryId: category._id,
       brandId: brand._id,
       options: Object.assign(
@@ -194,7 +201,7 @@ const [isBcWithOptions, setIsBcWithOptions] = useState(false)
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-console.log(values)
+  console.log(values.barcods)
   return (
     <>
       <div className={styles.form}>
@@ -330,7 +337,12 @@ console.log(values)
                           .replace(",", "."),
                       })
                     }
-                    onBlur={(e) => setValues({ ...values, price: stringToPrice(e.target.value) })}
+                    onBlur={(e) =>
+                      setValues({
+                        ...values,
+                        price: stringToPrice(e.target.value),
+                      })
+                    }
                   />
                 </div>
                 <div tabIndex={0}>
@@ -347,7 +359,12 @@ console.log(values)
                           .replace(",", "."),
                       })
                     }
-                    onBlur={(e) =>setValues({...values,retailPrice:stringToPrice(e.target.value)})}
+                    onBlur={(e) =>
+                      setValues({
+                        ...values,
+                        retailPrice: stringToPrice(e.target.value),
+                      })
+                    }
                   />
                 </div>
                 <div>
@@ -398,12 +415,19 @@ console.log(values)
               setValues={setValues}
               brand={brand}
               toast={toast}
+              changedPriceOption={changedPriceOption}
+              setChangedPriceOption={setChangedPriceOption}
             />
           ) : null}
           {isBcWithOptions ? (
-            <BcOptions values={values} setValues={setValues} token={token} />
+            <BcOptions
+              values={values}
+              setValues={setValues}
+              token={token}
+              setChangedPriceOption={setChangedPriceOption}
+            />
           ) : (
-              <BcAlong values={values} setValues={setValues} token={token} />
+            <BcAlong values={values} setValues={setValues} token={token} />
           )}
           <div>
             <label htmlFor="description">Описание</label>

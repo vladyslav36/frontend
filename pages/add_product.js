@@ -27,7 +27,7 @@ import {
 } from "react-icons/fa"
 import BcAlong from "@/components/BcAlong"
 
-export default function addProductPage({ categories, catalogs,barcods }) {
+export default function addProductPage({ categories, catalogs}) {
   const {
     user: { isAdmin, token },
   } = useContext(AuthContext)
@@ -56,6 +56,9 @@ export default function addProductPage({ categories, catalogs,barcods }) {
   const [catalogName, setCatalogName] = useState("")
   const [categoryName, setCategoryName] = useState("")
   const [isBcWithOptions, setIsBcWithOptions] = useState(false)
+  
+  // Ф-я стоит здесь так как используется в двух компонентах
+  const [changedPriceOption, setChangedPriceOption] = useState("")
 
   const [imageIdx, setImageIdx] = useState(0)
 
@@ -68,7 +71,7 @@ export default function addProductPage({ categories, catalogs,barcods }) {
           (option) => Object.keys(values.options[option]).length
         )
       : false
-   
+
     setIsBcWithOptions(rez)
   }, [values.options])
 
@@ -123,7 +126,6 @@ export default function addProductPage({ categories, catalogs,barcods }) {
     }
   }
 
- 
   // input для name & model ...
   const handleChange = (e) => {
     const { name, value, checked } = e.target
@@ -176,7 +178,7 @@ export default function addProductPage({ categories, catalogs,barcods }) {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-console.log(barcods)
+
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
@@ -389,13 +391,20 @@ console.log(barcods)
                   values={values}
                   setValues={setValues}
                   brand={brand}
-                  toast={toast}
+                      toast={toast}
+                      changedPriceOption={changedPriceOption}
+                  setChangedPriceOption={setChangedPriceOption}
                 />
               ) : null}
               {isBcWithOptions ? (
-                  <BcOptions values={values} setValues={setValues} token={token } />
+                <BcOptions
+                  values={values}
+                  setValues={setValues}
+                  token={token}
+                  setChangedPriceOption={setChangedPriceOption}
+                />
               ) : (
-                    <BcAlong values={values} setValues={setValues} token={ token} />
+                <BcAlong values={values} setValues={setValues} token={token} />
               )}
 
               <div>
@@ -454,13 +463,14 @@ console.log(barcods)
 }
 
 export async function getServerSideProps() {
-
   const res1 = await fetch(`${API_URL}/api/categories`)
   const res2 = await fetch(`${API_URL}/api/catalogs`)
-  const res3 = await fetch(`${API_URL}/api/barcode`)
-  const [{ categories }, { catalogs }, { barcods }] = await Promise.all([res1.json(), res2.json(), res3.json()]) 
+  const [{ categories }, { catalogs }] = await Promise.all([
+    res1.json(),
+    res2.json(),
+  ])
 
-  if (!res1.ok || !categories || !res2.ok || !catalogs||!res3.ok||!barcods ) {
+  if (!res1.ok || !categories || !res2.ok || !catalogs) {
     return {
       notFound: true,
     }
@@ -469,7 +479,6 @@ export async function getServerSideProps() {
     props: {
       categories,
       catalogs,
-      barcods
     },
   }
 }

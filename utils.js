@@ -246,7 +246,8 @@ export const copyBarcods = (existBc, newBc) => {
 }
 
 
-export const bcPricesToOptions = (barcods, options) => {
+export const bcPricesToOptions = ({ barcods, options, bcPrice }) => {
+  
   // ф-я сравнения объектов по их содержимому
   const compareObj = (obj1, obj2) => {
     if (obj1 === obj2) {
@@ -278,6 +279,22 @@ export const bcPricesToOptions = (barcods, options) => {
       }
     }
     return true
+  }
+
+
+
+  const changeBcToPrice = (bc, bcPrice) => {
+    
+    const deepToBc = (bc) => Object.keys(bc).map(item => {      
+      if (typeof (bc[item]) === 'string') {
+        const value = bcPrice.find(item2 => item2.barcode === bc[item]).price
+        bc[item]=value
+      } else {
+        deepToBc(bc[item])
+      }
+    })
+    deepToBc(bc)
+    
   }
 
   // ф-я находит изменяющуюся опцию
@@ -314,7 +331,7 @@ export const bcPricesToOptions = (barcods, options) => {
     return Object.keys(bc)
       .map((item) => {
         if (typeof bc[item] === "string") {
-          return { [item]: bc[item] }
+          return { [item]:bc[item]}
         } else {
           const getDeepPrice = (bcObj) => {
             const firstKey = Object.keys(bcObj)[0]
@@ -348,6 +365,8 @@ export const bcPricesToOptions = (barcods, options) => {
     return deepToBc(barcods)
   }
 
+  changeBcToPrice(barcods, bcPrice)
+ 
   const changedOption = searchOption(barcods, options)
   if (changedOption.option.length > 1) {
     return { newOptions: {}, error: true }
@@ -383,5 +402,5 @@ export const bcPricesToOptions = (barcods, options) => {
       ),
     }))
   )
-  return { newOptions, error: false }
+  return { newOptions, error: false,totalPrice,changedOption:changedOption.option[0] }
 }
