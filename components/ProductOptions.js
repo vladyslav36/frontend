@@ -30,7 +30,7 @@ export default function ProductOptions({
                   onClick={() => handleClick({ option, value })}
                 >
                   <div>
-                    {value} /{" "}
+                    {value} /
                     <span
                       className={
                         (options[option][value].isChanged
@@ -40,8 +40,11 @@ export default function ProductOptions({
                         (values[option] === value ? styles.active_price : "")
                       }
                     >
-                      {options[option][value].price}{" "}
+                      
+                         {options[option][value].price}
                       {getCurrencySymbol(currencyValue)}
+                      
+                     
                     </span>
                   </div>
                 </div>

@@ -159,7 +159,7 @@ export default function productPage({  product: productDb }) {
     description: product.description,
     price: product.price + " " + product.currencyValue,
   }
-  console.log(currentPrice)
+  
   return (
     <Layout
       title={Object.keys(product).length ? product.name : ""}
