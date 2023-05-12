@@ -41,8 +41,8 @@ export default function BcOptions({ values, setValues, token, setChangedPriceOpt
 
   useEffect(() => {
     const barcode = crumbsArr.length
-      ? crumbsArr.reduce((acc, item) => acc[item], { ...values.barcods })
-      : { ...values.barcods }
+      ? crumbsArr.reduce((acc, item) => acc[item], values.barcods )
+      : values.barcods 
     if (typeof barcode === "string") {
       setInputValues({ ...inputValues, barcode })
       setShowInput(true)
@@ -145,7 +145,7 @@ export default function BcOptions({ values, setValues, token, setChangedPriceOpt
       options: values.options,
       bcPrice,
     })
-    console.log(newOptions, error, totalPrice)
+    
     if (!error) {
       setValues({ ...values, options: newOptions, price: totalPrice })
       setChangedPriceOption(changedOption)
@@ -153,7 +153,7 @@ export default function BcOptions({ values, setValues, token, setChangedPriceOpt
       toast.error("Обнаружено более 1 меняющейся опции")
     }
   }
-  console.log(values.options)
+  
   return (
     <div className={styles.container}>
       <ToastContainer />
