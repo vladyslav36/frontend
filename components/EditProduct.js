@@ -24,13 +24,12 @@ export default function EditProduct({
   categories,
   catalogs,
   product,
-  setIsShowProduct,
-  bcPrice,
+  setIsShowProduct,  
   token,
 }) {
   // Ф-я стоит здесь так как используется в двух компонентах
   const [changedPriceOption, setChangedPriceOption] = useState("")
-  
+
   const [brand, setBrand] = useState(
     categories.find(
       (item) => idToString(item._id) === idToString(product.brandId)
@@ -201,7 +200,7 @@ export default function EditProduct({
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-  console.log(values.barcods)
+  
   return (
     <>
       <div className={styles.form}>
