@@ -30,7 +30,10 @@ export default function ProductOptions({
                   onClick={() => handleClick({ option, value })}
                 >
                   <div>
-                    <span>{value} /</span>
+                    <span>{value}</span>
+                    <span>
+                      /
+                    </span>         
 
                     <span
                       className={
