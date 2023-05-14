@@ -138,7 +138,7 @@ export default function BcOptions({ values, setValues, token, setChangedPriceOpt
   }
 
   const handleExportPrices = () => {
-    console.log(values.barcods, values.options)
+    
     const { newOptions, error, totalPrice,changedOption } = bcPricesToOptions({
       // передача КОПИИ barcods является ОБЯЗАТЕЛЬНОЙ
       barcods: JSON.parse(JSON.stringify(values.barcods)),

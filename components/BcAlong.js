@@ -3,7 +3,7 @@ import styles from "@/styles/BcOptions.module.scss"
 import "react-toastify/dist/ReactToastify.css"
 import { toast, ToastContainer } from "react-toastify"
 import { GiCheckMark } from 'react-icons/gi'
-import { FaSave } from 'react-icons/fa'
+import { FaChevronCircleUp, FaSave } from 'react-icons/fa'
 import { stringToPrice } from 'utils'
 import { API_URL } from '../config'
 
@@ -81,7 +81,20 @@ export default function BcAlong({values,setValues,token}) {
      e.preventDefault()
      const value = e.target.value.replace(/[^\d.,]/gi, "").replace(",", ".")
      setInputValues({ ...inputValues, price: value })
-   }
+  }
+  
+  const handleExportPrices =async () => { 
+    if (values.barcode) {
+      const res = await fetch(`${API_URL}/api/barcode/${values.barcode}`)
+      if (!res.ok) {
+        const { message } = await res.json()
+        toast.error(message)
+        return
+      }
+      const { price } = await res.json()
+      setValues({...values,price})
+    }
+  }
  
   return (
     <div className={styles.container}>
@@ -95,7 +108,13 @@ export default function BcAlong({values,setValues,token}) {
         />
         <label htmlFor="check_btn">Штрихкод</label>
         <GiCheckMark className={styles.icon} />
+         <FaChevronCircleUp
+        className={styles.export_button}
+        title="Экспорт прайсов в опции"
+        onClick={handleExportPrices}
+      />
       </div>
+     
 
       <div className={styles.flex_list}>
         {hasBarcods ? (

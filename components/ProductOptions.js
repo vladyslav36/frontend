@@ -10,7 +10,7 @@ export default function ProductOptions({
   const handleClick = ({ option, value }) => {
     setValues({ ...values, [option]: value })
   }
- 
+
   return (
     <div className={styles.options_container}>
       {Object.keys(options).map((option, i) => (
@@ -30,7 +30,8 @@ export default function ProductOptions({
                   onClick={() => handleClick({ option, value })}
                 >
                   <div>
-                    {value} /
+                    <span>{value} /</span>
+
                     <span
                       className={
                         (options[option][value].isChanged
@@ -40,11 +41,8 @@ export default function ProductOptions({
                         (values[option] === value ? styles.active_price : "")
                       }
                     >
-                      
-                         {options[option][value].price}
+                      {options[option][value].price}
                       {getCurrencySymbol(currencyValue)}
-                      
-                     
                     </span>
                   </div>
                 </div>
