@@ -18,8 +18,12 @@ import "react-toastify/dist/ReactToastify.css"
 import { toast, ToastContainer } from "react-toastify"
 import { API_URL } from "../config"
 
-
-export default function BcOptions({ values, setValues, token, setChangedPriceOption }) {
+export default function BcOptions({
+  values,
+  setValues,
+  token,
+  setChangedPriceOption,
+}) {
   const [hasBarcods, setHasBarcods] = useState(false)
   const [crumbsArr, setCrumbsArr] = useState([])
   const [currentBarcods, setCurrentBarcods] = useState({ ...values.barcods })
@@ -41,8 +45,8 @@ export default function BcOptions({ values, setValues, token, setChangedPriceOpt
 
   useEffect(() => {
     const barcode = crumbsArr.length
-      ? crumbsArr.reduce((acc, item) => acc[item], values.barcods )
-      : values.barcods 
+      ? crumbsArr.reduce((acc, item) => acc[item], values.barcods)
+      : values.barcods
     if (typeof barcode === "string") {
       setInputValues({ ...inputValues, barcode })
       setShowInput(true)
@@ -101,12 +105,7 @@ export default function BcOptions({ values, setValues, token, setChangedPriceOpt
       toast.error("Количество цифр должно быть равно 13")
       return
     }
-    const barcods = { ...values.barcods }
-    let lastObj = crumbsArr
-      .slice(0, -1)
-      .reduce((acc, item) => acc[item], barcods)
-    const lastKey = crumbsArr[crumbsArr.length - 1]
-    lastObj[lastKey] = inputValues.barcode
+
     if (inputValues.price) {
       const res = await fetch(`${API_URL}/api/barcode/${inputValues.barcode}`, {
         headers: {
@@ -114,15 +113,28 @@ export default function BcOptions({ values, setValues, token, setChangedPriceOpt
           authorization: `Bearer ${token}`,
         },
         method: "POST",
-        body: JSON.stringify({ price: inputValues.price }),
+        body: JSON.stringify({
+          price: inputValues.price,
+          productId: values._id,
+          crumbsArr,
+        }),
       })
       if (!res.ok) {
-        toast.error("Прайс не сохранен")
+        const { message } = await res.json()
+        toast.error(message)
+        return
       }
     }
+    // если не выбивает ошибку с повторением штрихкода, только после этого меняем barcods
+    const barcods = { ...values.barcods }
+    let lastObj = crumbsArr
+      .slice(0, -1)
+      .reduce((acc, item) => acc[item], barcods)
+    const lastKey = crumbsArr[crumbsArr.length - 1]
+    lastObj[lastKey] = inputValues.barcode
 
     setValues({ ...values, barcods })
-    setInputValues({ price: "", barcode: "" })
+    setCrumbsArr(crumbsArr.slice(0, -1))
   }
   const handleChangeBc = (e) => {
     e.preventDefault()
@@ -138,14 +150,13 @@ export default function BcOptions({ values, setValues, token, setChangedPriceOpt
   }
 
   const handleExportPrices = () => {
-    
-    const { newOptions, error, totalPrice,changedOption } = bcPricesToOptions({
+    const { newOptions, error, totalPrice, changedOption } = bcPricesToOptions({
       // передача КОПИИ barcods является ОБЯЗАТЕЛЬНОЙ
       barcods: JSON.parse(JSON.stringify(values.barcods)),
       options: values.options,
       bcPrice,
     })
-    
+
     if (!error) {
       setValues({ ...values, options: newOptions, price: totalPrice })
       setChangedPriceOption(changedOption)
@@ -153,7 +164,7 @@ export default function BcOptions({ values, setValues, token, setChangedPriceOpt
       toast.error("Обнаружено более 1 меняющейся опции")
     }
   }
-  
+
   return (
     <div className={styles.container}>
       <ToastContainer />

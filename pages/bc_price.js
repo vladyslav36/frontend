@@ -10,72 +10,42 @@ import { API_URL } from "../config"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-export default function BcPrice({ products }) {
+export default function BcPrice() {
   const [values, setValues] = useState({
     barcode: "",
     price: "",
   })
   const [barcode, setBarcode] = useState("")
-  const [product, setProduct] = useState(null)
-  const [bcCrumbs, setBcCrumbs] = useState([])
-  const [brand, setBrand] = useState(null)
-  const [category, setCategory] = useState(null)
+  const [product, setProduct] = useState(null)  
+  const [bcCrumbs, setBcCrumbs] = useState([])  
   const {
     user: { isAdmin, token },
   } = useContext(AuthContext)
 
-  useEffect(() => {
-    const getBrand = async () => {
-      const res = await fetch(`${API_URL}/api/products/${product.slug}`)
-      const { product: productDb } = await res.json()
-      setBrand(productDb.brandId.name)
-      setCategory(productDb.categoryId.name)
-    }
-    if (product) {
-      getBrand()
-    }
-  }, [product])
+ 
 
   useEffect(() => {
-    // Если barcode изменился и стал пустым то обнуляем product и crumbs и values.price и выход
-    if (!barcode) {
+    const getProductByBc = async (bc) => {
+      const res = await fetch(`${API_URL}/api/barcode/product/${bc}`)
+      if (!res.ok) {
+        const { message } = await res.json()
+        toast.error(message)
+        return
+      }
+      const { barcode,product } = await res.json()
+      setBcCrumbs(barcode?barcode.crumbsArr:[])
+      setProduct(product)
+    }
+    if (barcode) {
+      getProductByBc(barcode)
+    } else {
+      // Если barcode изменился и стал пустым то обнуляем product и crumbs и values.price и выход
       setProduct(null)
       setBcCrumbs([])
       setValues({ ...values, price: "" })
       return
-    }
-    products.forEach((item) => {
-      if (item.barcode === barcode) {
-        console.log(barcode)
-        setProduct(item)
-        return
-      } else {
-        if (Object.keys(item.barcods).length) {
-          let crumbs = []
-          // Ф-я searchBc ищет методом рекурсии совпадение штрихкода. При совпадении сохраняется продукт и путь-крошки
-          // в объекте barcods к этому штрихкоду.Для сохранения крошек используется текущий уровень погружения в рекурсию level
-          // и временный массив crumbs. При совпадении массив crumbs копируется в bcCrumbs
-          const searchBc = (bcObj) => {
-            Object.keys(bcObj).forEach((key) => {
-              crumbs[level] = key
-              if (typeof bcObj[key] == "string") {
-                if (bcObj[key] === barcode) {                  
-                  setProduct(item)
-                  setBcCrumbs([...crumbs])
-                  return
-                }
-              } else {
-                level++
-                searchBc(bcObj[key])
-              }
-            })
-            level--
-          }
-          let level = 0
-          searchBc(item.barcods)
-        }
-      }
-    })
+    }   
+    
     getPriceByBarcode(barcode)
   }, [barcode])
 
@@ -97,7 +67,7 @@ export default function BcPrice({ products }) {
         "Content-Type": "application/json",
         authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ price: values.price }),
+      body: JSON.stringify({ price: values.price,productId:product._id,crumbsArr:bcCrumbs }),
     })
     if (!res.ok) {
       const { message } = await res.json()
@@ -210,11 +180,11 @@ export default function BcPrice({ products }) {
                 <div>
                   <div>
                     <span>Бренд:</span>
-                    <span>{brand}</span>
+                    <span>{product.brandId.name}</span>
                   </div>
                   <div>
                     <span>Категория:</span>
-                    <span>{category}</span>
+                    <span>{product.categoryId.name}</span>
                   </div>
                   <div>
                     <span>Модель:</span>
@@ -244,12 +214,4 @@ export default function BcPrice({ products }) {
   )
 }
 
-export async function getServerSideProps() {
-  const res = await fetch(`${API_URL}/api/products`)
-  const { products } = await res.json()
-  return {
-    props: {
-      products,
-    },
-  }
-}
+

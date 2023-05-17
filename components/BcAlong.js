@@ -60,10 +60,12 @@ export default function BcAlong({values,setValues,token}) {
         authorization: `Bearer ${token}`,
       },
       method: "POST",
-      body: JSON.stringify({ price: inputValues.price }),
+      body: JSON.stringify({ price: inputValues.price,crumbsArr:[],productId:values._id }),
       })
       if (!res.ok) {
-        toast.error('Прайс не сохранен')
+       const { message } = await res.json()
+       toast.error(message)
+       return
       }
     }
 
