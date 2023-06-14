@@ -1,5 +1,5 @@
 import styles from "@/styles/Form.module.scss"
-import { useEffect, useRef, useState } from "react"
+import { useEffect,  useState } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { API_URL } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
@@ -17,6 +17,7 @@ import ModalImage from "./ModalImage"
 import { FaCloudDownloadAlt, FaPlusSquare, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
 import BcOptions from "./BcOptions"
 import BcAlong from "./BcAlong"
+import ModalDialog from "./ModalDialog"
 
 export default function EditProduct({
   setProdList,
@@ -77,7 +78,8 @@ export default function EditProduct({
   const listForCatalogMenu = getListForCatalogsMenu(catalogs)
   const [isBcWithOptions, setIsBcWithOptions] = useState(false)
   const [imageIdx, setImageIdx] = useState(0)
-  const elDialog = useRef()
+  const [showImageUpload, setShowImageUpload] = useState(false)
+  
 
   useEffect(() => {
     const rez = Object.keys(values.options).length
@@ -194,7 +196,8 @@ export default function EditProduct({
     } else {
       setImages([...images, { path: url, file: e.target.files[0] }])
     }
-    elDialog.current.close()
+    
+    setShowImageUpload(false)
   }
   const deleteImage = (i) => {
     URL.revokeObjectURL(images[i].path)
@@ -455,7 +458,8 @@ export default function EditProduct({
                       title="Загрузить"
                       onClick={() => {
                         setImageIdx(i)
-                        elDialog.current.showModal()
+                        
+                        setShowImageUpload(true)
                       }}
                     />
                     <FaWindowClose
@@ -472,12 +476,20 @@ export default function EditProduct({
             className={styles.plus_icon}
             onClick={() => {
               setImageIdx(images.length)
-              elDialog.current.showModal()
+              
+              setShowImageUpload(true)
             }}
           />
         </div>
       </div>
-      <ModalImage handleUploadChange={handleUploadChange} elDialog={elDialog} />
+      {showImageUpload ? (
+        <ModalDialog>
+          <ModalImage
+            handleUploadChange={handleUploadChange}
+            setShowImageUpload={setShowImageUpload}
+          />
+        </ModalDialog>
+      ) : null}
     </>
   )
 }

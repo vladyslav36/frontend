@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css"
 import Links from "@/components/Links"
 import { useRef, useState } from "react"
 import { FaPencilAlt, FaTimes } from "react-icons/fa"
+import ModalDialog from "./ModalDialog"
 
 export default function EditCatalogList({
   catalogs,
@@ -16,8 +17,8 @@ export default function EditCatalogList({
 }) {
   const [catForDelete, setCatForDelete] = useState({})
 
-  const elemModal = useRef()
-
+ 
+const [showModal, setShowModal] = useState(false)
   const arrayTree = catalogs.map((item) => {
     return {
       _id: item._id,
@@ -54,7 +55,8 @@ export default function EditCatalogList({
   }
 
   const handleModal = (item) => {
-    elemModal.current.showModal()
+    
+    setShowModal(true)
     setCatForDelete(item)
   }
   const handle = (rez) => {
@@ -62,7 +64,7 @@ export default function EditCatalogList({
       handleDeleteCatalog(catForDelete)
     }
     setCatForDelete({})
-    elemModal.current.close()
+    setShowModal(false)
   }
   return (
     <div>
@@ -86,20 +88,25 @@ export default function EditCatalogList({
                       className={styles.delete}
                       onClick={() => handleModal(item)}
                       title="Удалить"
-                    />                  
+                    />
                   </div>
                 </div>
               ))
             : null}
         </div>
       </div>
-      <dialog className={styles.dialog} ref={elemModal}>
-        <div className={styles.dialog_wrapper}>
-          <p>Удалить каталог {catForDelete.name}?</p>
-          <div onClick={() => handle(true)}>Да</div>
-          <div onClick={() => handle(false)}>Нет</div>
-        </div>
-      </dialog>
+      {showModal ? (
+        <ModalDialog>
+          <div className={styles.content}>
+            <div>
+              <p>Удалить товар </p>
+              <p>{catForDelete.name}?</p>
+            </div>
+            <div onClick={() => handle(true)}>Да</div>
+            <div onClick={() => handle(false)}>Нет</div>
+          </div>
+        </ModalDialog>
+      ) : null}
     </div>
   )
 }

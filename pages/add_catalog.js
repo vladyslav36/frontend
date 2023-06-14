@@ -10,6 +10,7 @@ import AccessDenied from "@/components/AccessDenied"
 import { getListForCatalogsMenu } from "utils"
 import ModalImage from "@/components/ModalImage"
 import { FaCloudDownloadAlt, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
+import ModalDialog from "@/components/ModalDialog"
 
 export default function addCatalog({ catalogs: dbCatalogs }) {
   const {
@@ -19,6 +20,7 @@ export default function addCatalog({ catalogs: dbCatalogs }) {
   const [values, setValues] = useState(initValues)
   const [image, setImage] = useState({ path: "", file: null })
   const [catalogs, setCatalogs] = useState(dbCatalogs)
+  const [showImageUpload, setShowImageUpload] = useState(false)
 
   const elDialog = useRef()
 const listForMenu=getListForCatalogsMenu(catalogs)
@@ -34,7 +36,7 @@ const listForMenu=getListForCatalogsMenu(catalogs)
     const url = URL.createObjectURL(e.target.files[0])
     URL.revokeObjectURL(image.path)
     setImage({ path: url, file: e.target.files[0] })
-    elDialog.current.close()
+    setShowImageUpload(false)
   }
   const deleteImage = () => {
     URL.revokeObjectURL(image.path)
@@ -151,7 +153,7 @@ const listForMenu=getListForCatalogsMenu(catalogs)
                   className={styles.icon}
                   name="download"
                   title="Загрузить"
-                  onClick={() => elDialog.current.showModal()}
+                  onClick={() => setShowImageUpload(true)}
                 />
                 <FaWindowClose
                   className={styles.icon}
@@ -163,10 +165,14 @@ const listForMenu=getListForCatalogsMenu(catalogs)
             </div>
           </div>
 
-          <ModalImage
-            elDialog={elDialog}
-            handleUploadChange={handleUploadChange}
-          />
+          {showImageUpload ? (
+            <ModalDialog>
+              <ModalImage
+                handleUploadChange={handleUploadChange}
+                setShowImageUpload={setShowImageUpload}
+              />
+            </ModalDialog>
+          ) : null}
         </>
       ) : (
         <AccessDenied />

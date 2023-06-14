@@ -2,7 +2,7 @@ import styles from "@/styles/Form.module.scss"
 import AccessDenied from "@/components/AccessDenied"
 import Layout from "@/components/Layout"
 import AuthContext from "@/context/AuthContext"
-import { useContext, useState, useEffect, useRef } from "react"
+import { useContext, useState, useEffect } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { useRouter } from "next/router"
 import { API_URL, NOIMAGE } from "@/config/index"
@@ -13,7 +13,14 @@ import { getListForCategoriesMenu } from "../utils"
 import ModalImage from "@/components/ModalImage"
 import ModalPrice from "@/components/ModalPrice"
 import ModalCatalog from "@/components/ModalCatalog"
-import { FaCloudDownloadAlt, FaImage, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
+import {
+  FaCloudDownloadAlt,
+  FaImage,
+  FaSave,
+  FaTimes,
+  FaWindowClose,
+} from "react-icons/fa"
+import ModalDialog from "@/components/ModalDialog"
 
 export default function addCategoryPage({ categories }) {
   const {
@@ -30,9 +37,10 @@ export default function addCategoryPage({ categories }) {
   const [image, setImage] = useState({ path: "", file: null })
   const [price, setPrice] = useState({ path: "", file: null })
   const [catalog, setCatalog] = useState({ path: "", file: null })
-  const elDialog = useRef()
-  const elDialogPrice = useRef()
-  const elDialogCatalog = useRef()
+  const [showImageUpload, setShowImageUpload] = useState(false)
+  const [showPriceUpload, setShowPriceUpload] = useState(false)
+  const [showCatalogUpload, setShowCatalogUpload] = useState(false)
+
   const listForMenu = getListForCategoriesMenu(categories)
 
   useEffect(() => {
@@ -96,16 +104,16 @@ export default function addCategoryPage({ categories }) {
   const handleUploadChange = (e) => {
     const url = URL.createObjectURL(e.target.files[0])
     URL.revokeObjectURL(image.path)
-    setImage({ path: url, file: e.target.files[0] })
-    elDialog.current.close()
+    setImage({ path: url, file: e.target.files[0] })    
+    setShowImageUpload(false)
   }
   const handleUploadPrice = (e) => {
     setPrice({ path: "/", file: e.target.files[0] })
-    elDialogPrice.current.close()
+    setShowPriceUpload(false)
   }
   const handleUploadCatalog = (e) => {
     setCatalog({ path: "/", file: e.target.files[0] })
-    elDialogCatalog.current.close()
+    setShowCatalogUpload(false)
   }
   const handleListClick = ({ id, name }) => {
     setValues({ ...values, parent: name, parentId: id })
@@ -211,7 +219,7 @@ export default function addCategoryPage({ categories }) {
                       <div>
                         <FaCloudDownloadAlt
                           onClick={() => {
-                            elDialogPrice.current.showModal()
+                            setShowPriceUpload(true)
                           }}
                           title="Загрузить прайс"
                         />
@@ -228,7 +236,7 @@ export default function addCategoryPage({ categories }) {
                       <div>
                         <FaCloudDownloadAlt
                           onClick={() => {
-                            elDialogCatalog.current.showModal()
+                            setShowCatalogUpload(true)
                           }}
                           title="Загрузить каталог"
                         />
@@ -258,7 +266,7 @@ export default function addCategoryPage({ categories }) {
                   <div className={styles.image_footer}>
                     <FaImage
                       onClick={() => {
-                        elDialog.current.showModal()
+                        setShowImageUpload(true)
                       }}
                       name="save"
                       title="Сохранить"
@@ -277,18 +285,32 @@ export default function addCategoryPage({ categories }) {
             </div>
           </>
         )}
-        <ModalImage
-          elDialog={elDialog}
-          handleUploadChange={handleUploadChange}
-        />
-        <ModalPrice
-          elDialogPrice={elDialogPrice}
-          handleUploadPrice={handleUploadPrice}
-        />
-        <ModalCatalog
-          elDialogCatalog={elDialogCatalog}
-          handleUploadCatalog={handleUploadCatalog}
-        />
+        {showPriceUpload ? (
+          <ModalDialog>
+            <ModalPrice
+              setShowPriceUpload={setShowPriceUpload}
+              handleUploadPrice={handleUploadPrice}
+            />
+          </ModalDialog>
+        ) : null}
+
+        {showCatalogUpload ? (
+          <ModalDialog>
+            <ModalCatalog
+              setShowCatalogUpload={setShowCatalogUpload}
+              handleUploadCatalog={handleUploadCatalog}
+            />
+          </ModalDialog>
+        ) : null}
+
+        {showImageUpload ? (
+          <ModalDialog>
+            <ModalImage
+              handleUploadChange={handleUploadChange}
+              setShowImageUpload={setShowImageUpload}
+            />
+          </ModalDialog>
+        ) : null}
       </Layout>
     </div>
   )

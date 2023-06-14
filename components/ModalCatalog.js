@@ -2,16 +2,16 @@ import React from "react"
 import styles from "@/styles/ModalFile.module.scss"
 import { FaTimes } from "react-icons/fa"
 
-export default function ModalCatalog({ handleUploadCatalog, elDialogCatalog }) {
+export default function ModalCatalog({ handleUploadCatalog, setShowCatalogUpload }) {
   return (
-    <dialog ref={elDialogCatalog} className={styles.dialog}>
-      <div className={styles.dialog_content}>
-        <span onClick={() => elDialogCatalog.current.close()}>
+   
+      <div className={styles.content}>
+      <span onClick={() => { setShowCatalogUpload(false)}}>
           <FaTimes />
         </span>
         <p>Загрузка каталога</p>
         <input type="file" onChange={handleUploadCatalog} />
       </div>
-    </dialog>
+   
   )
 }

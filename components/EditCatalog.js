@@ -1,14 +1,18 @@
 import styles from "@/styles/CatalogForm.module.scss"
-import React, { useContext, useRef, useState } from "react"
+import React, { useState } from "react"
 import { API_URL, NOIMAGE } from "../config"
 import Links from "@/components/Links"
-import AuthContext from "@/context/AuthContext"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import AccessDenied from "@/components/AccessDenied"
 import { getListForCatalogsMenu } from "utils"
 import ModalImage from "./ModalImage"
-import { FaCloudDownloadAlt, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
+import {
+  FaCloudDownloadAlt,
+  FaSave,
+  FaTimes,
+  FaWindowClose,
+} from "react-icons/fa"
+import ModalDialog from "./ModalDialog"
 
 export default function EditCatalog({
   catalog,
@@ -27,8 +31,8 @@ export default function EditCatalog({
     path: catalog.image ? `${API_URL}${catalog.image}` : "",
     file: null,
   })
+  const [showImageUpload, setShowImageUpload] = useState(false)
 
-  const elDialog = useRef()
   const listForMenu = getListForCatalogsMenu(catalogs)
   const handleValues = (e) => {
     e.preventDefault()
@@ -42,7 +46,7 @@ export default function EditCatalog({
     const url = URL.createObjectURL(e.target.files[0])
     URL.revokeObjectURL(image.path)
     setImage({ path: url, file: e.target.files[0] })
-    elDialog.current.close()
+    setShowImageUpload(false)
   }
   const deleteImage = () => {
     URL.revokeObjectURL(image.path)
@@ -138,7 +142,7 @@ export default function EditCatalog({
                   setValues({ ...values, parent: "", parentId: null })
                 }
               >
-                <FaTimes  />
+                <FaTimes />
               </div>
               <ul className={styles.drop_down_list}>
                 {listForMenu.length
@@ -165,25 +169,30 @@ export default function EditCatalog({
           <div className={styles.image}>
             {image.path ? <img src={image.path} /> : <img src={NOIMAGE} />}
           </div>
-          <div className={styles.buttons}>             
-              <FaCloudDownloadAlt
-                className={styles.icon}
-                name="download"
-                title="Загрузить"
-                onClick={() => elDialog.current.showModal()}
-              />            
-              <FaWindowClose
-                className={styles.icon}
-                name="delete"
-                title="Удалить"
-                onClick={deleteImage}
-              />
-          
+          <div className={styles.buttons}>
+            <FaCloudDownloadAlt
+              className={styles.icon}
+              name="download"
+              title="Загрузить"
+              onClick={() => setShowImageUpload(true)}
+            />
+            <FaWindowClose
+              className={styles.icon}
+              name="delete"
+              title="Удалить"
+              onClick={deleteImage}
+            />
           </div>
         </div>
       </div>
-
-      <ModalImage elDialog={elDialog} handleUploadChange={handleUploadChange} />
+      {showImageUpload ? (
+        <ModalDialog>
+          <ModalImage
+            handleUploadChange={handleUploadChange}
+            setShowImageUpload={setShowImageUpload}
+          />
+        </ModalDialog>
+      ) : null}
     </>
   )
 }

@@ -2,7 +2,7 @@ import styles from "@/styles/Form.module.scss"
 import AccessDenied from "@/components/AccessDenied"
 import Layout from "@/components/Layout"
 import AuthContext from "@/context/AuthContext"
-import { useContext, useState, useEffect, useRef } from "react"
+import { useContext, useState, useEffect } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { GiCheckMark } from "react-icons/gi"
@@ -26,12 +26,13 @@ import {
   FaWindowClose,
 } from "react-icons/fa"
 import BcAlong from "@/components/BcAlong"
+import ModalDialog from "@/components/ModalDialog"
 
 export default function addProductPage({ categories, catalogs}) {
   const {
     user: { isAdmin, token },
   } = useContext(AuthContext)
-
+  
   const [values, setValues] = useState({
     name: "",
     brandId: null,
@@ -61,8 +62,7 @@ export default function addProductPage({ categories, catalogs}) {
   const [changedPriceOption, setChangedPriceOption] = useState("")
 
   const [imageIdx, setImageIdx] = useState(0)
-
-  const elDialog = useRef()
+const [showImageUpload, setShowImageUpload] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -172,7 +172,8 @@ export default function addProductPage({ categories, catalogs}) {
     } else {
       setImages([...images, { path: url, file: e.target.files[0] }])
     }
-    elDialog.current.close()
+    
+    setShowImageUpload(false)
   }
   const deleteImage = (i) => {
     URL.revokeObjectURL(images[i].path)
@@ -432,8 +433,8 @@ export default function addProductPage({ categories, catalogs}) {
                           name="download"
                           title="Загрузить"
                           onClick={() => {
-                            setImageIdx(i)
-                            elDialog.current.showModal()
+                            setImageIdx(i)                            
+                            setShowImageUpload(true)
                           }}
                         />
                         <FaWindowClose
@@ -450,14 +451,20 @@ export default function addProductPage({ categories, catalogs}) {
                 className={styles.plus_icon}
                 onClick={() => {
                   setImageIdx(images.length)
-                  elDialog.current.showModal()
+                 
+                  setShowImageUpload(true)
                 }}
               />
             </div>
           </div>
         </div>
       )}
-      <ModalImage handleUploadChange={handleUploadChange} elDialog={elDialog} />
+      {showImageUpload ? (
+        <ModalDialog>
+           <ModalImage handleUploadChange={handleUploadChange} setShowImageUpload={setShowImageUpload} />
+      </ModalDialog>
+      ):null}
+     
     </Layout>
   )
 }

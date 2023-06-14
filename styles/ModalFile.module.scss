@@ -1,8 +1,10 @@
-@import './dialog';
-
-.dialog_content {
-  width: 100%;
-  height: 100%;
+.content{
+  width:350px;
+  height:200px;
+  color:#333;
+  background-color: #fff;
+  border-radius: 5px;;
+  box-shadow:5px 5px 5px rgba(0,0,0,0.5);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +21,7 @@
     }
   }
   input {
-    width: 80%;
+    width: 90%;
     border: 1px solid #888;
     padding: 5px;
   }

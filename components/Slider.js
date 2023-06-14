@@ -1,7 +1,7 @@
 import styles from "@/styles/Slider.module.scss"
 import { API_URL } from "../config"
 import { useState, useEffect } from "react"
-import ReactDom from "react-dom"
+import ReactDom, { createPortal } from "react-dom"
 import { FaChevronCircleLeft, FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa"
 
 export default function Slider({
@@ -61,7 +61,7 @@ export default function Slider({
   )
 
   if (isBrowser) {
-    return ReactDom.createPortal(content, document.getElementById("slider"))
+    return createPortal(content, document.body)
   } else {
     return null
   }

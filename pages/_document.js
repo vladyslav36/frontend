@@ -15,10 +15,7 @@ export default function Document() {
       </Head>
       <body>
         <Main />
-        <NextScript />
-        {/* <div id="modal-root"></div> */}
-        <div id="slider"></div>
-        <div id="loupe"></div>        
+        <NextScript />      
       </body>
     </Html>
   )
