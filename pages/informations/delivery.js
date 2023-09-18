@@ -17,7 +17,7 @@ export default function DeliveryPage({information}) {
 </div>
         
        
-          <div className={styles.logos}>
+          {/* <div className={styles.logos}>
             <div className={styles.image}>
               <img title="Новая почта" src={NEW_POST_IMAGE} />
             </div>
@@ -27,7 +27,7 @@ export default function DeliveryPage({information}) {
             <div className={styles.image}>
               <img title="Укрпочта" src={UPOST_IMAGE} />
             </div>
-          </div>
+          </div> */}
         
       </div>
     </Layout>

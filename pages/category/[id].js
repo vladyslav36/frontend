@@ -15,7 +15,7 @@ export default function categoryPage({ category, categories }) {
   const [productList, setProductList] = useState([])
   const [isShowAsList, setIsShowAsList] = useState(true)
   const router = useRouter()
-
+  
   const childrenList = category
     ? categories
         .filter((item) => item.parentId === category._id)

@@ -16,7 +16,7 @@ export default function Header() {
   const router = useRouter()
   const { currencyShop, setCurrencyShop, cart, currencyRate } =
     useContext(ProductsContext)
-  const [delayTimer, setDelayTimer] = useState(new Date())
+  const [timeoutID, setTimeoutID] = useState(0)
   const [isShowList, setIsShowList] = useState(false)
   const [isShowLoupe, setIsShowLoupe] = useState(false)
   const [image, setImage] = useState("")
@@ -31,8 +31,8 @@ export default function Header() {
     e.preventDefault()
     const string = e.target.value.replace(/[^A-Za-zА-Яа-я 0-9]/g,'')
     setSearchString(string)
-    clearTimeout(delayTimer)
-    setDelayTimer(
+    clearTimeout(timeoutID)
+    setTimeoutID(
       setTimeout(async () => {
         const res = await fetch(
           `${API_URL}/api/products/search?string=${string.trim()}`
