@@ -140,7 +140,7 @@ export default function SelectOptions({
       })
     }
   }
-  console.log(values.optionValues)
+  
   return (
     <div className={styles.options_container}>
       {Object.keys(brand.options).length
