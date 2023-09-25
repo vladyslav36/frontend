@@ -13,6 +13,7 @@ import {
   getListForCatalogsMenu,
   getListForCategoriesMenu,
   stringToPrice,
+  createPriceObject
 } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
@@ -27,6 +28,7 @@ import {
 } from "react-icons/fa"
 import BcAlong from "@/components/BcAlong"
 import ModalDialog from "@/components/ModalDialog"
+import PriceTable from "@/components/PriceTable"
 
 export default function addProductPage({ categories, catalogs}) {
   const {
@@ -41,6 +43,8 @@ export default function addProductPage({ categories, catalogs}) {
     categoryId: null,
     catalogId: null,
     options: {},
+    ownOptions: {},
+    optionValues: {},
     barcods: {},
     barcode: "",
     isInStock: true,
@@ -74,6 +78,10 @@ const [showImageUpload, setShowImageUpload] = useState(false)
 
     setIsBcWithOptions(rez)
   }, [values.options])
+
+  useEffect(() => {
+    setValues({ ...values, optionValues:createPriceObject(values.ownOptions) })
+  },[values.ownOptions])
 
   const resetCategory = () => {
     setCategoryName("")
@@ -157,6 +165,7 @@ const [showImageUpload, setShowImageUpload] = useState(false)
         {},
         ...Object.keys(brand.options).map((option) => ({ [option]: {} }))
       ),
+      ownOptions: Object.assign({}, ...Object.keys(brand.options).map(option => ({ [option]: [] })))
     })
   }
   const handleUploadChange = (e) => {
@@ -406,7 +415,9 @@ const [showImageUpload, setShowImageUpload] = useState(false)
                 />
               ) : (
                 <BcAlong values={values} setValues={setValues} token={token} />
-              )}
+                )}
+                
+                <PriceTable values={values} setValues={setValues} />
 
               <div>
                 <label htmlFor="description">Описание</label>

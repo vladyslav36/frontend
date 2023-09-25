@@ -404,3 +404,27 @@ export const bcPricesToOptions = ({ barcods, options, bcPrice }) => {
   )
   return { newOptions, error: false,totalPrice,changedOption:changedOption.option[0] }
 }
+
+ export const createPriceObject = (ownOptions) => {
+   // убираем поля пустышки
+   const fillingOwnOptions = Object.assign(
+     {},
+     ...Object.keys(ownOptions)
+       .filter((item) => ownOptions[item].length)
+       .map((item) => ({ [item]: ownOptions[item] }))
+   )
+
+   let rez = { price: "", barcode: "" }
+
+   Object.keys(fillingOwnOptions)
+     .reverse()
+     .forEach((option) => {
+       rez = Object.assign(
+         {},
+         ...ownOptions[option].map((value) => ({
+           [value]: JSON.parse(JSON.stringify(rez)),
+         }))
+       )
+     })
+   return rez
+ }

@@ -2,8 +2,17 @@ import styles from "@/styles/SelectOptions.module.scss"
 import { useEffect, useState } from "react"
 import { stringToPrice } from "utils"
 
-export default function SelectOptions({ values, setValues, brand, toast,changedPriceOption,setChangedPriceOption }) {
+export default function SelectOptions({
+  values,
+  setValues,
+  brand,
+  toast,
+  changedPriceOption,
+  setChangedPriceOption,
+}) {
   // const [changedPriceOption, setChangedPriceOption] = useState("")
+
+ 
 
   useEffect(() => {
     if (Object.keys(values.options).length) {
@@ -49,8 +58,8 @@ export default function SelectOptions({ values, setValues, brand, toast,changedP
     })
   }
   const formatPrice = ({ name, option, e }) => {
-    const  price = stringToPrice(e.target.value)
-    
+    const price = stringToPrice(e.target.value)
+
     setValues({
       ...values,
       options: {
@@ -82,6 +91,10 @@ export default function SelectOptions({ values, setValues, brand, toast,changedP
             },
           },
         },
+        ownOptions: {
+          ...values.ownOptions,
+          [name]: [...values.ownOptions[name], option],
+        },
       })
     } else {
       // remove option from values.options[name]
@@ -91,6 +104,10 @@ export default function SelectOptions({ values, setValues, brand, toast,changedP
         options: {
           ...values.options,
           [name]: newValues,
+        },
+        ownOptions: {
+          ...values.ownOptions,
+          [name]: values.ownOptions[name].filter((value) => value !== option),
         },
       })
     }
@@ -123,7 +140,7 @@ export default function SelectOptions({ values, setValues, brand, toast,changedP
       })
     }
   }
-
+  console.log(values.optionValues)
   return (
     <div className={styles.options_container}>
       {Object.keys(brand.options).length
