@@ -80,7 +80,7 @@ const [showImageUpload, setShowImageUpload] = useState(false)
   }, [values.options])
 
   useEffect(() => {
-    setValues({ ...values, optionValues:createPriceObject(values.ownOptions) })
+    setValues({ ...values, optionValues: createPriceObject({ ownOptions: values.ownOptions, optionValues: values.optionValues }) })
   },[values.ownOptions])
 
   const resetCategory = () => {

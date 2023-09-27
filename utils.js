@@ -100,14 +100,12 @@ export const getShortDescription = (description, length) => {
     : description
 }
 
-
-
 export const stringToPrice = (string) => {
-  const priceNum =parseFloat(string.replace(/[^\d.,]+/g, "").replace(",", "."))||0
-  
-   return priceNum == 0 ? "" : priceNum.toFixed(2)
-  
- }
+  const priceNum =
+    parseFloat(string.replace(/[^\d.,]+/g, "").replace(",", ".")) || 0
+
+  return priceNum == 0 ? "" : priceNum.toFixed(2)
+}
 
 export const getQntInCart = (cart) =>
   cart.reduce((acc, item) => acc + +item.qnt, 0)
@@ -245,9 +243,7 @@ export const copyBarcods = (existBc, newBc) => {
   return newBc
 }
 
-
 export const bcPricesToOptions = ({ barcods, options, bcPrice }) => {
-  
   // ф-я сравнения объектов по их содержимому
   const compareObj = (obj1, obj2) => {
     if (obj1 === obj2) {
@@ -281,20 +277,19 @@ export const bcPricesToOptions = ({ barcods, options, bcPrice }) => {
     return true
   }
 
-
-
   const changeBcToPrice = (bc, bcPrice) => {
-    
-    const deepToBc = (bc) => Object.keys(bc).map(item => {      
-      if (typeof (bc[item]) === 'string') {
-        const value = bcPrice.find(item2 => item2.barcode === bc[item]).price
-        bc[item]=value
-      } else {
-        deepToBc(bc[item])
-      }
-    })
+    const deepToBc = (bc) =>
+      Object.keys(bc).map((item) => {
+        if (typeof bc[item] === "string") {
+          const value = bcPrice.find(
+            (item2) => item2.barcode === bc[item]
+          ).price
+          bc[item] = value
+        } else {
+          deepToBc(bc[item])
+        }
+      })
     deepToBc(bc)
-    
   }
 
   // ф-я находит изменяющуюся опцию
@@ -331,7 +326,7 @@ export const bcPricesToOptions = ({ barcods, options, bcPrice }) => {
     return Object.keys(bc)
       .map((item) => {
         if (typeof bc[item] === "string") {
-          return { [item]:bc[item]}
+          return { [item]: bc[item] }
         } else {
           const getDeepPrice = (bcObj) => {
             const firstKey = Object.keys(bcObj)[0]
@@ -366,7 +361,7 @@ export const bcPricesToOptions = ({ barcods, options, bcPrice }) => {
   }
 
   changeBcToPrice(barcods, bcPrice)
- 
+
   const changedOption = searchOption(barcods, options)
   if (changedOption.option.length > 1) {
     return { newOptions: {}, error: true }
@@ -402,29 +397,49 @@ export const bcPricesToOptions = ({ barcods, options, bcPrice }) => {
       ),
     }))
   )
-  return { newOptions, error: false,totalPrice,changedOption:changedOption.option[0] }
+  return {
+    newOptions,
+    error: false,
+    totalPrice,
+    changedOption: changedOption.option[0],
+  }
 }
 
- export const createPriceObject = (ownOptions) => {
-   // убираем поля пустышки
-   const fillingOwnOptions = Object.assign(
-     {},
-     ...Object.keys(ownOptions)
-       .filter((item) => ownOptions[item].length)
-       .map((item) => ({ [item]: ownOptions[item] }))
-   )
+export const createPriceObject = ({ ownOptions, optionValues }) => {
+  // убираем поля пустышки
+  const fillingOwnOptions = Object.assign(
+    {},
+    ...Object.keys(ownOptions)
+      .filter((item) => ownOptions[item].length)
+      .map((item) => ({ [item]: ownOptions[item].sort() }))
+  )
 
-   let rez = { price: "", barcode: "" }
+  let rez = { price: "", barcode: "" }
 
-   Object.keys(fillingOwnOptions)
-     .reverse()
-     .forEach((option) => {
-       rez = Object.assign(
-         {},
-         ...ownOptions[option].map((value) => ({
-           [value]: JSON.parse(JSON.stringify(rez)),
-         }))
-       )
-     })
-   return rez
- }
+  Object.keys(fillingOwnOptions)
+    .reverse()
+    .forEach((option) => {
+      rez = Object.assign(
+        {},
+        ...ownOptions[option].map((value) => ({
+          [value]: JSON.parse(JSON.stringify(rez)),
+        }))
+      )
+    })
+
+  //  копируем значения полей из староно объекта values.options во вновь созданный rez
+  const deep = (newOptions, oldOptions) => {
+    if (newOptions.hasOwnProperty("price")) return newOptions
+    Object.keys(newOptions).forEach((item) => {
+      if (!oldOptions.hasOwnProperty(item)) return
+      if (newOptions[item].hasOwnProperty("price")) {
+        newOptions[item] = JSON.parse(JSON.stringify(oldOptions[item]))
+      } else {
+        deep(newOptions[item], oldOptions[item])
+      }
+    })
+    return newOptions
+  }
+
+  return deep(rez, optionValues)
+}
