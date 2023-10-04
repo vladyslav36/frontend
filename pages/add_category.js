@@ -1,4 +1,4 @@
-import styles from "@/styles/Form.module.scss"
+import styles from "@/styles/CategoryForm.module.scss"
 import AccessDenied from "@/components/AccessDenied"
 import Layout from "@/components/Layout"
 import AuthContext from "@/context/AuthContext"

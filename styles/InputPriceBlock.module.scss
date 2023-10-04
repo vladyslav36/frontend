@@ -1,16 +1,21 @@
-.price_block{
-   display:flex;
-   column-gap: 10px;  
-   
-   input{
-       text-align: center;
-    &:first-child{
-      width:100px;   
-    }
-    &:last-child{
-      width:160px;
-    }    
-   font-size:18px;   
-   }
-  
+.price_block {
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+  svg {
+    color: #f39c12;
+    font-size: 16px;
   }
+  input {
+    text-align: center;
+    align-items: center;
+
+    &:nth-child(2) {
+      width: 100px;
+    }
+    &:nth-child(3) {
+      width: 160px;
+    }
+    font-size: 18px;
+  }
+}

@@ -1,4 +1,4 @@
-import styles from "@/styles/Form.module.scss"
+import styles from "@/styles/CategoryForm.module.scss"
 import { useState, useEffect } from "react"
 import { ToastContainer, toast } from "react-toastify"
 import { useRouter } from "next/router"

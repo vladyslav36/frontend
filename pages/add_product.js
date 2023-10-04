@@ -12,13 +12,13 @@ import {
   getBrand,
   getListForCatalogsMenu,
   getListForCategoriesMenu,
-  stringToPrice,
-  createPriceObject
+ 
+  createPriceObject,
 } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 import ModalImage from "@/components/ModalImage"
-import BcOptions from "@/components/BcOptions"
+
 import {
   FaCloudDownloadAlt,
   FaPlusSquare,
@@ -26,30 +26,25 @@ import {
   FaTimes,
   FaWindowClose,
 } from "react-icons/fa"
-import BcAlong from "@/components/BcAlong"
+
 import ModalDialog from "@/components/ModalDialog"
 import PriceTable from "@/components/PriceTable"
 
-export default function addProductPage({ categories, catalogs}) {
+export default function addProductPage({ categories, catalogs }) {
   const {
     user: { isAdmin, token },
   } = useContext(AuthContext)
-  
+
   const [values, setValues] = useState({
     name: "",
     brandId: null,
     model: "",
     description: "",
     categoryId: null,
-    catalogId: null,
-    options: {},
+    catalogId: null,    
     ownOptions: {},
-    optionValues: {},
-    barcods: {},
-    barcode: "",
-    isInStock: true,
-    price: "",
-    retailPrice: "",
+    optionValues: {},   
+    isInStock: true,   
     isShowcase: false,
     currencyValue: "UAH",
   })
@@ -60,32 +55,26 @@ export default function addProductPage({ categories, catalogs}) {
   const listForCatalogMenu = getListForCatalogsMenu(catalogs)
   const [catalogName, setCatalogName] = useState("")
   const [categoryName, setCategoryName] = useState("")
-  const [isBcWithOptions, setIsBcWithOptions] = useState(false)
-  
-  // Ф-я стоит здесь так как используется в двух компонентах
-  const [changedPriceOption, setChangedPriceOption] = useState("")
-
   const [imageIdx, setImageIdx] = useState(0)
-const [showImageUpload, setShowImageUpload] = useState(false)
+  const [showImageUpload, setShowImageUpload] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    const rez = Object.keys(values.options).length
-      ? Object.keys(values.options).some(
-          (option) => Object.keys(values.options[option]).length
-        )
-      : false
-
-    setIsBcWithOptions(rez)
-  }, [values.options])
+ 
 
   useEffect(() => {
-    setValues({ ...values, optionValues: createPriceObject({ ownOptions: values.ownOptions, optionValues: values.optionValues }) })
-  },[values.ownOptions])
+    setValues({
+      ...values,
+      optionValues: createPriceObject({
+        ownOptions: values.ownOptions,
+        optionValues: values.optionValues,
+      }),
+    })
+  }, [values.ownOptions])
 
   const resetCategory = () => {
     setCategoryName("")
-    setValues({ ...values, categoryId: null, brandId: null, options: {} })
+    // setValues({ ...values, categoryId: null, brandId: null, options: {} })
+    setValues({ ...values, categoryId: null, brandId: null })
     setBrand({})
   }
 
@@ -160,12 +149,11 @@ const [showImageUpload, setShowImageUpload] = useState(false)
     setValues({
       ...values,
       categoryId: category._id,
-      brandId: brand._id,
-      options: Object.assign(
+      brandId: brand._id,     
+      ownOptions: Object.assign(
         {},
-        ...Object.keys(brand.options).map((option) => ({ [option]: {} }))
+        ...Object.keys(brand.options).map((option) => ({ [option]: [] }))
       ),
-      ownOptions: Object.assign({}, ...Object.keys(brand.options).map(option => ({ [option]: [] })))
     })
   }
   const handleUploadChange = (e) => {
@@ -181,14 +169,14 @@ const [showImageUpload, setShowImageUpload] = useState(false)
     } else {
       setImages([...images, { path: url, file: e.target.files[0] }])
     }
-    
+
     setShowImageUpload(false)
   }
   const deleteImage = (i) => {
     URL.revokeObjectURL(images[i].path)
     setImages(images.filter((item, idx) => idx !== i))
   }
-
+  
   return (
     <Layout title="Добавление товара">
       {!isAdmin ? (
@@ -231,6 +219,33 @@ const [showImageUpload, setShowImageUpload] = useState(false)
                     value={values.model}
                     onChange={handleChange}
                   />
+                </div>
+
+                <div className={styles.currency_value}>
+                  <p>{values.currencyValue}</p>
+                  <ul className={styles.dropdown_menu}>
+                    <li
+                      onClick={() =>
+                        setValues({ ...values, currencyValue: "UAH" })
+                      }
+                    >
+                      UAH
+                    </li>
+                    <li
+                      onClick={() =>
+                        setValues({ ...values, currencyValue: "USD" })
+                      }
+                    >
+                      USD
+                    </li>
+                    <li
+                      onClick={() =>
+                        setValues({ ...values, currencyValue: "EUR" })
+                      }
+                    >
+                      EUR
+                    </li>
+                  </ul>
                 </div>
 
                 <div>
@@ -301,98 +316,17 @@ const [showImageUpload, setShowImageUpload] = useState(false)
                   </div>
                 </div>
 
-                <div>
-                  <div className={styles.labels}>
-                    <label htmlFor="price">Цена (опт)</label>
-                    <label htmlFor="retailPrice">Цена (розн)</label>
-                    <label htmlFor="currencyValue">Валюта товара</label>
-                  </div>
-                  <div className={styles.input_price}>
-                    <div tabIndex={0}>
-                      <input
-                        type="text"
-                        id="price"
-                        name="price"
-                        value={values.price}
-                        onChange={(e) =>
-                          setValues({
-                            ...values,
-                            price: e.target.value
-                              .replace(/[^\d.,]+/g, "")
-                              .replace(",", "."),
-                          })
-                        }
-                        onBlur={(e) =>
-                          setValues({
-                            ...values,
-                            price: stringToPrice(e.target.value),
-                          })
-                        }
-                      />
-                    </div>
-                    <div tabIndex={0}>
-                      <input
-                        type="text"
-                        id="retailPrice"
-                        name="retailPrice"
-                        value={values.retailPrice}
-                        onChange={(e) =>
-                          setValues({
-                            ...values,
-                            retailPrice: e.target.value
-                              .replace(/[^\d.,]+/g, "")
-                              .replace(",", "."),
-                          })
-                        }
-                        onBlur={(e) =>
-                          setValues({
-                            ...values,
-                            retailPrice: stringToPrice(e.target.value),
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <select
-                        className={styles.input}
-                        name="currencyValue"
-                        id="currencyValue"
-                        value={values.currencyValue}
-                        onChange={handleChange}
-                      >
-                        <option value="UAH">UAH</option>
-                        <option value="USD">USD</option>
-                        <option value="EUR">EUR</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
                 <div className={styles.checkbox_wrapper}>
-                  <div className={styles.custom_checkbox}>
-                    <input
-                      type="checkbox"
-                      name="isShowcase"
-                      id="isShowcase"
-                      onChange={handleChange}
-                      checked={values.isShowcase}
-                    />
-                    <label htmlFor="isShowcase">Показывать на витрине </label>
+                  <input
+                    type="checkbox"
+                    name="isShowcase"
+                    checked={values.isShowcase}
+                    id="isShowcase"
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="isShowcase">На витрине</label>
 
-                    <GiCheckMark className={styles.check_icon} />
-                  </div>
-
-                  <div className={styles.custom_checkbox}>
-                    <input
-                      type="checkbox"
-                      name="isInStock"
-                      id="isInStock"
-                      onChange={handleChange}
-                      checked={values.isInStock}
-                    />
-                    <label htmlFor="isInStock">В наличии</label>
-                    <GiCheckMark className={styles.check_icon} />
-                  </div>
+                  <GiCheckMark className={styles.check_icon} />
                 </div>
               </div>
               {Object.keys(brand).length &&
@@ -401,24 +335,10 @@ const [showImageUpload, setShowImageUpload] = useState(false)
                   values={values}
                   setValues={setValues}
                   brand={brand}
-                      toast={toast}
-                      changedPriceOption={changedPriceOption}
-                  setChangedPriceOption={setChangedPriceOption}
                 />
               ) : null}
-              {isBcWithOptions ? (
-                <BcOptions
-                  values={values}
-                  setValues={setValues}
-                  token={token}
-                  setChangedPriceOption={setChangedPriceOption}
-                />
-              ) : (
-                <BcAlong values={values} setValues={setValues} token={token} />
-                )}
-                
-                <PriceTable values={values} setValues={setValues} />
 
+              <PriceTable values={values} setValues={setValues} />
               <div>
                 <label htmlFor="description">Описание</label>
                 <textarea
@@ -440,16 +360,14 @@ const [showImageUpload, setShowImageUpload] = useState(false)
                       </div>
                       <div className={styles.image_footer}>
                         <FaCloudDownloadAlt
-                          className={styles.icon}
                           name="download"
                           title="Загрузить"
                           onClick={() => {
-                            setImageIdx(i)                            
+                            setImageIdx(i)
                             setShowImageUpload(true)
                           }}
                         />
                         <FaWindowClose
-                          className={styles.icon}
                           name="delete"
                           title="Удалить"
                           onClick={() => deleteImage(i)}
@@ -462,7 +380,7 @@ const [showImageUpload, setShowImageUpload] = useState(false)
                 className={styles.plus_icon}
                 onClick={() => {
                   setImageIdx(images.length)
-                 
+
                   setShowImageUpload(true)
                 }}
               />
@@ -472,10 +390,12 @@ const [showImageUpload, setShowImageUpload] = useState(false)
       )}
       {showImageUpload ? (
         <ModalDialog>
-           <ModalImage handleUploadChange={handleUploadChange} setShowImageUpload={setShowImageUpload} />
-      </ModalDialog>
-      ):null}
-     
+          <ModalImage
+            handleUploadChange={handleUploadChange}
+            setShowImageUpload={setShowImageUpload}
+          />
+        </ModalDialog>
+      ) : null}
     </Layout>
   )
 }

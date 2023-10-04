@@ -33,37 +33,116 @@
     }
   }
 
-  input {
-    display: block;
-    width: 100%;
-    height: 30px;
-    padding: 5px 10px;
-    font-size: 14px;
-  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 150px;
+    column-gap: 20px;
+    row-gap: 10px;
 
-  select {
-    display: block;
-    width: 100%;
-    height: 30px;
-    padding: 5px;
-    font-size: 14px;
-    background-color: inherit;
-    border: 1px solid #333;
-  }
+    label {
+      font-size: 14px;
+      display: block;
+    }
+    input {
+      display: block;
+      width: 100%;
+      height: 30px;
+      padding: 5px 10px;
+      font-size: 14px;
+    }
 
-  .input_price {
-    display: flex;
-    width: 100%;
+    .dropdown_menu {
+      list-style: none;
+      font-size: 14px;
+      display: none;
+      width: 100%;
+      max-height: 300px;
+      overflow: auto;
+      position: absolute;
+      z-index: 900;
+      top: 100%;
+      left: 0;
+      background: rgba(244, 246, 246);
+      padding: 0 10px;
+      border: 1px solid #333;
+      border-radius: 5px;
+      li {
+        padding: 0 5px;
+        &:hover {
+          cursor: pointer;
+          background-color: darken($color: rgba(244, 246, 246), $amount: 10);
+        }
+      }
+    }
 
-    div {
-      flex: 1;
+    .currency_value {
+      position: relative;
+      align-self: self-end;
+      justify-self: center;
+      font-size: 16px;
+      width: 100%;
+      background-color: #eaeded;
+      border-radius: 10px;
+      cursor: pointer;
+      p {
+        text-align: center;
+        padding: 2px;
+      }
+      &:hover .dropdown_menu {
+        display: block;
+      }
+    }
+
+    .input_group_menu {
+      position: relative;
+      svg {
+        display: block;
+        transform: translate(-50%, -50%);
+        font-size: 20px;
+        position: absolute;
+        color: red;
+        top: 50%;
+        right: 0;
+        cursor: pointer;
+      }
+
+      &:hover .dropdown_menu {
+        display: block;
+      }
+    }
+
+    .checkbox_wrapper {
+      position: relative;
+      align-self: self-end;
+      justify-self: center;
+      font-size: 16px;
+      width: 100%;
+      background-color: #eaeded;
+      border-radius: 10px;
+      input {
+        width: 0;
+        height: 0;
+        &:checked ~ .check_icon {
+          display: block;
+        }
+      }
+      label {
+        text-align: center;
+        padding: 5px;
+        cursor: pointer;
+      }
+      cursor: pointer;
+
+      .check_icon {
+        position: absolute;
+        color: green;
+        top: 6px;
+        right: 10px;
+        display: none;
+      }
     }
   }
-
-  .labels {
-    display: flex;
-    justify-content: space-around;
-  }
+ 
 
   textarea {
     font-size: 14px;
@@ -73,45 +152,19 @@
   }
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 20px;
-  row-gap: 10px;
-
-  label {
-    font-size: 14px;
-    display: block;
-  }
-}
-.image_header {
+.images_container {
   display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  & > div {
-    display: flex;
-    gap: 25px;
-    & > div {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-
-      svg {
-        cursor: pointer;
-        padding: 0 2px;
-
-        &:nth-child(1) {
-          color: steelblue;
-          font-size: 35px;
-        }
-        &:nth-child(2) {
-          color: red;
-          font-size: 30px;
-        }
-      }
-    }
+  column-gap: 10px;
+  .plus_icon {
+    color: steelblue;
+    font-size: 30px;
+    cursor: pointer;
   }
-}
+
 .image {
   width: 200px;
   height: 250px;
@@ -148,143 +201,52 @@
       &[name="delete"] {
         color: red;
       }
-      &[name="save"],&[name='download'] {
+      &[name="save"],
+      &[name="download"] {
         color: steelblue;
       }
     }
   }
 }
 
-.images_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: 10px;
-  .plus_icon{
-    color:steelblue;
-    font-size:30px;
-    cursor:pointer;
-  }
 }
 
-.dropdown_menu {
-  list-style: none;
-  font-size: 14px;
-  display: none;
-  width: 100%;
-  max-height: 300px;
-  overflow: auto;
-  position: absolute;
-  z-index: 900;
-  top: 100%;
-  left: 0;
-  background: rgba(244, 246, 246);
-  padding: 0 10px;
-  border: 1px solid #333;
-  border-radius: 5px;
+// .image_header {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   & > div {
+//     display: flex;
+//     gap: 25px;
+//     & > div {
+//       display: flex;
+//       gap: 10px;
+//       align-items: center;
 
-  li {
-    padding: 0 5px;
+//       svg {
+//         cursor: pointer;
+//         padding: 0 2px;
 
-    &:hover {
-      cursor: pointer;
-      background-color: darken($color: rgba(244, 246, 246), $amount: 10);
-    }
-  }
-}
+//         &:nth-child(1) {
+//           color: steelblue;
+//           font-size: 35px;
+//         }
+//         &:nth-child(2) {
+//           color: red;
+//           font-size: 30px;
+//         }
+//       }
+//     }
+//   }
+// }
+
+
+
+
 .active {
   display: block;
 }
 
-.input_group_menu {
-  position: relative;
-  svg {
-    display: block;
-    transform: translate(-50%, -50%);
-    font-size: 20px;
-    position: absolute;
-    color: red;
-    top: 50%;
-    right: 0;
-    cursor: pointer;
-  }
-
-  &:hover .dropdown_menu {
-    display: block;
-  }
-}
-.linkButton {
-  border: none;
-  font-size: 1rem;
-  color: #3498db;
-  padding: 5px 0;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.options_container {
-  padding: 10px 0;
-}
-// .flex_block {
-//   display: flex;
-//   flex-wrap: wrap;
-//   font-size: 16;
-
-//   padding: 5px 0;
-// }
-
-.option_price {
-  input {
-    height: 20px;
-    width: 60px;
-    margin: 0;
-    padding: 0 5px;
-    border: none;
-  }
-}
-
-.checkbox_wrapper {
-  align-self: flex-end;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  .custom_checkbox {
-    position: relative;
-    display: flex;
-    align-items: center;
-    column-gap: 5px;
-    label {
-      border: 1px solid #0e6655;
-      padding: 3px 10px;
-      border-radius: 5px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 5px;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    input[type="checkbox"] {
-      position: absolute;
-      z-index: -1;
-      opacity: 0;
-      &:checked ~ .check_icon {
-        visibility: visible;
-      }
-    }
-    .check_icon {
-      visibility: hidden;
-      color: green;
-      font-size: 20px;
-    }
-  }
-}
 
 @media (max-width: 768px) {
   .grid {

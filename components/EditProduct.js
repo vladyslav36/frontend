@@ -7,17 +7,16 @@ import {
   getBrand,
   getListForCatalogsMenu,
   getListForCategoriesMenu,
-  idToString,
-  stringToPrice,
+  idToString,  
 } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
 import Links from "@/components/Links"
 import { GiCheckMark } from "react-icons/gi"
 import ModalImage from "./ModalImage"
 import { FaCloudDownloadAlt, FaPlusSquare, FaSave, FaTimes, FaWindowClose } from "react-icons/fa"
-import BcOptions from "./BcOptions"
-import BcAlong from "./BcAlong"
+
 import ModalDialog from "./ModalDialog"
+import PriceTable from "./PriceTable"
 
 export default function EditProduct({
   setProdList,
@@ -28,8 +27,7 @@ export default function EditProduct({
   setIsShowProduct,  
   token,
 }) {
-  // Ф-я стоит здесь так как используется в двух компонентах
-  const [changedPriceOption, setChangedPriceOption] = useState("")
+ 
 
   const [brand, setBrand] = useState(
     categories.find(
@@ -58,13 +56,9 @@ export default function EditProduct({
     description: product.description,
     categoryId: product.categoryId,
     catalogId: product.catalogId,
-    options: product.options,
-    barcods: product.barcods,
-    barcode: product.barcode,
-    isInStock: product.isInStock,
-    price: product.price,
-    retailPrice: product.retailPrice,
-    isShowcase: product.isShowcase,
+    ownOptions: product.ownOptions,
+    optionValues: product.optionValues,
+        isShowcase: product.isShowcase,
     currencyValue: product.currencyValue,
   })
 
@@ -76,20 +70,12 @@ export default function EditProduct({
 
   const listForCategoryMenu = getListForCategoriesMenu(categories)
   const listForCatalogMenu = getListForCatalogsMenu(catalogs)
-  const [isBcWithOptions, setIsBcWithOptions] = useState(false)
+ 
   const [imageIdx, setImageIdx] = useState(0)
   const [showImageUpload, setShowImageUpload] = useState(false)
   
 
-  useEffect(() => {
-    const rez = Object.keys(values.options).length
-      ? Object.keys(values.options).some(
-          (option) => Object.keys(values.options[option]).length
-        )
-      : false
-
-    setIsBcWithOptions(rez)
-  }, [values.options])
+  
 
   useEffect(() => {
     if (!values.categoryId) {
@@ -176,9 +162,9 @@ export default function EditProduct({
       ...values,
       categoryId: category._id,
       brandId: brand._id,
-      options: Object.assign(
+      ownOptions: Object.assign(
         {},
-        ...Object.keys(brand.options).map((option) => ({ [option]: {} }))
+        ...Object.keys(brand.options).map((option) => ({ [option]: [] }))
       ),
     })
   }
@@ -247,6 +233,26 @@ export default function EditProduct({
                 value={values.model}
                 onChange={handleChange}
               />
+            </div>
+            <div className={styles.currency_value}>
+              <p>{values.currencyValue}</p>
+              <ul className={styles.dropdown_menu}>
+                <li
+                  onClick={() => setValues({ ...values, currencyValue: "UAH" })}
+                >
+                  UAH
+                </li>
+                <li
+                  onClick={() => setValues({ ...values, currencyValue: "USD" })}
+                >
+                  USD
+                </li>
+                <li
+                  onClick={() => setValues({ ...values, currencyValue: "EUR" })}
+                >
+                  EUR
+                </li>
+              </ul>
             </div>
 
             <div>
@@ -318,72 +324,6 @@ export default function EditProduct({
                 </ul>
               </div>
             </div>
-            <div>
-              <div className={styles.labels}>
-                <label htmlFor="price">Цена (опт)</label>
-                <label htmlFor="retailPrice">Цена (розн)</label>
-                <label htmlFor="currencyValue">Валюта товара</label>
-              </div>
-              <div className={styles.input_price}>
-                <div tabIndex={0}>
-                  <input
-                    type="text"
-                    id="price"
-                    name="price"
-                    value={values.price}
-                    onChange={(e) =>
-                      setValues({
-                        ...values,
-                        price: e.target.value
-                          .replace(/[^\d.,]+/g, "")
-                          .replace(",", "."),
-                      })
-                    }
-                    onBlur={(e) =>
-                      setValues({
-                        ...values,
-                        price: stringToPrice(e.target.value),
-                      })
-                    }
-                  />
-                </div>
-                <div tabIndex={0}>
-                  <input
-                    type="text"
-                    id="retailPrice"
-                    name="retailPrice"
-                    value={values.retailPrice}
-                    onChange={(e) =>
-                      setValues({
-                        ...values,
-                        retailPrice: e.target.value
-                          .replace(/[^\d.,]+/g, "")
-                          .replace(",", "."),
-                      })
-                    }
-                    onBlur={(e) =>
-                      setValues({
-                        ...values,
-                        retailPrice: stringToPrice(e.target.value),
-                      })
-                    }
-                  />
-                </div>
-                <div>
-                  <select
-                    className={styles.input}
-                    name="currencyValue"
-                    id="currencyValue"
-                    value={values.currencyValue}
-                    onChange={handleChange}
-                  >
-                    <option value="UAH">UAH</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                  </select>
-                </div>
-              </div>
-            </div>
 
             <div className={styles.checkbox_wrapper}>
               <div className={styles.custom_checkbox}>
@@ -394,43 +334,20 @@ export default function EditProduct({
                   onChange={handleChange}
                   checked={values.isShowcase}
                 />
-                <label htmlFor="isShowcase">Показывать на витрине</label>
-                <GiCheckMark className={styles.check_icon} />
-              </div>
-
-              <div className={styles.custom_checkbox}>
-                <input
-                  type="checkbox"
-                  name="isInStock"
-                  id="isInStock"
-                  onChange={handleChange}
-                  checked={values.isInStock}
-                />
-                <label htmlFor="isInStock">В наличии</label>
+                <label htmlFor="isShowcase">На витрине</label>
                 <GiCheckMark className={styles.check_icon} />
               </div>
             </div>
           </div>
-          {Object.keys(values.options).length ? (
+          {Object.keys(brand.options).length ? (
             <SelectOptions
               values={values}
               setValues={setValues}
               brand={brand}
               toast={toast}
-              changedPriceOption={changedPriceOption}
-              setChangedPriceOption={setChangedPriceOption}
             />
           ) : null}
-          {isBcWithOptions ? (
-            <BcOptions
-              values={values}
-              setValues={setValues}
-              token={token}
-              setChangedPriceOption={setChangedPriceOption}
-            />
-          ) : (
-            <BcAlong values={values} setValues={setValues} token={token} />
-          )}
+          <PriceTable values={values} setValues={setValues} />
           <div>
             <label htmlFor="description">Описание</label>
             <textarea
@@ -458,7 +375,7 @@ export default function EditProduct({
                       title="Загрузить"
                       onClick={() => {
                         setImageIdx(i)
-                        
+
                         setShowImageUpload(true)
                       }}
                     />
@@ -476,7 +393,7 @@ export default function EditProduct({
             className={styles.plus_icon}
             onClick={() => {
               setImageIdx(images.length)
-              
+
               setShowImageUpload(true)
             }}
           />

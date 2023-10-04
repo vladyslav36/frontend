@@ -4,16 +4,14 @@ import InputPriceBlock from "./InputPriceBlock"
 import OptionInTable from "./OptionInTable"
 
 export default function PriceTable({ values, setValues }) {
-
   useEffect(() => {
     // делаем таблицу полосатой
     const elements = document.querySelectorAll([
-       ".option",
-      ".OptionInTable_last_option__qLu2l"
-    ]
-     
-    ) 
-    elements.forEach((elem,key) => {
+      ".option",
+      ".OptionInTable_last_option__qLu2l",
+    ])
+
+    elements.forEach((elem, key) => {
       if (key % 2) {
         elem.style.backgroundColor = "#F8F9F9 "
       } else {
@@ -21,17 +19,18 @@ export default function PriceTable({ values, setValues }) {
       }
     })
   })
-  
-  
+
+ 
+
   let level = 0
   const crumbs = []
 
   const maxLevel = Object.keys(values.ownOptions).filter(
     (item) => values.ownOptions[item].length
   ).length
-  
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container}>      
       {!maxLevel ? (
         <InputPriceBlock
           arr={[...crumbs]}

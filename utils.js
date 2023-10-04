@@ -421,12 +421,12 @@ export const createPriceObject = ({ ownOptions, optionValues }) => {
     .forEach((option) => {
       rez = Object.assign(
         {},
-        ...ownOptions[option].map((value) => ({
+        ...fillingOwnOptions[option].map((value) => ({
           [value]: JSON.parse(JSON.stringify(rez)),
         }))
       )
     })
-
+  
   //  копируем значения полей из староно объекта values.options во вновь созданный rez
   const deep = (newOptions, oldOptions) => {
     if (newOptions.hasOwnProperty("price")) return newOptions
