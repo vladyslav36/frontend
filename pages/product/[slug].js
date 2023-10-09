@@ -11,6 +11,7 @@ import ProductsContext from "@/context/ProductsContext"
 import Links from "@/components/Links"
 import ProductOptions from "@/components/ProductOptions"
 import { FaMinusSquare, FaPlusSquare } from "react-icons/fa"
+import ProductTable from "@/components/ProductTable"
 
 export default function productPage({  product: productDb }) {
   const { currencyShop } = useContext(ProductsContext)
@@ -19,17 +20,17 @@ export default function productPage({  product: productDb }) {
   const product = { ...productDb }
 
   // Удаляем опции в товаре которые в нем не используются
-  Object.keys(product.options).forEach(option => {
-    if (!Object.keys(product.options[option]).length) {
-      delete product.options[option]
-    }
-  })    
+  // Object.keys(product.options).forEach(option => {
+  //   if (!Object.keys(product.options[option]).length) {
+  //     delete product.options[option]
+  //   }
+  // })    
   
 
   const [values, setValues] = useState(
     Object.assign(
       {},
-      ...Object.keys(product.options).map((item) => ({ [item]: "" })),
+      ...Object.keys(product.ownOptions).map((item) => ({ [item]: "" })),
       { qnt: "" }
     )
   )
@@ -213,37 +214,17 @@ export default function productPage({  product: productDb }) {
 
           <div className={styles.center}>
             <div className={styles.center_header}>
-              <div>
-                <div>
-                  <h5>Бренд:</h5>
-                  <p>{product.brandId ? product.brandId.name : ""}</p>
-                </div>
-                <div>
-                  <h5>Категория:</h5>
-                  <p>{product.categoryId ? product.categoryId.name : ""}</p>
-                </div>
-                <div>
-                  <h5>Каталог:</h5>
-                  <p>{product.catalogId ? product.catalogId.name : ""}</p>
-                </div>
-                <div>
-                  <h5>Модель:</h5>
-                  <p>{product.name}</p>
-                </div>
-                <div>
-                  <h5>Артикул:</h5>
-                  <p>{product.model}</p>
-                </div>
+              <div>               
+                  <p>{product.name}</p>              
               </div>
               <div>
                 {Object.keys(currencyRate).length ? (
                   <div className={styles.price}>
                     <div>
                       {getPriceForShow({
-                        currencyRate,
-                        currencyValue: product.currencyValue,
+                        currencyRate,                        
                         currencyShop,
-                        price: currentPrice,
+                        product
                       })}
                     </div>
                     <div>{getCurrencySymbol(currencyShop)}</div>
@@ -251,15 +232,9 @@ export default function productPage({  product: productDb }) {
                 ) : null}
               </div>
             </div>
-
-            {Object.keys(product.options).length ? (
-              <ProductOptions
-                options={product.options}
-                currencyValue={product.currencyValue}
-                values={values}
-                setValues={setValues}
-              />
-            ) : null}
+            <div>
+              <ProductTable product={product} />
+         </div>
             <div className={styles.counter_cart_wrapper}>
               <div className={styles.counter_wrapper}>
                 <FaMinusSquare onClick={decQnt}/>

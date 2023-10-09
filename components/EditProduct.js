@@ -4,9 +4,10 @@ import { ToastContainer, toast } from "react-toastify"
 import { API_URL } from "@/config/index"
 import "react-toastify/dist/ReactToastify.css"
 import {
+  createPriceObject,
   getBrand,
   getListForCatalogsMenu,
-  getListForCategoriesMenu,
+  getListForCategoriesMenu,  
   idToString,  
 } from "../utils"
 import SelectOptions from "@/components/SelectOptions"
@@ -75,11 +76,19 @@ export default function EditProduct({
   const [showImageUpload, setShowImageUpload] = useState(false)
   
 
-  
+  useEffect(() => {
+    setValues({
+      ...values,
+      optionValues: createPriceObject({
+        ownOptions: values.ownOptions,
+        optionValues: values.optionValues,
+      }),
+    })
+  }, [values.ownOptions])
 
   useEffect(() => {
     if (!values.categoryId) {
-      setValues({ ...values, options: {}, brandId: null })
+      setValues({ ...values, brandId: null })
       setCategoryName("")
     }
   }, [values.categoryId])

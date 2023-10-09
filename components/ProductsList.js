@@ -72,8 +72,7 @@ export default function ProductsList({ products = [], isShowAsList }) {
                             {getPriceForShow({
                               currencyRate,
                               currencyShop,
-                              price: item.price,
-                              currencyValue: item.currencyValue,
+                             item
                             })}
                             &nbsp;{getCurrencySymbol(currencyShop)}
                           </div>
@@ -115,8 +114,7 @@ export default function ProductsList({ products = [], isShowAsList }) {
                       {getPriceForShow({
                         currencyRate,
                         currencyShop,
-                        price: item.price,
-                        currencyValue: item.currencyValue,
+                       item
                       })}
                       &nbsp;{getCurrencySymbol(currencyShop)}
                     </p>

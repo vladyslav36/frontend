@@ -54,7 +54,7 @@ export default function InputPriceBlock({ values, setValues, arr }) {
   }
 
   const shareHandler = (arr) => {
-    console.log(arr)
+    
     let rez = values.optionValues
     arr.forEach(item => {
       rez = rez[item]      

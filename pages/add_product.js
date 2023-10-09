@@ -43,8 +43,7 @@ export default function addProductPage({ categories, catalogs }) {
     categoryId: null,
     catalogId: null,    
     ownOptions: {},
-    optionValues: {},   
-    isInStock: true,   
+    optionValues: {},         
     isShowcase: false,
     currencyValue: "UAH",
   })

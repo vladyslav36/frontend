@@ -22,14 +22,20 @@ export const idToString = (id) => {
 export function getPriceForShow({
   currencyShop,
   currencyRate,
-  currencyValue,
-  price,
+  product,
+  
 }) {
-  const showPrice = (
-    (currencyRate[currencyValue] * +price) /
+  const { min, max } = getStringPrice(product)
+  const showMin=(
+    (currencyRate[product.currencyValue] * +min) /
     currencyRate[currencyShop]
   ).toFixed(2)
-  return showPrice
+  const showMax=(
+    (currencyRate[product.currencyValue] * +max) /
+    currencyRate[currencyShop]
+  ).toFixed(2)
+const string=min===max?showMin:`${showMin}...${showMax}`
+  return string
 }
 
 export const getCatTree = (cat, catArray) => {
@@ -406,6 +412,7 @@ export const bcPricesToOptions = ({ barcods, options, bcPrice }) => {
 }
 
 export const createPriceObject = ({ ownOptions, optionValues }) => {
+ 
   // убираем поля пустышки
   const fillingOwnOptions = Object.assign(
     {},
@@ -426,7 +433,7 @@ export const createPriceObject = ({ ownOptions, optionValues }) => {
         }))
       )
     })
-  
+
   //  копируем значения полей из староно объекта values.options во вновь созданный rez
   const deep = (newOptions, oldOptions) => {
     if (newOptions.hasOwnProperty("price")) return newOptions
@@ -442,4 +449,28 @@ export const createPriceObject = ({ ownOptions, optionValues }) => {
   }
 
   return deep(rez, optionValues)
+  
+}
+
+export const getStringPrice = (values) => {  
+  const pricesArray = []
+  const deep = (options) => {
+    if (options.hasOwnProperty("price")) {
+      pricesArray.push(options.price)
+      return
+    } else {
+      Object.keys(options).forEach((item) => {
+        deep(options[item])
+      })
+    }
+  }
+  deep(values.optionValues)
+  const min = pricesArray.sort((a, b) => a - b)[0]
+  const max = pricesArray.sort((a, b) => b - a)[0]  
+  let string =
+    min === max
+      ? `${min.toString()} ${getCurrencySymbol(values.currencyValue)}`
+      : `${min}...${max} ${getCurrencySymbol(values.currencyValue)}`
+ 
+  return { string, min, max }
 }

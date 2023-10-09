@@ -91,19 +91,16 @@ $image-width: 500px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    h5 {
-      background-color: #f8c471;
-      border-radius: 7px;
-      padding: 2px 5px;
-    }
+    column-gap:10px;
+    
+   
     & > div p {
       padding: 0 5px;
+font-style:italic;
+background-color: #FDEBD0;
+padding:0 20px;
     }
-    & > div div {
-      display: flex;
-      align-items: center;
-      padding: 2px 0;
-    }
+   
     .price {
       display: flex;
       column-gap: 5px;
@@ -207,6 +204,12 @@ $image-width: 500px;
     }
     .left {
       align-items: center;
+    }
+  }
+  .center{
+    .center_header{
+      flex-wrap:wrap;
+      justify-content: center;
     }
   }
 }

@@ -1,6 +1,6 @@
 import styles from "@/styles/EditProduct.module.scss"
 import {  useState } from "react"
-import { getCurrencySymbol, getShortDescription } from "utils"
+import { getCurrencySymbol, getShortDescription, getStringPrice } from "utils"
 import { API_URL } from "../config"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -270,8 +270,9 @@ export default function EditProductList({
                       <td>{item.model}</td>
                       <td>{getShortDescription(item.description, 150)}</td>
                       <td>
-                        {item.price}&nbsp;
-                        {getCurrencySymbol(item.currencyValue)}
+                        {/* {item.price}&nbsp;
+                        {getCurrencySymbol(item.currencyValue)} */}
+                      {getStringPrice({...item}).string}
                       </td>
                       <td>
                         <div className={styles.buttons_wrapper}>
