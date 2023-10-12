@@ -1,10 +1,12 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import ProductPriceBlock from "./ProductPriceBlock"
 import ProductOptionsInTable from "./ProductOptionsInTable"
 import styles from '@/styles/ProductTable.module.scss'
+import { getCurrencySymbol } from "utils"
 
-export default function ProductTable({ product, setValues }) {
-  console.log(product)
+export default function ProductTable({ product, setValues,values }) {
+  const [qntAmount, setQntAmount] = useState({ qnt: '', amount: '' })
+  
   useEffect(() => {
     // делаем таблицу полосатой
     const elements = document.querySelectorAll([
@@ -21,6 +23,28 @@ export default function ProductTable({ product, setValues }) {
     })
   })
 
+  useEffect(() => {
+    let totalQnt = 0
+    let amount = 0
+    const tableObj = values
+    const deep = (optionValues) => {
+      if ('price' in optionValues) {
+        let qnt = parseInt(optionValues.qnt) || 0
+        totalQnt+=qnt
+        amount += (parseFloat(optionValues.price) || 0) * qnt
+        return
+      } else {
+        Object.keys(optionValues).forEach(item => {
+          deep(optionValues[item])
+        })
+      }
+    }
+    deep(tableObj)
+    totalQnt = totalQnt.toString()
+    amount=amount.toFixed(2)+' '+getCurrencySymbol(product.currencyValue)
+    setQntAmount({qnt:totalQnt,amount})
+  },[values])
+
   const crumbs = []
   const level = 0
   const maxLevel = Object.keys(product.ownOptions).filter(
@@ -29,17 +53,22 @@ export default function ProductTable({ product, setValues }) {
   return (
     <div className={styles.container}>
       {!maxLevel ? (
-        <ProductPriceBlock product={product } />
+        <ProductPriceBlock product={product} arr={crumbs} setValues={setValues} values={ values} />
       ) : (
         <ProductOptionsInTable
-          crumbs={crumbs}
-          level={level}
+            crumbs={crumbs}
+            level={level}
             maxLevel={maxLevel}
             product={product}
-          optionValues={product.optionValues}
-          setValues={setValues}
+            optionValues={product.optionValues}
+            setValues={setValues}
+            values={values}
         />
       )}
+      <div className={styles.footer}>
+        <p>Выбрано: {qntAmount.qnt }</p>
+        <p>Сумма: {qntAmount.amount}</p>
+      </div>
     </div>
   )
 }

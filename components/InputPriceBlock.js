@@ -5,14 +5,13 @@ import { stringToPrice } from "utils"
 
 export default function InputPriceBlock({ values, setValues, arr }) {
   const getValue = () => {
-    let rez = JSON.parse(JSON.stringify(values.optionValues))
+    let priceObj = JSON.parse(JSON.stringify(values.optionValues))
     arr.forEach((item) => {
-      rez = rez[item]
+      priceObj = priceObj[item]
     })
 
-    return rez
+    return priceObj
   }
-  
 
   const setValueToPrice = ({ value, name, optionValues }) => {
     let obj = JSON.parse(JSON.stringify(optionValues))
@@ -30,50 +29,52 @@ export default function InputPriceBlock({ values, setValues, arr }) {
   const handleBlur = (e) => {
     let { value, name } = e.target
     value = stringToPrice(value)
-    const obj = setValueToPrice({ value, name, optionValues: values.optionValues })
-     setValues({ ...values, optionValues: obj })
-    
+    const obj = setValueToPrice({
+      value,
+      name,
+      optionValues: values.optionValues,
+    })
+
+    setValues({ ...values, optionValues: obj })
   }
   const changeHandler = (e) => {
     let { value, name } = e.target
-    value =name==='price'? value.replace(/[^\d.,]+/g, "").replace(",", "."):value.replace(/[^\d]+/g,'')
-    
-     let obj = JSON.parse(JSON.stringify(values.optionValues))
-     let rez = obj
-     if (arr.length === 0) {
-       rez[name] = value
-     } else {
-       for (let i = 0; i < arr.length - 1; i++) {
-         rez = rez[arr[i]]
-       }
-       rez[arr[arr.length - 1]][name] = value
-     }
-    
-    setValues({ ...values, optionValues: obj })
-    
+    value =
+      name === "price"
+        ? value.replace(/[^\d.,]+/g, "").replace(",", ".")
+        : value.replace(/[^\d]+/g, "")
+
+    let optionValues = JSON.parse(JSON.stringify(values.optionValues))
+    let priceObj = optionValues
+    arr.forEach((item) => {
+      priceObj = priceObj[item]
+    })
+    priceObj[name] = value
+
+    setValues({ ...values, optionValues })
   }
 
   const shareHandler = (arr) => {
-    
-    let rez = values.optionValues
-    arr.forEach(item => {
-      rez = rez[item]      
+    let priceObj = values.optionValues
+    arr.forEach((item) => {
+      priceObj = priceObj[item]
     })
-    const { price } = rez
-    const optionValues=JSON.parse(JSON.stringify(values.optionValues))
+    const { price } = priceObj
+    const optionValues = JSON.parse(JSON.stringify(values.optionValues))
     const deep = (optionValues) => {
-      if (optionValues.hasOwnProperty('price')) {
+      if (optionValues.hasOwnProperty("price")) {
         optionValues.price = price
         return
       } else {
-        Object.keys(optionValues).forEach(item => {
+        Object.keys(optionValues).forEach((item) => {
           deep(optionValues[item])
         })
       }
     }
     deep(optionValues)
-    setValues({...values,optionValues})
+    setValues({ ...values, optionValues })
   }
+
   return (
     <div className={styles.price_block}>
       <div title="Скопировать на все поля" onClick={() => shareHandler(arr)}>
@@ -85,7 +86,7 @@ export default function InputPriceBlock({ values, setValues, arr }) {
         id="price"
         name="price"
         placeholder="Цена"
-        value={getValue().price || ''}
+        value={getValue().price || ""}
         onChange={changeHandler}
         onBlur={handleBlur}
       />
@@ -95,7 +96,7 @@ export default function InputPriceBlock({ values, setValues, arr }) {
         name="barcode"
         maxLength={13}
         placeholder="Штрихкод"
-        value={getValue().barcode || ''}
+        value={getValue().barcode || ""}
         onChange={changeHandler}
       />
     </div>

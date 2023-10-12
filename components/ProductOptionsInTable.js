@@ -2,7 +2,7 @@ import React from 'react'
 import ProductPriceBlock from './ProductPriceBlock'
 import styles from '@/styles/ProductOptionsInTable.module.scss'
 
-export default function ProductOptionsInTable({ crumbs, level, maxLevel, optionValues, setValues,product }) {
+export default function ProductOptionsInTable({ crumbs, level, maxLevel, optionValues, setValues,product,values }) {
   level++
   return (
     <>
@@ -20,6 +20,7 @@ export default function ProductOptionsInTable({ crumbs, level, maxLevel, optionV
                 arr={[...crumbs, item]}
                 product={product}
                 setValues={setValues}
+                values={values}
               />
             </div>
           ) : (
@@ -35,7 +36,8 @@ export default function ProductOptionsInTable({ crumbs, level, maxLevel, optionV
                 maxLevel={maxLevel}
                 crumbs={[...crumbs, item]}
                 product={product}
-                setValues={setValues}
+                  setValues={setValues}
+                  values={values}
                 optionValues={optionValues[item]}
               />
             </>

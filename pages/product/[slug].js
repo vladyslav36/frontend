@@ -9,92 +9,55 @@ import Slider from "@/components/Slider"
 import Navbar from "@/components/Navbar"
 import ProductsContext from "@/context/ProductsContext"
 import Links from "@/components/Links"
-import ProductOptions from "@/components/ProductOptions"
-import { FaMinusSquare, FaPlusSquare } from "react-icons/fa"
+
 import ProductTable from "@/components/ProductTable"
 
-export default function productPage({  product: productDb }) {
+export default function productPage({ product: productDb }) {
   const { currencyShop } = useContext(ProductsContext)
   const { cart, setCart, currencyRate } = useContext(ProductsContext)
 
   const product = { ...productDb }
 
-  // Удаляем опции в товаре которые в нем не используются
-  // Object.keys(product.options).forEach(option => {
-  //   if (!Object.keys(product.options[option]).length) {
-  //     delete product.options[option]
-  //   }
-  // })    
+
+
+  const initialState = () => {
+    const table = JSON.parse(JSON.stringify(product.optionValues))
+    const deep = (optionValues) => {
+      if (optionValues.hasOwnProperty('price')) {
+        optionValues.qnt = ''
+        delete optionValues.barcode
+        return
+      } else {
+        Object.keys(optionValues).forEach(item => {
+          deep(optionValues[item])
+        })
+      }
+    }
+    deep(table)
+    return table
+  }
+
+  // Здесь values то же самое что и product.optionValues но вместо barcode qnt
+const [values,setValues]=useState(initialState())
   
 
-  const [values, setValues] = useState(
-    Object.assign(
-      {},
-      ...Object.keys(product.ownOptions).map((item) => ({ [item]: "" })),
-      { qnt: "" }
-    )
-  )
-
-  
-  
   const [sliderValues, setSliderValues] = useState({
     isShow: false,
     idx: 0,
   })
   // Прайс на единицу товара с учетом опции
-  const [currentPrice, setCurrentPrice] = useState(product.price)
+ 
 
   const [mainImageIdx, setMainImageIdx] = useState(0)
 
   const [cartBtnDisable, setCartBtnDisable] = useState(true)
 
-  // Устанавливаем currentPrice. Сначала выделяем объект выбранных опций. 
-  // Потом по его ключам в product.options добираемся до прайса.Если стоит 
-  // флаг isChanged то результирующий прайс равен опционному
-  useEffect(() => {
-    const { qnt, ...chosenOptions } = values
-    let rezPrice=product.price
-   Object.keys(chosenOptions).forEach(option => {
-     const value = chosenOptions[option]
-     if (!value) return
-     const { price, isChanged } = product.options[option][value]
-     if (isChanged) rezPrice=price      
-    })
-   setCurrentPrice(rezPrice)
-  }, [values])
-
-  useEffect(() => {    
-    const options = Object.keys(values)
-    const isActive = options.every((item) => values[item])
-    if (isActive) {
-      setCartBtnDisable(false)
-    } else {
-      setCartBtnDisable(true)
-    }
-  }, [values])
  
-  const handleQnt = (e) => {
-    const number = +e.target.value
-    if (number === 0) {
-      setValues({ ...values, qnt: "" })
-      return
-    }
-    if (
-      !isNaN(number) &&
-      number > 0 &&
-      number < 999 &&
-      Number.isInteger(number)
-    ) {
-      setValues({ ...values, qnt: "" + number })
-    } else {
-      return
-    }
-  }
 
   const handleCartClick = () => {
     if (cartBtnDisable) return
     const options = Object.keys(product.options)
-    
+
     setCart([
       ...cart,
       {
@@ -106,34 +69,14 @@ export default function productPage({  product: productDb }) {
             )
           : {},
         qnt: values.qnt,
-        price: currentPrice,
+        price: '',
         currencyValue: product.currencyValue,
       },
     ])
     clearValues()
-    
   }
 
-    const decQnt = () => {
-    const number = +values.qnt - 1
-    if (number > 0) {
-      setValues({ ...values, qnt: "" + number })
-    } else {
-      if (number === 0) {
-        setValues({ ...values, qnt: "" })
-      } else {
-        return
-      }
-    }
-  }
-  const incQnt = () => {
-    const number = +values.qnt + 1
-    if (number <1000) {
-      setValues({ ...values, qnt: "" + number })
-    } else {
-      return
-    }
-  }
+ 
 
   const clearValues = () => {
     setValues(
@@ -147,7 +90,6 @@ export default function productPage({  product: productDb }) {
     )
   }
 
- 
   // ld+json for SEO
   const schemaData = {
     "@context": "http://www.schema.org",
@@ -160,7 +102,7 @@ export default function productPage({  product: productDb }) {
     description: product.description,
     price: product.price + " " + product.currencyValue,
   }
-  
+  console.log(values)
   return (
     <Layout
       title={Object.keys(product).length ? product.name : ""}
@@ -214,17 +156,17 @@ export default function productPage({  product: productDb }) {
 
           <div className={styles.center}>
             <div className={styles.center_header}>
-              <div>               
-                  <p>{product.name}</p>              
+              <div>
+                <p>{product.name}</p>
               </div>
               <div>
                 {Object.keys(currencyRate).length ? (
                   <div className={styles.price}>
                     <div>
                       {getPriceForShow({
-                        currencyRate,                        
+                        currencyRate,
                         currencyShop,
-                        product
+                        product,
                       })}
                     </div>
                     <div>{getCurrencySymbol(currencyShop)}</div>
@@ -233,35 +175,27 @@ export default function productPage({  product: productDb }) {
               </div>
             </div>
             <div>
-              <ProductTable product={product} />
-         </div>
+              <ProductTable
+                product={product}
+                setValues={setValues}
+                values={values}
+              />
+            </div>
+           
             <div className={styles.counter_cart_wrapper}>
-              <div className={styles.counter_wrapper}>
-                <FaMinusSquare onClick={decQnt}/>
-               
-                <input
-                  type="text"
-                  className={styles.counter}
-                  value={values.qnt}
-                  onChange={handleQnt}
-                />{" "}
-                <FaPlusSquare onClick={incQnt}/>
-                
-              </div>
+            
 
-             
-              <div onClick={handleCartClick}
+              <div
+                onClick={handleCartClick}
                 className={
                   styles.cart_button +
                   " " +
                   (cartBtnDisable ? styles.disable : "")
-                } 
+                }
               >
                 <p>В корзину</p>
               </div>
             </div>
-       
-
           </div>
         </div>
         {product.description ? (
@@ -294,7 +228,7 @@ export async function getServerSideProps({ params: { slug } }) {
   }
   return {
     props: {
-      product      
+      product,
     },
   }
 }
