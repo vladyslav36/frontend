@@ -13,29 +13,18 @@ export default function InputPriceBlock({ values, setValues, arr }) {
     return priceObj
   }
 
-  const setValueToPrice = ({ value, name, optionValues }) => {
-    let obj = JSON.parse(JSON.stringify(optionValues))
-    let rez = obj
-    if (arr.length === 0) {
-      rez[name] = value
-    } else {
-      for (let i = 0; i < arr.length - 1; i++) {
-        rez = rez[arr[i]]
-      }
-      rez[arr[arr.length - 1]][name] = value
-    }
-    return obj
-  }
+  
   const handleBlur = (e) => {
     let { value, name } = e.target
     value = stringToPrice(value)
-    const obj = setValueToPrice({
-      value,
-      name,
-      optionValues: values.optionValues,
-    })
+     let optionValues = JSON.parse(JSON.stringify(values.optionValues))
+     let priceObj = optionValues
+     arr.forEach((item) => {
+       priceObj = priceObj[item]
+     })
+     priceObj[name] = value
 
-    setValues({ ...values, optionValues: obj })
+    setValues({ ...values, optionValues})
   }
   const changeHandler = (e) => {
     let { value, name } = e.target
