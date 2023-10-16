@@ -67,12 +67,12 @@ export default function ProductsList({ products = [], isShowAsList }) {
                         {getShortDescription(item.description, innerWidth / 15)}
                       </td>
                       <td>
-                        {item.price && currencyRate ? (
+                        { currencyRate ? (
                           <div>
                             {getPriceForShow({
                               currencyRate,
                               currencyShop,
-                             item
+                            product: item
                             })}
                             &nbsp;{getCurrencySymbol(currencyShop)}
                           </div>

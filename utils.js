@@ -25,6 +25,7 @@ export function getPriceForShow({
   product,
   
 }) {
+  
   const { min, max } = getStringPrice(product)
   const showMin=(
     (currencyRate[product.currencyValue] * +min) /
@@ -34,7 +35,7 @@ export function getPriceForShow({
     (currencyRate[product.currencyValue] * +max) /
     currencyRate[currencyShop]
   ).toFixed(2)
-const string=min===max?showMin:`${showMin}...${showMax}`
+const string=min===max?showMin:`${showMin} - ${showMax}`
   return string
 }
 
@@ -211,205 +212,7 @@ export const sortObjFields = (obj) =>
       .map((key) => ({ [key]: obj[key] }))
   )
 
-export const optionsToBarcods = (input = {}) => {
-  // Отфильтровываем только те поля в которых есть значения
-  const activeInput = Object.keys(input)
-    .filter((item) => Object.keys(input[item]).length)
-    .reduce((acc, item) => ({ ...acc, [item]: input[item] }), {})
-  // Массив ключей
-  const orderArr = Object.keys(activeInput)
-  let output = {}
-  // Организовываем матрешку начиная с последнего элемента
-  if (orderArr.length) {
-    for (let i = 1; i <= orderArr.length; i++) {
-      output = {
-        ...Object.keys(activeInput[orderArr[orderArr.length - i]])
-          .sort()
-          .map((value) => ({ [value]: i === 1 ? "" : { ...output } }))
-          .reduce((acc, item) => ({ ...acc, ...item }), {}),
-      }
-    }
-  }
 
-  return output
-}
-
-export const copyBarcods = (existBc, newBc) => {
-  const checker = (existObj, newObj) =>
-    Object.keys(newObj).forEach((item) => {
-      if (!existObj.hasOwnProperty(item)) return
-      if (typeof newObj[item] === "object") {
-        checker(existObj[item], newObj[item])
-      } else {
-        newObj[item] = existObj[item]
-      }
-    })
-
-  checker(existBc, newBc)
-  return newBc
-}
-
-export const bcPricesToOptions = ({ barcods, options, bcPrice }) => {
-  // ф-я сравнения объектов по их содержимому
-  const compareObj = (obj1, obj2) => {
-    if (obj1 === obj2) {
-      return true
-    }
-
-    if (typeof obj1 !== typeof obj2) {
-      return false
-    }
-
-    if (
-      typeof obj1 !== "object" ||
-      typeof obj2 !== "object" ||
-      obj1 === null ||
-      obj2 === null
-    ) {
-      return obj1 === obj2
-    }
-
-    const keys1 = Object.keys(obj1)
-    const keys2 = Object.keys(obj2)
-    if (keys1.length !== keys2.length) {
-      return false
-    }
-
-    for (let prop of keys1) {
-      if (!compareObj(obj1[prop], obj2[prop])) {
-        return false
-      }
-    }
-    return true
-  }
-
-  const changeBcToPrice = (bc, bcPrice) => {
-    const deepToBc = (bc) =>
-      Object.keys(bc).map((item) => {
-        if (typeof bc[item] === "string") {
-          const value = bcPrice.find(
-            (item2) => item2.barcode === bc[item]
-          ).price
-          bc[item] = value
-        } else {
-          deepToBc(bc[item])
-        }
-      })
-    deepToBc(bc)
-  }
-
-  // ф-я находит изменяющуюся опцию
-  const searchOption = (barcods, options) => {
-    const option = []
-    const levels = []
-    let level = 0
-    const searchLevel = (bc) => {
-      const firstKey = Object.keys(bc)[0]
-      const isEqual = Object.keys(bc).every((item) =>
-        compareObj(bc[firstKey], bc[item])
-      )
-      if (!isEqual) {
-        const changedOption = Object.keys(options)[level]
-        if (!option.includes(changedOption)) option.push(changedOption)
-        if (!levels.includes(level)) levels.push(level)
-      }
-      if (typeof bc[firstKey] === "string") {
-        return
-      }
-      level++
-      for (let key in bc) {
-        searchLevel(bc[key])
-      }
-      level--
-    }
-    searchLevel(barcods)
-    return { option, levels }
-  }
-
-  // создание объекта прайсов для изменяющегося объекта опции по первому элементу
-  // т.к.предполагается что остальные опции не меняются
-  const searchPrices = (bc) => {
-    return Object.keys(bc)
-      .map((item) => {
-        if (typeof bc[item] === "string") {
-          return { [item]: bc[item] }
-        } else {
-          const getDeepPrice = (bcObj) => {
-            const firstKey = Object.keys(bcObj)[0]
-            if (typeof bcObj[firstKey] === "string") {
-              return bcObj[firstKey]
-            } else {
-              return getDeepPrice(bcObj[firstKey])
-            }
-          }
-          const price = getDeepPrice(bc[item])
-          return { [item]: price }
-        }
-      })
-      .reduce((acc, value) => ({ ...acc, ...value }), {})
-  }
-
-  // ф-я формирует объект прайсов если известен уровень погружения измененного прайса
-  const getPricesByLevel = (barcods, targetLevel) => {
-    let level = 0
-
-    const deepToBc = (bc) => {
-      if (level === targetLevel) {
-        return searchPrices(bc)
-      } else {
-        const firstKey = Object.keys(bc)[0]
-        level++
-        return deepToBc(bc[firstKey])
-      }
-    }
-
-    return deepToBc(barcods)
-  }
-
-  changeBcToPrice(barcods, bcPrice)
-
-  const changedOption = searchOption(barcods, options)
-  if (changedOption.option.length > 1) {
-    return { newOptions: {}, error: true }
-  }
-
-  let totalPrice = ""
-  let pricesObj = {}
-  // если измененных опций нет
-  if (changedOption.option.length === 0) {
-    totalPrice = Object.values(searchPrices(barcods))[0]
-  } else {
-    pricesObj = getPricesByLevel(barcods, changedOption.levels[0])
-    totalPrice = Object.values(pricesObj).sort((a, b) => a - b)[0]
-  }
-
-  const newOptions = Object.assign(
-    {},
-    ...Object.keys(options).map((option) => ({
-      [option]: Object.assign(
-        {},
-        ...Object.keys(options[option]).map((value) => {
-          if (
-            changedOption.option.length != 0 &&
-            option === changedOption.option[0]
-          ) {
-            return totalPrice === pricesObj[value]
-              ? { [value]: { price: pricesObj[value], isChanged: false } }
-              : { [value]: { price: pricesObj[value], isChanged: true } }
-          } else {
-            return { [value]: { price: totalPrice, isChanged: false } }
-          }
-        })
-      ),
-    }))
-  )
-  return {
-    newOptions,
-    error: false,
-    totalPrice,
-    changedOption: changedOption.option[0],
-  }
-}
 
 export const createPriceObject = ({ ownOptions, optionValues }) => {
  
@@ -464,7 +267,10 @@ export const getStringPrice = (values) => {
       })
     }
   }
-  deep(values.optionValues)
+  // if (!Object.keys(values.optionValues).length) {
+  //   return {string:'',min:0,max:0}
+  // }
+  deep(values.optionValues)  
   const min = pricesArray.sort((a, b) => a - b)[0]
   const max = pricesArray.sort((a, b) => b - a)[0]  
   let string =

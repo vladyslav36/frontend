@@ -115,11 +115,14 @@
 
   p {
     padding: 0 3px;
+    
   }
 }
 
-.right_wrapper p {
+.right_wrapper  {
   padding: 0 3px;
+  white-space: nowrap;
+  overflow:hidden;
 }
 .phones {
   grid-area: phones;

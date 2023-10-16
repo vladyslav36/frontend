@@ -1,11 +1,10 @@
 .container{
   font-size:16px;
-  .footer{
-    display:flex;
-    align-items: center;
-    justify-content: space-between;
-    font-style: italic;
-    background-color: #D4E6F1 ;
-    padding: 2px;;
+  .price_block_along{
+  display:flex;
+  justify-content: flex-end;
+  align-items:center;
+
   }
+  
 }

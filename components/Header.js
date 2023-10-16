@@ -115,9 +115,9 @@ export default function Header() {
                         {getPriceForShow({
                           currencyShop,
                           currencyRate,
-                         item
-                        })}
-                        &nbsp;{getCurrencySymbol(currencyShop)}
+                        product: item
+                        })+' '+getCurrencySymbol(currencyShop)}
+                       
                       </p>
                     ) : null}
                   </div>

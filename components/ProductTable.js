@@ -5,7 +5,7 @@ import styles from '@/styles/ProductTable.module.scss'
 import { getCurrencySymbol } from "utils"
 
 export default function ProductTable({ product, setValues,values }) {
-  const [qntAmount, setQntAmount] = useState({ qnt: '', amount: '' })
+ 
   
   useEffect(() => {
     // делаем таблицу полосатой
@@ -23,37 +23,19 @@ export default function ProductTable({ product, setValues,values }) {
     })
   })
 
-  useEffect(() => {
-    let totalQnt = 0
-    let amount = 0
-    const tableObj = values
-    const deep = (optionValues) => {
-      if ('price' in optionValues) {
-        let qnt = parseInt(optionValues.qnt) || 0
-        totalQnt+=qnt
-        amount += (parseFloat(optionValues.price) || 0) * qnt
-        return
-      } else {
-        Object.keys(optionValues).forEach(item => {
-          deep(optionValues[item])
-        })
-      }
-    }
-    deep(tableObj)
-    totalQnt = totalQnt.toString()
-    amount=amount.toFixed(2)+' '+getCurrencySymbol(product.currencyValue)
-    setQntAmount({qnt:totalQnt,amount})
-  },[values])
-
   const crumbs = []
   const level = 0
   const maxLevel = Object.keys(product.ownOptions).filter(
     (item) => product.ownOptions[item].length
   ).length
+  
   return (
     <div className={styles.container}>
       {!maxLevel ? (
-        <ProductPriceBlock product={product} arr={crumbs} setValues={setValues} values={ values} />
+        <div className={styles.price_block_along}>
+          
+          <ProductPriceBlock product={product} arr={crumbs} setValues={setValues} values={ values} />
+        </div>
       ) : (
         <ProductOptionsInTable
             crumbs={crumbs}
@@ -65,10 +47,7 @@ export default function ProductTable({ product, setValues,values }) {
             values={values}
         />
       )}
-      <div className={styles.footer}>
-        <p>Выбрано: {qntAmount.qnt }</p>
-        <p>Сумма: {qntAmount.amount}</p>
-      </div>
+     
     </div>
   )
 }

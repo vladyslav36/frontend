@@ -46,7 +46,6 @@ export default function categoryPage({ category, categories }) {
       fetchProduct()
     }
   }, [category])
-
   return (
     <Layout
       title={`Категория ${Object.keys(category).length ? category.name : ""}`}

@@ -10,6 +10,7 @@ import { FaTimes } from "react-icons/fa"
 
 export default function Cart() {
   const { cart, setCart } = useContext(ProductsContext)  
+  console.log(cart)
 const router=useRouter()
   // optionList собирает все возможные опции из корзины  
   const optionList = cart.length ? (cart.reduce((acc, item) => {
