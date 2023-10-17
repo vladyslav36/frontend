@@ -72,7 +72,7 @@ export default function ProductPriceBlock({ product, arr, setValues, values }) {
   setValue(value)
    
   }
-console.log(values)
+
   return (
     <div className={styles.flex_block}>
       <div>
