@@ -1,5 +1,5 @@
 import styles from "@/styles/Navbar.module.scss"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import { API_URL } from "../config"
 import ProductsContext from "@/context/ProductsContext"
@@ -14,7 +14,7 @@ export default function Navbar() {
   const fakeArray = Array(20)
   fakeArray.fill("")
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetcher = async () => {
       const res = await fetch(`${API_URL}/api/categories`)
       if (res.ok) {
@@ -26,7 +26,7 @@ export default function Navbar() {
     fetcher()
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetcher = async () => {
       const res = await fetch(`${API_URL}/api/catalogs`)
       if (res.ok) {
@@ -43,10 +43,10 @@ export default function Navbar() {
   }
 
   // Вычисление с какой стороны показывать выпадающий список справа или слева
-  const getSpace = (e) => {
-    const rightSpace = window.innerWidth - e.target.getBoundingClientRect().x
-    setIsShowRight(rightSpace < 160 ? true : false)
-  }
+  // const getSpace = (e) => {
+  //   const rightSpace = window.innerWidth - e.target.getBoundingClientRect().x
+  //   setIsShowRight(rightSpace < 160 ? true : false)
+  // }
   // categoriesList список категорий формата {cat:категория-бренд,children:ее первые дети}
   const getCatList = (catArray) =>
     catArray
@@ -104,11 +104,11 @@ export default function Navbar() {
                       e.stopPropagation()
                       router.push(`/category/${item.cat._id}`)
                     }}
-                    onMouseEnter={(e) => getSpace(e)}
+                    // onMouseEnter={(e) => getSpace(e)}
                   >
                     <p>{item.cat.name}</p>
                   </div>
-                  {item.children.length ? (
+                  {/* {item.children.length ? (
                     <div
                       className={
                         styles.drop_down_list +
@@ -128,7 +128,7 @@ export default function Navbar() {
                         </div>
                       ))}
                     </div>
-                  ) : null}
+                  ) : null} */}
                 </div>
               ))}
               {fakeArray.map((item, i) => (
@@ -146,11 +146,11 @@ export default function Navbar() {
                     e.stopPropagation()
                     router.push(`/catalog/${item.cat._id}`)
                   }}
-                  onMouseEnter={(e) => getSpace(e)}
+                  // onMouseEnter={(e) => getSpace(e)}
                 >
                   <p>{item.cat.name}</p>
                 </div>
-                {item.children.length ? (
+                {/* {item.children.length ? (
                   <div
                     className={
                       styles.drop_down_list +
@@ -170,7 +170,7 @@ export default function Navbar() {
                       </div>
                     ))}
                   </div>
-                ) : null}
+                ) : null} */}
               </div>
             ))}
             {fakeArray.map((item, i) => (

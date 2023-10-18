@@ -79,7 +79,7 @@ export default function ProductPriceBlock({ product, arr, setValues, values }) {
         <FaChevronDown onClick={decrement} />
         <input
           type="text"
-          value={getValue()}
+          value={getValue()||''}
           onChange={handleChange}
           maxLength={3}
           onBlur={handleBlur}
