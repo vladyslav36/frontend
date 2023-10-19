@@ -16,6 +16,7 @@ export default function productPage({ product }) {
   const { currencyShop } = useContext(ProductsContext)
   const { cart, setCart, currencyRate } = useContext(ProductsContext)
   const [qntAmount, setQntAmount] = useState({ qnt: "", amount: "" })
+  
 
   // Здесь values то же самое что и product.optionValues но вместо barcode qnt
   const [values, setValues] = useState({})
@@ -28,6 +29,8 @@ export default function productPage({ product }) {
   const [mainImageIdx, setMainImageIdx] = useState(0)
 
   const [cartBtnDisable, setCartBtnDisable] = useState(true)
+
+ 
 
   useEffect(() => {
     const table = JSON.parse(JSON.stringify(product.optionValues))

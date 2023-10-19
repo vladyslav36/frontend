@@ -1,5 +1,5 @@
 import styles from "@/styles/Navbar.module.scss"
-import { useContext, useLayoutEffect, useState } from "react"
+import { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { API_URL } from "../config"
 import ProductsContext from "@/context/ProductsContext"
@@ -13,7 +13,7 @@ export default function Navbar() {
   const fakeArray = Array(20)
   fakeArray.fill("")
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const fetcher = async () => {
       const res = await fetch(`${API_URL}/api/categories/navbar`)
       if (res.ok) {
@@ -25,7 +25,7 @@ export default function Navbar() {
 
     fetcher()
   }, [])
-
+  
   return (
     <>
       <div className={styles.header}>

@@ -3,7 +3,7 @@ import Layout from "@/components/Layout"
 import { API_URL, NOIMAGE } from "@/config/index"
 import Link from "next/link"
 import ProductsList from "@/components/ProductsList"
-import { useEffect, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { getArrayCatTree } from "utils"
 import Navbar from "@/components/Navbar"
 import CategoriesList from "@/components/CategoriesList"
@@ -14,8 +14,8 @@ import { FaBorderAll, FaFileExcel, FaFilePdf, FaList } from "react-icons/fa"
 export default function categoryPage({ category, categories }) {
   const [productList, setProductList] = useState([])
   const [isShowAsList, setIsShowAsList] = useState(true)
-  const router = useRouter()
-  
+
+  const containerElem = useRef()
   const childrenList = category
     ? categories
         .filter((item) => item.parentId === category._id)
@@ -30,6 +30,8 @@ export default function categoryPage({ category, categories }) {
     image: category.image,
     description: category.description,
   }
+
+ 
 
   useEffect(() => {
     if (childrenList.length) {
@@ -46,12 +48,13 @@ export default function categoryPage({ category, categories }) {
       fetchProduct()
     }
   }, [category])
+
   return (
     <Layout
       title={`Категория ${Object.keys(category).length ? category.name : ""}`}
       description={Object.keys(category).length ? category.description : ""}
     >
-      <Navbar categories={categories} />
+      <Navbar />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
@@ -79,7 +82,7 @@ export default function categoryPage({ category, categories }) {
               <FaList />
             </div>
             <div title="Плитка" onClick={() => setIsShowAsList(false)}>
-             <FaBorderAll />
+              <FaBorderAll />
             </div>
           </div>
         ) : null}
@@ -105,7 +108,7 @@ export default function categoryPage({ category, categories }) {
                 <Link href={`${API_URL}${category.price}`} target="_blank">
                   <div>
                     <p className={styles.icon_price}>
-                     <FaFileExcel />
+                      <FaFileExcel />
                     </p>
                     <p>Прайс</p>
                   </div>
@@ -147,7 +150,7 @@ export async function getServerSideProps({ params: { id } }) {
       notFound: true,
     }
   }
- 
+
   return {
     props: {
       categories,
