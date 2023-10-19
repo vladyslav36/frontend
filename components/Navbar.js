@@ -1,10 +1,10 @@
 import styles from "@/styles/Navbar.module.scss"
-import { useContext, useEffect, useLayoutEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { API_URL } from "../config"
 import ProductsContext from "@/context/ProductsContext"
 
-export default function Navbar() {
+export default  function Navbar() {
   const { catToggle, setCatToggle } = useContext(ProductsContext)
   const router = useRouter()
   const [categoriesList, setCategoriesList] = useState([])
