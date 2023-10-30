@@ -29,24 +29,24 @@ export default function EditProduct({
   token,
 }) {
  
-
-  const [brand, setBrand] = useState(
-    categories.find(
+const brandInit= categories.find(
       (item) => idToString(item._id) === idToString(product.brandId)
     )
-  )
-  const [categoryName, setCategoryName] = useState(
-    categories.find(
-      (item) => idToString(item._id) === idToString(product.categoryId)
-    ).name
+  const [brand, setBrand] = useState(
+    brandInit ? brandInit : {}
   )
 
-  const [catalogName, setCatalogName] = useState(
-    product.catalogId
-      ? catalogs.find(
+  const categoryInit=categories.find(
+      (item) => idToString(item._id) === idToString(product.categoryId)
+    )
+  const [categoryName, setCategoryName] = useState(
+   categoryInit?categoryInit.name:''
+  )
+const catalogInit=catalogs.find(
           (item) => idToString(item._id) === idToString(product.catalogId)
-        ).name
-      : ""
+        )
+  const [catalogName, setCatalogName] = useState(
+   catalogInit?catalogInit.name:''
   )
 
   const [values, setValues] = useState({

@@ -51,7 +51,7 @@ export default function Options({ values, setValues }) {
       setInputValue({ ...inputValue, [inputValue.option]: "", option: "" })
       setValues({
         ...values,
-        options: sortObjFields({ ...values.options, [inputValue.option]: [] }),
+        options: { ...values.options, [inputValue.option]: [] },
       })
       setActiveOption("")
     } else {

@@ -43,6 +43,7 @@ export default function addCategoryPage({ categories }) {
 
   const listForMenu = getListForCategoriesMenu(categories)
 
+ 
   useEffect(() => {
     if (values.parentId) setValues({ ...values, options: {} })
   }, [values.parentId])

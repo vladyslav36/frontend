@@ -10,7 +10,7 @@ export default function ProductOptionsInTable({ crumbs, level, maxLevel, optionV
         <div key={level + [...crumbs, item].join()}>
           {level === maxLevel ? (
             <div
-              className={styles.last_option}
+              className={styles.last_option+' '+'option'}
               style={{ paddingLeft: level * 10 + "px" }}
               key={level + crumbs.toString()}
             >

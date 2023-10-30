@@ -9,10 +9,7 @@ export default function ProductTable({ product, setValues,values }) {
   
   useEffect(() => {
     // делаем таблицу полосатой
-    const elements = document.querySelectorAll([
-      ".option",
-      ".ProductOptionsInTable_last_option__v49OI",
-    ])
+    const elements = document.querySelectorAll(".option" )
 
     elements.forEach((elem, key) => {
       if (key % 2) {

@@ -8,14 +8,13 @@ import { getArrayCatTree } from "utils"
 import Navbar from "@/components/Navbar"
 import CategoriesList from "@/components/CategoriesList"
 import Links from "@/components/Links"
-import { useRouter } from "next/router"
 import { FaBorderAll, FaFileExcel, FaFilePdf, FaList } from "react-icons/fa"
 
 export default function categoryPage({ category, categories }) {
   const [productList, setProductList] = useState([])
   const [isShowAsList, setIsShowAsList] = useState(true)
 
-  const containerElem = useRef()
+  
   const childrenList = category
     ? categories
         .filter((item) => item.parentId === category._id)

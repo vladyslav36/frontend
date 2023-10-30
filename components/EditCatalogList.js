@@ -99,7 +99,7 @@ const [showModal, setShowModal] = useState(false)
         <ModalDialog>
           <div className={styles.content}>
             <div>
-              <p>Удалить товар </p>
+              <p>Удалить каталог </p>
               <p>{catForDelete.name}?</p>
             </div>
             <div onClick={() => handle(true)}>Да</div>

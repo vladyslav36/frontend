@@ -37,6 +37,7 @@ const [showModal, setShowModal] = useState(false)
     const isChildren = categories.some((item) => item.parentId === _id)
     if (isChildren) {
       toast.error("Сначала удалите все подкатегории в этой категории")
+      return
     }
     const res = await fetch(`${API_URL}/api/categories/${_id}`, {
       method: "DELETE",
@@ -101,7 +102,7 @@ const [showModal, setShowModal] = useState(false)
         <ModalDialog>
           <div className={styles.content}>
             <div>
-              <p>Удалить товар </p>
+              <p>Удалить категорию </p>
               <p>{catForDelete.name}?</p>
             </div>
             <div onClick={() => handle(true)}>Да</div>
