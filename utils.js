@@ -185,6 +185,14 @@ export const formatingPhone = (number) => {
   return rez
 }
 
+export const formatingDate = (value) => {
+  const date = new Date(value)
+  const day = date.getDate().toString().padStart(2, "0")
+  const month = date.getMonth().toString().padStart(2, "0")
+  const year = date.getFullYear().toString().padStart(2, "0")
+  return `${day}-${month}-${year}`
+}
+
 export const addRiple = (e) => {
   const circle = document.createElement("span")
   circle.classList.add("riple")
