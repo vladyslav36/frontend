@@ -97,9 +97,7 @@ export default function categoryPage({ category, categories }) {
                 }
               />
             </div>
-            <div className={styles.name}>
-              <p>{category.name}</p>
-            </div>
+           
           </div>
           {category.price || category.catalog ? (
             <div className={styles.left_content_footer}>

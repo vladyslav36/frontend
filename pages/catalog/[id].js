@@ -85,15 +85,13 @@ export default function catalogPage({ catalog, catalogs }) {
       </div>
 
       <div className={styles.container}>
-        <div className={styles.left_content}>
+        <div className={styles.left_content_header}>
           <div className={styles.image}>
             <img
               src={catalog.image ? `${API_URL}${catalog.image}` : `${NOIMAGE}`}              
             />
           </div>
-          <div className={styles.name}>
-            <p>{catalog.name}</p>
-          </div>
+         
         </div>
         <div className={styles.right_content}>
           {childrenList.length ? (
