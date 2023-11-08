@@ -2,7 +2,7 @@
   margin-top: 20px;
   padding: 0 10px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
   & > div {
     justify-self: center;
@@ -11,16 +11,16 @@
 
 .item {
   border: 1px solid #707b7c;
-  width: 230px;
-  height: 370px;
+  width: 260px;
+  height: 400px;
   padding: 5px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  // justify-content: space-between;
   align-items: center;
-  line-height: 1.2;
-  font-size: 15px;
-  overflow: auto;
+  line-height: 1.1;
+  font-size: 20px;
+  
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
   &:hover {
     cursor: pointer;
@@ -29,14 +29,17 @@
 }
 
 .header {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  & > img {
-    max-width: 205px;
-    max-height: 280px;
-    margin: 5px;
-    border: 1px solid #888;
+  display:flex;
+  justify-content: center;
+  align-items:center;
+  width:250px;
+  height:280px;
+  border: 1px solid #888; 
+   img {
+    max-width: 240px;
+    max-height: 270px;
+   
+   
     &:hover {
       cursor: zoom-in;
       transform: scale(0.99);
@@ -45,16 +48,22 @@
 }
 
 .name {
+  flex:1;
   width: 100%;
-  padding: 0 10px;
+  padding: 5px;
+  display:flex;
+  align-items: center;
+  justify-content: flex-start;
+  color:#424949;
 }
 
 .footer {
   width: 100%;
+  height:35px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #e5e8e8;
-  font-size: 16px;
+  // font-size: 20px;
   padding: 5px 0;
 }
