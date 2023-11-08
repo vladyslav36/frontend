@@ -47,7 +47,7 @@
   color: #000;
   padding: 10px;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.1;
   .list {
     display: flex;
@@ -56,11 +56,11 @@
     flex-wrap: wrap;
     .fakeItem {
       height: 0px;
-      width: 117px;
+      width: 150px;
     }
     .category_wrapper {
       position: relative;
-      width: 117px;
+      width: 150px;
       &:hover {
         cursor: pointer;
 
