@@ -109,12 +109,12 @@ export default function ProductsList({ products = [], isShowAsList }) {
                 </div>
 
                 <div className={styles.footer_card}>
-                  {item.price && currencyRate ? (
+                  { currencyRate ? (
                     <p>
                       {getPriceForShow({
                         currencyRate,
                         currencyShop,
-                       item
+                       product:item
                       })}
                       &nbsp;{getCurrencySymbol(currencyShop)}
                     </p>
