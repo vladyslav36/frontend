@@ -54,11 +54,11 @@
 
 .container {
   display: flex;
-  padding: 10px;
+  padding-top: 10px;
+  gap:10px;
 }
 
-.left_content_header {
-  margin-bottom:10px;
+.left_content_header { 
   display: flex; 
   justify-content: center;
   align-items: center;
